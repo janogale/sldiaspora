@@ -1,0 +1,74 @@
+@use '../../utils' as *;
+
+/*----------------------------------------*/
+/*  6.2 footer-2
+/*----------------------------------------*/
+
+.footer2 {
+    &__area-common{
+        background-repeat: no-repeat;
+    }
+    &__top{
+        flex-wrap: wrap;
+        column-gap: 10px;
+        row-gap: 20px;
+    }
+    &__widget2{
+        margin-left: 85px;
+
+        @media #{$lg, $md, $sm, $xs} {
+            margin-left: 0;
+        }
+    }
+    &__widget3{
+        margin-left: 15px;
+
+        @media #{$lg, $md, $sm, $xs} {
+            margin-left: 0;
+        }
+    }
+    &__date{
+        a{
+            @media #{$lg, $md, $sm, $xs} {
+                br{
+                    display: none;
+                }
+            }
+        }
+    }
+    &__right{
+        &-social{
+            align-items: center;
+            gap: 10px;
+            a{
+                border: 1px solid var(--rr-text-body);
+                color: var(--rr-common-white);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                transition: .3s;
+
+                &:hover{
+                    border-color: var(--rr-theme-primary);
+                }
+            }
+        }
+    }
+    &__title{
+        h4{
+            margin-bottom: 30px;
+            @media #{$sm, $xs} {
+                margin-bottom: 15px;
+            }
+        }
+    }
+    &__wrap{
+        padding: 80px 0 80px 0;
+        @media #{$md, $sm, $xs} {
+            padding: 50px 0 50px 0;
+        }
+    }
+}

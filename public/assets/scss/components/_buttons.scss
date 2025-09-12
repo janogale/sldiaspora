@@ -1,0 +1,201 @@
+@use '../utils' as *;
+
+/*----------------------------------------*/
+/*  2.3 buttons
+/*----------------------------------------*/
+
+// Common button
+.rr-btn {
+    color: var(--rr-common-white);
+    font-family: var(--rr-ff-heading);
+    font-size: 14px;
+    font-style: normal;
+    line-height: 30px;
+    text-transform: capitalize;
+	font-weight: var(--rr-fw-sbold);
+    display: inline-flex;
+	align-items: center;
+    gap: 10px;
+	justify-content: center;
+	@include border-radius(150px);
+	position: relative;
+	overflow: hidden;
+    padding: 15px 30px;
+    background-color: var(--rr-theme-primary);
+	z-index: 5;
+    
+    svg path{
+        @extend %rs-transition-3;
+    }
+
+    &:focus {
+        color: var(--rr-common-white);
+      }
+    
+    &::before {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-165%, 0) rotate(0deg);
+        transform-origin: right bottom;
+        transition: all 0.35s;
+        z-index: -1;
+        content: "";
+    }
+ 
+	&:hover {
+        color: var(--rr-common-white);
+        background: var(--rr-heading-primary);
+        &::before {
+            transform: translate(0, 0);
+        }
+        
+        svg path[fill="#00160A"] {
+            fill: var(--rr-common-white);
+        }
+	}
+    
+    &.btn-hover-white {
+        &::before {
+            background-color: var(--rr-common-white);
+        }
+        &:hover {
+            color: var(--rr-heading-primary);
+            
+            svg path[fill="white"] {
+                fill: var(--rr-heading-primary);
+            }
+        }
+    }
+    
+    &.btn-transparent {
+        padding: 10px 28px;
+        border: 1px solid var(--rr-common-white);
+        color: var(--rr-common-white);
+        background-color: transparent;
+        
+        &::before {
+            background-color: var(--rr-theme-primary);
+        }
+       
+        
+        &.btn-border-2 {
+            padding: 18px 30px;
+            border: 2px solid var(--rr-theme-primary);
+            &::before {
+                border-radius: 0;
+            }
+        }
+        
+        &.btn-border-gray {
+            padding: 19px 22px;
+            border-color: var(--rr-heading-primary);
+            
+            @media #{$md, $lg} {
+                padding: 10px 15px;
+            }
+            
+            @media #{$xs, $sm} {
+                padding: 6px 10px;
+            }
+            
+            &:hover {
+                i {
+                    background-color: var(--rr-theme-primary);
+                }
+            }
+            
+            i {
+                @extend %rs-transition-3;
+                @include border-radius(5px);
+                width: 40px;
+                height: 40px;
+                padding: 10px;
+                background-color: var(--rr-heading-primary);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                
+                @media #{$xs, $sm} {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+        
+        svg path[fill="white"] {
+            fill: var(--rr-theme-primary);
+        }
+        &:hover {
+            color: var(--rr-common-white);
+            border: 1px solid var(--rr-theme-primary);
+            svg path[fill="white"] {
+                fill: var(--rr-common-white);
+            }
+        }
+    }
+    
+    &.btn-white {
+        color: var(--rr-heading-primary);
+        background-color: var(--rr-common-white);
+        &::before {
+            background-color: var(--rr-theme-primary);
+        }
+        &:hover {
+            color: var(--rr-common-white);
+        }
+    }
+    
+    &.btn-text-color-white {
+        color: var(--rr-common-white);
+    }
+}
+
+.small-btn{
+    height: 60px;
+    width: 60px;
+    border: 1px solid #E3DBD8;
+    background: #d5dfd4;
+    border-radius: 50%;
+    transition: .3s;
+
+    &:hover{
+        background: var(--rr-theme-primary);
+
+        i{
+            color: var(--rr-common-white);
+        }
+
+        & svg {
+            path {
+                fill: var(--rr-common-white);
+            }
+        }
+    }
+    
+}
+.small-btn-transparent{
+    background: transparent;
+    border: 1px solid #e5e8e6;
+}
+.rr-btn2{
+    font-family: var(--rr-ff-heading);
+    color: var(--rr-heading-primary);
+    font-weight: var(--rr-fw-sbold);
+    font-size: 14px;
+    line-height: var(--rr-lh-h5);
+	padding: 15px 30px;
+	border-radius: 30px;
+    font-style: normal;
+	border: 1px solid #e3dbd8;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    &:hover{
+        background: var(--rr-theme-primary);
+        color: var(--rr-common-white);
+    }
+}

@@ -1,0 +1,38 @@
+@use "../utils" as *;
+
+/*----------------------------------------*/
+/*  2.2 background
+/*----------------------------------------*/
+
+.white-bg {
+  background-color: var(--rr-common-white) !important;
+}
+.black-bg {
+  background-color: var(--rr-common-black);
+}
+
+.gray-bg{
+  background-color: var(--rr-background-gray);
+}
+.dark-green{
+  background-color: var(--rr-background-dark-green);
+}
+
+// Theme bg
+.theme-bg-1 {
+  background-color: var(--rr-theme-primary);
+}
+.theme-bg-2 {
+  background-color: var(--rr-gray-900);
+}
+
+.bg-gray{
+  background: #F1F5EB;
+}
+
+
+
+// Gradient color
+.bg-gradient-1 {
+  background: linear-gradient(90deg, #674AD9 0%, #FB5141 50.52%, #089EFF 100%);
+}

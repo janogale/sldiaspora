@@ -1,0 +1,136 @@
+$colors: (
+  common: (
+    "white": #FFFFFF,
+    "black": #000000,
+    "placeholder": #4A5764,
+  ),
+  body: (
+    "primary": #fff,
+  ),
+  theme: (
+    "primary": #83CD20,
+    "secondary": #07CBEB,
+  ),
+  heading: (
+    "primary": #034833,
+  ),
+  text: (
+    "body": #727272,
+    "primary": #000,
+  ),
+  shadow: (
+      "primary": 0px 30px 60px 0px rgba(0, 15, 32, 0.10),
+  ),
+  background: (
+      "gray": #F1F5EB,
+      "dark-green": #034833,
+  ),
+  border: (
+    "primary": 1px solid #E3DBD8,
+  )
+);
+
+
+.banner-home-bg{
+  background: linear-gradient(90deg, rgba(255, 61, 0, 0.10) 0.19%, rgba(255, 177, 152, 0.10) 49.48%, rgba(255, 61, 0, 0.10) 99.8%);
+}
+
+.latest-feature-bg{
+  background-color: #fffbfa;
+}
+
+.latest-Choose-bg{
+  background-color: #fff;
+}
+
+.latest-service-bg{
+  background-color: #FAFAFA;
+}
+
+.latest-counter-bg{
+  background-color: #FFF5F1;
+}
+
+.question-bg{
+  background-color: #fff;
+}
+
+.latest-team-bg{
+  background-color: #001D08;
+}
+
+.latest-project-bg{
+  background-color: #fff;
+}
+
+.latest-testimonial-bg{
+  background-color: #fff;
+}
+
+.latest-blog-bg{
+  background-color: #fff;
+}
+
+.latest-newsletter-bg{
+  background-color: #FAFAFA;
+}
+
+.footer-home-1-bg{
+  background-color: #FFF5F1;
+}
+
+.footer__bottom-home-1-bg{
+  background-color: #001D08;
+}
+
+.latest-blog2-bg{
+  background-color: #FAFAFA;
+}
+
+.white-bg{
+  background: #fff !important;
+}
+.product-bg{
+  background: #FAFAFA;
+}
+
+.heading-color{
+  color: #001D08 !important;
+}
+.white-color{
+  color: #fff !important;
+}
+.gray-color{
+  color: #d8d9da !important;
+}
+/*home-3-feature-card-bg-color*/
+.frist-bg{
+	background: #f5f0ea;
+}
+.second-bg{
+	background: #e9eef4;
+}
+.thaird-bg{
+	background: #f2f1ec;
+}
+.banner-bg-3{
+  background: #fcffea;
+}
+.body-color{
+  color: var(--rr-text-body) !important;
+}
+.happy-customer-bg{
+  background: #ffefeb;
+}
+.footer-home-3-bg{
+  background: #F5F5F5;
+}
+.bg-headr-3{
+  background: var(--rr-common-white) !important;
+}
+
+.hover-theme{
+  &:hover{
+    color: red;
+  }
+}

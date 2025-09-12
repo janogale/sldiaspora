@@ -1,0 +1,94 @@
+@use "../../utils" as *;
+
+.visa{
+    &__item{
+        background: var(--rr-common-white);
+        box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        padding: 20px;
+        gap: 52px;
+        @media #{$xs} {
+            flex-wrap: wrap;
+            gap: 30px;
+          }
+        &-media{
+            overflow: hidden;
+            border-radius: 20px;
+            width: 100%;
+            img{
+                width: inherit;
+                height: 100%;
+                border-radius: 20px;
+                overflow: hidden;
+
+                @media #{$md, $lg} {
+                    height: 260px;
+                  }
+            }
+            
+        }
+        &-content{
+            h5{
+                font-family: var(--rr-ff-heading);
+                color: var(--rr-heading-primary);
+                font-weight: var(--rr-fw-bold);
+                line-height: var(--rr-lh-h5);
+                font-size: 22px;
+                font-style: normal;
+                margin-bottom: 10px;
+            }
+            p{
+                font-family: var(--rr-ff-body);
+                color: var(--rr-text-body);
+                font-weight: var(--rr-fw-regular);
+                line-height: var(--rr-lh-h5);
+                font-size: 16px;
+                margin-bottom: 0;
+                font-style: normal;
+            }
+            &-button{
+                a{
+                    color: var(--rr-theme-primary);
+                    border: 1px solid var(--rr-theme-primary);
+                    width: 60px;
+                    height: 60px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 20px;
+                    transition: .3s;
+
+                    i{
+                        transform: rotate(-40deg);
+                        transition: .3s;
+                    }
+
+                    &:hover{
+                        background: var(--rr-theme-primary);
+                        color: var(--rr-common-white);
+
+                        i{
+                            transform: rotate(1deg);
+                        }
+                    }
+                }
+                img{
+                    max-width: 55px;
+                    height: 100%;
+                }
+            }
+        }
+        &-2{
+            background: var(--rr-gray) !important;
+            border: var(--rr-border-primary) !important;
+        }
+        &:hover{
+            & .visa__item-media{
+                img{
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+}
+

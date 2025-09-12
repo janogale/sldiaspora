@@ -1,0 +1,13 @@
+@use "../../utils" as *;
+
+.tab{
+    &__wrap{
+        button{
+            color: var(--rr-heading-primary) !important;
+
+            &.active {
+                color: var(--rr-theme-primary) !important;
+            }
+        }  
+    }
+}
