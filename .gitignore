@@ -17,6 +17,8 @@
 /.next/
 /out/
 
+# ignore HTML files
+*.html
 # production
 /build
 
