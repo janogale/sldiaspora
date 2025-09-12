@@ -2639,7 +2639,7 @@ textarea {
   height: 60px;
   width: 60px;
   border: 1px solid #E3DBD8;
-  background: #034833;
+  background: red;
   border-radius: 50%;
   transition: 0.3s;
 }
@@ -2648,7 +2648,7 @@ textarea {
 }
 .section-slider-title-button-right:hover {
   background: var(--rr-theme-primary);
-  border-color: var(--rr-theme-primary);
+  border-color: white;
 }
 .section-slider-title-button-right:hover i {
   color: var(--rr-common-white);
@@ -12589,7 +12589,7 @@ body .ui-tooltip {
   border-radius: 20px;
 }
 .choose-us__text {
-  background: var(--rr-theme-primary);
+  background: red;
   display: flex;
   align-items: center;
   padding: 33px 44px;
@@ -12737,7 +12737,7 @@ body .ui-tooltip {
   column-gap: 10px;
 }
 .choose-us__button-text-icon {
-  background: var(--rr-theme-primary);
+  background: red;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15796,7 +15796,7 @@ body .ui-tooltip {
   transform: rotate(360deg);
 }
 .project-three__single-content {
-  background: #83CD20;
+  background: var(--rr-theme-primary);
   position: absolute;
   width: calc(100% - 24px);
   border-radius: 20px;
@@ -15889,7 +15889,7 @@ body .ui-tooltip {
   }
 }
 .project-three__single-content .button a {
-  background: var(--rr-theme-primary);
+  background: red;
   font-family: var(--rr-ff-heading);
   color: var(--rr-common-white);
   font-weight: var(--rr-fw-sbold);
