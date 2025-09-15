@@ -26,7 +26,7 @@ export default function Home() {
         <TicketBooking />
         <Blogs />
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
