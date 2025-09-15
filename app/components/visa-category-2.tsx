@@ -56,7 +56,8 @@ const VisaCategory2 = () => {
                 className="section__title-wrapper-title wow fadeInLeft animated"
                 data-wow-delay=".3s"
               >
-                Multiple Avenues to Contribute <br /> to Somaliland's Growth
+                Multiple Avenues to Contribute <br /> to Somaliland&apos;s
+                Growth
               </h2>
             </div>
           </div>
@@ -195,7 +196,7 @@ const VisaCategory2 = () => {
                     </span>
                     <span className="paragraph">
                       Secure your citizenship rights and advocate for
-                      Somaliland's recognition on the global stage.
+                      Somaliland&apos;s recognition on the global stage.
                     </span>
                   </span>
                 </button>

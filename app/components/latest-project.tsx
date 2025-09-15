@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { projectData } from "../data/project-data";
 import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { projectData } from "../data/project-data";
 
 const LatestProject = () => {
   return (

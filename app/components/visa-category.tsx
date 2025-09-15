@@ -141,7 +141,7 @@ const VisaCategory = () => {
                     </h3>
                     <p>
                       Lend your expertise to educate, mentor, and build capacity
-                      within Somaliland's institutions.
+                      within Somaliland&apos;s institutions.
                     </p>
                   </div>
                 </div>

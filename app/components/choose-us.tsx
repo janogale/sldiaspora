@@ -102,12 +102,12 @@ const ChooseUs = () => {
                   className="choose-us__content-description wow fadeInLeft animated"
                   data-wow-delay=".4s"
                 >
-                  Somaliland's culture is rooted in ancient Somali traditions,
-                  poetry, and a strong nomadic heritage. Our society is built on
-                  a clan-based system that emphasizes community, hospitality,
-                  and mutual support. While Hargeisa is our bustling capital,
-                  our people are spread across vibrant regions, each
-                  contributing to our national identity.
+                  Somaliland&apos;s culture is rooted in ancient Somali
+                  traditions, poetry, and a strong nomadic heritage. Our society
+                  is built on a clan-based system that emphasizes community,
+                  hospitality, and mutual support. While Hargeisa is our
+                  bustling capital, our people are spread across vibrant
+                  regions, each contributing to our national identity.
                 </p>
                 <div className="choose-us__content-wrapper mt-35">
                   <div

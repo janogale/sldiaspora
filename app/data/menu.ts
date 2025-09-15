@@ -16,8 +16,8 @@ export const menuList: MenuItem[] = [
   },
   {
     label: "Guidelines",
-    path: "/guidelines",
-    children: [],
+    path: "/guidlines",
+    // children: [],
   },
   {
     label: "Events",
@@ -25,7 +25,7 @@ export const menuList: MenuItem[] = [
   },
   {
     label: "News",
-    path: "/news",
+    path: "/blogs",
   },
   {
     label: "Contact",

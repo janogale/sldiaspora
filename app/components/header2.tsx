@@ -2,8 +2,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import { menuList } from "../data/menu";
-
-const Header = () => {
+interface Props {
+  logo?: string;
+}
+const Header = ({ logo }: Props) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -12,7 +14,6 @@ const Header = () => {
 
   return (
     <>
-      {/* Offcanvas area start */}
       <div className="fix">
         <div
           className={`offcanvas__area ${isMobileMenuOpen ? "info-open" : ""}`}
@@ -22,10 +23,11 @@ const Header = () => {
               <div className="offcanvas__top d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
                   <Link href="/">
-                    <img
-                      src="/assets/imgs/logo/offcanvas-logo.svg"
-                      alt="logo not found"
-                    />
+                    {logo ? (
+                      <img src={logo} alt="logo not found" />
+                    ) : (
+                      <img src={logo} alt="logo not found" />
+                    )}
                   </Link>
                 </div>
                 <div className="offcanvas__close">
@@ -117,29 +119,26 @@ const Header = () => {
         onClick={toggleMobileMenu}
       ></div>
       <div className="offcanvas__overlay-white"></div>
-      {/* Offcanvas area end */}
-
-      {/* Header area start */}
       <header>
-        <div id="header-sticky" className="header__area header2 rs-sticky-2">
-          <div className="container">
-            <div className="mega__menu-wrapper header2__bg p-relative">
-              <div className="header__main header2__main">
-                <div className="header__left header2__left">
+        <div id="header-sticky" className="header__area header-1">
+          <div className="header-container">
+            <div className="mega__menu-wrapper p-relative">
+              <div className="header__main">
+                <div className="header__left">
                   <div className="header__logo">
-                    <Link href="/">
+                    <a href="index.html">
                       <div className="logo">
                         <img
-                          src="/assets/imgs/logo/logo.svg"
+                          src="assets/imgs/logo/logo.svg"
                           alt="logo not found"
                         />
                       </div>
-                    </Link>
+                    </a>
                   </div>
                 </div>
                 <div className="header__middle">
                   <div className="mean__menu-wrapper d-none d-xl-block">
-                    <div className="main-menu  header2__menu">
+                    <div className="main-menu">
                       <nav id="mobile-menu">
                         <ul>
                           {" "}
@@ -205,7 +204,7 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-                <div className="header__right header2__right">
+                <div className="header__right">
                   <div className="header__action d-flex align-items-center">
                     <div className="header__btn-wrap d-none d-sm-inline-flex">
                       <Link
@@ -236,23 +235,6 @@ const Header = () => {
           </div>
         </div>
       </header>
-
-      <div id="popup-search-box">
-        <div className="box-inner-wrap d-flex align-items-center">
-          <form id="form" action="#" method="get" role="search">
-            <input
-              id="popup-search"
-              type="text"
-              name="s"
-              placeholder="Type keywords here..."
-            />
-          </form>
-          <div className="search-close">
-            <i className="fa-sharp fa-regular fa-xmark"></i>
-          </div>
-        </div>
-      </div>
-      {/* Header area end */}
     </>
   );
 };

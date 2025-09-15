@@ -48,7 +48,7 @@ const ProcessSection = () => {
                 data-wow-delay=".3s"
               >
                 A Clear, Guided Journey to Engage and
-                <br /> Contribute to Somaliland's Future
+                <br /> Contribute to Somaliland&apos;s Future
               </h2>
             </div>
           </div>

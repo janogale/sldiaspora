@@ -175,7 +175,7 @@ const Blogs = () => {
                 </div>
                 <h3 className="latest-blog2__content-title mb-20">
                   <Link href="/blog-details">
-                    Hiking Through Nature's Beauty
+                    Hiking Through Nature&apos;s Beauty
                   </Link>
                 </h3>
                 <p>
