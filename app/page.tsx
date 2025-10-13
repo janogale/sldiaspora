@@ -1,3 +1,4 @@
+"use client";
 import Blogs from "./components/blogs";
 import ChooseUs from "./components/choose-us";
 import Header from "./components/header";
@@ -8,8 +9,11 @@ import Testimonial from "./components/testimonial";
 import TicketBooking from "./components/ticket-booking";
 import VisaCategory from "./components/visa-category";
 import VisaCategory2 from "./components/visa-category-2";
-import WorldMap from "./components/WorldMap";
+import dynamic from "next/dynamic";
 
+const WorldMap = dynamic(() => import("./components/WorldMap"), {
+  ssr: false, // 👈 disables server-side rendering for this component
+});
 export default function Home() {
   return (
     <>
