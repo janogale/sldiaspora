@@ -256,35 +256,6 @@ const DepartmentStructureContent = () => {
       {/* Hero Section */}
 
       {/* Vision & Mission Section */}
-      <section
-        className="vision-mission-section pt-50 pb-50"
-        style={{ backgroundColor: "#f8f9fa" }}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6 mb-30">
-              <div className="vision-card h-100">
-                <div className="card-header">
-                  <h3 className="section-title">Vision Statement</h3>
-                </div>
-                <div className="card-body">
-                  <p className="vision-text">{visionStatement}</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 mb-30">
-              <div className="mission-card h-100">
-                <div className="card-header">
-                  <h3 className="section-title">Mission Statement</h3>
-                </div>
-                <div className="card-body">
-                  <p className="mission-text">{missionStatement}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Leadership Section */}
       <section className="leadership-section pt-100 pb-50">
