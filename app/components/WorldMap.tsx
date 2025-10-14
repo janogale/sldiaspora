@@ -1,106 +1,108 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import Link from "next/link";
 
-// Example country markers with flag URLs
-const countryMarkers: {
-  geocode: [number, number];
-  popUp: string;
-  flagUrl: string;
-}[] = [
-  {
-    geocode: [38.89511, -77.03637], // Washington, USA
-    popUp: "United States",
-    flagUrl: "https://flagcdn.com/us.svg",
-  },
-  {
-    geocode: [48.8566, 2.3522], // Paris, France
-    popUp: "France",
-    flagUrl: "https://flagcdn.com/fr.svg",
-  },
-  {
-    geocode: [35.6895, 139.6917], // Tokyo, Japan
-    popUp: "Japan",
-    flagUrl: "https://flagcdn.com/jp.svg",
-  },
-  {
-    geocode: [51.5074, -0.1278], // London, UK
-    popUp: "United Kingdom",
-    flagUrl: "https://flagcdn.com/gb.svg",
-  },
-  {
-    geocode: [55.7558, 37.6173], // Moscow, Russia
-    popUp: "Russia",
-    flagUrl: "https://flagcdn.com/ru.svg",
-  },
-  {
-    geocode: [52.52, 13.405], // Berlin, Germany
-    popUp: "Germany",
-    flagUrl: "https://flagcdn.com/de.svg",
-  },
-  {
-    geocode: [40.7128, -74.006], // New York, USA
-    popUp: "New York",
-    flagUrl: "https://flagcdn.com/us.svg",
-  },
-  {
-    geocode: [28.6139, 77.209], // New Delhi, India
-    popUp: "India",
-    flagUrl: "https://flagcdn.com/in.svg",
-  },
-  {
-    geocode: [-33.8688, 151.2093], // Sydney, Australia
-    popUp: "Australia",
-    flagUrl: "https://flagcdn.com/au.svg",
-  },
-  {
-    geocode: [-23.5505, -46.6333], // São Paulo, Brazil
-    popUp: "Brazil",
-    flagUrl: "https://flagcdn.com/br.svg",
-  },
-];
-
-// Calculate bounds to fit all markers
-const bounds = countryMarkers.map((marker) => marker.geocode);
+interface LocationData {
+  id: string;
+  city: string;
+  country: string;
+  map: {
+    type: string;
+    coordinates: [number, number]; // [lng, lat]
+  };
+}
+async function getLocations(): Promise<LocationData[]> {
+  const res = await fetch("http://109.199.126.40/items/locations");
+  if (!res.ok) throw new Error("Failed to fetch locations");
+  const data = await res.json();
+  // If your API returns { data: [...] }, extract the array
+  return Array.isArray(data) ? data : data.data || [];
+}
 
 const Map = () => {
+  const [locations, setLocations] = useState<LocationData[]>([]);
+  const [flags, setFlags] = useState<Record<string, string>>({}); // country → flag URL
+
+  // ✅ Simulate fetching your API data
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getLocations();
+      setLocations(data);
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchFlags() {
+      const uniqueCountries = Array.from(
+        new Set(locations.map((loc) => loc.country))
+      );
+
+      const flagMap: Record<string, string> = {};
+
+      for (const country of uniqueCountries) {
+        try {
+          const res = await fetch(
+            `https://restcountries.com/v3.1/name/${encodeURIComponent(
+              country
+            )}?fields=flags`
+          );
+          const data = await res.json();
+          const flag = data[0]?.flags?.svg || data[0]?.flags?.png || "";
+          flagMap[country] = flag;
+        } catch {
+          flagMap[country] = "";
+        }
+      }
+
+      setFlags(flagMap);
+    }
+
+    if (locations.length > 0) fetchFlags();
+  }, [locations]);
+
+  // ✅ Create map bounds dynamically from coordinates
+  const bounds = L.latLngBounds(
+    locations.map((loc) => [loc.map.coordinates[1], loc.map.coordinates[0]])
+  );
+
   return (
-    <>
-      <section
-        className="contact4__area p-relative"
-        style={{ margin: "20rem 0 5rem 0" }}
-      >
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-12">
-              <div className="contact4__allcontent p-relative mt-255">
-                <div className="contact4__bg-color">
-                  <div className="contact4__bg-img"></div>
-                  <div className="row">
-                    <div className="col-6" style={{ padding: "7rem 5rem " }}>
-                      <h2 className="contact4__title wow" data-wow-delay=".2s">
-                        Our Global Somaliland Community
-                      </h2>
-                      <p
-                        className=" wow fadeInLeft animated"
-                        data-wow-delay=".6s"
-                      >
-                        Connecting a Worldwide Network for a National Vision
-                      </p>
-                      <div
-                        className="button mt-40 wow fadeInLeft animated"
-                        data-wow-delay=".3s"
-                      >
-                        <Link href="/contact" className="contact4__btn">
-                          Contact us <i className="fa-solid fa-arrow-right"></i>
-                        </Link>
-                      </div>
+    <section
+      className="contact4__area p-relative"
+      style={{ margin: "20rem 0 5rem 0" }}
+    >
+      <div className="container">
+        <div className="row align-items-center">
+          <div className="col-12">
+            <div className="contact4__allcontent p-relative mt-255">
+              <div className="contact4__bg-color">
+                <div className="contact4__bg-img"></div>
+                <div className="row">
+                  {/* Left side */}
+                  <div className="col-6" style={{ padding: "7rem 5rem " }}>
+                    <h2 className="contact4__title wow" data-wow-delay=".2s">
+                      Our Global Somaliland Community
+                    </h2>
+                    <p className="wow fadeInLeft animated" data-wow-delay=".6s">
+                      Connecting a Worldwide Network for a National Vision
+                    </p>
+                    <div
+                      className="button mt-40 wow fadeInLeft animated"
+                      data-wow-delay=".3s"
+                    >
+                      <Link href="/contact" className="contact4__btn">
+                        Contact us <i className="fa-solid fa-arrow-right"></i>
+                      </Link>
                     </div>
-                    <div className=" col-6">
+                  </div>
+
+                  {/* Map side */}
+                  <div className=" col-6">
+                    {locations.length > 0 && (
                       <MapContainer
                         bounds={bounds}
                         style={{
@@ -109,35 +111,46 @@ const Map = () => {
                           borderRadius: "1rem",
                         }}
                         scrollWheelZoom={false}
-                        key={JSON.stringify(bounds)} // Ensures re-render if bounds change
+                        key={JSON.stringify(bounds)}
                       >
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                        {countryMarkers.map((marker, idx) => {
+                        {locations.map((loc) => {
+                          const [lng, lat] = loc.map.coordinates;
+                          const flag = flags[loc.country];
                           const icon = L.divIcon({
-                            html: `<img src="${marker.flagUrl}" alt="${marker.popUp} flag" style="width:32px;height:24px;border-radius:4px;border:1px solid #ccc;" />`,
+                            html: flag
+                              ? `<img src="${flag}" alt="${loc.country} flag" style="width:32px;height:24px;border-radius:4px;border:1px solid #ccc;" />`
+                              : `<div style="background:#fff;border-radius:4px;padding:4px;border:1px solid #ccc;">📍</div>`,
                             iconSize: [32, 24],
                             className: "",
                           });
+
                           return (
                             <Marker
-                              key={idx}
-                              position={marker.geocode}
+                              key={loc.id}
+                              position={[lat, lng]}
                               icon={icon}
                             >
-                              <Popup>{marker.popUp}</Popup>
+                              <Popup>
+                                <strong>{loc.city}</strong> <br />
+                                {loc.country} <br />
+                                <small>
+                                  {lat.toFixed(4)}, {lng.toFixed(4)}
+                                </small>
+                              </Popup>
                             </Marker>
                           );
                         })}
                       </MapContainer>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
