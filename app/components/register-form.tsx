@@ -134,8 +134,6 @@ export default function RegisterForm() {
 
   const handleRegistrationAndLogin = async () => {
     const data = getValues();
-    console.log("=== Starting Registration Process ===");
-    console.log("Form data:", { email: data.email, hasPassword: !!data.password });
 
     setIsSubmitting(true);
     setLoadingMessage("Creating your account...");
@@ -144,13 +142,8 @@ export default function RegisterForm() {
     const registerUrl = `${base}/users/register`;
     const loginUrl = `${base}/auth/login`;
 
-    console.log("Registration URL:", registerUrl);
-
     try {
-      // Create user with axios
-      console.log("Sending registration request...");
-      console.log("Request payload:", { email: data.email, password: "***" });
-
+      // Create user
       const createResp = await axios.post(
         registerUrl,
         {
@@ -160,21 +153,14 @@ export default function RegisterForm() {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log("✓ Registration successful!");
-      console.log("Registration response status:", createResp.status);
-      console.log("Registration response data:", createResp.data);
+      console.log("Registration successful:", createResp.data);
 
       // Small delay to ensure user is fully created in the database
       setLoadingMessage("Account created! Logging you in...");
-      console.log("Waiting 1 second before login attempt...");
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Automatically log in the user after successful registration
       try {
-        console.log("Sending login request...");
-        console.log("Login URL:", loginUrl);
-        console.log("Login payload:", { email: data.email, password: "***" });
-
         const loginResp = await axios.post(
           loginUrl,
           {
@@ -184,10 +170,7 @@ export default function RegisterForm() {
           { headers: { "Content-Type": "application/json" } }
         );
 
-        console.log("✓ Login successful!");
-        console.log("Login response status:", loginResp.status);
-        console.log("Login response data:", loginResp.data);
-
+        console.log("Login successful:", loginResp.data);
         setLoadingMessage("Login successful!");
 
         // Extract and store access token
@@ -197,28 +180,20 @@ export default function RegisterForm() {
                            loginResp.data?.accessToken;
 
         if (accessToken) {
-          console.log("Access Token:", accessToken);
+          console.log("Access token saved to localStorage");
           localStorage.setItem("access-token", accessToken);
           localStorage.setItem("authToken", accessToken);
-          console.log("Access token saved to localStorage");
-        } else {
-          console.warn("No access token found in login response");
         }
 
         // Store the entire login response for debugging
         localStorage.setItem("loginResponse", JSON.stringify(loginResp.data));
-        console.log("Full login response saved to localStorage");
 
         // Store user data if provided
         if (loginResp.data?.user) {
           localStorage.setItem("user", JSON.stringify(loginResp.data.user));
-          console.log("User data:", loginResp.data.user);
-          console.log("User data saved to localStorage");
         }
       } catch (loginError: any) {
-        console.error("=== LOGIN FAILED (but registration succeeded) ===");
-        console.error("Login error:", loginError);
-        console.error("Login error response:", loginError?.response?.data);
+        console.error("Login failed (but registration succeeded):", loginError?.response?.data);
 
         // Extract login error message
         let loginErrorMsg = "Login failed after registration";
@@ -234,13 +209,7 @@ export default function RegisterForm() {
       // Move to step 2 after successful registration
       setCurrentStep(2);
     } catch (error: any) {
-      console.error("=== ERROR OCCURRED ===");
-      console.error("Full error object:", error);
-      console.error("Error response:", error?.response);
-      console.error("Error response data:", error?.response?.data);
-      console.error("Error response status:", error?.response?.status);
-      console.error("Error response headers:", error?.response?.headers);
-      console.error("Error message:", error?.message);
+      console.error("Registration failed:", error?.response?.data || error);
 
       let msg = "An unknown error occurred";
 
@@ -249,11 +218,9 @@ export default function RegisterForm() {
 
         // Check for GraphQL-style errors
         if (errorData.errors && Array.isArray(errorData.errors)) {
-          const errorMessages = errorData.errors.map((err: any) =>
+          msg = errorData.errors.map((err: any) =>
             err.message || err.error || JSON.stringify(err)
           ).join(", ");
-          msg = errorMessages;
-          console.error("GraphQL errors found:", errorData.errors);
         }
         // Check for standard error formats
         else if (errorData.message) {
@@ -271,11 +238,8 @@ export default function RegisterForm() {
         msg = String(error);
       }
 
-      console.error("=== FINAL ERROR MESSAGE ===");
-      console.error(msg);
       alert(`Registration/Login failed:\n\n${msg}`);
     } finally {
-      console.log("=== Registration Process Ended ===");
       setIsSubmitting(false);
       setLoadingMessage("");
     }
