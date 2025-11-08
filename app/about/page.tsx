@@ -4,6 +4,7 @@ import Header2 from "../components/header2";
 import ProcessSection from "../components/process-section";
 import Testimonial from "../components/testimonial";
 import TicketBooking from "../components/ticket-booking";
+import DepartmentHierarchy from "../components/department-hierarchy";
 
 export default function AboutUs() {
   return (
@@ -78,7 +79,8 @@ export default function AboutUs() {
         </div>
       </section>
       <ProcessSection />
-      <TicketBooking />
+      <DepartmentHierarchy />
+      {/* <TicketBooking /> */}
       <div style={{ marginTop: "10rem" }}></div>
       <Testimonial />
     </>

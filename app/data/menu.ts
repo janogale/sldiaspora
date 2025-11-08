@@ -15,8 +15,12 @@ export const menuList: MenuItem[] = [
     path: "/about",
   },
   {
-    label: "Department Structure",
-    path: "/department-structure",
+    label: "Services",
+    path: "/#services",
+  },
+  {
+    label: "Investment",
+    path: "/investment",
   },
   {
     label: "Guidelines",

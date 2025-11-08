@@ -79,11 +79,11 @@ const Map = () => {
         <div className="row align-items-center">
           <div className="col-12">
             <div className="contact4__allcontent p-relative mt-255">
-              <div className="contact4__bg-color">
+              <div className="contact4__bg-ceolor">
                 <div className="contact4__bg-img"></div>
-                <div className="row">
+                <div className="row ">
                   {/* Left side */}
-                  <div className="col-6" style={{ padding: "7rem 5rem " }}>
+                  <div className="col-12" style={{ padding: "7rem 5rem " }}>
                     <h2 className="contact4__title wow" data-wow-delay=".2s">
                       Our Global Somaliland Community
                     </h2>
@@ -101,12 +101,12 @@ const Map = () => {
                   </div>
 
                   {/* Map side */}
-                  <div className=" col-6">
+                  <div className=" col-12">
                     {locations.length > 0 && (
                       <MapContainer
                         bounds={bounds}
                         style={{
-                          height: "400px",
+                          height: "800px",
                           width: "100%",
                           borderRadius: "1rem",
                         }}

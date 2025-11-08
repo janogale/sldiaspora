@@ -1,0 +1,92 @@
+/* .\* Testimonial pagination arrow-bullets */ 
+/* Testimonial pagination arrow-bullets */
+.testimonial__content-2-swiper-pagination {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 6px 0;
+}
+.testimonial__content-2-swiper-pagination .testimonial-dot {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	cursor: pointer;
+	color: #9aa6b2; /* inactive arrow color */
+	opacity: 0.75;
+	transition: transform .15s ease, color .15s ease, opacity .15s ease;
+}
+.testimonial__content-2-swiper-pagination .testimonial-dot svg {
+	width: 14px;
+	height: 12px;
+}
+.testimonial__content-2-swiper-pagination .testimonial-dot.swiper-pagination-bullet-active,
+.testimonial__content-2-swiper-pagination .swiper-pagination-bullet-active {
+	color: #50FEA8; /* active arrow color */
+	opacity: 1;
+	transform: scale(1.05);
+}
+
+/* make nav buttons sit above content if needed */
+.testimonial__slider-nav button {
+	background: transparent;
+	border: none;
+	padding: 0;
+}
+
+/* Professional dark card form styles */
+.pro-card {
+	background: #0f1112; /* deep dark */
+	border: 1px solid rgba(255,255,255,0.06);
+	box-shadow: 0 6px 22px rgba(2,6,23,0.6);
+	border-radius: 12px;
+	padding: 28px;
+	color: #e6eef3;
+}
+.pro-card .card-title {
+	font-weight: 700;
+	font-size: 1.05rem;
+	margin-bottom: 6px;
+	color: #ffffff;
+}
+.pro-card .card-subtitle {
+	color: #a7b4bf;
+	font-size: 0.92rem;
+	margin-bottom: 18px;
+}
+.pro-input {
+	background: rgba(255,255,255,0.02);
+	border: 1px solid rgba(255,255,255,0.06);
+	color: #e6eef3;
+	border-radius: 8px;
+	padding: 12px 14px;
+}
+.pro-input::placeholder { color: rgba(230,238,243,0.45); }
+.pro-help {
+	color: #9aa6b2;
+	font-size: 0.85rem;
+	margin-top: 8px;
+}
+.pro-actions {
+	display:flex;align-items:center;justify-content:space-between;margin-top:18px;
+}
+.pro-actions .btn-reset {
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.08);
+	color: #dbe9ef;
+	padding: 8px 14px;
+	border-radius: 8px;
+}
+.pro-actions .btn-save {
+	background: #f6f7f8; color:#0b0b0b; padding:8px 18px; border-radius:8px; border:none;
+}
+
+/* small responsive tweaks */
+@media (max-width: 576px) {
+	.pro-card { padding: 18px; }
+	.pro-actions { flex-direction:column; gap:10px; align-items:stretch; }
+	.pro-actions .btn-reset, .pro-actions .btn-save { width:100%; }
+}
+
