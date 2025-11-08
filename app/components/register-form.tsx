@@ -9,10 +9,11 @@ import { z } from "zod";
 // Zod schemas for each step
 const step1Schema = z
   .object({
-    username: z
+    email: z
       .string()
-      .min(3, "Username must be at least 3 characters")
-      .max(50, "Username must be less than 50 characters"),
+      .email("Please enter a valid email address")
+      .min(3, "Email must be at least 3 characters")
+      .max(100, "Email must be less than 100 characters"),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
@@ -59,6 +60,8 @@ export default function RegisterForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [accessToken, setAccessToken] = useState<string>("");
 
   const totalSteps = 3;
 
@@ -74,7 +77,7 @@ export default function RegisterForm() {
     resolver: zodResolver(completeFormSchema),
     mode: "onChange",
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
       confirmPassword: "",
       first_name: "",
@@ -91,7 +94,7 @@ export default function RegisterForm() {
 
   const validateStep1 = async (): Promise<boolean> => {
     const step1Fields: (keyof CompleteFormData)[] = [
-      "username",
+      "email",
       "password",
       "confirmPassword",
     ];
@@ -119,13 +122,227 @@ export default function RegisterForm() {
     if (currentStep === 1) {
       const isValid = await validateStep1();
       if (isValid) {
-        setCurrentStep(2);
+        // Submit registration after step 1 validation
+        await handleRegistrationAndLogin();
       }
     } else if (currentStep === 2) {
       const isValid = await validateStep2();
       if (isValid) {
-        setCurrentStep(3);
+        // Update user profile after step 2 validation
+        await handleUpdateProfile();
       }
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    const data = getValues();
+
+    setIsSubmitting(true);
+    setLoadingMessage("Updating your profile...");
+
+    const base = "https://sldp.duckdns.org";
+    const updateUrl = `${base}/users/me`;
+
+    try {
+      // Get the access token from state first, then localStorage
+      const token = accessToken ||
+                   localStorage.getItem("access-token") ||
+                   localStorage.getItem("authToken");
+
+      console.log("Using access token:", token ? "Token found" : "No token");
+
+      if (!token) {
+        console.error("Token sources checked:");
+        console.error("- State token:", accessToken);
+        console.error("- localStorage access-token:", localStorage.getItem("access-token"));
+        console.error("- localStorage authToken:", localStorage.getItem("authToken"));
+        throw new Error("No access token found. Please try logging in again.");
+      }
+
+      // Update user profile
+      const updateResp = await axios.patch(
+        updateUrl,
+        {
+          access_token: token,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          location: data.location,
+          title: data.title,
+          expertise: data.expertise,
+          bio: data.bio,
+          phone: data.phone,
+          whatsapp: data.whatsapp,
+          city: data.city,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          }
+        }
+      );
+
+      console.log("Profile updated successfully:", updateResp.data);
+      setLoadingMessage("Profile updated!");
+
+      // Update stored user data
+      localStorage.setItem("user", JSON.stringify(updateResp.data));
+
+      // Move to step 3
+      setCurrentStep(3);
+    } catch (error: any) {
+      console.error("Profile update failed:", error?.response?.data || error);
+
+      let msg = "An unknown error occurred";
+
+      if (error?.response?.data) {
+        const errorData = error.response.data;
+
+        // Check for GraphQL-style errors
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          msg = errorData.errors.map((err: any) =>
+            err.message || err.error || JSON.stringify(err)
+          ).join(", ");
+        }
+        // Check for standard error formats
+        else if (errorData.message) {
+          msg = errorData.message;
+        } else if (errorData.error) {
+          msg = errorData.error;
+        } else if (errorData.detail) {
+          msg = errorData.detail;
+        } else {
+          msg = JSON.stringify(errorData);
+        }
+      } else if (error?.message) {
+        msg = error.message;
+      } else {
+        msg = String(error);
+      }
+
+      alert(`Profile update failed:\n\n${msg}`);
+    } finally {
+      setIsSubmitting(false);
+      setLoadingMessage("");
+    }
+  };
+
+  const handleRegistrationAndLogin = async () => {
+    const data = getValues();
+
+    setIsSubmitting(true);
+    setLoadingMessage("Creating your account...");
+
+    const base = "https://sldp.duckdns.org";
+    const registerUrl = `${base}/users/register`;
+    const loginUrl = `${base}/auth/login`;
+
+    try {
+      // Create user
+      const createResp = await axios.post(
+        registerUrl,
+        {
+          email: data.email,
+          password: data.password,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Registration successful:", createResp.data);
+
+      // Small delay to ensure user is fully created in the database
+      setLoadingMessage("Account created! Logging you in...");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Automatically log in the user after successful registration
+      try {
+        const loginResp = await axios.post(
+          loginUrl,
+          {
+            email: data.email,
+            password: data.password,
+          },
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        console.log("Login successful:", loginResp.data);
+        setLoadingMessage("Login successful!");
+
+        // Extract and store access token (check nested data object first)
+        const responseData = loginResp.data?.data || loginResp.data;
+        const token = responseData?.access_token ||
+                     responseData?.["access-token"] ||
+                     responseData?.token ||
+                     responseData?.accessToken;
+
+        if (token) {
+          console.log("Access token found and saved");
+          localStorage.setItem("access-token", token);
+          localStorage.setItem("authToken", token);
+          setAccessToken(token); // Save to state for immediate use
+        } else {
+          console.warn("No access token found in response");
+          console.warn("Response data:", loginResp.data);
+          console.warn("Nested data:", responseData);
+        }
+
+        // Store the entire login response for debugging
+        localStorage.setItem("loginResponse", JSON.stringify(loginResp.data));
+
+        // Store user data if provided
+        if (loginResp.data?.user) {
+          localStorage.setItem("user", JSON.stringify(loginResp.data.user));
+        }
+      } catch (loginError: any) {
+        console.error("Login failed (but registration succeeded):", loginError?.response?.data);
+
+        // Extract login error message
+        let loginErrorMsg = "Login failed after registration";
+        if (loginError?.response?.data?.errors) {
+          loginErrorMsg = loginError.response.data.errors.map((e: any) => e.message).join(", ");
+        } else if (loginError?.response?.data?.message) {
+          loginErrorMsg = loginError.response.data.message;
+        }
+
+        alert(`Registration successful but automatic login failed:\n\n${loginErrorMsg}\n\nPlease try logging in manually with your credentials.`);
+      }
+
+      // Move to step 2 after successful registration
+      setCurrentStep(2);
+    } catch (error: any) {
+      console.error("Registration failed:", error?.response?.data || error);
+
+      let msg = "An unknown error occurred";
+
+      if (error?.response?.data) {
+        const errorData = error.response.data;
+
+        // Check for GraphQL-style errors
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          msg = errorData.errors.map((err: any) =>
+            err.message || err.error || JSON.stringify(err)
+          ).join(", ");
+        }
+        // Check for standard error formats
+        else if (errorData.message) {
+          msg = errorData.message;
+        } else if (errorData.error) {
+          msg = errorData.error;
+        } else if (errorData.detail) {
+          msg = errorData.detail;
+        } else {
+          msg = JSON.stringify(errorData);
+        }
+      } else if (error?.message) {
+        msg = error.message;
+      } else {
+        msg = String(error);
+      }
+
+      alert(`Registration/Login failed:\n\n${msg}`);
+    } finally {
+      setIsSubmitting(false);
+      setLoadingMessage("");
     }
   };
 
@@ -148,7 +365,7 @@ export default function RegisterForm() {
       const createResp = await axios.post(
         registerUrl,
         {
-          email: data.username,
+          email: data.email,
           password: data.password,
         },
         { headers: { "Content-Type": "application/json" } }
@@ -301,22 +518,22 @@ export default function RegisterForm() {
                           className="contact-us__input wow fadeInLeft animated"
                           data-wow-delay=".4s"
                         >
-                          <span>Enter Username</span>
+                          <span>Enter Email</span>
                           <input
-                            id="username"
-                            type="text"
-                            placeholder="Your Username"
+                            id="email"
+                            type="email"
+                            placeholder="Your Email Address"
                             className={`form-control ${
-                              errors.username ? "is-invalid" : ""
+                              errors.email ? "is-invalid" : ""
                             }`}
-                            {...register("username")}
+                            {...register("email")}
                           />
                           <div className="icon">
-                            <i className="fa-solid fa-user"></i>
+                            <i className="fa-solid fa-envelope"></i>
                           </div>
-                          {errors.username && (
+                          {errors.email && (
                             <div className="invalid-feedback">
-                              {errors.username.message}
+                              {errors.email.message}
                             </div>
                           )}
                         </div>
@@ -375,18 +592,36 @@ export default function RegisterForm() {
                       </div>
 
                       <div className="col-12">
+                        {isSubmitting && loadingMessage && (
+                          <div className="alert alert-info d-flex align-items-center mb-3">
+                            <div className="spinner-border spinner-border-sm me-2" role="status">
+                              <span className="visually-hidden">Loading...</span>
+                            </div>
+                            <strong>{loadingMessage}</strong>
+                          </div>
+                        )}
                         <div className="d-flex justify-content-between align-items-center mt-3">
                           <button
                             type="button"
                             className="contact-btn mt-0 wow fadeInLeft animated"
                             data-wow-delay=".8s"
                             onClick={handleNext}
+                            disabled={isSubmitting}
                           >
-                            Next{" "}
-                            <i
-                              style={{ paddingLeft: "1rem" }}
-                              className="fas fa-arrow-right ms-1"
-                            />
+                            {isSubmitting ? (
+                              <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Processing...
+                              </>
+                            ) : (
+                              <>
+                                Next{" "}
+                                <i
+                                  style={{ paddingLeft: "1rem" }}
+                                  className="fas fa-arrow-right ms-1"
+                                />
+                              </>
+                            )}
                           </button>
                         </div>
                       </div>
@@ -621,12 +856,21 @@ export default function RegisterForm() {
                       </div>
 
                       <div className="col-12  ">
+                        {isSubmitting && loadingMessage && (
+                          <div className="alert alert-info d-flex align-items-center mb-3">
+                            <div className="spinner-border spinner-border-sm me-2" role="status">
+                              <span className="visually-hidden">Loading...</span>
+                            </div>
+                            <strong>{loadingMessage}</strong>
+                          </div>
+                        )}
                         <div className="d-flex gap-4 justify-content-between align-items-center mt-3">
                           <button
                             type="button"
                             className="contact-btn mt-0 wow fadeInLeft animated"
                             data-wow-delay=".8s"
                             onClick={handleBack}
+                            disabled={isSubmitting}
                           >
                             <i
                               style={{ paddingRight: "1rem" }}
@@ -640,12 +884,22 @@ export default function RegisterForm() {
                             className="contact-btn mt-0 wow fadeInLeft animated"
                             data-wow-delay=".8s"
                             onClick={handleNext}
+                            disabled={isSubmitting}
                           >
-                            Next{" "}
-                            <i
-                              style={{ paddingLeft: "1rem" }}
-                              className="fas fa-arrow-right ms-1"
-                            />
+                            {isSubmitting ? (
+                              <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Processing...
+                              </>
+                            ) : (
+                              <>
+                                Next{" "}
+                                <i
+                                  style={{ paddingLeft: "1rem" }}
+                                  className="fas fa-arrow-right ms-1"
+                                />
+                              </>
+                            )}
                           </button>
                         </div>
                       </div>
@@ -708,8 +962,8 @@ export default function RegisterForm() {
                 <div className="col-md-7">
                   <h5 className="mb-3">Registration Summary</h5>
                   <dl className="row">
-                    <dt className="col-sm-4 text-muted">Username</dt>
-                    <dd className="col-sm-8">{formData.username || "-"}</dd>
+                    <dt className="col-sm-4 text-muted">Email</dt>
+                    <dd className="col-sm-8">{formData.email || "-"}</dd>
 
                     <dt className="col-sm-4 text-muted">First Name</dt>
                     <dd className="col-sm-8">{formData.first_name || "-"}</dd>
