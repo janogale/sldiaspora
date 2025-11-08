@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import axios from "axios";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 // Zod schemas for each step
@@ -52,8 +53,8 @@ const step2Schema = z.object({
 // Combined schema for final submission
 const completeFormSchema = step1Schema.merge(step2Schema);
 
-type Step1FormData = z.infer<typeof step1Schema>;
-type Step2FormData = z.infer<typeof step2Schema>;
+// type Step1FormData = z.infer<typeof step1Schema>;
+// type Step2FormData = z.infer<typeof step2Schema>;
 type CompleteFormData = z.infer<typeof completeFormSchema>;
 
 export default function RegisterForm() {
@@ -145,17 +146,24 @@ export default function RegisterForm() {
 
     try {
       // Get the access token from state first, then localStorage
-      const token = accessToken ||
-                   localStorage.getItem("access-token") ||
-                   localStorage.getItem("authToken");
+      const token =
+        accessToken ||
+        localStorage.getItem("access-token") ||
+        localStorage.getItem("authToken");
 
       console.log("Using access token:", token ? "Token found" : "No token");
 
       if (!token) {
         console.error("Token sources checked:");
         console.error("- State token:", accessToken);
-        console.error("- localStorage access-token:", localStorage.getItem("access-token"));
-        console.error("- localStorage authToken:", localStorage.getItem("authToken"));
+        console.error(
+          "- localStorage access-token:",
+          localStorage.getItem("access-token")
+        );
+        console.error(
+          "- localStorage authToken:",
+          localStorage.getItem("authToken")
+        );
         throw new Error("No access token found. Please try logging in again.");
       }
 
@@ -177,8 +185,8 @@ export default function RegisterForm() {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -190,37 +198,38 @@ export default function RegisterForm() {
 
       // Move to step 3
       setCurrentStep(3);
-    } catch (error: any) {
-      console.error("Profile update failed:", error?.response?.data || error);
+    } catch (error) {
+      console.error("Profile update failed:" + error);
+      // console.error("Profile update failed:", error?.response?.data || error);
 
-      let msg = "An unknown error occurred";
+      // let msg = "An unknown error occurred";
 
-      if (error?.response?.data) {
-        const errorData = error.response.data;
+      // if (error?.response?.data) {
+      //   const errorData = error.response.data;
 
-        // Check for GraphQL-style errors
-        if (errorData.errors && Array.isArray(errorData.errors)) {
-          msg = errorData.errors.map((err: any) =>
-            err.message || err.error || JSON.stringify(err)
-          ).join(", ");
-        }
-        // Check for standard error formats
-        else if (errorData.message) {
-          msg = errorData.message;
-        } else if (errorData.error) {
-          msg = errorData.error;
-        } else if (errorData.detail) {
-          msg = errorData.detail;
-        } else {
-          msg = JSON.stringify(errorData);
-        }
-      } else if (error?.message) {
-        msg = error.message;
-      } else {
-        msg = String(error);
-      }
+      //   // Check for GraphQL-style errors
+      //   if (errorData.errors && Array.isArray(errorData.errors)) {
+      //     msg = errorData.errors
+      //       .map((err: any) => err.message || err.error || JSON.stringify(err))
+      //       .join(", ");
+      //   }
+      //   // Check for standard error formats
+      //   else if (errorData.message) {
+      //     msg = errorData.message;
+      //   } else if (errorData.error) {
+      //     msg = errorData.error;
+      //   } else if (errorData.detail) {
+      //     msg = errorData.detail;
+      //   } else {
+      //     msg = JSON.stringify(errorData);
+      //   }
+      // } else if (error?.message) {
+      //   msg = error.message;
+      // } else {
+      //   msg = String(error);
+      // }
 
-      alert(`Profile update failed:\n\n${msg}`);
+      alert(`Profile update failed:\n\n`);
     } finally {
       setIsSubmitting(false);
       setLoadingMessage("");
@@ -252,7 +261,7 @@ export default function RegisterForm() {
 
       // Small delay to ensure user is fully created in the database
       setLoadingMessage("Account created! Logging you in...");
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Automatically log in the user after successful registration
       try {
@@ -270,10 +279,11 @@ export default function RegisterForm() {
 
         // Extract and store access token (check nested data object first)
         const responseData = loginResp.data?.data || loginResp.data;
-        const token = responseData?.access_token ||
-                     responseData?.["access-token"] ||
-                     responseData?.token ||
-                     responseData?.accessToken;
+        const token =
+          responseData?.access_token ||
+          responseData?.["access-token"] ||
+          responseData?.token ||
+          responseData?.accessToken;
 
         if (token) {
           console.log("Access token found and saved");
@@ -293,53 +303,56 @@ export default function RegisterForm() {
         if (loginResp.data?.user) {
           localStorage.setItem("user", JSON.stringify(loginResp.data.user));
         }
-      } catch (loginError: any) {
-        console.error("Login failed (but registration succeeded):", loginError?.response?.data);
-
+      } catch (loginError) {
+        // console.error(
+        //   "Login failed (but registration succeeded):",
+        //   loginError?.response?.data
+        // )
         // Extract login error message
-        let loginErrorMsg = "Login failed after registration";
-        if (loginError?.response?.data?.errors) {
-          loginErrorMsg = loginError.response.data.errors.map((e: any) => e.message).join(", ");
-        } else if (loginError?.response?.data?.message) {
-          loginErrorMsg = loginError.response.data.message;
-        }
+        // let loginErrorMsg = "Login failed after registration";
+        // if (loginError?.response?.data?.errors) {
+        //   loginErrorMsg = loginError.response.data.errors
+        //     .map((e: any) => e.message)
+        //     .join(", ");
+        // } else if (loginError?.response?.data?.message) {
+        //   loginErrorMsg = loginError.response.data.message;
+        // }
 
-        alert(`Registration successful but automatic login failed:\n\n${loginErrorMsg}\n\nPlease try logging in manually with your credentials.`);
+        alert(
+          `Registration successful but automatic login failed:\n\n${loginError}\n\nPlease try logging in manually with your credentials.`
+        );
       }
 
       // Move to step 2 after successful registration
       setCurrentStep(2);
-    } catch (error: any) {
-      console.error("Registration failed:", error?.response?.data || error);
-
-      let msg = "An unknown error occurred";
-
-      if (error?.response?.data) {
-        const errorData = error.response.data;
-
-        // Check for GraphQL-style errors
-        if (errorData.errors && Array.isArray(errorData.errors)) {
-          msg = errorData.errors.map((err: any) =>
-            err.message || err.error || JSON.stringify(err)
-          ).join(", ");
-        }
-        // Check for standard error formats
-        else if (errorData.message) {
-          msg = errorData.message;
-        } else if (errorData.error) {
-          msg = errorData.error;
-        } else if (errorData.detail) {
-          msg = errorData.detail;
-        } else {
-          msg = JSON.stringify(errorData);
-        }
-      } else if (error?.message) {
-        msg = error.message;
-      } else {
-        msg = String(error);
-      }
-
-      alert(`Registration/Login failed:\n\n${msg}`);
+    } catch (error) {
+      console.log(error);
+      // console.error("Registration failed:", error?.response?.data || error);
+      // let msg = "An unknown error occurred";
+      // if (error?.response?.data) {
+      //   const errorData = error.response.data;
+      //   // Check for GraphQL-style errors
+      //   if (errorData.errors && Array.isArray(errorData.errors)) {
+      //     msg = errorData.errors
+      //       .map((err: any) => err.message || err.error || JSON.stringify(err))
+      //       .join(", ");
+      //   }
+      //   // Check for standard error formats
+      //   else if (errorData.message) {
+      //     msg = errorData.message;
+      //   } else if (errorData.error) {
+      //     msg = errorData.error;
+      //   } else if (errorData.detail) {
+      //     msg = errorData.detail;
+      //   } else {
+      //     msg = JSON.stringify(errorData);
+      //   }
+      // } else if (error?.message) {
+      //   msg = error.message;
+      // } else {
+      //   msg = String(error);
+      // }
+      // alert(`Registration/Login failed:\n\n${msg}`);
     } finally {
       setIsSubmitting(false);
       setLoadingMessage("");
@@ -358,7 +371,7 @@ export default function RegisterForm() {
 
     const base = "https://sldp.duckdns.org";
     const registerUrl = `${base}/users/register`;
-    const updateFallback = `${base}/users/dc118cf0-0ff5-4c47-8b5c-b90f8bf2f8d0`;
+    // const updateFallback = `${base}/users/dc118cf0-0ff5-4c47-8b5c-b90f8bf2f8d0`;
 
     try {
       // Create user with axios
@@ -399,12 +412,12 @@ export default function RegisterForm() {
       console.log("User created:", createResp, "updated:", updated);
 
       setSubmissionSuccess(true);
-      setCurrentStep(3);
-    } catch (error: any) {
-      console.error("Registration failed:", error);
-      const msg =
-        error?.response?.data?.message || error?.message || String(error);
-      alert(`Registration failed: ${msg}`);
+      // setCurrentStep(3);
+    } catch (error) {
+      // console.error("Registration failed:", error);
+      // const msg =
+      //   error?.response?.data?.message || error?.message || String(error);
+      alert(`Registration failed: ${error}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -412,7 +425,7 @@ export default function RegisterForm() {
 
   const handleReset = () => {
     reset();
-    setCurrentStep(1);
+    // setCurrentStep(1);
   };
 
   const renderProgressBar = () => (
@@ -594,8 +607,13 @@ export default function RegisterForm() {
                       <div className="col-12">
                         {isSubmitting && loadingMessage && (
                           <div className="alert alert-info d-flex align-items-center mb-3">
-                            <div className="spinner-border spinner-border-sm me-2" role="status">
-                              <span className="visually-hidden">Loading...</span>
+                            <div
+                              className="spinner-border spinner-border-sm me-2"
+                              role="status"
+                            >
+                              <span className="visually-hidden">
+                                Loading...
+                              </span>
                             </div>
                             <strong>{loadingMessage}</strong>
                           </div>
@@ -610,7 +628,11 @@ export default function RegisterForm() {
                           >
                             {isSubmitting ? (
                               <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span
+                                  className="spinner-border spinner-border-sm me-2"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
                                 Processing...
                               </>
                             ) : (
@@ -858,8 +880,13 @@ export default function RegisterForm() {
                       <div className="col-12  ">
                         {isSubmitting && loadingMessage && (
                           <div className="alert alert-info d-flex align-items-center mb-3">
-                            <div className="spinner-border spinner-border-sm me-2" role="status">
-                              <span className="visually-hidden">Loading...</span>
+                            <div
+                              className="spinner-border spinner-border-sm me-2"
+                              role="status"
+                            >
+                              <span className="visually-hidden">
+                                Loading...
+                              </span>
                             </div>
                             <strong>{loadingMessage}</strong>
                           </div>
@@ -888,7 +915,11 @@ export default function RegisterForm() {
                           >
                             {isSubmitting ? (
                               <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span
+                                  className="spinner-border spinner-border-sm me-2"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
                                 Processing...
                               </>
                             ) : (
@@ -1052,9 +1083,9 @@ export default function RegisterForm() {
                     >
                       Register Another Account
                     </button>
-                    <a href="/" className="btn btn-outline-primary">
+                    <Link href="/" className="btn btn-outline-primary">
                       Go to Homepage
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

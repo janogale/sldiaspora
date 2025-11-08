@@ -18,6 +18,8 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "public/assets/js/vendor/**",
+      "public/assets/js/plugins/**",
     ],
   },
 ];

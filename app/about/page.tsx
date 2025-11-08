@@ -1,10 +1,9 @@
 import BreadCamp from "../components/BreadCamp";
 import ChooseUs from "../components/choose-us";
+import DepartmentHierarchy from "../components/department-hierarchy";
 import Header2 from "../components/header2";
 import ProcessSection from "../components/process-section";
 import Testimonial from "../components/testimonial";
-import TicketBooking from "../components/ticket-booking";
-import DepartmentHierarchy from "../components/department-hierarchy";
 
 export default function AboutUs() {
   return (

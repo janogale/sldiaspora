@@ -129,9 +129,9 @@ const InvestmentPage = () => {
                       experiences and high-impact projects.
                     </p>
                     <p style={{ fontSize: "16px", lineHeight: "1.8" }}>
-                      Must-see destinations include Laas Geel's prehistoric
+                      Must-see destinations include Laas Geel&apos;s prehistoric
                       paintings, the historic port town of Berbera, and the Cal
-                      Madow mountains. Whether you're exploring cultural
+                      Madow mountains. Whether you&apos;re exploring cultural
                       heritage, eco-tourism, or locating strategic logistics
                       hubs, Somaliland offers a welcoming environment and
                       growing infrastructure to support sustainable travel and
@@ -384,7 +384,7 @@ const InvestmentPage = () => {
                           marginBottom: 16,
                         }}
                       >
-                        Discover Somaliland's culture, history and the
+                        Discover Somaliland&apos;s culture, history and the
                         must-visit places below. Click any image for a larger
                         view or to learn more.
                       </p>

@@ -1,17 +1,15 @@
 "use client";
+import dynamic from "next/dynamic";
 import Blogs from "./components/blogs";
 import ChooseUs from "./components/choose-us";
 import Header from "./components/header";
 import HelpDesk from "./components/helpDesk";
 import Hero from "./components/hero";
-import LatestProject from "./components/latest-project";
 import ProcessSection from "./components/process-section";
 import Services from "./components/services";
 import Testimonial from "./components/testimonial";
-import TicketBooking from "./components/ticket-booking";
 import VisaCategory from "./components/visa-category";
 import VisaCategory2 from "./components/visa-category-2";
-import dynamic from "next/dynamic";
 
 const WorldMap = dynamic(() => import("./components/WorldMap"), {
   ssr: false, // 👈 disables server-side rendering for this component
