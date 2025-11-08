@@ -19,7 +19,7 @@ export const menuList: MenuItem[] = [
     path: "/#services",
   },
   {
-    label: "Investment",
+    label: "Investment & Tourism",
     path: "/investment",
   },
   {

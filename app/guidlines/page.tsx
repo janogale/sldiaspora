@@ -3,6 +3,8 @@ import Link from "next/link";
 import React from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header2 from "../components/header2";
+import { de } from "zod/locales";
+import { title } from "process";
 
 function Page() {
   const [selectedGuide, setSelectedGuide] = React.useState<number>(1);
@@ -12,120 +14,140 @@ function Page() {
       title: "Passport Application",
       desc: [
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada, and New Zealand. The highest IELT Academic module whether you have adequate possible band score is 9.0; most universities accept a score of 6.0 for undergraduate admission and 6.0-7.0 for graduate admission. There are two versions of the",
-        },
-        {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement English Language for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada,",
+          body: "A Somaliland passport is issued only to individuals who are recognized as citizens of Somaliland and can prove their citizenship. Applicants must also meet the following requirements:",
         },
       ],
       items: [
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "Provide a copy of their voter registration card issued during the election period.",
+          desc: "",
         },
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "Obtain a clearance letter from the Criminal Investigation Department (CID) confirming that they have no criminal record.",
+          desc: "",
         },
+        {
+          title:
+            "Obtain a verification letter from the District Attorney’s Office confirming that they have not committed any crime.",
+          desc: "",
+        },
+        {
+          title: "Provide three (3) recent passport-sized photographs.",
+          desc: "",
+        },
+        { title: "Submit a completed Passport Application Form.", desc: "" },
       ],
       image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-guides-img1.png",
+        "/assets/imgs/coaching/coaching-details/coaching-details-top-img.png",
     },
     {
       id: 1,
       title: "Voter Registration",
       desc: [
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada, and New Zealand. The highest IELT Academic module whether you have adequate possible band score is 9.0; most universities accept a score of 6.0 for undergraduate admission and 6.0-7.0 for graduate admission. There are two versions of the",
+          body: "This document outlines a comprehensive civil and voter registration process to be implemented by Somaliland's National Electoral Commission (NEC). The registration is a joint effort conducted by teams comprising staff from the NEC, the Ministry of Internal Affairs (MINT), and the Appeals Court (AC).",
         },
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement English Language for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada,",
+          body: "The process is rolled out region by region and consists of three main phases:",
         },
       ],
       items: [
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "A 25-day kick-off period for public information and distribution of forms at district offices.",
+          desc: "",
         },
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "A 5-day core registration period at designated registration centres, where eligible citizens register in person. Officials verify eligibility and then use electronic kits to capture personal data, a digital photograph, and fingerprints. A civil ID card and a voter card are printed on the spot, laminated, and issued immediately. Indelible ink is applied to a finger to prevent immediate duplicate registration.",
+          desc: "",
+        },
+        {
+          title:
+            "A 15-day supplemental registration period at district offices for those who missed the core registration.",
+          desc: "",
         },
       ],
-      image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-guides-img1.png",
+      image: "/vote.jpg",
     },
     {
       id: 2,
       title: "National ID Card",
       desc: [
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada, and New Zealand. The highest IELT Academic module whether you have adequate possible band score is 9.0; most universities accept a score of 6.0 for undergraduate admission and 6.0-7.0 for graduate admission. There are two versions of the",
+          body: "Districts facilitate issuance of national identity card. They perform the initial screening and verification process to ensure that only eligible citizens are granted the national ID card. Now, the districts can carry out this function by online, and if you want, you can apply in person.",
         },
-        {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement English Language for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada,",
-        },
+        { body: "Steps to apply for a new National ID card are:" },
       ],
       items: [
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title: "Login or register an account as an applicant",
+          desc: "",
         },
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "From your dashboard select apply new National ID. Fill out the application form and submit it. The technical officers at the Local government will review and verify the application.",
+          desc: "",
+        },
+        {
+          title:
+            "After approval, an invoice will be generated and a notification for payment shall be sent via SMS or email. Open the invoice from your dashboard and select Pay Now.",
+          desc: "",
+        },
+        {
+          title:
+            "Upon successful payment, the application will proceed to the Director of Tax for approval/revert.",
+          desc: "",
+        },
+        { title: "Download and print your national ID card form ", desc: "" },
+        {
+          title:
+            "Ministry of Interior issues the National ID and the applicant shall collect the ID in person from the district’s civic registration department",
+          desc: "",
         },
       ],
-      image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-guides-img1.png",
+      image: "/id.jpg",
     },
     {
       id: 3,
       title: "Investment Guidelines",
       desc: [
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada, and New Zealand. The highest IELT Academic module whether you have adequate possible band score is 9.0; most universities accept a score of 6.0 for undergraduate admission and 6.0-7.0 for graduate admission. There are two versions of the",
+          body: "Somaliland is a land of unexploited potential and emerging opportunities. Strategically located in the Horn of Africa, with an 850-kilometer coastline along the Gulf of Aden, it is a natural gateway to African and Middle Eastern markets. Blessed with abundant natural resources, a resilient and youthful population, and a deep-rooted cultural heritage, Somaliland offers a stable and investor-friendly environment.",
         },
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement English Language for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada,",
+          body: "The government is prioritizing key growth sectors: agriculture, livestock, fisheries, technology, trade & logistics, mining, and renewable energy, each supported by a government committed to economic transformation and sustainable development. With competitive business policies, improving infrastructure, and a growing appetite for innovation, Somaliland stands ready to welcome forward-thinking investors and partners. We invite you to explore the opportunities that await in Somaliland, where tradition meets ambition and investment drives impact.",
         },
       ],
-      items: [
-        {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
-        },
-        {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
-        },
-      ],
-      image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-guides-img1.png",
+      image: "/port.jpg",
     },
     {
       id: 4,
       title: "Tax Regulations",
       desc: [
         {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada, and New Zealand. The highest IELT Academic module whether you have adequate possible band score is 9.0; most universities accept a score of 6.0 for undergraduate admission and 6.0-7.0 for graduate admission. There are two versions of the",
-        },
-        {
-          body: "IELTS score is internationally recognized as an English Language proficiency requirement English Language for higher education, in almost all countries including the USA, the United Kingdom, Australia, Canada,",
+          body: "The Somaliland tax system, administered by the Ministry of Finance, includes several key types of taxes:",
         },
       ],
       items: [
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "Income Tax: A tax on the income of individuals and businesses, including:",
+          desc: "Business Profit Tax: Tax on company profits",
         },
         {
-          title: "Safety Guides",
-          desc: "Lorem ipsum dolor sit amet, cons ectetur adipiscing elit",
+          title:
+            "Indirect Taxes: Taxes on consumption and transactions, primarily",
+          desc: "Sales Tax: A general tax applied to the sale of goods and services.",
+        },
+        {
+          title: "Other Taxes: This category includes:",
+          desc: "Presumptive Tax: A simplified tax for small businesses based on an estimate of their earnings rather than detailed accounts.",
         },
       ],
-      image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-guides-img1.png",
+      image: "/taxes.jpg",
     },
     {
       id: 6,
@@ -185,8 +207,7 @@ function Page() {
           desc: '<a href="https://fire.govsomaliland.org/article/contact-us" target="_blank" rel="noopener noreferrer">https://fire.govsomaliland.org/article/contact-us</a>',
         },
       ],
-      image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-guides-img1.png",
+      image: "/help.jpg",
     },
   ];
 
@@ -252,10 +273,7 @@ function Page() {
                         className="coaching-details__content-top-img pb-20"
                         data-tilt
                       >
-                        <img
-                          src="/assets/imgs/coaching/coaching-details/coaching-details-top-img.png"
-                          alt="img not found"
-                        />
+                        <img src={guide.image} alt="img not found" />
                       </div>
                       <h2
                         className="coaching-details__content-title mb-30 wow fadeInLeft animated"
@@ -276,7 +294,7 @@ function Page() {
                     {guide.id === 6 ? (
                       // Grid layout for Key Links
                       <div className="row mt-30">
-                        {guide.items.map((item, idx) => {
+                        {guide.items?.map((item, idx) => {
                           const isGreen = idx % 2 === 0;
                           const bgColor = isGreen ? "#006D21" : "#DC143C";
                           const hoverShadow = isGreen
@@ -398,7 +416,7 @@ function Page() {
                       // Original layout for other guides
                       <div className="coaching-details__guides d-flex mb-40 mt-30">
                         <div className="coaching-details__guides-card">
-                          {guide.items.map((item, idx) => (
+                          {guide.items?.map((item, idx) => (
                             <div
                               key={idx}
                               className={`coaching-details__guides-card-tetx${

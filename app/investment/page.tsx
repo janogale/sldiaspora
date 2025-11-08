@@ -12,7 +12,7 @@ const InvestmentPage = () => {
     <>
       <Header />
       <main>
-        <BreadCamp title="Investments" />
+        <BreadCamp title="Investments and Tourism" />
 
         <section className="investment-section ">
           <div className="container">

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Footer = () => {
   return (
     <footer>
@@ -102,12 +104,12 @@ const Footer = () => {
                   />
                 </span>
                 <div className="footer__logo mb-30">
-                  <a href="index.html">
+                  <Link href="/">
                     <img
                       src="assets/imgs/logo/offcanvas-logo.svg"
                       alt="logo not found"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="footer__content">
                   <p>
@@ -144,27 +146,27 @@ const Footer = () => {
                 <div className="footer__link">
                   <ul>
                     <li>
-                      <a href="about-us.html">
+                      <Link href="/contact" className="d-block">
                         <i className="fa-solid fa-check"></i>Contact Diaspora
                         Affairs
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="faq.html">
+                      <Link href="/guidlines" className="d-block">
                         <i className="fa-solid fa-check"></i>FAQ & Support
                         Center
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="service-details.html">
+                      <Link href="/contact" className="d-block">
                         <i className="fa-solid fa-check"></i>Schedule a
                         Consultation
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="service.html">
+                      <Link href="/contact" className="d-block">
                         <i className="fa-solid fa-check"></i>Report an Issue
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -182,27 +184,27 @@ const Footer = () => {
                 <div className="footer__link">
                   <ul>
                     <li>
-                      <a href="index-3.html">
+                      <Link href="/blogs" className="d-block">
                         <i className="fa-solid fa-angle-right"></i>Latest News
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="about-us.html">
+                      <Link href="/department-structure" className="d-block">
                         <i className="fa-solid fa-angle-right"></i>National
                         Development Causes
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="service.html">
+                      <Link href="/contact" className="d-block">
                         <i className="fa-solid fa-angle-right"></i>Contact
                         Government Offices
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="blog.html">
+                      <Link href="/blogs" className="d-block">
                         <i className="fa-solid fa-angle-right"></i>Success
                         Stories
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -282,16 +284,16 @@ const Footer = () => {
                     className=" wow fadeInLeft animated"
                     data-wow-delay="1.6s"
                   >
-                    <a href="about-us.html">Trams & Condition</a>
+                    <Link href="/terms">Terms &amp; Conditions</Link>
                   </li>
                   <li
                     className=" wow fadeInLeft animated"
                     data-wow-delay="1.8s"
                   >
-                    <a href="team-details.html">Privacy Policy</a>
+                    <Link href="/privacy">Privacy Policy</Link>
                   </li>
                   <li className=" wow fadeInLeft animated" data-wow-delay="2s">
-                    <a href="contact.html">Contact Us</a>
+                    <Link href="/contact">Contact Us</Link>
                   </li>
                 </ul>
               </div>
