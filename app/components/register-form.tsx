@@ -9,10 +9,11 @@ import { z } from "zod";
 // Zod schemas for each step
 const step1Schema = z
   .object({
-    username: z
+    email: z
       .string()
-      .min(3, "Username must be at least 3 characters")
-      .max(50, "Username must be less than 50 characters"),
+      .email("Please enter a valid email address")
+      .min(3, "Email must be at least 3 characters")
+      .max(100, "Email must be less than 100 characters"),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
@@ -74,7 +75,7 @@ export default function RegisterForm() {
     resolver: zodResolver(completeFormSchema),
     mode: "onChange",
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
       confirmPassword: "",
       first_name: "",
@@ -91,7 +92,7 @@ export default function RegisterForm() {
 
   const validateStep1 = async (): Promise<boolean> => {
     const step1Fields: (keyof CompleteFormData)[] = [
-      "username",
+      "email",
       "password",
       "confirmPassword",
     ];
@@ -148,7 +149,7 @@ export default function RegisterForm() {
       const createResp = await axios.post(
         registerUrl,
         {
-          email: data.username,
+          email: data.email,
           password: data.password,
         },
         { headers: { "Content-Type": "application/json" } }
@@ -301,22 +302,22 @@ export default function RegisterForm() {
                           className="contact-us__input wow fadeInLeft animated"
                           data-wow-delay=".4s"
                         >
-                          <span>Enter Username</span>
+                          <span>Enter Email</span>
                           <input
-                            id="username"
-                            type="text"
-                            placeholder="Your Username"
+                            id="email"
+                            type="email"
+                            placeholder="Your Email Address"
                             className={`form-control ${
-                              errors.username ? "is-invalid" : ""
+                              errors.email ? "is-invalid" : ""
                             }`}
-                            {...register("username")}
+                            {...register("email")}
                           />
                           <div className="icon">
-                            <i className="fa-solid fa-user"></i>
+                            <i className="fa-solid fa-envelope"></i>
                           </div>
-                          {errors.username && (
+                          {errors.email && (
                             <div className="invalid-feedback">
-                              {errors.username.message}
+                              {errors.email.message}
                             </div>
                           )}
                         </div>
@@ -708,8 +709,8 @@ export default function RegisterForm() {
                 <div className="col-md-7">
                   <h5 className="mb-3">Registration Summary</h5>
                   <dl className="row">
-                    <dt className="col-sm-4 text-muted">Username</dt>
-                    <dd className="col-sm-8">{formData.username || "-"}</dd>
+                    <dt className="col-sm-4 text-muted">Email</dt>
+                    <dd className="col-sm-8">{formData.email || "-"}</dd>
 
                     <dt className="col-sm-4 text-muted">First Name</dt>
                     <dd className="col-sm-8">{formData.first_name || "-"}</dd>
