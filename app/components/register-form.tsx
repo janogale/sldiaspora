@@ -163,6 +163,7 @@ export default function RegisterForm() {
       const updateResp = await axios.patch(
         updateUrl,
         {
+          access_token: token,
           first_name: data.first_name,
           last_name: data.last_name,
           location: data.location,
@@ -176,7 +177,7 @@ export default function RegisterForm() {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${token}`,
           }
         }
       );
