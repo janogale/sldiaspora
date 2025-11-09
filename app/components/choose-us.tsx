@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const ChooseUs = () => {
@@ -231,9 +232,9 @@ const ChooseUs = () => {
                   className="choose-us__button-btn wow fadeInLeft animated"
                   data-wow-delay=".7s"
                 >
-                  <a href="story-details.html">
+                  <Link href="about">
                     Read More <i className="fa-solid fa-arrow-right"></i>
-                  </a>
+                  </Link>
                 </div>
                 <div
                   className="choose-us__button-text wow fadeInLeft animated"

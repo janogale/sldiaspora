@@ -45,11 +45,11 @@ const Hero = () => {
                     nation-building.
                   </h1>
                   <Link
-                    href="/contact"
+                    href="/register"
                     className="banner2__button mt-40 mt-xs-25 wow fadeInLeft animated d-inline-block"
                     data-wow-delay=".6s"
                   >
-                    Contact Us <i className="fa-solid fa-arrow-right"></i>
+                    Become a Member
                   </Link>
                 </div>
               </div>

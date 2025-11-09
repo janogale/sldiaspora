@@ -71,7 +71,7 @@ const Header = () => {
                   </nav>
                 </div>
               </div>
-              <div className="offcanvas__social">
+              {/* <div className="offcanvas__social">
                 <h3 className="offcanvas__title mb-20">Subscribe & Follow</h3>
                 <ul>
                   <li>
@@ -105,7 +105,7 @@ const Header = () => {
                     </span>
                   </Link>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -209,11 +209,11 @@ const Header = () => {
                   <div className="header__action d-flex align-items-center">
                     <div className="header__btn-wrap d-none d-sm-inline-flex">
                       <Link
-                        href="/contact"
+                        href="/register"
                         className="rr-btn"
                         style={{ background: "red" }}
                       >
-                        <span>Portal Login</span>{" "}
+                        <span>Become a Member</span>{" "}
                         <i
                           className="fa-solid fa-arrow-right"
                           style={{ marginTop: "0.2rem" }}
