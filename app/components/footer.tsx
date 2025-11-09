@@ -47,8 +47,8 @@ const Footer = () => {
                   </svg>
                 </div>
                 <h3>
-                  Need Support With Engagement or <br />
-                  Documentation?
+                  Need help with investments, <br />
+                  citizenship, or documentation?
                 </h3>
               </div>
               {/* <div
@@ -141,31 +141,29 @@ const Footer = () => {
                 data-wow-delay=".3s"
               >
                 <div className="footer__widget-title footer__widget-title-2">
-                  <h4>Get Help</h4>
+                  <h4>Quick Links</h4>
                 </div>
                 <div className="footer__link">
                   <ul>
                     <li>
-                      <Link href="/contact" className="d-block">
-                        <i className="fa-solid fa-check"></i>Contact Diaspora
-                        Affairs
+                      <Link href="/" className="d-block">
+                        <i className="fa-solid fa-check"></i>
+                        Home
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/about" className="d-block">
+                        <i className="fa-solid fa-check"></i>About us
                       </Link>
                     </li>
                     <li>
                       <Link href="/guidlines" className="d-block">
-                        <i className="fa-solid fa-check"></i>FAQ & Support
-                        Center
+                        <i className="fa-solid fa-check"></i>Guidelines
                       </Link>
                     </li>
                     <li>
                       <Link href="/contact" className="d-block">
-                        <i className="fa-solid fa-check"></i>Schedule a
-                        Consultation
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/contact" className="d-block">
-                        <i className="fa-solid fa-check"></i>Report an Issue
+                        <i className="fa-solid fa-check"></i> Contact Us
                       </Link>
                     </li>
                   </ul>
@@ -189,21 +187,18 @@ const Footer = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link href="/department-structure" className="d-block">
-                        <i className="fa-solid fa-angle-right"></i>National
-                        Development Causes
+                      <Link href="/guidlines" className="d-block">
+                        <i className="fa-solid fa-angle-right"></i>Guidelines
                       </Link>
                     </li>
                     <li>
-                      <Link href="/contact" className="d-block">
-                        <i className="fa-solid fa-angle-right"></i>Contact
-                        Government Offices
+                      <Link href="/investment" className="d-block">
+                        <i className="fa-solid fa-angle-right"></i>Investments
                       </Link>
                     </li>
                     <li>
-                      <Link href="/blogs" className="d-block">
-                        <i className="fa-solid fa-angle-right"></i>Success
-                        Stories
+                      <Link href="/investment" className="d-block">
+                        <i className="fa-solid fa-angle-right"></i>Tourism
                       </Link>
                     </li>
                   </ul>
@@ -277,7 +272,7 @@ const Footer = () => {
                   rights reserved.
                 </p>
               </div>
-
+              {/* 
               <div className="footer__copyright-menu">
                 <ul>
                   <li
@@ -296,7 +291,7 @@ const Footer = () => {
                     <Link href="/contact">Contact Us</Link>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
