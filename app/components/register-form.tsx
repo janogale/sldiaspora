@@ -64,12 +64,11 @@ export default function RegisterForm() {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [accessToken, setAccessToken] = useState<string>("");
 
-  const totalSteps = 3;
+  const totalSteps = 2;
 
   // Initialize form with React Hook Form and Zod resolver
   const {
     register,
-    handleSubmit,
     formState: { errors, isValid },
     trigger,
     reset,
@@ -171,7 +170,7 @@ export default function RegisterForm() {
       const updateResp = await axios.patch(
         updateUrl,
         {
-          access_token: token,
+          // access_token: token,
           first_name: data.first_name,
           last_name: data.last_name,
           location: data.location,
@@ -196,8 +195,8 @@ export default function RegisterForm() {
       // Update stored user data
       localStorage.setItem("user", JSON.stringify(updateResp.data));
 
-      // Move to step 3
-      setCurrentStep(3);
+      // Registration complete
+      setSubmissionSuccess(true);
     } catch (error) {
       console.error("Profile update failed:" + error);
       // console.error("Profile update failed:", error?.response?.data || error);
@@ -365,69 +364,6 @@ export default function RegisterForm() {
     }
   };
 
-  const onSubmit = async (data: CompleteFormData) => {
-    setIsSubmitting(true);
-    setSubmissionSuccess(false);
-
-    const base = "https://sldp.duckdns.org";
-    const registerUrl = `${base}/users/register`;
-    // const updateFallback = `${base}/users/dc118cf0-0ff5-4c47-8b5c-b90f8bf2f8d0`;
-
-    try {
-      // Create user with axios
-      const createResp = await axios.post(
-        registerUrl,
-        {
-          email: data.email,
-          password: data.password,
-        },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      // const created = createResp.data;
-      // const createdId =
-      //   created?.id || created?.userId || created?.uuid || created?._id;
-      // const updateUrl = createdId
-      //   ? `${base}/users/${createdId}`
-      //   : updateFallback;
-
-      // // Update the created user (axios PUT)
-      // const updateResp = await axios.put(
-      //   updateUrl,
-      //   {
-      //     first_name: data.first_name,
-      //     last_name: data.last_name,
-      //     location: data.location,
-      //     title: data.title,
-      //     expertise: data.expertise,
-      //     bio: data.bio,
-      //     phone: data.phone,
-      //     whatsapp: data.whatsapp,
-      //     city: data.city,
-      //   },
-      //   { headers: { "Content-Type": "application/json" } }
-      // );
-
-      const updated = createResp.data;
-      console.log("User created:", createResp, "updated:", updated);
-
-      setSubmissionSuccess(true);
-      // setCurrentStep(3);
-    } catch (error) {
-      // console.error("Registration failed:", error);
-      // const msg =
-      //   error?.response?.data?.message || error?.message || String(error);
-      alert(`Registration failed: ${error}`);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleReset = () => {
-    reset();
-    // setCurrentStep(1);
-  };
-
   const renderProgressBar = () => (
     <div className="progress mb-4" style={{ height: "8px" }}>
       <div
@@ -443,7 +379,7 @@ export default function RegisterForm() {
 
   const renderStepIndicator = () => (
     <div className="d-flex justify-content-center mb-4">
-      {[1, 2, 3].map((step) => (
+      {[1, 2].map((step) => (
         <div key={step} className="d-flex align-items-center">
           <div
             className={`rounded-circle d-flex align-items-center justify-content-center ${
@@ -477,49 +413,6 @@ export default function RegisterForm() {
           <div className="row align-items-center">
             <div className="col-lg-12">
               <div className="contact-us__title-wrapper">
-                <div className="section__title-wrapper mb-40">
-                  <h6
-                    className="section__title-wrapper-black-subtitle mb-10 wow fadeInLeft animated"
-                    data-wow-delay=".2s"
-                  >
-                    Contact Information
-                    <svg
-                      width="14"
-                      height="12"
-                      viewBox="0 0 14 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#clip0_3843_1169)">
-                        <path
-                          d="M4.92578 10.3748L6.49623 9.68052L5.62583 9.07031L4.92578 10.3748Z"
-                          fill="#83CD20"
-                        />
-                        <path
-                          d="M4.92578 10.3743L5.00073 8L13.9088 0L5.66505 9.1113L4.92578 10.3743Z"
-                          fill="#83CD20"
-                        />
-                        <path d="M5 8L13.908 0L0 6.22704L5 8Z" fill="#83CD20" />
-                        <path
-                          d="M5.66406 9.1113L9.95686 12L13.9078 0L5.66406 9.1113Z"
-                          fill="#034833"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_3843_1169">
-                          <rect width="13.908" height="12" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </h6>
-                  <h2
-                    className="section__title-wrapper-title wow fadeInLeft animated"
-                    data-wow-delay=".3s"
-                  >
-                    Let Your Wanderlust Guide You
-                  </h2>
-                </div>
-
                 <div className="contact-us__form-wrapper">
                   <div className="card-header py-4 text-white">
                     <h5 className="mb-0">Stage 1: Account Credentials</h5>
@@ -578,7 +471,7 @@ export default function RegisterForm() {
                         </div>
                       </div>
 
-                      <div className="col-sm-12">
+                      {/* <div className="col-sm-12">
                         <div
                           className="contact-us__input wow fadeInLeft animated"
                           data-wow-delay=".6s"
@@ -602,7 +495,7 @@ export default function RegisterForm() {
                             </div>
                           )}
                         </div>
-                      </div>
+                      </div> */}
 
                       <div className="col-12">
                         {isSubmitting && loadingMessage && (
@@ -945,168 +838,98 @@ export default function RegisterForm() {
     </>
   );
 
-  const renderStep3 = () => {
-    const formData = getValues();
-    return (
-      <div className="d-flex justify-content-center">
-        <div
-          className="card border-0 shadow-lg"
-          style={{ maxWidth: 900, width: "100%", overflow: "hidden" }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(90deg,#0f9d58,#83CD20)",
-              padding: "2rem 1.25rem",
-            }}
-          >
-            <div className="d-flex align-items-center">
-              <div
-                className="me-3"
-                style={{
-                  width: 84,
-                  height: 84,
-                  borderRadius: "50%",
-                  background: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                }}
-              >
-                <i
-                  className="fas fa-user-check text-success"
-                  style={{ fontSize: "2.4rem" }}
-                />
-              </div>
-              <div className="text-white">
-                <h3 className="mb-1">Review & Submit</h3>
-                <p className="mb-0 ">
-                  Please review your details and complete registration.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="card-body p-4">
-            {!submissionSuccess ? (
-              <div className="row">
-                <div className="col-md-7">
-                  <h5 className="mb-3">Registration Summary</h5>
-                  <dl className="row">
-                    <dt className="col-sm-4 text-muted">Email</dt>
-                    <dd className="col-sm-8">{formData.email || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">First Name</dt>
-                    <dd className="col-sm-8">{formData.first_name || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">Last Name</dt>
-                    <dd className="col-sm-8">{formData.last_name || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">Title</dt>
-                    <dd className="col-sm-8">{formData.title || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">Expertise</dt>
-                    <dd className="col-sm-8">{formData.expertise || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">Location</dt>
-                    <dd className="col-sm-8">{formData.location || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">City</dt>
-                    <dd className="col-sm-8">{formData.city || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">Phone</dt>
-                    <dd className="col-sm-8">{formData.phone || "-"}</dd>
-
-                    <dt className="col-sm-4 text-muted">WhatsApp</dt>
-                    <dd className="col-sm-8">{formData.whatsapp || "-"}</dd>
-                  </dl>
-
-                  {formData.bio && (
-                    <>
-                      <h6 className="mt-3">Bio</h6>
-                      <p className="text-muted small">{formData.bio}</p>
-                    </>
-                  )}
-                </div>
-
-                <div className="col-md-5 d-flex flex-column justify-content-center align-items-center">
-                  <div className="mb-3 text-center">
-                    <span className="badge bg-warning text-dark py-2 px-3">
-                      Ready to submit
-                    </span>
-                  </div>
-                  <p className="text-muted text-center">
-                    When you click Complete Registration we will create your
-                    account then apply profile updates.
-                  </p>
-                  <div className="d-flex gap-2 mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                      onClick={handleBack}
-                      disabled={isSubmitting}
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? "Submitting..." : "Complete Registration"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="row">
-                <div className="col-12 text-center py-4">
-                  <div className="mb-4">
-                    <i
-                      className="fas fa-check-circle text-success"
-                      style={{ fontSize: "4rem" }}
-                    />
-                  </div>
-                  <h3 className="text-success mb-3">Registration Complete!</h3>
-                  <p className="lead mb-4">
-                    Thank you for registering with the Somaliland Diaspora
-                    Department.
-                  </p>
-                  <div className="mb-3">
-                    <span className="badge bg-success py-2 px-3">Verified</span>
-                  </div>
-                  <div className="d-flex gap-2 justify-content-center mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleReset}
-                    >
-                      Register Another Account
-                    </button>
-                    <Link href="/" className="btn btn-outline-primary">
-                      Go to Homepage
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="container-fluid py-4">
       <div className="row justify-content-center">
         <div className="col-12">
-          {renderStepIndicator()}
-          {renderProgressBar()}
+          {!submissionSuccess && (
+            <>
+              {renderStepIndicator()}
+              {renderProgressBar()}
+            </>
+          )}
 
-          {currentStep === 1 && renderStep1()}
-          {currentStep === 2 && renderStep2()}
-          {currentStep === 3 && (
-            <form onSubmit={handleSubmit(onSubmit)}>{renderStep3()}</form>
+          {currentStep === 1 && !submissionSuccess && renderStep1()}
+          {currentStep === 2 && !submissionSuccess && renderStep2()}
+
+          {submissionSuccess && (
+            <div className="d-flex justify-content-center">
+              <div
+                className="card border-0 shadow-lg"
+                style={{ maxWidth: 900, width: "100%", overflow: "hidden" }}
+              >
+                <div
+                  style={{
+                    background: "linear-gradient(90deg,#0f9d58,#83CD20)",
+                    padding: "2rem 1.25rem",
+                  }}
+                >
+                  <div className="d-flex align-items-center">
+                    <div
+                      className="me-3"
+                      style={{
+                        width: 84,
+                        height: 84,
+                        borderRadius: "50%",
+                        background: "#fff",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                      }}
+                    >
+                      <i
+                        className="fas fa-user-check text-success"
+                        style={{ fontSize: "2.4rem" }}
+                      />
+                    </div>
+                    <div className="text-white">
+                      <h3 className="mb-1">Registration Complete!</h3>
+                      <p className="mb-0">
+                        Your account has been successfully created.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card-body p-4">
+                  <div className="row">
+                    <div className="col-12 text-center py-4">
+                      <div className="mb-4">
+                        <i
+                          className="fas fa-check-circle text-success"
+                          style={{ fontSize: "4rem" }}
+                        />
+                      </div>
+                      <h3 className="text-success mb-3">Success!</h3>
+                      <p className="lead mb-4">
+                        Thank you for registering with the Somaliland Diaspora
+                        Department. Your profile has been created and updated
+                        successfully.
+                      </p>
+                      <div className="mb-3">
+                        <span className="badge bg-success py-2 px-3">
+                          Verified
+                        </span>
+                      </div>
+                      <div className="">
+                        <Link href="/">
+                          <button
+                            type="button"
+                            className="contact-btn mt-0 wow fadeInLeft animated"
+                            data-wow-delay=".8s"
+                            onClick={handleNext}
+                            disabled={isSubmitting}
+                          >
+                            Back to Home
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

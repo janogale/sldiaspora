@@ -19,7 +19,7 @@ export default function RegisterPage() {
             <div className="col-lg-12">
               <div className="section__title-wrapper text-center mb-60">
                 <h6
-                  className="section__title-wrapper-black-subtitle mb-10 wow fadeInLeft animated"
+                  className="ction__title-wrapper-subtitle"
                   data-wow-delay=".2s"
                 >
                   Registration Process
