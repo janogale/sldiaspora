@@ -3,8 +3,6 @@ import Link from "next/link";
 import React from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header2 from "../components/header2";
-import { de } from "zod/locales";
-import { title } from "process";
 
 function Page() {
   const [selectedGuide, setSelectedGuide] = React.useState<number>(1);

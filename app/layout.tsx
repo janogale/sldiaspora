@@ -1,7 +1,7 @@
+import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
 import Footer from "./components/footer";
 import "./globals.css";
-import "leaflet/dist/leaflet.css";
 
 import Script from "next/script";
 

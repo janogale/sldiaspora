@@ -26,11 +26,11 @@ const DepartmentStructureContent = () => {
   //   setExpandedSections(newExpanded);
   // };
 
-  const visionStatement =
-    "To serve as the bridge between the Somaliland Diaspora community and the home country for mutually beneficial relationships in socioeconomic development and promotion of Somaliland's positive national image abroad and international standing.";
+  // const visionStatement =
+  //   "To serve as the bridge between the Somaliland Diaspora community and the home country for mutually beneficial relationships in socioeconomic development and promotion of Somaliland's positive national image abroad and international standing.";
 
-  const missionStatement =
-    "To effectively mobilize and utilize the resources of the Somaliland diaspora, promoting the country's economic, social, technological, and political development by creating an enabling environment for deeper and sustainable diaspora engagement.";
+  // const missionStatement =
+  //   "To effectively mobilize and utilize the resources of the Somaliland diaspora, promoting the country's economic, social, technological, and political development by creating an enabling environment for deeper and sustainable diaspora engagement.";
 
   const leadership: LeadershipRole[] = [
     {
@@ -223,7 +223,7 @@ const DepartmentStructureContent = () => {
           responsibilities: [
             "Maintains diaspora registries and demographic profiles",
             "Develops secure digital data management platforms",
-            "Analyze migration trends and diaspora distribution",
+            "Analyzes migration trends and diaspora distribution",
             "Registers diaspora professionals abroad via online platforms",
             "Ensures compliance with data protection standards",
           ],
@@ -233,7 +233,7 @@ const DepartmentStructureContent = () => {
 
           responsibilities: [
             "Conducts thematic research on diaspora engagement",
-            "Analyze trends and produces statistical reports",
+            "Analyzes trends and produces statistical reports",
             "Supports academic collaborations and diaspora studies",
             "Produces information packages and service guides",
             "Prepares quarterly magazines and outreach materials",
@@ -244,7 +244,7 @@ const DepartmentStructureContent = () => {
         "Oversees diaspora mapping initiatives, research, and profiling activities",
         "Promotes virtual engagement to identify and attract diaspora expertise",
         "Maintains diaspora databases and mapping systems for engagement efforts",
-        "Analyses diaspora demographics to inform targeted programs and investment opportunities",
+        "Analyzes diaspora demographics to inform targeted programs and investment opportunities",
         "Manages digital platforms for diaspora interaction",
         "Coordinates with national statistics entities and academic institutions",
       ],

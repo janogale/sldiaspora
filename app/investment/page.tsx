@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import Header from "../components/header";
+import { useState } from "react";
 import BreadCamp from "../components/BreadCamp";
-import { de } from "zod/locales";
+import Header from "../components/header";
 import { Investments } from "../data/Investments";
 import { explorePlaces } from "../data/explores";
 

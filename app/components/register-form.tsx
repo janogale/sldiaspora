@@ -69,9 +69,8 @@ export default function RegisterForm() {
   // Initialize form with React Hook Form and Zod resolver
   const {
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     trigger,
-    reset,
     getValues,
   } = useForm<CompleteFormData>({
     resolver: zodResolver(completeFormSchema),
