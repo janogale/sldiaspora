@@ -1,0 +1,119 @@
+.root {
+  padding: 48px 0;
+  background: linear-gradient(180deg, #f7fbf9 0%, #f4f8f7 100%);
+}
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+.top {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.lead {
+  flex: 1 1 480px;
+  min-width: 300px;
+}
+.eyebrow {
+  color: #0b5b39;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.heading {
+  color: #072b20;
+  font-size: 28px;
+  margin: 0 0 12px 0;
+}
+.introText {
+  color: #475569;
+  line-height: 1.7;
+  font-size: 16px;
+}
+.imageBox {
+  flex: 0 0 420px;
+  min-width: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 48px rgba(2, 48, 29, 0.06);
+}
+.subSection {
+  margin-top: 28px;
+}
+.subTitle {
+  color: #034833;
+  margin: 0 0 6px 0;
+}
+.subLead {
+  color: #4b5563;
+  margin: 0 0 18px 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid rgba(2, 48, 29, 0.04);
+  box-shadow: 0 6px 18px rgba(10, 25, 47, 0.04);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 48px rgba(2, 48, 29, 0.12);
+}
+.icon {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e6f7ef 0%, #ffffff 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #047a4c;
+}
+.cardTitle {
+  margin: 0 0 6px 0;
+  color: #072b20;
+  font-size: 16px;
+}
+.cardText {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+}
+.ctaRow {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cta {
+  background: #047a4c;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 8px 30px rgba(4, 122, 76, 0.12);
+}
+.cta.secondary {
+  background: transparent;
+  color: #047a4c;
+  border: 1px solid rgba(4, 122, 76, 0.12);
+}
+
+@media (max-width: 640px) {
+  .heading { font-size: 22px; }
+  .icon { width: 40px; height: 40px; }
+}

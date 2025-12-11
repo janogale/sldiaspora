@@ -188,12 +188,57 @@ const InvestmentOpportunities = () => {
                         </li>
                       ))}
                   </ul>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: 12,
+                    }}
+                  >
+                    <Link
+                      href={investment.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn"
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "1px solid #006d21",
+                        color: "#006d21",
+                        padding: "10px 18px",
+                        fontSize: "1rem",
+                        fontWeight: 600,
+                        borderRadius: "8px",
+                        textDecoration: "none",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor =
+                          "#006d21";
+                        (e.currentTarget as HTMLElement).style.color = "#fff";
+                        (e.currentTarget as HTMLElement).style.transform =
+                          "translateY(-2px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor =
+                          "transparent";
+                        (e.currentTarget as HTMLElement).style.color =
+                          "#006d21";
+                        (e.currentTarget as HTMLElement).style.transform =
+                          "translateY(0)";
+                      }}
+                    >
+                      Read more
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="text-center mt-5 pt-3">
+        {/* <div className="text-center mt-5 pt-3">
           <Link
             href="/investment"
             className="btn btn-primary wow fadeInUp animated"
@@ -227,7 +272,7 @@ const InvestmentOpportunities = () => {
             <i className="fa-solid fa-download"></i>
             Download Investment Guide
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -16,7 +16,7 @@ export default function AboutUs() {
       <Header2 />
       <BreadCamp title="About Us" />
       <IntroductionSection />
-      <ChooseUs />
+
       <section className="overview__area custom-width section-space bottom p-relative border overflow-hidden gray-bg">
         <div
           className="overview__bg-img"
@@ -131,9 +131,8 @@ export default function AboutUs() {
       </section>
       <CoreValues />
       <StrategicObjectives />
-      <ProcessSection />
+
       <DepartmentHierarchy />
-      <HelpDesk />
     </>
   );
 }

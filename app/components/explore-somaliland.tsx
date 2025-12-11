@@ -107,18 +107,24 @@ const ExploreSomaliland = () => {
                     }}
                   />
                   <div className="position-absolute top-0 end-0 m-3">
-                    <div
-                      className="badge d-flex align-items-center gap-2 px-3 py-2"
-                      style={{
-                        backgroundColor: "rgba(255, 255, 255, 0.95)",
-                        color: "#006d21",
-                        fontWeight: "600",
-                        fontSize: "1rem",
-                        backdropFilter: "blur(10px)",
-                      }}
+                    <Link
+                      href={place.map}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <MapPin size={16} /> Destination
-                    </div>
+                      <div
+                        className="badge d-flex align-items-center gap-2 px-3 py-2"
+                        style={{
+                          backgroundColor: "rgba(255, 255, 255, 0.95)",
+                          color: "#006d21",
+                          fontWeight: "600",
+                          fontSize: "1rem",
+                          backdropFilter: "blur(10px)",
+                        }}
+                      >
+                        <MapPin size={16} /> Destination
+                      </div>
+                    </Link>
                   </div>
                   <div
                     className="position-absolute bottom-0 start-0 p-4 w-100"
@@ -154,7 +160,7 @@ const ExploreSomaliland = () => {
         </div>
         <div className="text-center mt-5">
           <Link
-            href="/investments"
+            href="/investment"
             className="btn btn-outline-lg px-5 py-3 rounded-pill d-inline-flex align-items-center gap-2 wow fadeInUp animated"
             data-wow-delay=".6s"
             style={{

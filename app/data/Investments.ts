@@ -9,6 +9,7 @@ export const Investments = [
       "Strong Local Demand",
     ],
     image: "/assets/imgs/invest/arg.jpg",
+    website: "https://moad.govsomaliland.org/", // Ministry of Agricultural Development
   },
   {
     title: "Livestock",
@@ -18,6 +19,7 @@ export const Investments = [
       "Meat and dairy processing plants",
     ],
     image: "/assets/imgs/invest/livestock.jpg",
+    website: "https://molfd.govsomaliland.org/", // Ministry of Livestock & Rural Development
   },
   {
     title: "Fisheries",
@@ -28,6 +30,7 @@ export const Investments = [
       "Exporting seafood to regional markets",
     ],
     image: "/assets/imgs/invest/fish.jpg",
+    website: "https://mofcd.govsomaliland.org/", // Ministry of Fishery & Marine Resources
   },
   {
     title: "Technology",
@@ -37,6 +40,7 @@ export const Investments = [
       "Agri-tech and healthtech solutions",
     ],
     image: "/assets/imgs/invest/tech.jpg",
+    website: "https://mict.govsomaliland.org/", // Ministry of ICT
   },
   {
     title: "Trade and Logistics Sector",
@@ -46,6 +50,7 @@ export const Investments = [
       "Wholesale and Retail Infrastructure",
     ],
     image: "/assets/imgs/invest/log.webp",
+    website: "https://mott.govsomaliland.org/", // Ministry of Trade & Tourism
   },
   {
     title: "Mining",
@@ -55,6 +60,7 @@ export const Investments = [
       "Industrial minerals like gypsum and salt",
     ],
     image: "/assets/imgs/invest/ming.jpg",
+    website: "https://moem.govsomaliland.org/", // Ministry of Energy & Minerals
   },
   {
     title: "Renewable Energy",
@@ -64,5 +70,6 @@ export const Investments = [
       "Clean energy services for rural electrification",
     ],
     image: "/assets/imgs/invest/energy.jpeg",
+    website: "https://moem.govsomaliland.org/", // Same ministry handles energy
   },
 ];

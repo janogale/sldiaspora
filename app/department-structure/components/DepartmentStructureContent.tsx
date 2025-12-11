@@ -422,7 +422,7 @@ const DepartmentStructureContent = () => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-4">
+            {/* <div className="col-lg-4">
               <div
                 className="visa-details__widget mt-30 wow fadeInLeft animated"
                 data-wow-delay=".3s"
@@ -433,7 +433,7 @@ const DepartmentStructureContent = () => {
                 <h3 className="mt-15">GET TOUCH</h3>
                 <a href="tel:+888123456765">(+888) 123 456 765</a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

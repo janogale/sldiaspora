@@ -20,7 +20,7 @@ export const events = [
     description:
       "Career Opportunities Fair for the African Diaspora. Meet top employers and mentors.",
     location: "London, UK",
-    datetime: "2024-07-08 11:00 AM",
+    datetime: "2026-07-08 11:00 AM",
     delay: ".3s",
   },
   {
@@ -32,7 +32,7 @@ export const events = [
     description:
       "Diaspora Tech Summit: Innovation and Entrepreneurship in the Diaspora.",
     location: "Toronto, Canada",
-    datetime: "2024-07-12 09:30 AM",
+    datetime: "2026-07-12 09:30 AM",
     delay: ".4s",
   },
   {
@@ -44,7 +44,7 @@ export const events = [
     description:
       "Cultural Festival celebrating diversity in the diaspora community.",
     location: "Berlin, Germany",
-    datetime: "2024-07-18 04:00 PM",
+    datetime: "2026-07-18 04:00 PM",
     delay: ".5s",
   },
   {
@@ -68,7 +68,7 @@ export const events = [
     description:
       "Business Networking Mixer for diaspora entrepreneurs and investors.",
     location: "Paris, France",
-    datetime: "2024-07-28 07:00 PM",
+    datetime: "2026-07-28 07:00 PM",
     delay: ".7s",
   },
 ];

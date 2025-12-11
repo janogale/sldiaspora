@@ -4,6 +4,7 @@ import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import { Investments } from "../data/Investments";
 import { explorePlaces } from "../data/explores";
+import Link from "next/link";
 
 const InvestmentPage = () => {
   const [activeTab, setActiveTab] = useState<"sectors" | "explore">("sectors");
@@ -18,51 +19,106 @@ const InvestmentPage = () => {
             {/* Top toggle to switch between sections */}
             <div className="row mb-30">
               <div className="col-lg-12">
-                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                  <div style={{ flex: 1 }} />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <div
                     role="tablist"
                     aria-label="Investment sections toggle"
                     style={{
                       display: "inline-flex",
-                      background: "#f1f5f3",
-                      padding: 4,
+                      background: "#f6fbf7",
+                      padding: 6,
                       borderRadius: 999,
+                      boxShadow: "0 6px 18px rgba(3,40,18,0.06)",
+                      alignItems: "center",
                     }}
                   >
                     <button
                       onClick={() => setActiveTab("sectors")}
                       role="tab"
                       aria-selected={activeTab === "sectors"}
+                      aria-controls="sectors-panel"
                       style={{
                         border: "none",
-                        background:
-                          activeTab === "sectors" ? "#006D21" : "transparent",
                         color: activeTab === "sectors" ? "#fff" : "#063e1f",
-                        padding: "8px 14px",
+                        padding: "8px 16px",
                         borderRadius: 999,
                         cursor: "pointer",
-                        fontWeight: 700,
+                        fontWeight: 800,
+                        display: "inline-flex",
+                        gap: 10,
+                        alignItems: "center",
+                        transition: "all 220ms ease",
+                        boxShadow:
+                          activeTab === "sectors"
+                            ? "0 6px 16px rgba(0,109,33,0.18)"
+                            : "none",
+                        background:
+                          activeTab === "sectors" ? "#006D21" : "transparent",
                       }}
                     >
-                      Investment Sectors
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        style={{ opacity: activeTab === "sectors" ? 1 : 0.9 }}
+                      >
+                        <path
+                          d="M3 13h8V3H3v10zM3 21h8v-6H3v6zM13 21h8V11h-8v10zM13 3v6h8V3h-8z"
+                          fill={activeTab === "sectors" ? "#fff" : "#063e1f"}
+                        />
+                      </svg>
+                      <span>Investment Sectors</span>
                     </button>
+
                     <button
                       onClick={() => setActiveTab("explore")}
                       role="tab"
                       aria-selected={activeTab === "explore"}
+                      aria-controls="explore-panel"
                       style={{
                         border: "none",
-                        background:
-                          activeTab === "explore" ? "#006D21" : "transparent",
                         color: activeTab === "explore" ? "#fff" : "#063e1f",
-                        padding: "8px 14px",
+                        padding: "8px 16px",
                         borderRadius: 999,
                         cursor: "pointer",
-                        fontWeight: 700,
+                        fontWeight: 800,
+                        display: "inline-flex",
+                        gap: 10,
+                        alignItems: "center",
+                        transition: "all 220ms ease",
+                        boxShadow:
+                          activeTab === "explore"
+                            ? "0 6px 16px rgba(0,109,33,0.18)"
+                            : "none",
+                        background:
+                          activeTab === "explore" ? "#006D21" : "transparent",
                       }}
                     >
-                      Explore Somaliland
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        style={{ opacity: activeTab === "explore" ? 1 : 0.9 }}
+                      >
+                        <path
+                          d="M12 2l4 7h6l-5 4 2 7-7-4-7 4 2-7L2 9h6l4-7z"
+                          fill={activeTab === "explore" ? "#fff" : "#063e1f"}
+                        />
+                      </svg>
+                      <span>Explore Somaliland</span>
                     </button>
                   </div>
                 </div>
@@ -285,6 +341,56 @@ const InvestmentPage = () => {
                               </li>
                             ))}
                           </ul>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-end",
+                              marginTop: 12,
+                            }}
+                          >
+                            <Link
+                              href={sector.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn"
+                              style={{
+                                backgroundColor: "transparent",
+                                border: "1px solid #006d21",
+                                color: "#006d21",
+                                padding: "10px 18px",
+                                fontSize: "1.3rem",
+                                fontWeight: 600,
+                                borderRadius: "8px",
+                                textDecoration: "none",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                transition: "all 0.2s ease",
+                              }}
+                              onMouseEnter={(e) => {
+                                (
+                                  e.currentTarget as HTMLElement
+                                ).style.backgroundColor = "#006d21";
+                                (e.currentTarget as HTMLElement).style.color =
+                                  "#fff";
+                                (
+                                  e.currentTarget as HTMLElement
+                                ).style.transform = "translateY(-2px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                (
+                                  e.currentTarget as HTMLElement
+                                ).style.backgroundColor = "transparent";
+                                (e.currentTarget as HTMLElement).style.color =
+                                  "#006d21";
+                                (
+                                  e.currentTarget as HTMLElement
+                                ).style.transform = "translateY(0)";
+                              }}
+                            >
+                              Read more
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -505,6 +611,24 @@ const InvestmentPage = () => {
                                   }}
                                 >
                                   Get Directions
+                                </a>
+                                <a
+                                  href="https://mott.govsomaliland.org/"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="rr-btn"
+                                  style={{
+                                    background: "transparent",
+                                    border: "1px solid #006d21",
+                                    color: "#006d21",
+                                    padding: "10px 18px",
+                                    borderRadius: 6,
+                                    textDecoration: "none",
+                                    fontWeight: 600,
+                                    marginLeft: 8,
+                                  }}
+                                >
+                                  MOTT Website
                                 </a>
                               </div>
                             </div>

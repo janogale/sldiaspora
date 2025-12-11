@@ -1,3 +1,6 @@
+import Link from "next/link";
+import React from "react";
+
 const ProcessSection = () => {
   return (
     <section className="section-space ">
@@ -86,6 +89,29 @@ const ProcessSection = () => {
                 <span className="process__item-number">03</span>
                 <h5 className="mb-20 mt-10">Collaborate & Build</h5>
                 <p>Take action. Invest, volunteer, and build your legacy.</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-12">
+                <div style={{ textAlign: "center", marginTop: 24 }}>
+                  <Link
+                    href="/register"
+                    className="btn btn-primary"
+                    style={{
+                      background: "#006D21",
+                      color: "#fff",
+                      padding: "12px 28px",
+                      borderRadius: 10,
+                      textDecoration: "none",
+                      fontWeight: 700,
+                      border: "none",
+                      fontSize: "2rem",
+                      display: "inline-block",
+                    }}
+                  >
+                    Become a member
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

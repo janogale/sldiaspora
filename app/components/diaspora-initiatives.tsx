@@ -4,8 +4,10 @@ import {
   Hospital,
   Accessibility,
   Users,
-  Heart,
+  Gift,
+  ShieldAlert,
   ArrowRight,
+  Heart,
 } from "lucide-react";
 
 const DiasporaInitiatives = () => {
@@ -14,7 +16,7 @@ const DiasporaInitiatives = () => {
       icon: Hospital,
       title: "Help Hospital Home",
       description:
-        "Supporting healthcare facilities and medical programs across Somaliland to ensure quality care for all citizens.",
+        "Supporting hospitals and health centers with essential medical equipment, supplies, and patient care items.",
       action: "Donate Now",
       link: "/contact",
       color: "#006d21",
@@ -24,24 +26,43 @@ const DiasporaInitiatives = () => {
       icon: Accessibility,
       title: "Help Disable Hope",
       description:
-        "Empowering individuals with disabilities through accessibility programs, education, and community integration.",
+        "Providing assistive items and support for people with disabilities, including mobility aids and educational tools.",
       action: "Donate Now",
       link: "/contact",
       color: "#ffffff",
       bgGradient: "linear-gradient(135deg, #fafafa 0%, #ffffff 100%)",
     },
     {
+      icon: Gift,
+      title: "Take the Gift Home",
+      description:
+        "Encouraging diaspora to bring meaningful gifts that support vulnerable groups and improve daily living conditions.",
+      action: "Support Now",
+      link: "/contact",
+      color: "#0077b6",
+      bgGradient: "linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%)",
+    },
+    {
       icon: Users,
       title: "Diaspora Sponsor",
       description:
-        "Transform lives through child and family sponsorship programs that provide education, healthcare, and opportunities.",
+        "Connecting diaspora sponsors with vulnerable children, families, and individuals needing monthly support.",
       action: "Sponsor Now",
       link: "/contact",
       color: "#e4002b",
       bgGradient: "linear-gradient(135deg, #ffebee 0%, #fef5f6 100%)",
     },
+    {
+      icon: ShieldAlert,
+      title: "Diaspora Response Initiative (DIRA)",
+      description:
+        "Mobilizing diaspora to support emergency relief efforts during crises and humanitarian needs across Somaliland.",
+      action: "Contribute Now",
+      link: "/contact",
+      color: "#f57f17",
+      bgGradient: "linear-gradient(135deg, #fff8e1 0%, #fffde7 100%)",
+    },
   ];
-
   return (
     <section
       className="diaspora-initiatives__area section-space"

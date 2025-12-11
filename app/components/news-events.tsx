@@ -1,11 +1,60 @@
 import Link from "next/link";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { events } from "../data/events";
 import { Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
 
 const NewsEvents = () => {
-  // Take first 3 events for the homepage
-  const featuredEvents = events.slice(0, 3);
+  // UI state: toggle between 'upcoming' and 'past'
+  const [filter, setFilter] = useState<"upcoming" | "past">("upcoming");
+
+  // Helper: parse event datetime strings like "2024-07-03 06:00 PM"
+  const parseEventDate = (datetime: string) => {
+    try {
+      const parts = datetime.split(" ");
+      if (parts.length < 3) return new Date(datetime);
+      const datePart = parts[0];
+      const timePart = parts[1];
+      const ampm = parts[2].toUpperCase();
+      const [year, month, day] = datePart.split("-").map(Number);
+      const [hourStr, minuteStr] = timePart.split(":");
+      let hour = Number(hourStr);
+      const minute = Number(minuteStr || 0);
+      if (ampm === "PM" && hour !== 12) hour += 12;
+      if (ampm === "AM" && hour === 12) hour = 0;
+      return new Date(year, month - 1, day, hour, minute || 0);
+    } catch {
+      return new Date(datetime);
+    }
+  };
+
+  const { upcomingEvents, pastEvents } = useMemo(() => {
+    const now = new Date();
+    const upcoming: typeof events = [];
+    const past: typeof events = [];
+    events.forEach((ev) => {
+      const evDate = parseEventDate(ev.datetime);
+      if (evDate >= now) upcoming.push(ev);
+      else past.push(ev);
+    });
+
+    upcoming.sort(
+      (a, b) =>
+        parseEventDate(a.datetime).getTime() -
+        parseEventDate(b.datetime).getTime()
+    );
+    past.sort(
+      (a, b) =>
+        parseEventDate(b.datetime).getTime() -
+        parseEventDate(a.datetime).getTime()
+    );
+
+    return { upcomingEvents: upcoming, pastEvents: past };
+  }, []);
+
+  // Take first 3 events for the homepage depending on filter
+  const featuredEvents = (
+    filter === "upcoming" ? upcomingEvents : pastEvents
+  ).slice(0, 3);
 
   return (
     <section
@@ -45,18 +94,59 @@ const NewsEvents = () => {
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="section-title2 mb-60">
           <div className="section-title2__wrapper">
-            <span
-              className="section-title2__wrapper-subtitle wow fadeInLeft animated"
-              data-wow-delay=".2s"
-            >
-              <Sparkles size={20} fill="#006d21" />
-              Upcoming Events
-              <img
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <span
+                className="section-title2__wrapper-subtitle wow fadeInLeft animated"
+                data-wow-delay=".2s"
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+              >
+                <Sparkles size={20} fill="#006d21" />
+                {filter === "upcoming" ? "Upcoming Events" : "Past Events"}
+              </span>
+
+              {/* Simple toggle */}
+              <div style={{ marginLeft: 12 }}>
+                <button
+                  onClick={() => setFilter("upcoming")}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: 10,
+                    border:
+                      filter === "upcoming"
+                        ? "2px solid #006d21"
+                        : "1px solid #ccc",
+                    background:
+                      filter === "upcoming" ? "#eaf6ea" : "transparent",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    marginRight: 8,
+                  }}
+                >
+                  Upcoming
+                </button>
+                <button
+                  onClick={() => setFilter("past")}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: 10,
+                    border:
+                      filter === "past"
+                        ? "2px solid #006d21"
+                        : "1px solid #ccc",
+                    background: filter === "past" ? "#eaf6ea" : "transparent",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                  }}
+                >
+                  Past
+                </button>
+              </div>
+              {/* <img
                 style={{ width: "52px", height: "10px" }}
                 src="./assets/imgs/shape2.svg"
                 alt=""
-              />
-            </span>
+              /> */}
+            </div>
             <h2
               className="section-title2__wrapper-title  wow fadeInLeft animated"
               data-wow-delay=".3s"

@@ -1,89 +1,160 @@
 import React from "react";
+import styles from "./introduction-section.module.css";
+import {
+  Book,
+  DollarSign,
+  HandHelping,
+  Handshake,
+  Map,
+  Network,
+  Plane,
+  UserCog,
+} from "lucide-react";
+import Link from "next/link";
+
+const services = [
+  {
+    id: 1,
+    title: "Diaspora Mapping",
+    text: "Building a comprehensive, dynamic database to identify skilled professionals, entrepreneurs, investors, and philanthropists and connect them with opportunities.",
+    icon: <Map />,
+  },
+  {
+    id: 2,
+    title: "Liaison with Government",
+    text: "Serving as the primary point of contact to ensure diaspora voices are heard and integrated into national development planning.",
+    icon: <Handshake />,
+  },
+  {
+    id: 3,
+    title: "Airport Help Desk",
+    text: "Dedicated desk at Egal International Airport offering arrival and departure assistance, guidance on immigration, customs and transport.",
+    icon: <Plane />,
+  },
+  {
+    id: 4,
+    title: "Knowledge Transfer",
+    text: "Facilitating diaspora experts to share knowledge and build capacity with local institutions, businesses, and government agencies.",
+    icon: <Book />,
+  },
+  {
+    id: 5,
+    title: "Private Investment",
+    text: "Supporting diaspora investors with guidance on opportunities, regulations, and business development to stimulate growth and jobs.",
+    icon: <DollarSign />,
+  },
+  {
+    id: 6,
+    title: "Community Development",
+    text: "Partnering with diaspora-led organizations on education, healthcare, infrastructure and social welfare initiatives for lasting impact.",
+    icon: <HandHelping />,
+  },
+  {
+    id: 7,
+    title: "Network Building & Engagement",
+    text: "Engaging diaspora communities worldwide through partnerships with committees, associations and youth groups.",
+    icon: <Network />,
+  },
+  {
+    id: 8,
+    title: "Coordination with Stakeholders",
+    text: "Collaborating with government agencies, international organizations and private partners to deliver coordinated initiatives.",
+    icon: <UserCog />,
+  },
+];
 
 const IntroductionSection = () => {
   return (
-    <section
-      className="section-space overflow-hidden"
-      style={{ background: "#f8faf9" }}
-    >
-      <div className="container">
-        <div className="row align-items-center g-5">
-          <div
-            className="col-lg-5 wow fadeInLeft animated"
-            data-wow-delay=".2s"
-          >
-            <div
-              style={{
-                borderRadius: "20px",
-                overflow: "hidden",
-                boxShadow: "0 10px 40px rgba(0, 109, 33, 0.1)",
-              }}
-            >
-              <img
-                src="/assets/imgs/about/about-big-img.png"
-                alt="Diaspora community"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  display: "block",
-                }}
-              />
+    <section className={styles.root} aria-labelledby="diaspora-heading">
+      <div className={styles.inner}>
+        <div className={styles.top}>
+          <div className={styles.lead}>
+            <div className={styles.eyebrow}>About</div>
+            <h2 id="diaspora-heading" className={styles.heading}>
+              About the Diaspora Department
+            </h2>
+
+            <div className={styles.introText}>
+              <p>
+                The Diaspora Department serves as a vital link between the
+                global Somaliland diaspora and the government of Somaliland,
+                acting as a bridge to facilitate seamless access to resources,
+                services, and opportunities for Somalilanders living abroad and
+                when they return.
+              </p>
+
+              <p>
+                Our mandate is to empower the diaspora community by providing
+                tailored support, fostering engagement, and ensuring their
+                contributions are maximized for the benefit of Somaliland’s
+                prosperity. As a one-stop-shop for information, programs, and
+                services, we are committed to addressing the unique needs of the
+                diaspora both when they are in Somaliland and when they are
+                abroad.
+              </p>
+
+              <p>
+                We strive to create a strong network of collaboration,
+                knowledge-sharing, and mutual support that aligns with the
+                broader Somaliland agenda.
+              </p>
+            </div>
+
+            <div className={styles.ctaRow}>
+              <Link href="/contact">
+                <button className={styles.cta}>Get Involved</button>
+              </Link>
+              <Link
+                target="_blank"
+                href="https://mfa.govsomaliland.org/article/diaspora-department"
+              >
+                <button className={`${styles.cta} ${styles.secondary}`}>
+                  Learn More
+                </button>
+              </Link>
             </div>
           </div>
 
-          <div
-            className="col-lg-7 wow fadeInRight animated"
-            data-wow-delay=".3s"
-          >
-            <div className="section__title-wrapper mb-20">
-              <h6 className="section__title-wrapper-black-subtitle mb-10">
-                <svg
-                  width="20"
-                  height="21"
-                  viewBox="0 0 20 21"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clipPath="url(#clip0_intro)">
-                    <path
-                      d="M19.299 2.66986C19.2609 2.59008 19.1926 2.52868 19.1093 2.49911L12.195 0.0581985C12.0215 -0.00317634 11.831 0.0879901 11.7697 0.26149L10.199 4.70581H9.51204V3.57248C9.51202 3.41941 9.47686 3.26838 9.40926 3.13104C9.34166 2.9937 9.24343 2.87372 9.12214 2.78033C9.00085 2.68695 8.85974 2.62266 8.70968 2.59242C8.55962 2.56217 8.40462 2.56679 8.25663 2.6059L0.24744 4.7169V4.7229C0.176847 4.74064 0.114146 4.78133 0.0691834 4.83857C0.0242205 4.89581 -0.000457842 4.96636 -0.000976562 5.03915L-0.000976562 19.0391C-0.000976562 19.5914 0.446773 20.0391 0.999021 20.0391H10.3323C10.8846 20.0391 11.3323 19.5914 11.3323 19.0391V16.0145L14.0057 16.9582C14.1793 17.0194 14.3697 16.9285 14.431 16.7548L19.3133 2.92457C19.3278 2.88326 19.334 2.83949 19.3315 2.79578C19.329 2.75208 19.318 2.70928 19.2989 2.66986H19.299Z"
-                      fill="#034833"
-                    />
-                  </g>
-                </svg>
-                Introduction
-              </h6>
-              <h2 className="section__title-wrapper-title">
-                About the Diaspora Department
-              </h2>
-            </div>
+          <div className={styles.imageBox}>
+            <img
+              src="/assets/imgs/visa/visa-offers/visa-offer-img2.png"
+              alt="Diaspora community"
+              style={{
+                width: "100%",
+                height: "40rem",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+          </div>
+        </div>
 
-            <div
-              style={{ fontSize: "1.05rem", lineHeight: "1.8", color: "#555" }}
-            >
-              <p style={{ marginBottom: "20px" }}>
-                The Republic of Somaliland has a vibrant diaspora of over one
-                million people across the UK, Europe, North America, Middle
-                East, East Africa, and Australia.
-              </p>
+        <div className={styles.subSection}>
+          <h3 className={styles.subTitle}>Our Mandate and Areas of Service</h3>
+          <p className={styles.subLead}>
+            We operate with a dual focus: supporting the diaspora during their
+            time in Somaliland and maintaining a strong connection while they
+            are abroad.
+          </p>
 
-              <p style={{ marginBottom: "20px" }}>
-                Our diaspora contributes an estimated{" "}
-                <strong style={{ color: "#006d21" }}>
-                  $1.3 billion annually
-                </strong>{" "}
-                in remittances (45% of GDP), driving private sector growth
-                through investments in real estate, hospitality, education,
-                healthcare, and technology.
-              </p>
-
-              <p style={{ marginBottom: 0 }}>
-                Established in <strong>August 2010</strong> within the Ministry
-                of Foreign Affairs & International Cooperation (MoFAIC), the
-                Diaspora Department works to fully integrate the diaspora into
-                Somaliland&apos;s development.
-              </p>
-            </div>
+          <div className={styles.grid}>
+            {services.map((s) => (
+              <article
+                key={s.id}
+                className={styles.card}
+                aria-labelledby={`svc-${s.id}`}
+              >
+                <div className={styles.icon} aria-hidden>
+                  {s.icon}
+                </div>
+                <div>
+                  <h4 id={`svc-${s.id}`} className={styles.cardTitle}>
+                    {s.title}
+                  </h4>
+                  <p className={styles.cardText}>{s.text}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </div>
