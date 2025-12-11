@@ -12,6 +12,7 @@ import InvestmentOpportunities from "./components/investment-opportunities";
 import NewsEvents from "./components/news-events";
 import ProcessSection from "./components/process-section";
 import Services from "./components/services";
+import SomalilandFlagBanner from "./components/somaliland-flag-banner";
 import SomalilandFlagBanner2 from "./components/somaliland-flag-banner2";
 import VisaCategory from "./components/visa-category";
 
@@ -29,7 +30,7 @@ export default function Home() {
         <DirectorMessage />
 
         <Services />
-
+        <SomalilandFlagBanner />
         <GetInvolved />
 
         <InvestmentOpportunities />
@@ -37,13 +38,14 @@ export default function Home() {
         <DiasporaInitiatives />
 
         <ExploreSomaliland />
+        <SomalilandFlagBanner />
 
         <VisaCategory />
 
         <NewsEvents />
 
         <HelpDesk />
-
+        <SomalilandFlagBanner />
         <Blogs />
       </main>
     </>
