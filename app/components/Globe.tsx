@@ -1,13 +1,7 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import * as THREE from "three";
-import { GLOBE_IMAGE_URL, BUMP_IMAGE_URL, BACKGROUND_URL } from "../constants";
+import { BUMP_IMAGE_URL, GLOBE_IMAGE_URL } from "../constants";
 import { GlobeMarkerData } from "../types";
 
 interface GlobeProps {
