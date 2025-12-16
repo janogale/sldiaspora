@@ -1,10 +1,10 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import { Investments } from "../data/Investments";
 import { explorePlaces } from "../data/explores";
-import Link from "next/link";
 
 const InvestmentPage = () => {
   const [activeTab, setActiveTab] = useState<"sectors" | "explore">("sectors");

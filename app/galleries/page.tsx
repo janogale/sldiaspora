@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import BreadCamp from "../components/BreadCamp";
-import Header2 from "../components/header2";
 import Header from "../components/header";
 
 // Gallery data organized by events

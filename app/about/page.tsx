@@ -1,14 +1,10 @@
 "use client";
 import BreadCamp from "../components/BreadCamp";
-import ChooseUs from "../components/choose-us";
 import CoreValues from "../components/core-values";
 
 import DepartmentHierarchy from "../components/department-hierarchy";
 import Header from "../components/header";
-import Header2 from "../components/header2";
-import HelpDesk from "../components/helpDesk";
 import IntroductionSection from "../components/introduction-section";
-import ProcessSection from "../components/process-section";
 import StrategicObjectives from "../components/strategic-objectives";
 
 export default function AboutUs() {

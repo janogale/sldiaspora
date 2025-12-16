@@ -1,6 +1,5 @@
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
-import Header2 from "../components/header2";
 import DepartmentStructureContent from "./components/DepartmentStructureContent";
 
 export const metadata = {

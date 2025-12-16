@@ -1,6 +1,7 @@
 "use client";
+export const dynamic = "force-dynamic";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Blogs from "./components/blogs";
 import DiasporaInitiatives from "./components/diaspora-initiatives";
 import DirectorMessage from "./components/director-message";
@@ -18,7 +19,6 @@ import SomalilandFlagBanner from "./components/somaliland-flag-banner";
 import SomalilandFlagBanner2 from "./components/somaliland-flag-banner2";
 import VisaCategory from "./components/visa-category";
 import { GlobeMarkerData } from "./types";
-import GlobeComponent from "./components/Globe";
 interface ApiLocation {
   id: string;
   city: string;
@@ -33,7 +33,7 @@ export default function Home() {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  console.log(loading, locations, errorMsg);
   useEffect(() => {
     // We use limit=-1 to fetch all items.
     // We remove the 'fields' param to ensure we get the full object as shown in your sample.
@@ -154,9 +154,9 @@ export default function Home() {
       });
   }, []);
 
-  const handleRegionClick = useCallback((region: GlobeMarkerData) => {
-    console.log(`Region clicked: ${region.name}, Count: ${region.count}`);
-  }, []);
+  // const handleRegionClick = useCallback((region: GlobeMarkerData) => {
+  //   console.log(`Region clicked: ${region.name}, Count: ${region.count}`);
+  // }, []);
 
   return (
     <>

@@ -1,6 +1,5 @@
 import BreadCamp from "@/app/components/BreadCamp";
 import Header from "@/app/components/header";
-import Header2 from "@/app/components/header2";
 
 function Page() {
   return (

@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import * as THREE from "three";
@@ -63,7 +64,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
    * Creates a custom HTML DOM element for the label.
    */
   const createHtmlElement = useCallback(
-    (d: any): HTMLElement => {
+    (d: object): HTMLElement => {
       const data = d as GlobeMarkerData;
       const el = document.createElement("div");
 
@@ -148,7 +149,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
   /**
    * Creates a custom Three.js object for the 3D marker.
    */
-  const createThreeObject = useCallback((d: any): THREE.Object3D => {
+  const createThreeObject = useCallback((d: object): THREE.Object3D => {
     const data = d as GlobeMarkerData;
     const group = new THREE.Group();
 
@@ -196,7 +197,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
         objectLng="lng"
         objectAltitude={0.01}
         objectThreeObject={createThreeObject}
-        objectLabel={(d: any) => {
+        objectLabel={(d: object) => {
           const item = d as GlobeMarkerData;
           return `
             <div style="

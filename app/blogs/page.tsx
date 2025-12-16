@@ -1,8 +1,7 @@
 import Link from "next/link";
 import BreadCamp from "../components/BreadCamp";
-import Header2 from "../components/header2";
-import { blogs } from "../data/blogs";
 import Header from "../components/header";
+import { blogs } from "../data/blogs";
 
 function Page() {
   return (

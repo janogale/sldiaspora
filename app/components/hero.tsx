@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+"use client";
 import Link from "next/link";
-import GlobeComponent from "./Globe";
+import { useCallback, useEffect, useState } from "react";
 import { GlobeMarkerData } from "../types";
+import GlobeComponent from "./Globe";
 interface ApiLocation {
   id: string;
   city: string;
@@ -15,7 +16,7 @@ const Hero = () => {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  console.log(loading, locations, errorMsg);
   useEffect(() => {
     // We use limit=-1 to fetch all items.
     // We remove the 'fields' param to ensure we get the full object as shown in your sample.

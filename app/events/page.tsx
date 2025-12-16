@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import BreadCamp from "../components/BreadCamp";
-import Header2 from "../components/header2";
-import { events } from "../data/events";
 import Header from "../components/header";
+import { events } from "../data/events";
 
 function Page() {
   const [filter, setFilter] = useState<"upcoming" | "past">("upcoming");

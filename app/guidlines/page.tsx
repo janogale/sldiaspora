@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React from "react";
 import BreadCamp from "../components/BreadCamp";
-import Header2 from "../components/header2";
 import Header from "../components/header";
 
 function Page() {
