@@ -1,8 +1,26 @@
 "use client";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import { GlobeMarkerData } from "../types";
-import GlobeComponent from "./Globe";
+
+const GlobeComponent = dynamic(() => import("./Globe"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        width: "100%",
+        height: "600px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#fff",
+      }}
+    >
+      Loading Globe...
+    </div>
+  ),
+});
 interface ApiLocation {
   id: string;
   city: string;

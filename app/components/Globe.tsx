@@ -34,8 +34,10 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
     };
 
     updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", updateDimensions);
+      return () => window.removeEventListener("resize", updateDimensions);
+    }
   }, []);
 
   // Configure auto-rotation and initial view
@@ -179,7 +181,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className="relatisve w-fudll h-feull">
+    <div ref={containerRef} className="relative w-full h-full">
       <Globe
         ref={globeEl}
         width={dimensions.width}
@@ -222,7 +224,9 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
         }}
         onObjectHover={(obj) => {
           setHoveredObject(obj as GlobeMarkerData | null);
-          document.body.style.cursor = obj ? "pointer" : "default";
+          if (typeof document !== "undefined") {
+            document.body.style.cursor = obj ? "pointer" : "default";
+          }
         }}
         onObjectClick={(obj) => {
           if (onRegionClick && obj) onRegionClick(obj as GlobeMarkerData);
