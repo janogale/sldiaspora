@@ -1,5 +1,6 @@
 "use client";
 import BreadCamp from "@/app/components/BreadCamp";
+import Header from "@/app/components/header";
 import Header2 from "@/app/components/header2";
 import { events } from "@/app/data/events";
 import { useParams } from "next/navigation";
@@ -14,7 +15,8 @@ const EventDetailsPage = () => {
 
   return (
     <div>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title={event.title} />
 
       <section className="visa-details__area coaching-details padding-t100 section-space-bottom">

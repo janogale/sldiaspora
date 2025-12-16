@@ -1,10 +1,12 @@
 import BreadCamp from "@/app/components/BreadCamp";
+import Header from "@/app/components/header";
 import Header2 from "@/app/components/header2";
 
 function Page() {
   return (
     <div>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="News Details" />{" "}
       <section className="blog-details__area section-space overflow-hidden">
         <div className="container">

@@ -129,7 +129,7 @@ const Header = ({ logo }: Props) => {
                     <a href="index.html">
                       <div className="logo">
                         <img
-                          src="assets/imgs/logo/logo.svg"
+                          src="assets/imgs/logo/logo.png"
                           alt="logo not found"
                         />
                       </div>

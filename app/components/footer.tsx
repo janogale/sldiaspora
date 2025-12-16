@@ -106,7 +106,7 @@ const Footer = () => {
                 <div className="footer__logo mb-30">
                   <Link href="/">
                     <img
-                      src="assets/imgs/logo/offcanvas-logo.svg"
+                      src="assets/imgs/logo/offcanvas-logo.png"
                       alt="logo not found"
                     />
                   </Link>

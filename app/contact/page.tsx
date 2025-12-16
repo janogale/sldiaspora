@@ -1,4 +1,5 @@
 import BreadCamp from "../components/BreadCamp";
+import Header from "../components/header";
 import Header2 from "../components/header2";
 import HelpDesk from "../components/helpDesk";
 
@@ -6,7 +7,8 @@ function Page() {
   return (
     <div>
       {" "}
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="Contact Us" />
       <section className="contact-us__area section pt-100 section-space-bottom overflow-hidden">
         <div className="container">

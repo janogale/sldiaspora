@@ -1,4 +1,5 @@
 import BreadCamp from "../components/BreadCamp";
+import Header from "../components/header";
 import Header2 from "../components/header2";
 import RegisterForm from "../components/register-form";
 
@@ -10,7 +11,8 @@ export const metadata = {
 export default function RegisterPage() {
   return (
     <main>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="Register" />
       <section className="pt-100 pb-100 overflow-hidden">
         <div className="container">

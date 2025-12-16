@@ -1,4 +1,5 @@
 import BreadCamp from "../components/BreadCamp";
+import Header from "../components/header";
 import Header2 from "../components/header2";
 import DepartmentStructureContent from "./components/DepartmentStructureContent";
 
@@ -11,7 +12,8 @@ export const metadata = {
 export default function DepartmentStructure() {
   return (
     <>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="Department Structure" />
       <DepartmentStructureContent />
     </>

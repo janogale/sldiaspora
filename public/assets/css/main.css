@@ -6841,7 +6841,7 @@ body .ui-tooltip {
   font-family: var(--rr-ff-heading);
   color: white;
   font-weight: var(--rr-fw-bold);
-  font-size: 55px;
+  font-size: 45px;
   line-height: 67px;
   font-style: normal;
   text-transform: capitalize;

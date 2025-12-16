@@ -2,11 +2,13 @@ import Link from "next/link";
 import BreadCamp from "../components/BreadCamp";
 import Header2 from "../components/header2";
 import { blogs } from "../data/blogs";
+import Header from "../components/header";
 
 function Page() {
   return (
     <div>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="News & Development" />{" "}
       <section className="blog__area section-space">
         <div className="container">

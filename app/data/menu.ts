@@ -12,7 +12,17 @@ export const menuList: MenuItem[] = [
   },
   {
     label: "About",
-    path: "/about",
+    path: "#",
+    children: [
+      {
+        label: "About the Diaspora Department",
+        path: "/about",
+      },
+      {
+        label: "Galleries",
+        path: "/galleries",
+      },
+    ],
   },
   {
     label: "Services",

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import styles from "./introduction-section.module.css";
 import {
   Book,
@@ -9,6 +10,8 @@ import {
   Network,
   Plane,
   UserCog,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -63,10 +66,73 @@ const services = [
   },
 ];
 
+const sliderImages = [
+  {
+    id: 1,
+    src: "/assets/imgs/visa/visa-offers/visa-offer-img3.png",
+    alt: "Diaspora community gathering",
+  },
+  {
+    id: 2,
+    src: "/assets/imgs/about/about-big-img.png",
+    alt: "Community development",
+  },
+  {
+    id: 3,
+    src: "/banner.png",
+    alt: "Somaliland diaspora",
+  },
+  {
+    id: 4,
+    src: "/assets/imgs/about/about-medium-img.png",
+    alt: "Cultural heritage",
+  },
+];
+
 const IntroductionSection = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [showAllImages, setShowAllImages] = useState(false);
+
+  useEffect(() => {
+    if (!isAutoPlaying || showAllImages) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
+    }, 3000); // Auto-play every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, showAllImages]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
+    setIsAutoPlaying(false);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide(
+      (prev) => (prev - 1 + sliderImages.length) % sliderImages.length
+    );
+    setIsAutoPlaying(false);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    setIsAutoPlaying(false);
+  };
+
+  const handleMouseEnter = () => {
+    setShowAllImages(true);
+    setIsAutoPlaying(false);
+  };
+
+  const handleMouseLeave = () => {
+    setShowAllImages(false);
+    setIsAutoPlaying(true);
+  };
   return (
     <section className={styles.root} aria-labelledby="diaspora-heading">
-      <div className={styles.inner}>
+      <div className="container">
         <div className={styles.top}>
           <div className={styles.lead}>
             <div className={styles.eyebrow}>About</div>
@@ -115,17 +181,79 @@ const IntroductionSection = () => {
             </div>
           </div>
 
-          <div className={styles.imageBox}>
-            <img
-              src="/assets/imgs/visa/visa-offers/visa-offer-img2.png"
-              alt="Diaspora community"
-              style={{
-                width: "100%",
-                height: "40rem",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
+          <div
+            className={styles.imageBox}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              className={`${styles.slider} ${
+                showAllImages ? styles.gridView : ""
+              }`}
+            >
+              {!showAllImages ? (
+                <>
+                  <div className={styles.sliderTrack}>
+                    {sliderImages.map((image, index) => (
+                      <div
+                        key={image.id}
+                        className={`${styles.slide} ${
+                          index === currentSlide ? styles.active : ""
+                        }`}
+                        style={{
+                          transform: `translateX(${
+                            (index - currentSlide) * 100
+                          }%)`,
+                        }}
+                      >
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className={styles.sliderImage}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={styles.dots}>
+                    {sliderImages.map((_, index) => (
+                      <button
+                        key={index}
+                        className={`${styles.dot} ${
+                          index === currentSlide ? styles.activeDot : ""
+                        }`}
+                        onClick={() => goToSlide(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className={styles.galleryGrid}>
+                  {sliderImages.map((image, index) => (
+                    <div
+                      key={image.id}
+                      className={styles.galleryItem}
+                      onClick={() => {
+                        setCurrentSlide(index);
+                        setShowAllImages(false);
+                      }}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className={styles.galleryImage}
+                      />
+                      <div className={styles.galleryOverlay}>
+                        <span className={styles.galleryNumber}>
+                          {index + 1}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

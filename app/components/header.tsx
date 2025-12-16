@@ -19,12 +19,13 @@ const Header = () => {
         >
           <div className="offcanvas__wrapper">
             <div className="offcanvas__content">
-              <div className="offcanvas__top d-flex justify-content-between align-items-center">
+              <div className="offcanvas__top d-flex justify-content-between align-items-center mb-40">
                 <div className="offcanvas__logo">
-                  <Link href="/">
+                  <Link href="/" onClick={toggleMobileMenu}>
                     <img
-                      src="/assets/imgs/logo/offcanvas-logo.svg"
-                      alt="logo not found"
+                      src="/assets/imgs/logo/logo.png"
+                      alt="logo"
+                      style={{ maxWidth: "180px", height: "auto" }}
                     />
                   </Link>
                 </div>
@@ -41,35 +42,109 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-              <div className="mobile-menu fix">
-                {/* The meanmenu plugin would populate this, for now, we can duplicate the menu */}
-                <div className="main-menu">
+              <div className="mobile-menu fix mb-30">
+                <div className="maisn-menu">
                   <nav>
-                    <ul>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                       {menuList.map((item, idx) => (
                         <li
                           key={item.label + idx}
-                          className="has-dropdown has-dropdown-2"
+                          className={item.children ? "has-dropdown" : ""}
+                          style={{
+                            borderBottom: "1px solid rgba(255,255,255,0.1)",
+                            padding: "0",
+                          }}
                         >
                           {item.children ? (
                             <>
-                              <a href={item.path}>{item.label}</a>
-                              <ul className="submenu">
+                              <Link
+                                href={item.path}
+                                onClick={toggleMobileMenu}
+                                style={{
+                                  display: "block",
+                                  padding: "15px 0",
+                                  color: "#ffffff",
+                                  textDecoration: "none",
+                                  fontSize: "16px",
+                                  fontWeight: "500",
+                                  transition: "color 0.3s",
+                                }}
+                              >
+                                {item.label}
+                              </Link>
+                              <ul
+                                className="submenu"
+                                style={{
+                                  listStyle: "none",
+                                  padding: "0 0 10px 20px",
+                                  margin: 0,
+                                  background: "rgba(255,255,255,0.05)",
+                                }}
+                              >
                                 {item.children.map((sub, subIdx) => (
-                                  <li key={sub.label + subIdx}>
-                                    <Link href={sub.path}>{sub.label}</Link>
+                                  <li
+                                    key={sub.label + subIdx}
+                                    style={{ padding: 0 }}
+                                  >
+                                    <Link
+                                      href={sub.path}
+                                      onClick={toggleMobileMenu}
+                                      style={{
+                                        display: "block",
+                                        padding: "10px 0",
+                                        color: "#cccccc",
+                                        textDecoration: "none",
+                                        fontSize: "15px",
+                                        transition: "color 0.3s",
+                                      }}
+                                    >
+                                      {sub.label}
+                                    </Link>
                                   </li>
                                 ))}
                               </ul>
                             </>
                           ) : (
-                            <Link href={item.path}>{item.label}</Link>
+                            <Link
+                              href={item.path}
+                              onClick={toggleMobileMenu}
+                              style={{
+                                display: "block",
+                                padding: "15px 0",
+                                color: "#ffffff",
+                                textDecoration: "none",
+                                fontSize: "16px",
+                                fontWeight: "500",
+                                transition: "color 0.3s",
+                              }}
+                            >
+                              {item.label}
+                            </Link>
                           )}
                         </li>
                       ))}
                     </ul>
                   </nav>
                 </div>
+              </div>
+              <div className="offcanvas__btn">
+                <Link
+                  href="/register"
+                  className="rr-btn btn-hover-primary"
+                  onClick={toggleMobileMenu}
+                  style={{
+                    background: "red",
+                    width: "100%",
+                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span>Become a Member</span>
+                  <i className="fa-solid fa-arrow-right"></i>
+                </Link>
               </div>
               {/* <div className="offcanvas__social">
                 <h3 className="offcanvas__title mb-20">Subscribe & Follow</h3>
@@ -130,7 +205,7 @@ const Header = () => {
                     <Link href="/">
                       <div className="logo">
                         <img
-                          src="/assets/imgs/logo/logo.svg"
+                          src="/assets/imgs/logo/logo.png"
                           alt="logo not found"
                         />
                       </div>

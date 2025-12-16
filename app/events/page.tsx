@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header2 from "../components/header2";
 import { events } from "../data/events";
+import Header from "../components/header";
 
 function Page() {
   const [filter, setFilter] = useState<"upcoming" | "past">("upcoming");
@@ -56,7 +57,8 @@ function Page() {
 
   return (
     <div>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="Events & Opportunities" />
       <section className="visa-offer__area pt-100 section-space-bottom">
         <div className="container">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header2 from "../components/header2";
+import Header from "../components/header";
 
 function Page() {
   const [selectedGuide, setSelectedGuide] = React.useState<number>(1);
@@ -211,7 +212,8 @@ function Page() {
 
   return (
     <div>
-      <Header2 />
+      <div style={{ margin: "2rem" }}></div>
+      <Header />
       <BreadCamp title="Guidelines & Resources" />
       <section className="coaching-details__area pt-100 section-space-bottom">
         <div className="container">

@@ -10,6 +10,7 @@ const InvestmentPage = () => {
   const [activeTab, setActiveTab] = useState<"sectors" | "explore">("sectors");
   return (
     <>
+      <div style={{ margin: "2rem" }}></div>
       <Header />
       <main>
         <BreadCamp title="Investments and Tourism" />
