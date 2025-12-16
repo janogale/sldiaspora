@@ -74,17 +74,17 @@ const sliderImages = [
   },
   {
     id: 2,
-    src: "/assets/imgs/about/about-big-img.png",
+    src: "/assets/imgs/about/image2.jpg",
     alt: "Community development",
   },
   {
     id: 3,
-    src: "/banner.png",
+    src: "/assets/imgs/about/image3.jpg",
     alt: "Somaliland diaspora",
   },
   {
     id: 4,
-    src: "/assets/imgs/about/about-medium-img.png",
+    src: "/assets/imgs/about/image4.jpg",
     alt: "Cultural heritage",
   },
 ];
