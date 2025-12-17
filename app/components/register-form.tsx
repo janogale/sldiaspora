@@ -48,6 +48,8 @@ const step2Schema = z.object({
     .min(7, "WhatsApp number must be at least 7 digits")
     .max(20, "WhatsApp number must be less than 20 characters"),
   city: z.string().max(100, "City must be less than 100 characters"),
+
+  attachment: z.string().optional(),
 });
 
 // Combined schema for final submission
@@ -63,6 +65,7 @@ export default function RegisterForm() {
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [accessToken, setAccessToken] = useState<string>("");
+  const [attachmentBase64, setAttachmentBase64] = useState<string | null>(null);
 
   const totalSteps = 2;
 
@@ -88,6 +91,8 @@ export default function RegisterForm() {
       phone: "",
       whatsapp: "",
       city: "",
+
+      attachment: "",
     },
   });
 
@@ -112,9 +117,56 @@ export default function RegisterForm() {
       "phone",
       "whatsapp",
       "city",
+
+      "attachment",
     ];
     const isStep2Valid = await trigger(step2Fields);
     return isStep2Valid;
+  };
+
+  // Helper function to convert file to base64
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  // Handle attachment file upload
+  const handleAttachmentChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size must be less than 5MB");
+      return;
+    }
+
+    // Validate file type
+    const validDocTypes = [
+      "application/pdf",
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+    ];
+
+    if (!validDocTypes.includes(file.type)) {
+      alert("Please upload a valid document (PDF or image)");
+      return;
+    }
+
+    try {
+      const base64 = await convertFileToBase64(file);
+      setAttachmentBase64(base64);
+    } catch (error) {
+      console.error("Error converting file to base64:", error);
+      alert("Failed to process file. Please try again.");
+    }
   };
 
   const handleNext = async () => {
@@ -166,33 +218,36 @@ export default function RegisterForm() {
       }
 
       // Update user profile
-      const updateResp = await axios.patch(
-        updateUrl,
-        {
-          // access_token: token,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          location: data.location,
-          title: data.title,
-          expertise: data.expertise,
-          bio: data.bio,
-          phone: data.phone,
-          whatsapp: data.whatsapp,
-          city: data.city,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // const updateResp = await axios.patch(
+      //   updateUrl,
+      //   {
+      //     // access_token: token,
+      //     first_name: data.first_name,
+      //     last_name: data.last_name,
+      //     location: data.location,
+      //     title: data.title,
+      //     expertise: data.expertise,
+      //     bio: data.bio,
+      //     phone: data.phone,
+      //     whatsapp: data.whatsapp,
+      //     city: data.city,
 
-      console.log("Profile updated successfully:", updateResp.data);
-      setLoadingMessage("Profile updated!");
+      //     attachment: attachmentBase64,
+      //   },
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
 
-      // Update stored user data
-      localStorage.setItem("user", JSON.stringify(updateResp.data));
+      // console.log("Profile updated successfully:", updateResp.data);
+      // setLoadingMessage("Profile updated!");
+
+      // // Update stored user data
+      // localStorage.setItem("user", JSON.stringify(updateResp.data));
+      console.log(attachmentBase64);
 
       // Registration complete
       setSubmissionSuccess(true);
@@ -717,7 +772,7 @@ export default function RegisterForm() {
                         </div>
                       </div>
 
-                      <div className="col-12">
+                      <div className="col-sm-6">
                         <div
                           className="contact-us__input wow fadeInLeft animated"
                           data-wow-delay=".4s"
@@ -765,6 +820,33 @@ export default function RegisterForm() {
                             <div className="invalid-feedback">
                               {errors.bio.message}
                             </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="col-12">
+                        <div
+                          className="contact-us__input wow fadeInLeft animated"
+                          data-wow-delay=".4s"
+                        >
+                          <span>
+                            Document Attachment (Passport/National ID)
+                          </span>
+                          <input
+                            id="attachment"
+                            type="file"
+                            accept="application/pdf,image/jpeg,image/png,image/jpg"
+                            className="form-control"
+                            onChange={handleAttachmentChange}
+                          />
+                          <div className="icon">
+                            <i className="fa-solid fa-file"></i>
+                          </div>
+                          {attachmentBase64 && (
+                            <small className="text-success d-block mt-1">
+                              <i className="fa-solid fa-check"></i> Document
+                              uploaded successfully
+                            </small>
                           )}
                         </div>
                       </div>

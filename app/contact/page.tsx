@@ -68,9 +68,9 @@ function Page() {
                 <div className="contact-us__form-wrapper">
                   <form
                     className="contact-us__form"
-                    id="contact-us__form"
-                    method="POST"
-                    action="./mail.php"
+                    // id="contact-us__form"
+                    // method="POST"
+                    // action="./mail.php"
                   >
                     <div className="row">
                       <div className="col-sm-6">
@@ -116,7 +116,7 @@ function Page() {
                           <input
                             name="address"
                             id="address"
-                            type="email"
+                            type="text"
                             placeholder="Your Address"
                           />
                           <div className="icon">

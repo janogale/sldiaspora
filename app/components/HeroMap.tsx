@@ -1,24 +1,23 @@
-"use client";
-export const dynamic = "force-dynamic";
-
-import { useEffect, useState } from "react";
-import Blogs from "./components/blogs";
-import DiasporaInitiatives from "./components/diaspora-initiatives";
-import DirectorMessage from "./components/director-message";
-import ExploreSomaliland from "./components/explore-somaliland";
-import GalleriesHome from "./components/galleries-home";
-import GetInvolved from "./components/get-involved";
-import Header from "./components/header";
-import HelpDesk from "./components/helpDesk";
-import Hero2 from "./components/hero2";
-import InvestmentOpportunities from "./components/investment-opportunities";
-import NewsEvents from "./components/news-events";
-import ProcessSection from "./components/process-section";
-import Services from "./components/services";
-import SomalilandFlagBanner from "./components/somaliland-flag-banner";
-import SomalilandFlagBanner2 from "./components/somaliland-flag-banner2";
-import VisaCategory from "./components/visa-category";
-import { GlobeMarkerData } from "./types";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useState } from "react";
+import { GlobeMarkerData } from "../types";
+const GlobeComponent = dynamic(() => import("./Globe"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        width: "100%",
+        height: "600px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#fff",
+      }}
+    >
+      Loading Globe...
+    </div>
+  ),
+});
 interface ApiLocation {
   id: string;
   city: string;
@@ -29,15 +28,14 @@ interface ApiLocation {
   } | null;
 }
 
-export default function Home() {
+function HeroMap() {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  console.log(loading, locations, errorMsg);
   useEffect(() => {
     // We use limit=-1 to fetch all items.
     // We remove the 'fields' param to ensure we get the full object as shown in your sample.
-    fetch("https://sldp.duckdns.org/items/locations?limit=-1")
+    fetch("https://sldp.duckdns.org/items/locations")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`API returned status: ${res.status}`);
@@ -154,43 +152,10 @@ export default function Home() {
       });
   }, []);
 
-  // const handleRegionClick = useCallback((region: GlobeMarkerData) => {
-  //   console.log(`Region clicked: ${region.name}, Count: ${region.count}`);
-  // }, []);
-
-  return (
-    <>
-      <SomalilandFlagBanner2 />
-      <Header />
-
-      <main>
-        <Hero2 />
-        <ProcessSection />
-
-        <DirectorMessage />
-
-        <Services />
-        <SomalilandFlagBanner />
-        <GetInvolved />
-
-        <InvestmentOpportunities />
-
-        <DiasporaInitiatives />
-
-        <ExploreSomaliland />
-        <SomalilandFlagBanner />
-
-        <VisaCategory />
-
-        <NewsEvents />
-
-        <GalleriesHome />
-        <SomalilandFlagBanner />
-
-        <HelpDesk />
-        <SomalilandFlagBanner />
-        <Blogs />
-      </main>
-    </>
-  );
+  const handleRegionClick = useCallback((region: GlobeMarkerData) => {
+    console.log(`Region clicked: ${region.name}, Count: ${region.count}`);
+  }, []);
+  return <GlobeComponent data={locations} onRegionClick={handleRegionClick} />;
 }
+
+export default HeroMap;

@@ -44,11 +44,18 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
   useEffect(() => {
     if (globeEl.current) {
       // Slow, smooth rotation typical of data visualizations
-      globeEl.current.controls().autoRotate = true;
-      globeEl.current.controls().autoRotateSpeed = 0.5;
+      const controls = globeEl.current.controls();
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        // Disable zooming (mouse wheel / pinch)
+        controls.enableZoom = false;
+      }
 
       // Initial position
-      // globeEl.current.pointOfView({ lat: 25, lng: 10, altitude: 2.5 });
+      // Initial position - set a closer altitude for a "zoomed-in" view
+      // (second arg is animation duration in ms)
+      globeEl.current.pointOfView({ lat: 25, lng: 10, altitude: 1.5 }, 1500);
     }
   }, []);
 
@@ -128,7 +135,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
       // Hover effect
       el.onmouseenter = () => {
         setHoveredObject(data);
-        textContainer.style.background = "transparent";
+        textContainer.style.background = "red";
         textContainer.style.borderColor = "#38bdf8";
         textContainer.style.transform = "scale(1.05)";
       };
@@ -190,8 +197,8 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
         globeImageUrl={GLOBE_IMAGE_URL}
         bumpImageUrl={BUMP_IMAGE_URL}
         // backgroundImageUrl={BACKGROUND_URL}
-        backgroundColor="rgba(0,0,0,0)"
-        atmosphereColor="#3a228a"
+        backgroundColor="#006D21"
+        atmosphereColor="#006D21"
         atmosphereAltitude={0.15}
         // --- 3D Objects ---
         objectsData={data}
@@ -251,7 +258,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
       </div> */}
 
       {/* Info Card */}
-      {hoveredObject && (
+      {/* {hoveredObject && (
         <div className="absolute bottom-6 right-6 z-10 pointer-events-none">
           <div className="border border-slate-700 p-5 rounded-xl shadow-2xl backdrop-blur-md text-white w-72">
             <div className="flex items-center justify-between mb-4">
@@ -296,7 +303,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
