@@ -1,5 +1,13 @@
+"use client";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import HeroMap from "./HeroMap";
+//import MapContainer from "../components/map";
+
+// dynamic import MapContainer from "../components/map";
+const MapContainer = dynamic(
+  () => import("../components/map"),
+  { ssr: false }
+);
 
 const Hero = () => {
   return (
@@ -19,7 +27,7 @@ const Hero = () => {
         <div className="banner2__padding-space2">
           <div className="contdainer">
             <div className="row align-items-center justify-content-center">
-              <div className="col-lg-12 col-md-12">
+              <div className="col-lg-12 col-md-12 pb-50">
                 <div className="banner2__content p-relative text-center">
                   <h6
                     className="banner2__subtitled wow fadeInLeft animated"
@@ -58,7 +66,7 @@ const Hero = () => {
                 className="col-lg-12 col-md-12"
                 // style={{ background: "red" }}
               >
-                <HeroMap />
+                <MapContainer />
               </div>
             </div>
           </div>

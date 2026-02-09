@@ -10,7 +10,7 @@ import GalleriesHome from "./components/galleries-home";
 import GetInvolved from "./components/get-involved";
 import Header from "./components/header";
 import HelpDesk from "./components/helpDesk";
-import Hero2 from "./components/hero2";
+import HeroMap from "./components/hero2";
 import InvestmentOpportunities from "./components/investment-opportunities";
 import NewsEvents from "./components/news-events";
 import ProcessSection from "./components/process-section";
@@ -164,7 +164,7 @@ export default function Home() {
       <Header />
 
       <main>
-        <Hero2 />
+        <HeroMap />
         <ProcessSection />
 
         <DirectorMessage />
