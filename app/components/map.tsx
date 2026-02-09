@@ -4,47 +4,45 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "@/lib/leafletIconFix";
-
-const members = [
-  {
-    id: 1,
-    country: "Somaliland (Hargeisa)",
-    position: [9.56, 44.07],
-    count: 2,
-  },
-  {
-    id: 2,
-    country: "Kenya (Nairobi)",
-    position: [-1.286389, 36.817223],
-    count: 4,
-  },
-  {
-    id: 3,
-    country: "Ethiopia (Addis Ababa)",
-    position: [8.9806, 38.7578],
-    count: 3,
-  },
-  {
-    id: 4,
-    country: "United Kingdom (London)",
-    position: [51.5074, -0.1278],
-    count: 6,
-  },
-  {
-    id: 5,
-    country: "United States (New York)",
-    position: [40.7128, -74.006],
-    count: 8,
-  },
-  {
-    id: 6,
-    country: "UAE (Dubai)",
-    position: [25.2048, 55.2708],
-    count: 5,
-  },
-];
+import {readItems } from '@directus/sdk';
+import client from "@/lib/directus";
+import { TLocation } from "@/lib/schema";
+import React from "react";
 
 export default function Map() {
+
+
+  const [locations, setLocations] = React.useState<TLocation[]>([]);
+
+  React.useEffect(() => {
+  // read locations from directus
+    const fetchLocations = async () => {
+      const locations = await client.request<TLocation[]>(readItems("locations", {
+        fields: ["id", "member", "map", "city", "country"],
+      }));
+
+      setLocations(locations);
+    };
+
+    fetchLocations();
+  }, []);
+
+  console.log("Locations from Directus:", locations);
+
+  // group locations by country and count members per country, 
+  const countryMemberCount = locations.reduce((acc, location) => {
+    if (!acc[location.country]) {
+      acc[location.country] = {
+        count: 0,
+        coordinates: location.map.coordinates,
+      };
+    }
+    acc[location.country].count += 1;
+    return acc;
+  }, {} as Record<string, { count: number; coordinates: [number, number] }>);
+
+  console.log("Country Member Count:", countryMemberCount);
+
   return (
     <MapContainer
       center={[20, 0]}   // 🌍 World view
@@ -52,19 +50,19 @@ export default function Map() {
       style={{ height: "400px", width: "100%" }}
     >
       <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
+        attribution="&copy; <a href=&quot;https://sldiaspor.org/&quot;>Somaliland</a> Diaspora"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {members.map((member) => (
+      {Object.entries(countryMemberCount).map(([country, data]) => (
         <Marker
-          key={member.id}
-          position={member.position as [number, number]}
+          key={country}
+          position={[data.coordinates[1], data.coordinates[0]]} // [latitude, longitude]
         >
           <Popup>
-            <strong>{member.country}</strong>
+            <strong>{country}</strong>
             <br />
-            {member.count} Members 👋
+            {data.count} Members 👋
           </Popup>
         </Marker>
       ))}
