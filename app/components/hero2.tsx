@@ -1,15 +1,15 @@
 "use client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-//import MapContainer from "../components/map";
+import GlobeMapContainer from "./globemap-container";
 
 // dynamic import MapContainer from "../components/map";
-const MapContainer = dynamic(
-  () => import("../components/map"),
-  { ssr: false }
-);
+// const MapContainer = dynamic(
+//   () => import("./flatmap"),
+//   { ssr: false }
+// );
 
-const Hero = () => {
+const MapSection = () => {
   return (
     <section
       className="overflow-hidden p-relative gray-bg section-space-bottom-170 overflow-hidden"
@@ -62,12 +62,9 @@ const Hero = () => {
                   </Link>
                 </div>
               </div>
-              <div
-                className="col-lg-12 col-md-12"
-                // style={{ background: "red" }}
-              >
-                <MapContainer />
-              </div>
+             
+                <GlobeMapContainer />
+             
             </div>
           </div>
         </div>
@@ -76,4 +73,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default MapSection;
