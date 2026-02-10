@@ -2,6 +2,7 @@ import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
 import Footer from "./components/footer";
 import "./globals.css";
+import "./globe.css"
 
 import Script from "next/script";
 
