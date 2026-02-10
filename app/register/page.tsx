@@ -31,7 +31,7 @@ export default function RegisterPage() {
                     xmlns="http://www.w3.org/2000/svg"
                     className="ms-2"
                   >
-                    <g clip-path="url(#clip0_3843_1169)">
+                    <g clipPath="url(#clip0_3843_1169)">
                       <path
                         d="M4.92578 10.3748L6.49623 9.68052L5.62583 9.07031L4.92578 10.3748Z"
                         fill="#83CD20"

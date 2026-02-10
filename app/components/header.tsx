@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { menuList } from "../data/menu";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -219,9 +221,7 @@ const Header = () => {
                         <ul>
                           {" "}
                           {menuList.map((item, idx) => {
-                            const isActive =
-                              typeof window !== "undefined" &&
-                              window.location.pathname === item.path;
+                            const isActive = pathname === item.path;
                             return (
                               <li
                                 key={item.label + idx}
@@ -242,8 +242,7 @@ const Header = () => {
                                     <ul className="submenu">
                                       {item.children.map((sub, subIdx) => {
                                         const isSubActive =
-                                          typeof window !== "undefined" &&
-                                          window.location.pathname === sub.path;
+                                          pathname === sub.path;
                                         return (
                                           <li
                                             key={sub.label + subIdx}

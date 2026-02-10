@@ -151,8 +151,8 @@ const GlobeMapContainer = () => {
       <div className="row justify-content-center g-4">
         {/* Map column */}
         <div className="col-12">
-          <div className="globe-wrapper rounded-4 overflow-hidden d-flex">
-            <div className="flex-grow-1 min-vh-25">
+          <div className="globe-wrapper rounded-4 overflow-hidden">
+            <div className="globe-inner">
               <GlobeMap data={locations} onRegionClick={handleRegionClick} />
             </div>
           </div>
@@ -171,11 +171,11 @@ const GlobeMapContainer = () => {
         {/* Stats / counters */}
         <div className="col-12">
           <div className="globe-stats card border-0 rounded-4 shadow-sm">
-            <div className="card-body">
+            <div className="card-body ">
               <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
                 <div>
-                  <h3 className="h5 mb-1 text-body">Member Counters</h3>
-                  <p className="small mb-0 text-muted">
+                  <h3 className="h5 mb-1 text-dark">Member Counters</h3>
+                  <p className="small mb-0 text-black-50">
                     Overview of diaspora members by country.
                   </p>
                 </div>
@@ -209,7 +209,7 @@ const GlobeMapContainer = () => {
                       >
                         {country.name}
                       </span>
-                      <span className="fw-semibold globe-country-count">
+                      <span className="fw-bold globe-country-count">
                         {country.count.toLocaleString()}
                       </span>
                     </div>
