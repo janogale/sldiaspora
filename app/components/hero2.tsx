@@ -53,18 +53,21 @@ const MapSection = () => {
                     Your official portal for engagement, investment and
                     nation-building.
                   </h1>
-                  <Link
-                    href="/register"
-                    className="banner2__button mt-40 mt-xs-25 wow fadeInLeft animated d-inline-block"
-                    data-wow-delay=".6s"
-                  >
-                    Become a Member
-                  </Link>
+                  <div className="d-flex justify-content-center align-items-center my-4 h-25">
+                    <Link
+                      href="https://admin.sldiaspora.org/admin/register"
+                      className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg h-25"
+                    >
+                      <span className="fw-bold text-uppercase text-xl">
+                        Become a Member
+                      </span>
+                      <i className="fa-solid fa-arrow-right animate-arrow"></i>
+                    </Link>
+                  </div>
                 </div>
               </div>
-             
-                <GlobeMapContainer />
-             
+
+              <GlobeMapContainer />
             </div>
           </div>
         </div>

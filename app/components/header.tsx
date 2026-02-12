@@ -129,60 +129,18 @@ const Header = () => {
                   </nav>
                 </div>
               </div>
-              <div className="offcanvas__btn">
+              <div className="d-grid gap-2 p-6">
                 <Link
-                  href="/register"
-                  className="rr-btn btn-hover-primary"
+                  href="https://admin.sldiaspora.org/admin/register"
                   onClick={toggleMobileMenu}
-                  style={{
-                    background: "red",
-                    width: "100%",
-                    textAlign: "center",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                  }}
+                  className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg"
                 >
-                  <span>Become a Member</span>
-                  <i className="fa-solid fa-arrow-right"></i>
+                  <span className="fw-bold text-uppercase ls-1 h-20">
+                    Become a Member
+                  </span>
+                  <i className="fa-solid fa-arrow-right animate-arrow"></i>
                 </Link>
               </div>
-              {/* <div className="offcanvas__social">
-                <h3 className="offcanvas__title mb-20">Subscribe & Follow</h3>
-                <ul>
-                  <li>
-                    <a href="https://www.facebook.com/">
-                      <i className="fab fa-facebook-f"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://pinterest.com/">
-                      <i className="fa-brands fa-pinterest-p"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://youtube.com/">
-                      <i className="fab fa-youtube"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://linkedin.com/">
-                      <i className="fab fa-linkedin"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="offcanvas__btn d-sm-none">
-                <div className="header__btn-wrap">
-                  <Link className="rr-btn btn-hover-white" href="/contact">
-                    Purchase Now
-                    <span>
-                      <i className="fa-regular fa-angle-right"></i>
-                    </span>
-                  </Link>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

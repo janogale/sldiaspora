@@ -93,3 +93,50 @@ body {
 	.pro-actions .btn-reset, .pro-actions .btn-save { width:100%; }
 }
 
+/* ===== Fixed CTA style (no conflicts, no duplicates) ===== */
+
+.cta-register-btn {
+  background: linear-gradient(135deg, #ff7a18 0%, #ff3d81 100%);
+  border: none !important;
+  color: #ffffff !important;
+
+  /* size */
+  min-width: 320px !important;
+  padding: 20px 32px !important;
+
+  /* text */
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+
+  /* shape */
+  border-radius: 50px;
+
+  /* animation */
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.cta-register-btn:hover {
+  background: linear-gradient(135deg, #fb923c 0%, #f472b6 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  color: #ffffff !important;
+  
+}
+
+.cta-register-btn:active {
+  transform: translateY(0) scale(1);
+}
+
+/* keep this because you already use it in JSX */
+.ls-1 {
+  letter-spacing: 0.5px;
+}
+
+/* arrow animation – single source */
+.animate-arrow {
+  transition: transform 0.2s ease;
+}
+
+.cta-register-btn:hover .animate-arrow {
+  transform: translateX(6px);
+}
