@@ -241,7 +241,7 @@ const Header = () => {
                   <div className="header__action d-flex align-items-center">
                     <div className="header__btn-wrap d-none d-sm-inline-flex">
                       <Link
-                        href="/register"
+                        href="https://admin.sldiaspora.org/admin/register"
                         className="rr-btn"
                         style={{ background: "red" }}
                       >
