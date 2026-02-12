@@ -37,8 +37,8 @@ function Page() {
         },
         { title: "Submit a completed Passport Application Form.", desc: "" },
       ],
-      image:
-        "/assets/imgs/coaching/coaching-details/coaching-details-top-img.png",
+
+      image: "/passport.png",
     },
     {
       id: 1,
@@ -119,7 +119,7 @@ function Page() {
           body: "The government is prioritizing key growth sectors: agriculture, livestock, fisheries, technology, trade & logistics, mining, and renewable energy, each supported by a government committed to economic transformation and sustainable development. With competitive business policies, improving infrastructure, and a growing appetite for innovation, Somaliland stands ready to welcome forward-thinking investors and partners. We invite you to explore the opportunities that await in Somaliland, where tradition meets ambition and investment drives impact.",
         },
       ],
-      image: "/port.jpg",
+      image: "/investment.jpg",
     },
     {
       id: 4,
@@ -399,7 +399,7 @@ function Page() {
                                         dangerouslySetInnerHTML={{
                                           __html: item.desc.replace(
                                             /<a /g,
-                                            '<a style="color: #fff; text-decoration: underline; font-weight: 500;" '
+                                            '<a style="color: #fff; text-decoration: underline; font-weight: 500;" ',
                                           ),
                                         }}
                                       />
