@@ -1,94 +1,97 @@
-.globe-section {
-  max-width: 1200px;
+/* Layout & Container */
+.globe-master-card {
+
+  height: 80vh; /* Increased height for better visibility */
+  min-height: 650px;
 }
 
-/* Map outer wrapper */
-.globe-wrapper {
-  width: 100%;
-  max-width: 100%;
-  min-height: clamp(320px, 55vw, 560px);
+.globe-viewport {
+  z-index: 1;
+}
+
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+
+.backdrop-blur {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Floating Counter Card */
+.globe-counter-floating {
+  background: linear-gradient(135deg, #303032 0%, #2f3e60 100%);
   overflow: hidden;
+  min-width: 320px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(16px);
+  z-index: 10;
+  border-radius: 20px !important;
+  
 }
 
-/* Inner container where the globe is rendered */
-.globe-inner {
+.globe-counter-floating:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.fw-black { font-weight: 900; }
+.ls-wider { letter-spacing: 0.12em; }
+.x-small { font-size: 0.65rem; }
+
+/* Icon Box & Pulse Effect */
+.counter-icon-box {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #f97316, #ec4899);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
   position: relative;
+  flex-shrink: 0;
+}
+
+.pulse-ring {
+  position: absolute;
   width: 100%;
   height: 100%;
-  min-height: clamp(320px, 55vw, 560px);
+  border-radius: 50px;
+  border: 4px solid #f97316;
+  animation: pulse 2s infinite;
 }
 
-/* Loading fallback */
-.globe-loading {
-  width: 100%;
-  max-width: 100%;
-  min-height: clamp(320px, 55vw, 560px);
-
-  color: #9095a0;
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #00E676;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px #00E676;
 }
 
-/* Ensure globe-rendered canvas/SVG never overflows horizontally */
-.globe-wrapper canvas,
-.globe-wrapper svg,
-.globe-inner canvas,
-.globe-inner svg {
-  display: block;
-  max-width: 100%;
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  70% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(0.95); opacity: 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .globe-master-card { 
+    height: 85vh; 
+    min-height: 550px;
+  }
+  .globe-counter-floating {
+    min-width: 95%;
+    padding: 1.25rem !important;
+    border-radius: 20px !important;
+  }
+  .display-5 { font-size: 2.4rem; }
+}
+
+/* Ensure globe fills parent */
+.globe-viewport canvas {
   width: 100% !important;
   height: 100% !important;
-}
-
-/* --- stats styles you already have --- */
-
-
-
-.globe-stats.card {
-
-  border-radius: 18px;
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  background-color: transparent;
-  color: aliceblue;
-}
-
-.globe-pill {
-  padding: 6px 10px;
-  border-radius: 999px;
-
-}
-
-.globe-pill-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-}
-
-.globe-pill-dot--members {
-  background: #f97316;
-}
-
-.globe-pill-dot--countries {
-  background: #0ea5e9;
-}
-
-
-
-.globe-country-name {
-  font-size: 0.86rem;
-  color: #fdfdff;
-}
-
-.globe-country-count {
-  color: #efaf81;
-  font-size: 0.86rem;
-}
-
-@media (max-width: 576px) {
-  .globe-stats .card-body {
-    padding: 0.9rem 0.9rem 1rem;
-  }
-
-  .globe-country-card {
-    padding-inline: 0.7rem;
-    padding-block: 0.45rem;
-  }
 }
