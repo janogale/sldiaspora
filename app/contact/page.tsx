@@ -9,19 +9,30 @@ function Page() {
       <div style={{ margin: "2rem" }}></div>
       <Header />
       <BreadCamp title="Contact Us" />
-      <section className="contact-us__area section pt-100 section-space-bottom overflow-hidden">
+      <section
+        className="contact-us__area section pt-100 section-space-bottom overflow-hidden"
+        style={{ background: "#f8f9fa" }}
+      >
         <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-6">
-              <div className="contact-us__widget mb-30" data-tilt>
+          <div className="row align-items-stretch g-4">
+            <div className="col-lg-6 d-flex">
+              <div
+                className="contact-us__widget mb-0 shadow-sm"
+                data-tilt
+                style={{ borderRadius: "16px", overflow: "hidden", height: "620px", width: "100%" }}
+              >
                 <img
-                  src="./assets/imgs/concact/contact-left-img.png"
+                  src="/assets/imgs/concact/ugbad-img.jpeg"
                   alt="img not found"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                 />
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="contact-us__title-wrapper">
+              <div
+                className="contact-us__title-wrapper bg-white shadow-sm"
+                style={{ borderRadius: "16px", padding: "28px", height: "720px", display: "flex", flexDirection: "column", justifyContent: "center" }}
+              >
                 <div className="section__title-wrapper mb-40">
                   <h6
                     className="section__title-wrapper-black-subtitle mb-10 wow fadeInLeft animated"
@@ -35,7 +46,7 @@ function Page() {
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <g clip-path="url(#clip0_3843_1169)">
+                      <g clipPath="url(#clip0_3843_1169)">
                         <path
                           d="M4.92578 10.3748L6.49623 9.68052L5.62583 9.07031L4.92578 10.3748Z"
                           fill="#83CD20"
@@ -60,6 +71,7 @@ function Page() {
                   <h2
                     className="section__title-wrapper-title wow fadeInLeft animated"
                     data-wow-delay=".3s"
+                    style={{ fontSize: "2.2rem", lineHeight: 1.2 }}
                   >
                     Let Your Wanderlust Guide You
                   </h2>
