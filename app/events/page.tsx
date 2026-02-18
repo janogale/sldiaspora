@@ -308,9 +308,13 @@ function Page() {
                         style={{
                           border: isSelected
                             ? "2px solid #006d21"
+                            : hasEvents
+                              ? "1px solid #78b88c"
                             : "1px solid #e5e7eb",
                           background: isSelected
                             ? "#006d21"
+                            : hasEvents
+                              ? "#eaf6ee"
                             : isToday
                               ? "#f3fbf5"
                               : "#fff",
@@ -318,8 +322,12 @@ function Page() {
                           minHeight: "48px",
                           cursor: "pointer",
                           position: "relative",
-                          fontWeight: isToday ? 700 : 500,
-                          color: isSelected ? "#ffffff" : "#111827",
+                          fontWeight: isSelected || hasEvents || isToday ? 700 : 500,
+                          color: isSelected
+                            ? "#ffffff"
+                            : hasEvents
+                              ? "#0a5b24"
+                              : "#111827",
                         }}
                         aria-label={`Select ${key}`}
                       >
