@@ -1,0 +1,102 @@
+@use '../../utils' as *;
+
+/*----------------------------------------*/
+/*  		3.1 header-1
+/*----------------------------------------*/
+.header-1 {
+    &.rs-sticky {
+        
+        .header__btn {
+            
+            
+            .text {
+                h5, span {
+                    color: var(--rr-common-white);
+                }
+                
+                a {
+                    &:hover h5 {
+                        color: var(--rr-theme-primary);
+                    }
+                }
+            }
+        }
+        
+        .main-menu {
+            & ul{
+                & li{
+                    > a {
+                        color: var(--rr-heading-primary);
+                        &::before {
+                            background: var(--rr-theme-primary);
+                        }
+                    }
+                    & .submenu{
+                        
+                        & li{
+                            & a{
+                                &:hover {
+                                    color: var(--rr-theme-primary);
+                                    &::before {
+                                        background: var(--rr-theme-primary);
+                                    }
+                                }
+                            }
+                            &:hover{
+                                & > a{
+                                    color: var(--rr-theme-primary);
+                                    &::before{
+                                        background-color: var(--rr-theme-primary);
+                                    }
+                                }
+                            }
+                            &.has-dropdown{
+                                &:hover{
+                                    & > a{
+                                        &::after{
+                                            color: var(--rr-theme-primary);
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                    & .mega-menu{
+                        & li{
+                            & ul{
+                                & li{
+                                    &:hover{
+                                        & > a{
+                                            color: var(--rr-theme-primary);
+                                            &::before{
+                                                background: var(--rr-theme-primary);
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                            
+                            &:hover{
+                                & > .mega-menu-title{
+                                    color: var(--rr-theme-primary);
+                                }
+                            }
+                        }
+                    }
+                    
+                    &:hover{
+                        & > a{
+                            color: var(--rr-theme-primary);
+                            
+                            &::after{
+                                color: var(--rr-theme-primary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

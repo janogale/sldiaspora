@@ -1,0 +1,119 @@
+@use "../../utils" as *;
+
+.visa-offer{
+    &__item{
+        &-thumb{
+            position: relative;
+            &-small-img{
+                position: absolute;
+                margin-left: 20px;
+                margin-top: 20px;
+                
+                img{
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 20px;
+                    border: 1px solid var(--rr-theme-primary);
+                }
+            }
+            img{
+                width: 100%;
+                height: 100%;
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+            }
+            @media #{$md} {
+                height: 215px;
+            }
+        }
+        &-content{
+            padding: 40px;
+            box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.05);
+            border-radius: 0px 0px 20px 20px;
+            &-text{
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                column-gap: 10px;
+                row-gap: 20px;
+                &-title{
+                    h5{
+                        font-family: var(--rr-ff-heading);
+                        color: var(--rr-heading-primary);
+                        font-weight: var(--rr-fw-bold);
+                        line-height: var(--rr-lh-h5);
+                        font-size: 22px;
+                        font-style: normal;
+                        margin-bottom: 10px;
+                    }
+                    p{
+                        font-family: var(--rr-ff-body);
+                        color: var(--rr-text-body);
+                        font-weight: var(--rr-fw-regular);
+                        line-height: var(--rr-lh-h5);
+                        font-size: 16px;
+                        font-style: normal;
+                        margin-bottom: 0;
+
+                        @media #{$md, $sm, $xs} {
+                           br{
+                            display: none;
+                           }
+                        }
+                    }
+                }
+                &-button{
+                    padding-top: 20px;
+                    a{
+                        font-family: var(--rr-ff-heading);
+                        color: var(--rr-heading-primary);
+                        font-weight: var(--rr-fw-bold);
+                        line-height: var(--rr-lh-h5);
+                        font-size: 22px;
+                        font-style: normal;
+                        border: 1px solid #E3DBD8;
+                        border-radius: 20px;
+                        padding: 20px;
+                        @media #{$md, $sm, $xs} {
+                            padding: 15px;
+                        }
+
+                        &:hover{
+                            border-color: var(--rr-theme-primary);
+                        }
+                    }
+                }
+            }
+            &-btn{
+                a{
+                    font-family: var(--rr-ff-heading);
+                    color: var(--rr-heading-primary);
+                    font-weight: var(--rr-fw-sbold);
+                    line-height: var(--rr-lh-h5);
+                    font-size: 14px;
+                    font-style: normal;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    border-radius: 30px;
+                    border: 1px solid var(--rr-theme-primary);
+                    padding: 15px 30px;
+                    transition: .3s;
+
+                    &:hover{
+                        background: var(--rr-theme-primary);
+                        color: var(--rr-common-white);
+                    }
+                }
+            }
+        }
+
+        &:hover{
+            .visa-offer__item-thumb-small-img{
+                img{
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+}

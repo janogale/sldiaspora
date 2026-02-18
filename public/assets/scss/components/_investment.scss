@@ -1,0 +1,122 @@
+// Investment Page Styles
+.investment-section {
+  background: #f8f9fa;
+  
+  .investment-intro {
+    p {
+      color: #555;
+    }
+  }
+
+  .investment-card {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 109, 33, 0.15) !important;
+    }
+  }
+
+  .investment-card-header {
+    h3 {
+      position: relative;
+      display: inline-block;
+    }
+  }
+
+  .investment-card-body {
+    ul {
+      li {
+        transition: all 0.2s ease;
+        
+        &:hover {
+          padding-left: 30px;
+          color: #333;
+        }
+
+        i {
+          transition: all 0.2s ease;
+        }
+
+        &:hover i {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+
+  .investment-cta {
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    a.rr-btn {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10%, -10%);
+  }
+}
+
+// Responsive styles
+@media (max-width: 991px) {
+  .investment-section {
+    .investment-card {
+      margin-bottom: 30px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .investment-section {
+    .section-title2__wrapper-title {
+      font-size: 28px !important;
+    }
+
+    .investment-intro p {
+      font-size: 14px !important;
+    }
+
+    .investment-card {
+      padding: 20px !important;
+      
+      h3 {
+        font-size: 20px !important;
+      }
+    }
+
+    .investment-cta {
+      padding: 30px 20px !important;
+      
+      h3 {
+        font-size: 22px !important;
+      }
+
+      p {
+        font-size: 14px !important;
+      }
+    }
+  }
+}

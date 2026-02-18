@@ -1,0 +1,267 @@
+@use '../../utils' as *;
+/*----------------------------------------*/
+/*  3.1 banner Style 1
+/*----------------------------------------*/
+.banner {
+	z-index: 1;
+	position: relative;
+	&-custom-container{
+		max-width: 1550px;
+		width: 100%;
+		margin: 0 auto;
+		padding: 0 15px;
+	}
+	&__navigation {
+		position: absolute;
+		left: 47%;
+		top: 90%;
+		button {
+			width: 60px;
+			height: 60px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			@include border-radius(50%);
+			color: var(--rr-theme-primary);
+			position: absolute;
+			top: 90%;
+			@extend %translateY1_2;
+			left: 80px;
+			z-index: 55;
+			background-color: var(--rr-common-white);
+			@media #{$xxl } {
+				left: 20px;
+				width: 50px;
+				height: 50px;
+				svg {
+					max-width:17px;
+				}
+			}
+			@media #{ $xl, $lg, $md, $sm, $xs} {
+				left: 10px;
+				width: 50px;
+				height: 50px;
+				svg {
+					max-width:17px ;
+				}
+			}
+			svg  {
+				max-width: 24px;
+				@media #{ $xl, $lg, $md, $sm, $xs} {
+					max-width:17px !important;
+				}
+			}
+			
+			&:after {
+				top: 0;
+				z-index: -1;
+				left: 0;
+				content: "";
+				position: absolute;
+				width: 100%;
+				@include transform(scale(0));
+				height: 100%;
+				background: var(--rr-theme-primary);
+				@include border-radius(50%);
+			}
+			
+			&:hover {
+				background: var(--rr-theme-primary);
+				
+				svg path[stroke="#001D08"] {
+					stroke: var(--rr-common-white);
+				}
+			}
+		}
+		.banner__button-next {
+			left: auto;
+			@media #{$xxl } {
+				width: 50px;
+				height: 50px;
+				right: 20px;
+				svg {
+					max-width:17px;
+				}
+			}
+			
+			@media #{ $xl, $lg, $md, $sm, $xs} {
+				right: 10px;
+				width: 50px;
+				height: 50px;
+				svg {
+					max-width:17px;
+				}
+			}
+		}
+	}
+	
+	&_parallax-slider {
+		position: relative;
+		
+		.swiper-slide {
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			height: calc(100% + 1px);
+			top: -1px;
+		}
+	}
+	
+	&__space {
+		padding: 205px 0;
+		
+		@media #{$xl} {
+			padding-top: 150px;
+			padding-bottom: 200px;
+		}
+		
+		@media #{$lg} {
+			padding-top: 120px;
+			padding-bottom: 180px;
+		}
+		
+		@media #{$md} {
+			padding-top: 80px;
+			padding-bottom: 150px;
+		}
+		@media #{$sm, $xs} {
+			padding-top: 80px;
+			padding-bottom: 80px;
+		}
+
+		&-shape-wrapper{
+
+			@media #{$xl, $lg, $md, $sm, $xs, $xxs} {
+				display: none;
+			}
+
+			&-top-black-shape{
+				position: absolute;
+				top: -10px;
+				left: 0;
+				img{
+					width: 100%;
+					height: auto;
+				}
+			}
+
+			&-bottom-shape{
+				position: absolute;
+				right: 0;
+				bottom: -15px;
+
+				img{
+					width: 100%;
+					height: auto;
+				}
+			}
+		}
+	}
+	
+	&__thumb-bg {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+
+		&::before{
+			position: absolute;
+			content: "";
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+		}
+		
+		// @media #{$xs, $sm} {
+		// 	background-position: -475px 0;
+		// }
+		
+		// @media #{$xxs} {
+		// 	background-position: -562px 0
+		// }
+		
+		// @media (max-width: 400px) {
+		// 	background-position: -667px 0;
+		// }
+	}
+	
+	&__sub-title {
+		color: var(--rr-common-white);
+		font-family: var(--rr-ff-subtitle);
+		font-weight: var(--rr-fw-regular);
+		font-size: var(--rr-fs-h4);
+		line-height: var(--rr-lh-h5);
+		font-style: normal;
+		margin-bottom: 12px;
+	}
+	
+	&__title {
+
+		font-family: var(--rr-ff-heading);
+		color: var(--rr-common-white);
+		font-weight: var(--rr-fw-bold);
+		font-size: 80px;
+		line-height: 90px;
+		font-style: normal;
+		margin-bottom: 35px;
+
+		span{
+			color: var(--rr-theme-primary);
+		}
+		
+		@media #{$lg} {
+			font-size: 38px;
+			line-height:50px;
+		  }
+
+		  @media #{$md} {
+			font-size: 45px;
+			line-height:57px;
+		  }
+
+		  @media #{$sm} {
+			font-size: 45px;
+			line-height:57px;
+			margin-bottom: 10px;
+		  }
+
+		  @media #{$xs} {
+			font-size: 30px;
+			line-height: 42px;
+			margin-bottom: 10px;
+		  }
+		  
+		  @media #{$xxs} {
+			font-size: 27px;
+			line-height: 37px;
+		  }
+	}
+	
+	&__content {
+
+		@media #{$xl, $lg, $md, $sm} {
+			left: 9px;
+		}
+		
+		p {
+			font-family: var(--rr-ff-body);
+			color: var(--rr-common-white);
+			font-weight: var(--rr-fw-regular);
+			line-height: var(--rr-lh-h5);
+			font-size: 16px;
+			font-style: normal;
+
+			@media #{$sm, $xs} {
+				br{
+					display: none;
+				}
+			}
+		}
+	}
+}

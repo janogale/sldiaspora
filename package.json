@@ -1,0 +1,38 @@
+{
+  "name": "diapora",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@directus/sdk": "^21.1.0",
+    "@hookform/resolvers": "^5.2.2",
+    "axios": "^1.13.2",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.552.0",
+    "next": "^15.5.9",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-globe.gl": "^2.37.0",
+    "react-hook-form": "^7.66.0",
+    "react-leaflet": "5.0.0-rc.2",
+    "swiper": "^12.0.1",
+    "three": "^0.182.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.182.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "typescript": "^5"
+  }
+}

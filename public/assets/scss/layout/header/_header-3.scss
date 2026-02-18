@@ -1,0 +1,16 @@
+@use '../../utils' as *;
+
+/*----------------------------------------*/
+/*  3.3 header-3
+/*----------------------------------------*/
+.header__logo-3 {
+  max-width: 100% !important;
+
+  .header__hamburger {
+    margin-left: -80px !important;
+
+    @media (max-width: 1750px) {
+      margin-left: 0 !important;
+    }
+  }
+}

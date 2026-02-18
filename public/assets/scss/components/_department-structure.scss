@@ -1,0 +1,396 @@
+// Department Structure Styles
+.department-structure {
+  .department-hero {
+    background: linear-gradient(135deg, #006D21 0%, #004d1a 100%);
+    color: white;
+    text-align: center;
+
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .vision-mission-section {
+    .vision-card, .mission-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      height: 100%;
+
+      .card-header {
+        margin-bottom: 1.5rem;
+
+        .section-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #006D21;
+          margin: 0;
+        }
+      }
+
+      .card-body {
+        .vision-text, .mission-text {
+          font-size: 1rem;
+          line-height: 1.6;
+          color: #555;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .leadership-section {
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 3rem;
+    }
+
+    .leadership-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, #006D21 0%, #004d1a 100%);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+
+        .leadership-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin: 0;
+        }
+      }
+
+      .card-body {
+        padding: 2rem;
+
+        .responsibilities-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          .responsibility-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #555;
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            &::before {
+              content: "•";
+              color: #006D21;
+              font-weight: bold;
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sections-section {
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 3rem;
+    }
+
+    .section-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+
+      .section-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 2rem;
+        cursor: pointer;
+        border-bottom: 1px solid #dee2e6;
+
+        &:hover {
+          background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+
+        .section-main-title {
+          font-size: 1.4rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0 0 1rem 0;
+        }
+
+        .units-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+
+          .unit-badge {
+            background: #006D21;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+          }
+        }
+
+        .expand-btn {
+          background: none;
+          border: none;
+          font-size: 1.2rem;
+          color: #006D21;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+
+          &.expanded {
+            transform: rotate(180deg);
+          }
+
+          &:hover {
+            color: #004d1a;
+          }
+        }
+      }
+
+      .section-content {
+        padding: 2rem;
+        animation: fadeIn 0.3s ease-in-out;
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .subsection-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #006D21;
+          margin-bottom: 1rem;
+        }
+
+        .detailed-responsibilities {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          .detailed-responsibility-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            &::before {
+              content: "✓";
+              color: #006D21;
+              font-weight: bold;
+              margin-right: 0.75rem;
+            }
+          }
+        }
+
+        .units-sidebar {
+          background: #f8f9fa;
+          padding: 1.5rem;
+          border-radius: 10px;
+          height: fit-content;
+
+          .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #006D21;
+            margin-bottom: 1rem;
+          }
+
+          .units-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            .unit-item {
+              display: flex;
+              align-items: center;
+              padding: 0.5rem 0;
+              color: #555;
+              font-size: 0.9rem;
+
+              i {
+                color: #006D21;
+                margin-right: 0.5rem;
+                font-size: 0.8rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .contact-section {
+    background: linear-gradient(135deg, #006D21 0%, #004d1a 100%);
+    color: white;
+    text-align: center;
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    .contact-info {
+      max-width: 600px;
+      margin: 0 auto;
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+
+        i {
+          margin-right: 1rem;
+          font-size: 1.2rem;
+          opacity: 0.8;
+        }
+
+        span {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
+  // Responsive Design
+  @media (max-width: 768px) {
+    .department-hero {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    .leadership-section,
+    .sections-section {
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    .section-card {
+      .section-header {
+        padding: 1.5rem;
+
+        .section-main-title {
+          font-size: 1.2rem;
+        }
+
+        .units-badges {
+          .unit-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+          }
+        }
+      }
+
+      .section-content {
+        padding: 1.5rem;
+
+        .units-sidebar {
+          margin-top: 2rem;
+        }
+      }
+    }
+
+    .contact-section {
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+      .contact-info {
+        .contact-item {
+          flex-direction: column;
+          text-align: center;
+
+          i {
+            margin-right: 0;
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .leadership-section {
+      .leadership-card {
+        .card-body {
+          padding: 1.5rem;
+
+          .responsibilities-list {
+            .responsibility-item {
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

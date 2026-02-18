@@ -1,0 +1,108 @@
+@use "../../utils" as *;
+
+/*----------------------------------------*/
+/* 8.1 404
+/*----------------------------------------*/
+
+
+.error{
+    .error__content{
+        .error__content-media{
+            img{
+                width: 100%;
+                height: auto;
+            }
+        }
+        .section__title-wrapper{
+            margin: auto;
+            .section__title{
+                color: var(--rr-heading-primary);
+                font-size: var(--rr-fs-h2);
+                font-family: var(--rr-ff-heading);
+                font-weight: var(--rr-fw-bold);
+                line-height: var(--rr-lh-h2);
+                font-style: normal;
+
+                @media #{$md, $sm, $xs}{
+                    font-size: 35px;
+                    line-height: 50px;
+                    br{
+                        display: none;
+                    }
+                }
+            }
+            p{
+                color: var(--rr-text-body);
+                font-family: var(--rr-ff-heading);
+                line-height: var(--rr-lh-h5);
+                font-weight: 400;
+                font-size: 16px;
+                font-style: normal;
+                @media #{$xxl, $xl, $lg, $md, $sm, $xs}{
+                    br{
+                        display: none;
+                    }
+                }
+            }
+            .error-btn{
+                background: var(--rr-heading-primary);
+                color: var(--rr-common-white);
+                width: 217px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                top: 0;
+                position: relative;
+                left: 0;
+                margin: auto;
+                border-radius: 4px;
+                transition: .3s;
+
+                &:hover{
+                    background: var(--rr-theme-primary);
+                    color: var(--rr-common-white);
+                }
+            }
+            .footer-form{
+                position: relative;
+                width: 630px;
+                display: inline-block;
+                @media #{$sm, $xs} {
+                    width: 100%;
+                  }
+                .form-control{
+                    background-color: #F1F5EB;
+                    padding: 17px 104px 17px 20px;
+                    color: var(--rr-text-body);
+                    box-shadow: none;
+                    border-radius: 150px;
+                    border: none;
+                    @include rs-placeholder{
+                        color: var(--rr-text-body);
+                    }
+                    
+                }
+    
+                input{
+                    margin-left: 0;
+                }
+                .submit{
+                    background-color: var(--rr-theme-primary);
+                    color: var(--rr-common-white);
+                    position: absolute;
+                    top: 50%;
+                    right: 0;
+                    transform: translateY(-50%);
+                    height: 58px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    width: 58px;
+                    border-radius: 50%;
+                }
+            }
+            
+        }
+    }
+}

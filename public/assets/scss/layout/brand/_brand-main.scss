@@ -1,0 +1,33 @@
+@use '../../utils' as *;
+
+/*----------------------------------------*/
+/*  8.1 brand
+/*----------------------------------------*/
+.brand__thumb {
+    img {
+        cursor: pointer;
+        height: auto;
+        width: auto;
+        @extend %rs-transition-3;
+        opacity: .50;
+    }
+    &:hover {
+        img {
+            opacity: 1;
+        }
+    }
+}
+
+.brand__active {
+    .swiper-wrapper {
+        align-items: center;
+    }
+}
+
+.rr-brand-active .swiper-slide {
+    width: auto;
+    display: inline-block;
+}
+.rr-slider-transition {
+    transition-timing-function: linear
+}

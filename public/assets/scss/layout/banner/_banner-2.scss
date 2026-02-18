@@ -1,0 +1,335 @@
+@use '../../utils' as *;
+/*----------------------------------------*/
+/*  3.1 banner Style 1
+/*----------------------------------------*/
+
+
+.banner2{
+	&__right-thumb{
+		@media #{$md, $sm, $xs} {
+			justify-content: center;
+		}
+	}
+	&__shape{
+		width: 1821px;
+		height: 1134px;
+		position: absolute;
+		left: -221px;
+		top: -237px;
+	}
+	&__padding-space2{
+		padding: 180px 0 0 0;
+
+		@media #{$xs} {
+			padding: 130px 0 0 0;
+		}
+	}
+	&__content{
+		@media #{$md, $sm} {
+			margin-bottom: 50px;
+		}
+		@media #{$md, $sm, $xs} {
+			margin-bottom: 50px;
+			margin-top: 90px;
+		}
+	}
+	&__subtitle{
+		font-family: var(--rr-ff-heading);
+		color: var(--rr-heading-primary);
+		font-weight: var(--rr-fw-sbold);
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-style: normal;
+		font-size: 14px;
+		line-height: 14px;
+		margin-bottom: 20px;
+		text-transform: uppercase;
+		margin-top: -80px;
+	}
+	&__title{
+		font-family: var(--rr-ff-heading);
+		color: var(--rr-heading-primary);
+		font-weight: var(--rr-fw-bold);
+		font-size: 80px;
+		line-height: 90px;
+		font-style: normal;
+		text-transform: capitalize;
+
+		@media #{$lg} {
+			font-size: 67px;
+			line-height: 80px;
+		}
+		@media #{$md} {
+			font-size: 60px;
+			line-height: 80px;
+		}
+		@media #{$sm} {
+			font-size: 55px;
+			line-height: 75px;
+		}
+		@media #{$xs} {
+			font-size: 43px;
+			line-height: 56px;
+		}
+		@media #{$md, $sm, $xs} {
+			br {
+				display: none;
+			}
+		}
+	}
+	&__button{
+		background: var(--rr-background-gray);
+		font-family: var(--rr-ff-heading);
+		color: var(--rr-heading-primary);
+		font-weight: var(--rr-fw-sbold);
+		line-height: var(--rr-lh-h5);
+		border: 1px solid var(--rr-heading-primary);
+		border-radius: 30px;
+		font-size: 14px;
+		font-style: normal;
+		padding: 15px 30px;
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		transition: .3s;
+
+
+		&:hover{
+			background: var(--rr-theme-primary);
+			border-color: var(--rr-theme-primary);
+			color: var(--rr-common-white);
+		}
+	}
+	&__right-img{
+		max-width: 420px;
+		width: 100%;
+		height: 100%;
+		transition: .3s;
+		img {
+			border-radius: 20px;
+			border: 5px solid var(--rr-theme-primary);
+			width: 100%;
+			height: 100%;
+		}
+		&:hover{
+			.banner2__item-indonesia-small-img{
+				img{
+					transform: rotate(360deg);
+				}
+			}
+			.banner2__item-south-africa-small-img{
+				img{
+					transform: rotate(360deg);
+				}
+			}
+			.banner2__item-turkey-small-img{
+				img{
+					transform: rotate(360deg);
+				}
+			}
+		}
+	}
+	&__item{
+		&-germany{
+			background: var(--rr-common-white);
+			display: inline-flex;
+			align-items: center;
+			gap: 15px;
+			border-radius: 10px;
+			border: 0.498824px solid #E3DBD8;
+			padding: 10px 65px 10px 15px;
+			position: absolute;
+			z-index: 1;
+			top: 71px;
+			left: -59px;
+			transition: .3s;
+			@media #{$xs} {
+				top: 71px;
+				left: 0px;
+			}
+			
+			&-small-img{
+				img{
+					width: 100%;
+					height: 100%;
+					border: 1px solid var(--rr-theme-primary);
+					border-radius: 50%;
+				}
+			}
+			&-text{
+				span{
+					font-family: var(--rr-ff-heading);
+					color: var(--rr-heading-primary);
+					font-weight: var(--rr-fw-regular);
+					line-height: var(--rr-lh-h5);
+					font-style: normal;
+					font-size: 16px;
+				}
+			}
+		}
+		&-south-korea{
+			background: var(--rr-common-white);
+			display: inline-flex;
+			align-items: center;
+			gap: 15px;
+			border-radius: 10px;
+			border: 0.498824px solid #E3DBD8;
+			padding: 10px 41px 10px 15px;
+			position: absolute;
+			z-index: 1;
+			top: 71px;
+			right: -80px;
+			transition: .3s;
+			@media #{$lg} {
+				top: 175px;
+				right: 0px;
+			}
+			@media #{$xs} {
+				top: 160px;
+				right: 0px;
+			}
+
+			&-small-img{
+				img{
+					width: 100%;
+					height: 100%;
+					border: 1px solid var(--rr-theme-primary);
+					border-radius: 50%;
+				}
+			}
+			&-text{
+				span{
+					font-family: var(--rr-ff-heading);
+					color: var(--rr-heading-primary);
+					font-weight: var(--rr-fw-regular);
+					line-height: var(--rr-lh-h5);
+					font-style: normal;
+					font-size: 16px;
+				}
+			}
+		}
+		&-south-africa{
+			background: var(--rr-common-white);
+			display: inline-flex;
+			align-items: center;
+			gap: 15px;
+			border-radius: 10px;
+			border: 0.498824px solid #E3DBD8;
+			padding: 10px 42px 10px 15px;
+			position: absolute;
+			z-index: 1;
+			top: 311px;
+			left: -75px;
+			transition: .3s;
+			@media #{$xs} {
+				top: 250px;
+				left: 0px;
+			}
+
+			&-small-img{
+				img{
+					width: 100%;
+					height: 100%;
+					border: 1px solid var(--rr-theme-primary);
+					border-radius: 50%;
+				}
+			}
+			&-text{
+				span{
+					font-family: var(--rr-ff-heading);
+					color: var(--rr-heading-primary);
+					font-weight: var(--rr-fw-regular);
+					line-height: var(--rr-lh-h5);
+					font-style: normal;
+					font-size: 16px;
+				}
+			}
+		}
+		&-turkey{
+			background: var(--rr-common-white);
+			display: inline-flex;
+			align-items: center;
+			gap: 15px;
+			border-radius: 10px;
+			border: 0.498824px solid #E3DBD8;
+			padding: 10px 84px 10px 15px;
+			position: absolute;
+			z-index: 1;
+			bottom: 98px;
+			left: -110px;
+			@media #{$xs} {
+				bottom: 98px;
+				left: 0px;
+			}
+			@media #{$mxs} {
+				bottom: 350px;
+				left: 0px;
+			}
+
+			&-small-img{
+				img{
+					width: 100%;
+					height: 100%;
+					border: 1px solid var(--rr-theme-primary);
+					border-radius: 50%;
+				}
+			}
+			&-text{
+				span{
+					font-family: var(--rr-ff-heading);
+					color: var(--rr-heading-primary);
+					font-weight: var(--rr-fw-regular);
+					line-height: var(--rr-lh-h5);
+					font-style: normal;
+					font-size: 16px;
+				}
+			}
+		}
+		&-indonesia{
+			background: var(--rr-common-white);
+			display: inline-flex;
+			align-items: center;
+			gap: 15px;
+			border-radius: 10px;
+			border: 0.498824px solid #E3DBD8;
+			padding: 10px 59px 10px 15px;
+			position: absolute;
+			z-index: 1;
+			bottom: 116px;
+			right: -80px;
+			@media #{$lg} {
+				bottom: 155px;
+				right: 0px;
+			}
+			@media #{$xs} {
+				bottom: 190px;
+				right: 0px;
+			}
+			@media #{$xxs, $mxm} {
+				bottom: 25px;
+				right: 0px;
+			}
+			
+
+			&-small-img{
+				img{
+					width: 100%;
+					height: 100%;
+					border: 1px solid var(--rr-theme-primary);
+					border-radius: 50%;
+				}
+			}
+			&-text{
+				span{
+					font-family: var(--rr-ff-heading);
+					color: var(--rr-heading-primary);
+					font-weight: var(--rr-fw-regular);
+					line-height: var(--rr-lh-h5);
+					font-style: normal;
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}
