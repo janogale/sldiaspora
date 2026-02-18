@@ -12,7 +12,7 @@ const galleryPreviewData = [
   },
   {
     image:
-      "/assets/imgs/National Diaspora Policy Validation Workshop/National Diaspora Policy Validation Workshop/518328098_1155356866633372_1960477033848110088_n.jpg",
+      "/assets/imgs/National Diaspora Policy Validation Workshop/img1.jpg",
     title: "Policy Validation Workshop",
     category: "Workshop",
   },
@@ -24,7 +24,7 @@ const galleryPreviewData = [
   },
   {
     image:
-      "/assets/imgs/Interministerial Task Force Establishment/Interministerial Task Force Establishment/490607389_1082087983960261_69337729245276194_n.jpg",
+      "/assets/imgs/National Diaspora Policy Validation Workshop/img3.jpg",
     title: "Task Force Establishment",
     category: "Official Event",
   },
@@ -36,7 +36,7 @@ const galleryPreviewData = [
   },
   {
     image:
-      "/assets/imgs/National Diaspora Policy Validation Workshop/National Diaspora Policy Validation Workshop/518407752_1153978426771216_7045068734087327554_n.jpg",
+      "/assets/imgs/National Diaspora Policy Validation Workshop/img2.jpg",
     title: "Workshop Participants",
     category: "Workshop",
   },
