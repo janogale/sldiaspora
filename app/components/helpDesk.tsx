@@ -26,7 +26,7 @@ const tabs = [
 const contactItems = [
   { key: "call", label: "Phone", href: "tel:252638880240", value: "+252 63 8880240", icon: "phone" },
   { key: "email", label: "Email", href: "mailto:info@sldiaspora.org", value: "info@sldiaspora.org", icon: "email" },
-  { key: "location", label: "Office Location", href: "https://maps.app.goo.gl/MamGGq2HSeikPJZg7", value: "Shacab Area, Wadada Madax-tooyada,\nHargeisa", icon: "location" },
+  { key: "location", label: "Office Location", href: "https://maps.app.goo.gl/qo96x3AZEVEfdxSX8", value: "Shacab Area, Wadada Madax-tooyada,\nHargeisa", icon: "location" },
 ] satisfies Array<{ key: string; label: string; href: string; value: string; icon: IconType }>;
 
 const hours = [
