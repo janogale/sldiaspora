@@ -24,15 +24,18 @@ const tabs = [
 ];
 
 const contactItems = [
-  { key: "call", label: "Requesting A Call:", href: "tel:6295550129", value: "(629) 555-0129", icon: "phone" },
-  { key: "email", label: "E-mail", href: "mailto:info@example.com", value: "info@example.com", icon: "email" },
-  { key: "location", label: "Location", href: "https://maps.google.com", value: "6391 Elgin St. Celina,\nDelaware 10299", icon: "location" },
+  { key: "call", label: "Phone", href: "tel:252638880240", value: "+252 63 8880240", icon: "phone" },
+  { key: "email", label: "Email", href: "mailto:info@sldiaspora.org", value: "info@sldiaspora.org", icon: "email" },
+  { key: "location", label: "Office Location", href: "https://maps.app.goo.gl/MamGGq2HSeikPJZg7", value: "Shacab Area, Wadada Madax-tooyada,\nHargeisa", icon: "location" },
 ] satisfies Array<{ key: string; label: string; href: string; value: string; icon: IconType }>;
 
 const hours = [
-  { key: "mon", label: "Monday", time: "9 am - 8 pm" },
-  { key: "tue-fri", label: "Tuesday-Friday", time: "9 am - 8 pm" },
-  { key: "sat", label: "Saturday", time: "9 am - 8 pm" },
+  { key: "office", label: "Office Hours", time: "7:30am - 3pm" },
+  {
+    key: "airport-desk",
+    label: "Airport Welcome Desk Hours",
+    time: "2 hours prior to all departure flights. Available after all arrival flights.",
+  },
 ];
 
 // --- Sub-Components ---
@@ -61,9 +64,9 @@ const HelpDesk = () => {
     <section className="py-5 bg-light">
       <div className="container">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="text-center mb-4 mb-md-5">
           <span className="text-uppercase fw-bold text-success small">Help Desk</span>
-          <h2 className="display-5 fw-bold mt-2">We’ve got you covered</h2>
+          <h2 className="display-5 fw-bold mt-2 mb-0">We’ve got you covered</h2>
         </div>
 
         {/* Tab Navigation */}
@@ -85,7 +88,7 @@ const HelpDesk = () => {
         </ul>
 
         {/* Tab Content */}
-        <div className="tab-content border rounded-4 bg-white shadow-sm p-4 p-md-5" id="helpTabContent">
+        <div className="tab-content border rounded-4 bg-white shadow-sm p-3 p-md-4" id="helpTabContent">
           {tabs.map((t, i) => (
             <div
               key={t.id}
@@ -94,12 +97,12 @@ const HelpDesk = () => {
               role="tabpanel"
               tabIndex={0}
             >
-              <div className="row g-4 align-items-center">
+              <div className="row g-4 align-items-start">
                 {/* Contact Column */}
                 <div className="col-lg-4 border-end-lg">
                   <h5 className="mb-4 fw-bold">Contact Info</h5>
                   {contactItems.map((item) => (
-                    <div className="d-flex align-items-start mb-4" key={item.key}>
+                    <div className="d-flex align-items-start mb-3 p-3 rounded-3 bg-light" key={item.key}>
                       <IconWrapper type={item.icon} />
                       <div>
                         <small className="text-muted d-block">{item.label}</small>
@@ -117,9 +120,9 @@ const HelpDesk = () => {
                 <div className="col-lg-3 border-end-lg">
                   <h5 className="mb-4 fw-bold">Opening Hours</h5>
                   {hours.map((h) => (
-                    <div className="mb-4" key={h.key}>
+                    <div className="mb-3 p-3 rounded-3 bg-light" key={h.key}>
                       <small className="text-muted d-block">{h.label}</small>
-                      <div className="d-flex align-items-center fw-bold">
+                      <div className="d-flex align-items-start fw-bold">
                         <IconWrapper type="clock" />
                         <span>{h.time}</span>
                       </div>
@@ -129,14 +132,14 @@ const HelpDesk = () => {
 
                 {/* Small Carousel Column */}
                 <div className="col-lg-5">
-                  <div id={`carousel-${t.id}`} className="carousel slide carousel-fade shadow-sm rounded overflow-hidden" data-bs-ride="carousel">
+                  <div id={`carousel-${t.id}`} className="carousel slide carousel-fade shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
                     <div className="carousel-inner">
                       {t.carouselImgs.map((img, imgIdx) => (
                         <div className={`carousel-item ${imgIdx === 0 ? "active" : ""}`} key={imgIdx}>
                           <img 
                             src={img} 
                             className="d-block w-100 object-fit-cover" 
-                            style={{ height: "300px" }} 
+                            style={{ height: "340px" }} 
                             alt={`Slide ${imgIdx}`} 
                           />
                         </div>
