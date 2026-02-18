@@ -465,25 +465,6 @@ function Page() {
                   )}
                 </div>
               </div>
-
-              <div
-                className="wow fadeInRight animated"
-                data-wow-delay=".3s"
-                style={{
-                  background: "#fff",
-                  borderRadius: "18px",
-                  border: "1px solid rgba(0, 109, 33, 0.15)",
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.06)",
-                  padding: "20px",
-                }}
-              >
-                <h4 style={{ marginBottom: "8px", fontSize: "1.1rem", fontWeight: 700 }}>
-                  All Events
-                </h4>
-                <p style={{ margin: 0, color: "#5d6661" }}>
-                  Scroll below to view your full Upcoming and Past event lists.
-                </p>
-              </div>
             </div>
           </div>
 
