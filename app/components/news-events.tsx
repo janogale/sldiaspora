@@ -4,10 +4,8 @@ import { events } from "../data/events";
 import { Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
 
 const NewsEvents = () => {
-  // UI state: toggle between 'upcoming' and 'past'
   const [filter, setFilter] = useState<"upcoming" | "past">("upcoming");
 
-  // Helper: parse event datetime strings like "2024-07-03 06:00 PM"
   const parseEventDate = (datetime: string) => {
     try {
       const parts = datetime.split(" ");
@@ -31,10 +29,11 @@ const NewsEvents = () => {
     const now = new Date();
     const upcoming: typeof events = [];
     const past: typeof events = [];
-    events.forEach((ev) => {
-      const evDate = parseEventDate(ev.datetime);
-      if (evDate >= now) upcoming.push(ev);
-      else past.push(ev);
+
+    events.forEach((event) => {
+      const eventDate = parseEventDate(event.datetime);
+      if (eventDate >= now) upcoming.push(event);
+      else past.push(event);
     });
 
     upcoming.sort(
@@ -51,10 +50,10 @@ const NewsEvents = () => {
     return { upcomingEvents: upcoming, pastEvents: past };
   }, []);
 
-  // Take first 3 events for the homepage depending on filter
-  const featuredEvents = (
-    filter === "upcoming" ? upcomingEvents : pastEvents
-  ).slice(0, 3);
+  const displayedEvents = (filter === "upcoming" ? upcomingEvents : pastEvents).slice(
+    0,
+    3
+  );
 
   return (
     <section
@@ -65,61 +64,40 @@ const NewsEvents = () => {
         overflow: "hidden",
       }}
     >
-      {/* Decorative background elements */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-80px",
-          right: "-80px",
-          width: "250px",
-          height: "250px",
-          background:
-            "radial-gradient(circle, rgba(228, 0, 43, 0.08) 0%, transparent 70%)",
-          borderRadius: "50%",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-100px",
-          left: "-100px",
-          width: "300px",
-          height: "300px",
-          background:
-            "radial-gradient(circle, rgba(0, 109, 33, 0.06) 0%, transparent 70%)",
-          borderRadius: "50%",
-        }}
-      />
-
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div className="section-title2 mb-60">
+        <div className="section-title2 mb-50">
           <div className="section-title2__wrapper">
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "12px",
+              }}
+            >
               <span
                 className="section-title2__wrapper-subtitle wow fadeInLeft animated"
                 data-wow-delay=".2s"
                 style={{ display: "flex", alignItems: "center", gap: 8 }}
               >
-                <Sparkles size={20} fill="#006d21" />
+                <Sparkles size={18} fill="#006d21" />
                 {filter === "upcoming" ? "Upcoming Events" : "Past Events"}
               </span>
 
-              {/* Simple toggle */}
-              <div style={{ marginLeft: 12 }}>
+              <div style={{ display: "flex", gap: "8px" }}>
                 <button
                   onClick={() => setFilter("upcoming")}
                   style={{
                     padding: "8px 14px",
-                    borderRadius: 10,
+                    borderRadius: "10px",
                     border:
                       filter === "upcoming"
                         ? "2px solid #006d21"
-                        : "1px solid #ccc",
-                    background:
-                      filter === "upcoming" ? "#eaf6ea" : "transparent",
+                        : "1px solid #cfd8d3",
+                    background: filter === "upcoming" ? "#eaf6ea" : "#fff",
                     cursor: "pointer",
                     fontWeight: 600,
-                    marginRight: 8,
                   }}
                 >
                   Upcoming
@@ -128,12 +106,12 @@ const NewsEvents = () => {
                   onClick={() => setFilter("past")}
                   style={{
                     padding: "8px 14px",
-                    borderRadius: 10,
+                    borderRadius: "10px",
                     border:
                       filter === "past"
                         ? "2px solid #006d21"
-                        : "1px solid #ccc",
-                    background: filter === "past" ? "#eaf6ea" : "transparent",
+                        : "1px solid #cfd8d3",
+                    background: filter === "past" ? "#eaf6ea" : "#fff",
                     cursor: "pointer",
                     fontWeight: 600,
                   }}
@@ -141,263 +119,118 @@ const NewsEvents = () => {
                   Past
                 </button>
               </div>
-              {/* <img
-                style={{ width: "52px", height: "10px" }}
-                src="./assets/imgs/shape2.svg"
-                alt=""
-              /> */}
             </div>
+
             <h2
-              className="section-title2__wrapper-title  wow fadeInLeft animated"
+              className="section-title2__wrapper-title wow fadeInLeft animated"
               data-wow-delay=".3s"
-              style={{ fontSize: "3rem" }}
+              style={{ fontSize: "2.5rem" }}
             >
               EVENTS & OPPORTUNITIES
             </h2>
             <p
               className="wow fadeInUp animated"
               data-wow-delay=".4s"
-              style={{
-                color: "#666",
-                fontSize: "1.5rem",
-                lineHeight: "1.6",
-              }}
+              style={{ color: "#666", fontSize: "1.1rem", lineHeight: "1.6" }}
             >
-              Connect with your diaspora community through engaging events
-              worldwide
+              Track diaspora events worldwide and join the ones relevant to your
+              location and schedule.
             </p>
           </div>
         </div>
 
         <div className="row g-4">
-          {featuredEvents.map((event, idx) => (
-            <div className="col-lg-4 col-md-6" key={event.title + idx}>
-              <div
-                className="event-card h-100 wow fadeInUp animated"
-                data-wow-delay={event.delay}
-                style={{
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  background: "#ffffff",
-                  border: "2px solid rgba(0, 109, 33, 0.1)",
-                  position: "relative",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-12px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 20px 40px rgba(0, 109, 33, 0.15)";
-                  e.currentTarget.style.borderColor = "#006d21";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 12px rgba(0, 0, 0, 0.08)";
-                  e.currentTarget.style.borderColor = "rgba(0, 109, 33, 0.1)";
-                }}
-              >
-                {/* Image Section */}
+          {displayedEvents.length > 0 ? (
+            displayedEvents.map((event, idx) => (
+              <div className="col-lg-4 col-md-6" key={`${event.id}-${idx}`}>
                 <div
+                  className="h-100"
                   style={{
-                    position: "relative",
-                    height: "220px",
+                    borderRadius: "16px",
                     overflow: "hidden",
+                    background: "#fff",
+                    border: "1px solid rgba(0, 109, 33, 0.12)",
+                    boxShadow: "0 4px 14px rgba(0, 0, 0, 0.07)",
                   }}
                 >
-                  <img
-                    src={event.mainImg}
-                    alt={event.title}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      transition: "transform 0.4s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "scale(1.1)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "scale(1)";
-                    }}
-                  />
-                  {/* Flag Badge */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "16px",
-                      left: "16px",
-                      width: "60px",
-                      height: "60px",
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      border: "3px solid #ffffff",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-                    }}
-                  >
+                  <div style={{ height: "190px", position: "relative" }}>
                     <img
-                      src={event.smallImg}
-                      alt="flag"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
+                      src={event.mainImg}
+                      alt={event.title}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   </div>
-                  {/* Gradient Overlay */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: "60px",
-                      background:
-                        "linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent)",
-                    }}
-                  />
-                </div>
 
-                {/* Content Section */}
-                <div style={{ padding: "28px" }}>
-                  <h3
-                    style={{
-                      fontSize: "2rem",
-                      fontWeight: "700",
-                      color: "#1a1a1a",
-                      marginBottom: "12px",
-                      lineHeight: "1.3",
-                    }}
-                  >
-                    {event.title}
-                  </h3>
+                  <div style={{ padding: "20px" }}>
+                    <h4 style={{ marginBottom: "8px", fontWeight: 700 }}>{event.title}</h4>
+                    <p style={{ color: "#666", marginBottom: "14px" }}>{event.description}</p>
 
-                  <p
-                    style={{
-                      fontSize: "1.4rem",
-                      color: "#666",
-                      lineHeight: "1.7",
-                      marginBottom: "20px",
-                      minHeight: "60px",
-                    }}
-                  >
-                    {event.description}
-                  </p>
+                    <div style={{ marginBottom: "16px", color: "#4b5563" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                        <MapPin size={16} color="#006d21" />
+                        <span>{event.location}</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <Calendar size={16} color="#006d21" />
+                        <span>{event.datetime}</span>
+                      </div>
+                    </div>
 
-                  {/* Event Details */}
-                  <div style={{ marginBottom: "24px" }}>
-                    <div
+                    <Link
+                      href={`/events/${event.id}`}
                       style={{
-                        display: "flex",
+                        display: "inline-flex",
                         alignItems: "center",
-                        gap: "10px",
-                        marginBottom: "10px",
-                        fontSize: "1.4rem",
-                        color: "#555",
+                        gap: "8px",
+                        background: "#006d21",
+                        color: "#fff",
+                        borderRadius: "10px",
+                        padding: "10px 16px",
+                        textDecoration: "none",
+                        fontWeight: 600,
                       }}
                     >
-                      <MapPin size={18} color="#006d21" />
-                      <span>{event.location}</span>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        fontSize: "1.4rem",
-                        color: "#555",
-                      }}
-                    >
-                      <Calendar size={18} color="#006d21" />
-                      <span>{event.datetime}</span>
-                    </div>
+                      Join Now
+                      <ArrowRight size={16} />
+                    </Link>
                   </div>
-
-                  {/* Action Button */}
-                  <Link
-                    href={`/events/${event.id}`}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      background:
-                        "linear-gradient(135deg, #006d21 0%, #009b2e 100%)",
-                      color: "#ffffff",
-                      padding: "13px 30px",
-                      borderRadius: "12px",
-                      fontSize: "1.4rem",
-                      fontWeight: "600",
-                      textDecoration: "none",
-                      transition: "all 0.3s ease",
-                      boxShadow: "0 4px 12px rgba(0, 109, 33, 0.3)",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateX(4px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 20px rgba(0, 109, 33, 0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateX(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 4px 12px rgba(0, 109, 33, 0.3)";
-                    }}
-                  >
-                    Join Now
-                    <ArrowRight size={18} />
-                  </Link>
                 </div>
-
-                {/* Decorative corner */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    width: "100px",
-                    height: "100px",
-                    background:
-                      "linear-gradient(135deg, rgba(0, 109, 33, 0.05) 0%, transparent 100%)",
-                    borderRadius: "0 20px 0 100%",
-                  }}
-                />
+              </div>
+            ))
+          ) : (
+            <div className="col-12">
+              <div
+                style={{
+                  border: "1px solid #d6e8db",
+                  borderRadius: "12px",
+                  padding: "20px",
+                  background: "#fff",
+                }}
+              >
+                No {filter} events available right now.
               </div>
             </div>
-          ))}
+          )}
         </div>
 
-        {/* View All Button */}
         <div className="text-center mt-5">
           <Link
             href="/events"
-            className="btn wow fadeInUp animated"
-            data-wow-delay=".5s"
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "10px",
-              background: "transparent",
+              gap: "8px",
+              padding: "12px 22px",
+              borderRadius: "10px",
               border: "2px solid #006d21",
               color: "#006d21",
-              padding: "16px 40px",
-              fontSize: "1.05rem",
-              fontWeight: "600",
-              borderRadius: "12px",
               textDecoration: "none",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#006d21";
-              e.currentTarget.style.color = "#ffffff";
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "#006d21";
-              e.currentTarget.style.transform = "scale(1)";
+              fontWeight: 600,
+              background: "#fff",
             }}
           >
-            View All Events
-            <ArrowRight size={20} />
+            View Full Events Calendar
+            <ArrowRight size={18} />
           </Link>
         </div>
       </div>
