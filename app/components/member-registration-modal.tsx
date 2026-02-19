@@ -165,6 +165,28 @@ function MemberRegistrationModal() {
     }
   };
 
+  const labelStyle = {
+    fontWeight: 700,
+    fontSize: "0.86rem",
+    color: "#1f2937",
+    marginBottom: "6px",
+  } as const;
+
+  const inputStyle = {
+    border: "1px solid #cfe0d5",
+    borderRadius: "10px",
+    minHeight: "44px",
+    boxShadow: "none",
+    fontSize: "0.94rem",
+  } as const;
+
+  const sectionCardStyle = {
+    border: "1px solid #deebe2",
+    borderRadius: "12px",
+    padding: "14px",
+    background: "#fbfefc",
+  } as const;
+
   return (
     <>
       {isOpen && (
@@ -184,21 +206,21 @@ function MemberRegistrationModal() {
           <div
             style={{
               width: "100%",
-              maxWidth: "680px",
+              maxWidth: "760px",
               maxHeight: "92vh",
               overflow: "auto",
               background: "#ffffff",
-              borderRadius: "14px",
-              border: "1px solid #d8e7dc",
-              boxShadow: "0 18px 45px rgba(0, 0, 0, 0.25)",
+              borderRadius: "18px",
+              border: "1px solid #dbe8df",
+              boxShadow: "0 26px 60px rgba(0, 0, 0, 0.28)",
             }}
             onClick={(event) => event.stopPropagation()}
           >
             <div
               style={{
-                padding: "18px 18px 16px",
+                padding: "20px 22px 16px",
                 borderBottom: "1px solid #edf2ef",
-                background: "linear-gradient(180deg, #f4faf6 0%, #ffffff 100%)",
+                background: "linear-gradient(180deg, #f0f8f3 0%, #ffffff 100%)",
               }}
             >
               <div
@@ -213,24 +235,24 @@ function MemberRegistrationModal() {
                   <div
                     style={{
                       display: "inline-block",
-                      fontSize: "0.76rem",
+                      fontSize: "0.74rem",
                       fontWeight: 700,
-                      letterSpacing: "0.03em",
+                      letterSpacing: "0.06em",
                       color: "#006d21",
                       background: "#eaf6ee",
                       border: "1px solid #cfe5d5",
                       borderRadius: "999px",
-                      padding: "4px 10px",
-                      marginBottom: "8px",
+                      padding: "5px 11px",
+                      marginBottom: "10px",
                     }}
                   >
-                    Somaliland Diaspora
+                    SOMALILAND DIASPORA
                   </div>
-                  <h4 style={{ margin: 0, color: "#0f172a", fontWeight: 700 }}>
+                  <h4 style={{ margin: 0, color: "#0f172a", fontWeight: 800, fontSize: "1.35rem" }}>
                     Member Registration
                   </h4>
-                  <p style={{ margin: "6px 0 0", color: "#4b5563", fontSize: "0.92rem" }}>
-                    Complete your profile and submit for admin review.
+                  <p style={{ margin: "7px 0 0", color: "#4b5563", fontSize: "0.95rem" }}>
+                    Complete your profile to join the official Somaliland Diaspora members network.
                   </p>
                 </div>
                 <button
@@ -239,7 +261,7 @@ function MemberRegistrationModal() {
                   style={{
                     border: "1px solid #d5e4da",
                     background: "#fff",
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     width: "34px",
                     height: "34px",
                     cursor: "pointer",
@@ -252,129 +274,136 @@ function MemberRegistrationModal() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ padding: "16px 18px 20px" }}>
+            <form onSubmit={handleSubmit} style={{ padding: "18px 22px 22px" }}>
               <div
                 style={{
-                  border: "1px solid #d9e9df",
-                  background: "#f8fcf9",
+                  border: "1px solid #d3e7da",
+                  background: "linear-gradient(180deg, #f7fcf9 0%, #f2f9f5 100%)",
                   borderRadius: "12px",
-                  padding: "10px 12px",
-                  marginBottom: "14px",
+                  padding: "12px 14px",
+                  marginBottom: "16px",
                   color: "#0f5132",
-                  fontSize: "0.9rem",
+                  fontSize: "0.92rem",
                 }}
               >
-                Choose one verification option only: <strong>Upload National ID photo</strong> or
-                <strong> enter shared code</strong>.
+                Use one verification option only: <strong>Upload National ID photo</strong> or <strong>enter shared code</strong>.
               </div>
 
               <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Full Name *</label>
-                  <input
-                    className="form-control"
-                    value={formState.fullName}
-                    onChange={(event) => handleChange("fullName", event.target.value)}
-                    placeholder="Enter full name"
-                    required
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Phone *</label>
-                  <input
-                    className="form-control"
-                    value={formState.phone}
-                    onChange={(event) => handleChange("phone", event.target.value)}
-                    placeholder="e.g. +252..."
-                    required
-                  />
-                </div>
+                <div className="col-12">
+                  <div style={sectionCardStyle}>
+                    <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "12px" }}>Personal Information</div>
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <label className="form-label" style={labelStyle}>Full Name *</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={formState.fullName}
+                          onChange={(event) => handleChange("fullName", event.target.value)}
+                          placeholder="Enter full name"
+                          required
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label" style={labelStyle}>Phone *</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={formState.phone}
+                          onChange={(event) => handleChange("phone", event.target.value)}
+                          placeholder="e.g. +252..."
+                          required
+                        />
+                      </div>
 
-                <div className="col-md-6">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Email (Optional)</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={formState.email}
-                    onChange={(event) => handleChange("email", event.target.value)}
-                    placeholder="name@email.com"
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Country</label>
-                  <input
-                    className="form-control"
-                    value={formState.country}
-                    onChange={(event) => handleChange("country", event.target.value)}
-                    placeholder="Country"
-                  />
-                </div>
+                      <div className="col-md-6">
+                        <label className="form-label" style={labelStyle}>Email (Optional)</label>
+                        <input
+                          type="email"
+                          className="form-control"
+                          style={inputStyle}
+                          value={formState.email}
+                          onChange={(event) => handleChange("email", event.target.value)}
+                          placeholder="name@email.com"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label" style={labelStyle}>Country</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={formState.country}
+                          onChange={(event) => handleChange("country", event.target.value)}
+                          placeholder="Country"
+                        />
+                      </div>
 
-                <div className="col-md-6">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Address *</label>
-                  <input
-                    className="form-control"
-                    value={formState.address}
-                    onChange={(event) => handleChange("address", event.target.value)}
-                    placeholder="Residential address"
-                    required
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Profession</label>
-                  <input
-                    className="form-control"
-                    value={formState.profession}
-                    onChange={(event) => handleChange("profession", event.target.value)}
-                    placeholder="Your profession"
-                  />
+                      <div className="col-md-6">
+                        <label className="form-label" style={labelStyle}>Address *</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={formState.address}
+                          onChange={(event) => handleChange("address", event.target.value)}
+                          placeholder="Residential address"
+                          required
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label" style={labelStyle}>Profession</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={formState.profession}
+                          onChange={(event) => handleChange("profession", event.target.value)}
+                          placeholder="Your profession"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="col-12">
-                  <div
-                    style={{
-                      border: "1px solid #deebe2",
-                      borderRadius: "12px",
-                      padding: "12px",
-                      background: "#fbfefc",
-                    }}
-                  >
-                    <div style={{ fontWeight: 700, marginBottom: "8px", color: "#0f172a" }}>
+                  <div style={sectionCardStyle}>
+                    <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "12px" }}>
                       Identity Verification (Choose One)
                     </div>
                     <div className="row g-3">
                       <div className="col-md-6">
-                        <label className="form-label" style={{ fontWeight: 600 }}>
+                        <label className="form-label" style={labelStyle}>
                           Upload National ID Photo
                         </label>
                         <input
                           type="file"
                           accept="image/*,.pdf"
                           className="form-control"
+                          style={inputStyle}
                           disabled={hasIdCode}
                           onChange={(event) => handlePhotoChange(event.target.files?.[0] || null)}
                         />
-                        <small style={{ color: "#6b7280" }}>
+                        <small style={{ color: "#6b7280", display: "inline-block", marginTop: "6px" }}>
                           {hasIdCode
                             ? "Disabled because shared code is entered."
                             : nationalIdPhoto
                               ? `Selected: ${nationalIdPhoto.name}`
-                              : "JPG, PNG, or PDF"}
+                              : "Accepted: JPG, PNG, PDF"}
                         </small>
                       </div>
 
                       <div className="col-md-6">
-                        <label className="form-label" style={{ fontWeight: 600 }}>
+                        <label className="form-label" style={labelStyle}>
                           Shared Code (if no ID photo)
                         </label>
                         <input
                           className="form-control"
+                          style={inputStyle}
                           value={formState.nationalIdCode}
                           disabled={hasIdPhoto}
                           onChange={(event) => handleChange("nationalIdCode", event.target.value)}
                           placeholder="Enter invitation/shared code"
                         />
-                        <small style={{ color: "#6b7280" }}>
+                        <small style={{ color: "#6b7280", display: "inline-block", marginTop: "6px" }}>
                           {hasIdPhoto
                             ? "Disabled because ID photo is uploaded."
                             : "Use this only when you do not upload an ID photo."}
@@ -385,9 +414,10 @@ function MemberRegistrationModal() {
                 </div>
 
                 <div className="col-12">
-                  <label className="form-label" style={{ fontWeight: 600 }}>Additional Information</label>
+                  <label className="form-label" style={labelStyle}>Additional Information</label>
                   <textarea
                     className="form-control"
+                    style={{ ...inputStyle, minHeight: "96px" }}
                     rows={3}
                     value={formState.additionalNotes}
                     onChange={(event) => handleChange("additionalNotes", event.target.value)}
@@ -412,7 +442,7 @@ function MemberRegistrationModal() {
                 </div>
               )}
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "16px" }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "18px" }}>
                 <button
                   type="button"
                   onClick={closeModal}
@@ -421,7 +451,7 @@ function MemberRegistrationModal() {
                     background: "#ffffff",
                     color: "#0f172a",
                     borderRadius: "10px",
-                    padding: "9px 14px",
+                    padding: "10px 16px",
                     fontWeight: 600,
                     cursor: "pointer",
                   }}
@@ -436,7 +466,7 @@ function MemberRegistrationModal() {
                     background: isSubmitting || !canSubmit ? "#89b99a" : "#006d21",
                     color: "#ffffff",
                     borderRadius: "10px",
-                    padding: "9px 16px",
+                    padding: "10px 18px",
                     fontWeight: 700,
                     cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer",
                   }}
@@ -468,10 +498,10 @@ function MemberRegistrationModal() {
               width: "100%",
               maxWidth: "560px",
               background: "#ffffff",
-              borderRadius: "14px",
+              borderRadius: "16px",
               border: "1px solid #d8e7dc",
-              boxShadow: "0 18px 45px rgba(0, 0, 0, 0.25)",
-              padding: "20px",
+              boxShadow: "0 24px 52px rgba(0, 0, 0, 0.26)",
+              padding: "22px",
             }}
             onClick={(event) => event.stopPropagation()}
           >
