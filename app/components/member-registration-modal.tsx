@@ -1,0 +1,512 @@
+"use client";
+
+import { FormEvent, useEffect, useMemo, useState } from "react";
+
+type RegisterFormState = {
+  fullName: string;
+  phone: string;
+  email: string;
+  address: string;
+  country: string;
+  profession: string;
+  nationalIdCode: string;
+  additionalNotes: string;
+};
+
+const defaultFormState: RegisterFormState = {
+  fullName: "",
+  phone: "",
+  email: "",
+  address: "",
+  country: "",
+  profession: "",
+  nationalIdCode: "",
+  additionalNotes: "",
+};
+
+const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
+
+function MemberRegistrationModal() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
+  const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
+  const hasIdCode = formState.nationalIdCode.trim().length > 0;
+  const hasIdPhoto = !!nationalIdPhoto;
+
+  const canSubmit = useMemo(() => {
+    return (
+      formState.fullName.trim().length > 1 &&
+      formState.phone.trim().length > 5 &&
+      formState.address.trim().length > 4 &&
+      (hasIdPhoto || hasIdCode) &&
+      hasIdPhoto !== hasIdCode
+    );
+  }, [formState, hasIdCode, hasIdPhoto]);
+
+  const openModal = () => {
+    setErrorMessage("");
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const onOpenMemberModal = () => openModal();
+
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = event.target as HTMLElement | null;
+      const anchor = target?.closest("a") as HTMLAnchorElement | null;
+      if (!anchor) return;
+      if (anchor.target === "_blank") return;
+
+      const href = anchor.getAttribute("href") || "";
+      if (href === DIRECTUS_REGISTER_LINK || href === "/register") {
+        event.preventDefault();
+        openModal();
+      }
+    };
+
+    const onEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        setShowSuccess(false);
+      }
+    };
+
+    window.addEventListener("open-member-register", onOpenMemberModal);
+    document.addEventListener("click", onClick);
+    document.addEventListener("keydown", onEsc);
+
+    return () => {
+      window.removeEventListener("open-member-register", onOpenMemberModal);
+      document.removeEventListener("click", onClick);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, []);
+
+  const handleChange = (
+    key: keyof RegisterFormState,
+    value: string
+  ) => {
+    if (key === "nationalIdCode" && value.trim().length > 0 && nationalIdPhoto) {
+      setNationalIdPhoto(null);
+    }
+    setFormState((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handlePhotoChange = (file: File | null) => {
+    if (file) {
+      setFormState((prev) => ({ ...prev, nationalIdCode: "" }));
+    }
+    setNationalIdPhoto(file);
+  };
+
+  const resetForm = () => {
+    setFormState(defaultFormState);
+    setNationalIdPhoto(null);
+    setErrorMessage("");
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!canSubmit) {
+      setErrorMessage(
+        "Please complete required fields and choose only one verification method: upload ID photo or enter shared code."
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    try {
+      const payload = new FormData();
+      payload.append("fullName", formState.fullName.trim());
+      payload.append("phone", formState.phone.trim());
+      payload.append("email", formState.email.trim());
+      payload.append("address", formState.address.trim());
+      payload.append("country", formState.country.trim());
+      payload.append("profession", formState.profession.trim());
+      payload.append("nationalIdCode", formState.nationalIdCode.trim());
+      payload.append("additionalNotes", formState.additionalNotes.trim());
+
+      if (nationalIdPhoto) {
+        payload.append("nationalIdPhoto", nationalIdPhoto);
+      }
+
+      const response = await fetch("/api/member-register", {
+        method: "POST",
+        body: payload,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(result?.message || "Failed to submit registration.");
+        return;
+      }
+
+      closeModal();
+      setShowSuccess(true);
+      resetForm();
+    } catch {
+      setErrorMessage("Unable to submit right now. Please try again shortly.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <>
+      {isOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.55)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "18px",
+          }}
+          onClick={closeModal}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "680px",
+              maxHeight: "92vh",
+              overflow: "auto",
+              background: "#ffffff",
+              borderRadius: "14px",
+              border: "1px solid #d8e7dc",
+              boxShadow: "0 18px 45px rgba(0, 0, 0, 0.25)",
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div
+              style={{
+                padding: "18px 18px 16px",
+                borderBottom: "1px solid #edf2ef",
+                background: "linear-gradient(180deg, #f4faf6 0%, #ffffff 100%)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "12px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      fontSize: "0.76rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.03em",
+                      color: "#006d21",
+                      background: "#eaf6ee",
+                      border: "1px solid #cfe5d5",
+                      borderRadius: "999px",
+                      padding: "4px 10px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Somaliland Diaspora
+                  </div>
+                  <h4 style={{ margin: 0, color: "#0f172a", fontWeight: 700 }}>
+                    Member Registration
+                  </h4>
+                  <p style={{ margin: "6px 0 0", color: "#4b5563", fontSize: "0.92rem" }}>
+                    Complete your profile and submit for admin review.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  style={{
+                    border: "1px solid #d5e4da",
+                    background: "#fff",
+                    borderRadius: "8px",
+                    width: "34px",
+                    height: "34px",
+                    cursor: "pointer",
+                    fontWeight: 700,
+                    flexShrink: 0,
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} style={{ padding: "16px 18px 20px" }}>
+              <div
+                style={{
+                  border: "1px solid #d9e9df",
+                  background: "#f8fcf9",
+                  borderRadius: "12px",
+                  padding: "10px 12px",
+                  marginBottom: "14px",
+                  color: "#0f5132",
+                  fontSize: "0.9rem",
+                }}
+              >
+                Choose one verification option only: <strong>Upload National ID photo</strong> or
+                <strong> enter shared code</strong>.
+              </div>
+
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Full Name *</label>
+                  <input
+                    className="form-control"
+                    value={formState.fullName}
+                    onChange={(event) => handleChange("fullName", event.target.value)}
+                    placeholder="Enter full name"
+                    required
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Phone *</label>
+                  <input
+                    className="form-control"
+                    value={formState.phone}
+                    onChange={(event) => handleChange("phone", event.target.value)}
+                    placeholder="e.g. +252..."
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Email (Optional)</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={formState.email}
+                    onChange={(event) => handleChange("email", event.target.value)}
+                    placeholder="name@email.com"
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Country</label>
+                  <input
+                    className="form-control"
+                    value={formState.country}
+                    onChange={(event) => handleChange("country", event.target.value)}
+                    placeholder="Country"
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Address *</label>
+                  <input
+                    className="form-control"
+                    value={formState.address}
+                    onChange={(event) => handleChange("address", event.target.value)}
+                    placeholder="Residential address"
+                    required
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Profession</label>
+                  <input
+                    className="form-control"
+                    value={formState.profession}
+                    onChange={(event) => handleChange("profession", event.target.value)}
+                    placeholder="Your profession"
+                  />
+                </div>
+
+                <div className="col-12">
+                  <div
+                    style={{
+                      border: "1px solid #deebe2",
+                      borderRadius: "12px",
+                      padding: "12px",
+                      background: "#fbfefc",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, marginBottom: "8px", color: "#0f172a" }}>
+                      Identity Verification (Choose One)
+                    </div>
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <label className="form-label" style={{ fontWeight: 600 }}>
+                          Upload National ID Photo
+                        </label>
+                        <input
+                          type="file"
+                          accept="image/*,.pdf"
+                          className="form-control"
+                          disabled={hasIdCode}
+                          onChange={(event) => handlePhotoChange(event.target.files?.[0] || null)}
+                        />
+                        <small style={{ color: "#6b7280" }}>
+                          {hasIdCode
+                            ? "Disabled because shared code is entered."
+                            : nationalIdPhoto
+                              ? `Selected: ${nationalIdPhoto.name}`
+                              : "JPG, PNG, or PDF"}
+                        </small>
+                      </div>
+
+                      <div className="col-md-6">
+                        <label className="form-label" style={{ fontWeight: 600 }}>
+                          Shared Code (if no ID photo)
+                        </label>
+                        <input
+                          className="form-control"
+                          value={formState.nationalIdCode}
+                          disabled={hasIdPhoto}
+                          onChange={(event) => handleChange("nationalIdCode", event.target.value)}
+                          placeholder="Enter invitation/shared code"
+                        />
+                        <small style={{ color: "#6b7280" }}>
+                          {hasIdPhoto
+                            ? "Disabled because ID photo is uploaded."
+                            : "Use this only when you do not upload an ID photo."}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label" style={{ fontWeight: 600 }}>Additional Information</label>
+                  <textarea
+                    className="form-control"
+                    rows={3}
+                    value={formState.additionalNotes}
+                    onChange={(event) => handleChange("additionalNotes", event.target.value)}
+                    placeholder="Any details you want admin to review"
+                  />
+                </div>
+              </div>
+
+              {errorMessage && (
+                <div
+                  style={{
+                    marginTop: "12px",
+                    borderRadius: "10px",
+                    border: "1px solid #f4c8c8",
+                    background: "#fff5f5",
+                    color: "#991b1b",
+                    padding: "10px 12px",
+                    fontSize: "0.94rem",
+                  }}
+                >
+                  {errorMessage}
+                </div>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "16px" }}>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  style={{
+                    border: "1px solid #cadacc",
+                    background: "#ffffff",
+                    color: "#0f172a",
+                    borderRadius: "10px",
+                    padding: "9px 14px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !canSubmit}
+                  style={{
+                    border: "none",
+                    background: isSubmitting || !canSubmit ? "#89b99a" : "#006d21",
+                    color: "#ffffff",
+                    borderRadius: "10px",
+                    padding: "9px 16px",
+                    fontWeight: 700,
+                    cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Registration"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.55)",
+            zIndex: 10000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "18px",
+          }}
+          onClick={() => setShowSuccess(false)}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "560px",
+              background: "#ffffff",
+              borderRadius: "14px",
+              border: "1px solid #d8e7dc",
+              boxShadow: "0 18px 45px rgba(0, 0, 0, 0.25)",
+              padding: "20px",
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h4 style={{ marginBottom: "8px", color: "#006d21", fontWeight: 700 }}>
+              Registration Received
+            </h4>
+            <p style={{ marginBottom: "8px", color: "#1f2937" }}>
+              Please wait while we review your data.
+            </p>
+            <p style={{ marginBottom: "16px", color: "#4b5563" }}>
+              Verification usually takes about 2 to 3 business days. Your member status is now
+              pending until admin approval in Directus.
+            </p>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => setShowSuccess(false)}
+                style={{
+                  border: "none",
+                  background: "#006d21",
+                  color: "#fff",
+                  borderRadius: "10px",
+                  padding: "9px 16px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default MemberRegistrationModal;
