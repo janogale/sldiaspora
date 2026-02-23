@@ -166,25 +166,30 @@ function MemberRegistrationModal() {
   };
 
   const labelStyle = {
-    fontWeight: 700,
-    fontSize: "0.86rem",
+    fontWeight: 600,
+    fontSize: "0.875rem",
     color: "#1f2937",
-    marginBottom: "6px",
+    marginBottom: "8px",
+    display: "block",
+    letterSpacing: "0.3px",
   } as const;
 
   const inputStyle = {
-    border: "1px solid #cfe0d5",
-    borderRadius: "10px",
-    minHeight: "44px",
-    boxShadow: "none",
+    border: "1.5px solid #d4e4da",
+    borderRadius: "8px",
+    minHeight: "42px",
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.04)",
     fontSize: "0.94rem",
+    paddingLeft: "12px",
+    paddingRight: "12px",
+    transition: "all 0.2s ease",
   } as const;
 
   const sectionCardStyle = {
-    border: "1px solid #deebe2",
+    border: "1px solid #d4e4da",
     borderRadius: "12px",
-    padding: "14px",
-    background: "#fbfefc",
+    padding: "16px",
+    background: "linear-gradient(135deg, #f8fdfb 0%, #f2faf6 100%)",
   } as const;
 
   return (
@@ -194,105 +199,115 @@ function MemberRegistrationModal() {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.55)",
+            background: "rgba(0, 0, 0, 0.5)",
             zIndex: 9999,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "18px",
+            padding: "16px",
+            backdropFilter: "blur(2px)",
           }}
           onClick={closeModal}
         >
           <div
             style={{
               width: "100%",
-              maxWidth: "760px",
-              maxHeight: "92vh",
+              maxWidth: "700px",
+              maxHeight: "90vh",
               overflow: "auto",
               background: "#ffffff",
-              borderRadius: "18px",
-              border: "1px solid #dbe8df",
-              boxShadow: "0 26px 60px rgba(0, 0, 0, 0.28)",
+              borderRadius: "16px",
+              border: "1px solid #d4e4da",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 107, 33, 0.1)",
             }}
             onClick={(event) => event.stopPropagation()}
           >
             <div
               style={{
-                padding: "20px 22px 16px",
-                borderBottom: "1px solid #edf2ef",
-                background: "linear-gradient(180deg, #f0f8f3 0%, #ffffff 100%)",
+                padding: "24px",
+                borderBottom: "1px solid #e0ebe5",
+                background: "linear-gradient(135deg, #f0f9f4 0%, #ffffff 100%)",
               }}
             >
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   justifyContent: "space-between",
-                  gap: "12px",
+                  gap: "16px",
                 }}
               >
                 <div>
                   <div
                     style={{
                       display: "inline-block",
-                      fontSize: "0.74rem",
+                      fontSize: "0.7rem",
                       fontWeight: 700,
-                      letterSpacing: "0.06em",
+                      letterSpacing: "0.08em",
                       color: "#006d21",
-                      background: "#eaf6ee",
-                      border: "1px solid #cfe5d5",
-                      borderRadius: "999px",
-                      padding: "5px 11px",
-                      marginBottom: "10px",
+                      background: "#e6f3ea",
+                      border: "1px solid #c8dfd2",
+                      borderRadius: "6px",
+                      padding: "6px 12px",
+                      marginBottom: "12px",
                     }}
                   >
-                    SOMALILAND DIASPORA
+                    SOMALILAND DIASPORA NETWORK
                   </div>
-                  <h4 style={{ margin: 0, color: "#0f172a", fontWeight: 800, fontSize: "1.35rem" }}>
+                  <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 700, fontSize: "1.5rem" }}>
                     Member Registration
-                  </h4>
-                  <p style={{ margin: "7px 0 0", color: "#4b5563", fontSize: "0.95rem" }}>
-                    Complete your profile to join the official Somaliland Diaspora members network.
+                  </h3>
+                  <p style={{ margin: "0", color: "#5a6b76", fontSize: "0.94rem", lineHeight: "1.5" }}>
+                    Join the official Somaliland Diaspora community and connect with members worldwide.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={closeModal}
                   style={{
-                    border: "1px solid #d5e4da",
-                    background: "#fff",
-                    borderRadius: "10px",
-                    width: "34px",
-                    height: "34px",
+                    border: "none",
+                    background: "transparent",
+                    color: "#9ca3af",
+                    fontSize: "24px",
                     cursor: "pointer",
-                    fontWeight: 700,
+                    fontWeight: 300,
                     flexShrink: 0,
+                    padding: "0",
+                    width: "32px",
+                    height: "32px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "color 0.2s",
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#006d21")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
                 >
-                  ×
+                  ✕
                 </button>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ padding: "18px 22px 22px" }}>
+            <form onSubmit={handleSubmit} style={{ padding: "24px" }}>
               <div
                 style={{
-                  border: "1px solid #d3e7da",
-                  background: "linear-gradient(180deg, #f7fcf9 0%, #f2f9f5 100%)",
-                  borderRadius: "12px",
-                  padding: "12px 14px",
-                  marginBottom: "16px",
+                  border: "1px solid #d1e8da",
+                  background: "linear-gradient(135deg, #f0faf5 0%, #e8f7f1 100%)",
+                  borderRadius: "10px",
+                  padding: "14px 16px",
+                  marginBottom: "20px",
                   color: "#0f5132",
                   fontSize: "0.92rem",
+                  lineHeight: "1.5",
                 }}
               >
-                Use one verification option only: <strong>Upload National ID photo</strong> or <strong>enter shared code</strong>.
+                <strong>Verification Method:</strong> Choose one option only — <strong>Upload National ID photo</strong> or <strong>enter shared code</strong>.
               </div>
 
-              <div className="row g-3">
+              <div className="row g-4">
                 <div className="col-12">
                   <div style={sectionCardStyle}>
-                    <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "12px" }}>Personal Information</div>
+                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", letterSpacing: "0.5px", textTransform: "uppercase" }}>📋 Personal Information</div>
                     <div className="row g-3">
                       <div className="col-md-6">
                         <label className="form-label" style={labelStyle}>Full Name *</label>
@@ -366,8 +381,8 @@ function MemberRegistrationModal() {
 
                 <div className="col-12">
                   <div style={sectionCardStyle}>
-                    <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "12px" }}>
-                      Identity Verification (Choose One)
+                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+                      🔐 Identity Verification
                     </div>
                     <div className="row g-3">
                       <div className="col-md-6">
@@ -429,31 +444,43 @@ function MemberRegistrationModal() {
               {errorMessage && (
                 <div
                   style={{
-                    marginTop: "12px",
+                    marginTop: "16px",
+                    marginBottom: "8px",
                     borderRadius: "10px",
-                    border: "1px solid #f4c8c8",
-                    background: "#fff5f5",
+                    border: "1px solid #f5d5d5",
+                    background: "#fef2f2",
                     color: "#991b1b",
-                    padding: "10px 12px",
-                    fontSize: "0.94rem",
+                    padding: "12px 14px",
+                    fontSize: "0.92rem",
+                    lineHeight: "1.5",
                   }}
                 >
-                  {errorMessage}
+                  ⚠️ {errorMessage}
                 </div>
               )}
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "18px" }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "24px" }}>
                 <button
                   type="button"
                   onClick={closeModal}
                   style={{
-                    border: "1px solid #cadacc",
+                    border: "1.5px solid #d4e4da",
                     background: "#ffffff",
-                    color: "#0f172a",
-                    borderRadius: "10px",
-                    padding: "10px 16px",
+                    color: "#1f2937",
+                    borderRadius: "8px",
+                    padding: "10px 18px",
                     fontWeight: 600,
                     cursor: "pointer",
+                    fontSize: "0.94rem",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#f8fdfb";
+                    e.currentTarget.style.borderColor = "#c8dfd2";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#ffffff";
+                    e.currentTarget.style.borderColor = "#d4e4da";
                   }}
                 >
                   Cancel
@@ -463,12 +490,24 @@ function MemberRegistrationModal() {
                   disabled={isSubmitting || !canSubmit}
                   style={{
                     border: "none",
-                    background: isSubmitting || !canSubmit ? "#89b99a" : "#006d21",
+                    background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21",
                     color: "#ffffff",
-                    borderRadius: "10px",
-                    padding: "10px 18px",
-                    fontWeight: 700,
+                    borderRadius: "8px",
+                    padding: "10px 20px",
+                    fontWeight: 600,
                     cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer",
+                    fontSize: "0.94rem",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSubmitting && canSubmit) {
+                      e.currentTarget.style.background = "#005a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSubmitting && canSubmit) {
+                      e.currentTarget.style.background = "#006d21";
+                    }
                   }}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Registration"}
@@ -479,43 +518,44 @@ function MemberRegistrationModal() {
         </div>
       )}
 
-      {showSuccess && (
+            {showSuccess && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.55)",
+            background: "rgba(0, 0, 0, 0.5)",
             zIndex: 10000,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "18px",
+            padding: "16px",
+            backdropFilter: "blur(2px)",
           }}
           onClick={() => setShowSuccess(false)}
         >
           <div
             style={{
               width: "100%",
-              maxWidth: "560px",
+              maxWidth: "480px",
               background: "#ffffff",
               borderRadius: "16px",
-              border: "1px solid #d8e7dc",
-              boxShadow: "0 24px 52px rgba(0, 0, 0, 0.26)",
-              padding: "22px",
+              border: "1px solid #d4e4da",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 107, 33, 0.1)",
+              padding: "28px",
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <h4 style={{ marginBottom: "8px", color: "#006d21", fontWeight: 700 }}>
-              Registration Received
-            </h4>
-            <p style={{ marginBottom: "8px", color: "#1f2937" }}>
-              Please wait while we review your data.
-            </p>
-            <p style={{ marginBottom: "16px", color: "#4b5563" }}>
-              Verification usually takes about 2 to 3 business days. Your member status is now
-              pending until admin approval in Directus.
-            </p>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "3rem", marginBottom: "12px" }}>✓</div>
+              <h3 style={{ marginBottom: "8px", color: "#006d21", fontWeight: 700, fontSize: "1.25rem" }}>
+                Registration Submitted
+              </h3>
+              <p style={{ marginBottom: "12px", color: "#1f2937", lineHeight: "1.6" }}>
+                Thank you for joining the Somaliland Diaspora network!
+              </p>
+              <p style={{ marginBottom: "20px", color: "#5a6b76", fontSize: "0.92rem", lineHeight: "1.6" }}>
+                Our team will review your information within 2-3 days. You&#39;ll receive a notification once your membership is approved.
+              </p>
               <button
                 type="button"
                 onClick={() => setShowSuccess(false)}
@@ -523,13 +563,17 @@ function MemberRegistrationModal() {
                   border: "none",
                   background: "#006d21",
                   color: "#fff",
-                  borderRadius: "10px",
-                  padding: "9px 16px",
-                  fontWeight: 700,
+                  borderRadius: "8px",
+                  padding: "10px 20px",
+                  fontWeight: 600,
                   cursor: "pointer",
+                  fontSize: "0.94rem",
+                  transition: "background 0.2s",
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#005a1a")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#006d21")}
               >
-                OK
+                Got it, thanks!
               </button>
             </div>
           </div>
