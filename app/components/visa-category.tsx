@@ -81,7 +81,7 @@ const VisaCategory = () => {
       />
 
       <div className="container">
-        <div className="section-title2 mb-60">
+        <div className="section-title2 mb-0">
           <div className="section-title2__wrapper">
             <span
               className="section-title2__wrapper-subtitle wow fadeInLeft animated"

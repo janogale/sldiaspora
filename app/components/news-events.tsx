@@ -95,11 +95,11 @@ const NewsEvents = () => {
     calendarCells.push({ date, key: toDateKey(date) });
   }
 
-  const firstDateWithEvents =
-    calendarCells.find((cell) => cell.date && (eventCalendar.map.get(cell.key)?.length ?? 0) > 0)?.key ??
-    todayKey;
+  const monthEventCount = calendarCells
+    .filter((cell) => cell.date)
+    .flatMap((cell) => eventCalendar.map.get(cell.key) ?? []).length;
 
-  const effectiveSelectedDateKey = selectedDateKey ?? firstDateWithEvents;
+  const effectiveSelectedDateKey = selectedDateKey ?? todayKey;
   const selectedDateEvents = eventCalendar.map.get(effectiveSelectedDateKey) ?? [];
 
   const diasporaCountriesCount = useMemo(() => {
@@ -145,7 +145,7 @@ const NewsEvents = () => {
               data-wow-delay=".3s"
               style={{ fontSize: "2.5rem" }}
             >
-              Upcoming Events
+              Plan, Attend, Connect
             </h2>
 
             <p
@@ -175,10 +175,10 @@ const NewsEvents = () => {
               data-wow-delay=".2s"
               style={{
                 background: "#fff",
-                borderRadius: "16px",
+                borderRadius: "18px",
                 border: "1px solid rgba(0, 109, 33, 0.15)",
                 boxShadow: "0 8px 24px rgba(0, 0, 0, 0.06)",
-                padding: "18px",
+                padding: "20px",
               }}
             >
               <div
@@ -243,7 +243,7 @@ const NewsEvents = () => {
                     style={{
                       textAlign: "center",
                       fontWeight: 700,
-                      fontSize: "0.78rem",
+                      fontSize: "0.82rem",
                       color: "#4b5563",
                       padding: "6px 0",
                     }}
@@ -277,32 +277,50 @@ const NewsEvents = () => {
                             : isToday
                               ? "#f3fbf5"
                               : "#fff",
-                        color: isSelected ? "#fff" : "#111827",
-                        borderRadius: "9px",
-                        height: "38px",
-                        fontWeight: 600,
-                        fontSize: "0.9rem",
+                        borderRadius: "10px",
+                        minHeight: "48px",
                         cursor: "pointer",
                         position: "relative",
+                        fontWeight: isSelected || hasEvents || isToday ? 700 : 500,
+                        color: isSelected
+                          ? "#ffffff"
+                          : hasEvents
+                            ? "#0a5b24"
+                            : "#111827",
                       }}
                     >
                       {cell.date.getDate()}
-                      {hasEvents && !isSelected && (
+                      {hasEvents && (
                         <span
                           style={{
                             position: "absolute",
-                            right: "5px",
-                            top: "5px",
-                            width: "5px",
-                            height: "5px",
+                            bottom: "7px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: "6px",
+                            height: "6px",
                             borderRadius: "50%",
-                            background: "#006d21",
+                            background: isSelected ? "#ffffff" : "#006d21",
                           }}
                         />
                       )}
                     </button>
                   );
                 })}
+              </div>
+
+              <div
+                style={{
+                  marginTop: "16px",
+                  color: "#4b5563",
+                  fontSize: "0.92rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <CalendarDays size={16} color="#006d21" />
+                {monthEventCount} event(s) in {monthLabel}
               </div>
             </div>
           </div>
@@ -313,10 +331,10 @@ const NewsEvents = () => {
               data-wow-delay=".3s"
               style={{
                 background: "#fff",
-                borderRadius: "16px",
+                borderRadius: "18px",
                 border: "1px solid rgba(0, 109, 33, 0.15)",
                 boxShadow: "0 8px 24px rgba(0, 0, 0, 0.06)",
-                padding: "18px",
+                padding: "20px",
                 minHeight: "100%",
               }}
             >
@@ -330,76 +348,48 @@ const NewsEvents = () => {
               </div>
 
               {selectedDateEvents.length > 0 ? (
-                <div className="d-flex flex-column gap-3">
+                <div className="row g-3 mt-1">
                   {selectedDateEvents.map((event, idx) => (
-                    <div
-                      key={`${event.id}-${idx}`}
-                      style={{
-                        border: "1px solid #d6e8db",
-                        borderRadius: "14px",
-                        padding: "12px",
-                        background: "#f9fdfb",
-                        boxShadow: "0 6px 14px rgba(0,0,0,0.04)",
-                      }}
-                    >
-                      <div className="row g-3 align-items-start">
-                        <div className="col-md-4">
-                          <div
-                            style={{
-                              borderRadius: "10px",
-                              overflow: "hidden",
-                              border: "1px solid rgba(0,109,33,0.12)",
-                              height: "100%",
-                              minHeight: "130px",
-                              background: "#eef6f0",
-                              position: "relative",
-                            }}
-                          >
-                            <Image
-                              src={event.mainImg}
-                              alt={event.title}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 33vw"
-                              style={{ objectFit: "cover" }}
-                            />
-                          </div>
+                    <div className="col-md-6" key={`${event.id}-${idx}`}>
+                      <div
+                        style={{
+                          border: "1px solid #e5ece8",
+                          borderRadius: "14px",
+                          overflow: "hidden",
+                          height: "100%",
+                          background: "#fff",
+                        }}
+                      >
+                        <div style={{ height: "160px", position: "relative" }}>
+                          <Image
+                            src={event.mainImg}
+                            alt={event.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            style={{ objectFit: "cover" }}
+                          />
                         </div>
 
-                        <div className="col-md-8">
-                          <div className="d-flex justify-content-between align-items-start gap-2 flex-wrap">
-                            <h6 className="mb-1 fw-bold" style={{ fontSize: "1.06rem" }}>
-                              {event.title}
-                            </h6>
-                            <span
-                              style={{
-                                fontSize: "0.72rem",
-                                fontWeight: 700,
-                                letterSpacing: "0.03em",
-                                color: "#0b6d35",
-                                background: "#e8f5ec",
-                                border: "1px solid #cde8d6",
-                                borderRadius: "999px",
-                                padding: "4px 10px",
-                              }}
-                            >
-                              Diaspora Event
-                            </span>
-                          </div>
-
-                          <p className="mb-2 text-muted" style={{ fontSize: "0.95rem" }}>
+                        <div style={{ padding: "14px" }}>
+                          <h5 style={{ marginBottom: "8px", fontWeight: 700 }}>
+                            {event.title}
+                          </h5>
+                          <p style={{ color: "#666", marginBottom: "10px", fontSize: "0.92rem" }}>
                             {event.description}
                           </p>
 
-                          <div className="d-flex flex-column gap-1 text-muted" style={{ fontSize: "0.9rem" }}>
-                            <span className="d-inline-flex align-items-center gap-2">
-                              <MapPin size={15} color="#006d21" /> {event.location}
-                            </span>
-                            <span className="d-inline-flex align-items-center gap-2">
-                              <Clock3 size={15} color="#006d21" /> {event.datetime}
-                            </span>
+                          <div style={{ fontSize: "0.9rem", color: "#4b5563" }}>
+                            <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "6px" }}>
+                              <MapPin size={15} color="#006d21" />
+                              {event.location}
+                            </div>
+                            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                              <Clock3 size={15} color="#006d21" />
+                              {event.datetime}
+                            </div>
                           </div>
 
-                          <div className="mt-3">
+                          <div style={{ marginTop: "12px" }}>
                             <Link
                               href={`/events/${event.id}`}
                               style={{
@@ -409,15 +399,13 @@ const NewsEvents = () => {
                                 background: "#006d21",
                                 color: "#fff",
                                 borderRadius: "10px",
-                                padding: "9px 13px",
+                                padding: "8px 12px",
                                 textDecoration: "none",
                                 fontWeight: 600,
                                 fontSize: "0.9rem",
-                                whiteSpace: "nowrap",
                               }}
                             >
-                              View Event
-                              <ArrowRight size={15} />
+                              View Details
                             </Link>
                           </div>
                         </div>
@@ -428,14 +416,14 @@ const NewsEvents = () => {
               ) : (
                 <div
                   style={{
-                    border: "1px dashed #c8ded0",
+                    border: "1px dashed #c8dbcf",
                     borderRadius: "12px",
-                    padding: "20px",
-                    background: "#fff",
-                    color: "#4b5563",
+                    padding: "18px",
+                    color: "#5b655f",
+                    background: "#f8fbf9",
                   }}
                 >
-                  No events on this date yet. Keep checking for new diaspora programs.
+                  No events on this day yet. Use another date on the calendar to explore scheduled diaspora programs.
                 </div>
               )}
             </div>
