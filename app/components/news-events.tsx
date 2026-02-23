@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import React, { useMemo, useState } from "react";
 import {
   ArrowRight,
@@ -335,16 +336,56 @@ const NewsEvents = () => {
                       key={`${event.id}-${idx}`}
                       style={{
                         border: "1px solid #d6e8db",
-                        borderRadius: "12px",
-                        padding: "14px",
+                        borderRadius: "14px",
+                        padding: "12px",
                         background: "#f9fdfb",
+                        boxShadow: "0 6px 14px rgba(0,0,0,0.04)",
                       }}
                     >
-                      <div className="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                        <div>
-                          <h6 className="mb-1 fw-bold" style={{ fontSize: "1.06rem" }}>
-                            {event.title}
-                          </h6>
+                      <div className="row g-3 align-items-start">
+                        <div className="col-md-4">
+                          <div
+                            style={{
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              border: "1px solid rgba(0,109,33,0.12)",
+                              height: "100%",
+                              minHeight: "130px",
+                              background: "#eef6f0",
+                              position: "relative",
+                            }}
+                          >
+                            <Image
+                              src={event.mainImg}
+                              alt={event.title}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                              style={{ objectFit: "cover" }}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-md-8">
+                          <div className="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+                            <h6 className="mb-1 fw-bold" style={{ fontSize: "1.06rem" }}>
+                              {event.title}
+                            </h6>
+                            <span
+                              style={{
+                                fontSize: "0.72rem",
+                                fontWeight: 700,
+                                letterSpacing: "0.03em",
+                                color: "#0b6d35",
+                                background: "#e8f5ec",
+                                border: "1px solid #cde8d6",
+                                borderRadius: "999px",
+                                padding: "4px 10px",
+                              }}
+                            >
+                              Diaspora Event
+                            </span>
+                          </div>
+
                           <p className="mb-2 text-muted" style={{ fontSize: "0.95rem" }}>
                             {event.description}
                           </p>
@@ -357,27 +398,29 @@ const NewsEvents = () => {
                               <Clock3 size={15} color="#006d21" /> {event.datetime}
                             </span>
                           </div>
-                        </div>
 
-                        <Link
-                          href={`/events/${event.id}`}
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            background: "#006d21",
-                            color: "#fff",
-                            borderRadius: "10px",
-                            padding: "9px 13px",
-                            textDecoration: "none",
-                            fontWeight: 600,
-                            fontSize: "0.9rem",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          View
-                          <ArrowRight size={15} />
-                        </Link>
+                          <div className="mt-3">
+                            <Link
+                              href={`/events/${event.id}`}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                background: "#006d21",
+                                color: "#fff",
+                                borderRadius: "10px",
+                                padding: "9px 13px",
+                                textDecoration: "none",
+                                fontWeight: 600,
+                                fontSize: "0.9rem",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              View Event
+                              <ArrowRight size={15} />
+                            </Link>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
