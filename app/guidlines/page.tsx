@@ -1,11 +1,26 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 
 function Page() {
   const [selectedGuide, setSelectedGuide] = React.useState<number>(1);
+  const taxDoc = {
+    title: "Tax Rate Document",
+    description:
+      "Reference this document for common tax rates and standard tax categories used in Somaliland.",
+    filePath: "/doc/Common%20Tax%20Rates%20in%20Somaliland.docx.pdf",
+  };
+
+  const investmentDoc = {
+    title: "Investment Guide Document",
+    description:
+      "Review this investment document for current opportunities, sectors, and strategic guidance for investors in Somaliland.",
+    filePath: "/doc/Invest%20in%20Somaliland%202026.pdf",
+  };
+
   const data = [
     {
       id: 5,
@@ -272,7 +287,13 @@ function Page() {
                         className="coaching-details__content-top-img pb-20"
                         data-tilt
                       >
-                        <img src={guide.image} alt="img not found" />
+                        <Image
+                          src={guide.image}
+                          alt={guide.title}
+                          width={900}
+                          height={500}
+                          style={{ width: "100%", height: "auto" }}
+                        />
                       </div>
                       <h2
                         className="coaching-details__content-title mb-30 wow fadeInLeft animated"
@@ -413,27 +434,135 @@ function Page() {
                       </div>
                     ) : (
                       // Original layout for other guides
-                      <div className="coaching-details__guides d-flex mb-40 mt-30">
-                        <div className="coaching-details__guides-card">
-                          {guide.items?.map((item, idx) => (
-                            <div
-                              key={idx}
-                              className={`coaching-details__guides-card-tetx${
-                                idx > 0 ? " mt-30" : ""
-                              } wow fadeInLeft animated`}
-                              data-wow-delay=".4s"
-                            >
-                              <h5>
-                                <i className="fa-solid fa-check"></i>
-                                {item.title}
-                              </h5>
-                              <p
-                                dangerouslySetInnerHTML={{ __html: item.desc }}
-                              />
+                      <>
+                        {guide.items && guide.items.length > 0 && (
+                          <div className="coaching-details__guides d-flex mb-40 mt-30">
+                            <div className="coaching-details__guides-card">
+                              {guide.items?.map((item, idx) => (
+                                <div
+                                  key={idx}
+                                  className={`coaching-details__guides-card-tetx${
+                                    idx > 0 ? " mt-30" : ""
+                                  } wow fadeInLeft animated`}
+                                  data-wow-delay=".4s"
+                                >
+                                  <h5>
+                                    <i className="fa-solid fa-check"></i>
+                                    {item.title}
+                                  </h5>
+                                  <p
+                                    dangerouslySetInnerHTML={{ __html: item.desc }}
+                                  />
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
+                          </div>
+                        )}
+
+                        {guide.id === 3 && (
+                          <div className="mt-10 wow fadeInLeft animated" data-wow-delay=".4s">
+                            <div
+                              style={{
+                                border: "1px solid #dfe8e2",
+                                borderRadius: "12px",
+                                padding: "20px",
+                                background: "#fff",
+                                marginBottom: "18px",
+                              }}
+                            >
+                              <h4
+                                style={{
+                                  fontSize: "1.1rem",
+                                  fontWeight: 700,
+                                  color: "#111827",
+                                  marginBottom: "10px",
+                                }}
+                              >
+                                {investmentDoc.title}
+                              </h4>
+                              <p
+                                style={{
+                                  color: "#4b5563",
+                                  marginBottom: "12px",
+                                  lineHeight: 1.65,
+                                }}
+                              >
+                                {investmentDoc.description}
+                              </p>
+                              <a
+                                href={investmentDoc.filePath}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "8px",
+                                  background: "#006D21",
+                                  color: "#fff",
+                                  textDecoration: "none",
+                                  padding: "10px 16px",
+                                  borderRadius: "8px",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                Open Document
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {guide.id === 4 && (
+                          <div className="mt-10 wow fadeInLeft animated" data-wow-delay=".4s">
+                            <div
+                              style={{
+                                border: "1px solid #dfe8e2",
+                                borderRadius: "12px",
+                                padding: "20px",
+                                background: "#fff",
+                                marginBottom: "18px",
+                              }}
+                            >
+                              <h4
+                                style={{
+                                  fontSize: "1.1rem",
+                                  fontWeight: 700,
+                                  color: "#111827",
+                                  marginBottom: "10px",
+                                }}
+                              >
+                                {taxDoc.title}
+                              </h4>
+                              <p
+                                style={{
+                                  color: "#4b5563",
+                                  marginBottom: "12px",
+                                  lineHeight: 1.65,
+                                }}
+                              >
+                                {taxDoc.description}
+                              </p>
+                              <a
+                                href={taxDoc.filePath}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "8px",
+                                  background: "#006D21",
+                                  color: "#fff",
+                                  textDecoration: "none",
+                                  padding: "10px 16px",
+                                  borderRadius: "8px",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                Open Document
+                              </a>
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
                   </>
                 ))}
