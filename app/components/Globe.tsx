@@ -10,6 +10,55 @@ interface GlobeProps {
   onRegionClick?: (region: GlobeMarkerData) => void;
 }
 
+const countryFlagCodeMap: Record<string, string> = {
+  "United Kingdom": "gb",
+  UK: "gb",
+  England: "gb",
+  Scotland: "gb",
+  Wales: "gb",
+  "United States": "us",
+  USA: "us",
+  Somaliland: "somaliland",
+  Somalia: "somaliland",
+  Ethiopia: "et",
+  Kenya: "ke",
+  India: "in",
+  UAE: "ae",
+  "Saudi Arabia": "sa",
+  Turkey: "tr",
+  Germany: "de",
+  France: "fr",
+  Canada: "ca",
+  Sweden: "se",
+  Norway: "no",
+  Denmark: "dk",
+  Netherlands: "nl",
+  Belgium: "be",
+  Switzerland: "ch",
+};
+
+const getCountryFlagCode = (countryName: string) => {
+  return countryFlagCodeMap[countryName.trim()] || null;
+};
+
+const SOMALILAND_FLAG_SVG =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='5.333' y='0' fill='%23006D21'/%3E%3Crect width='24' height='5.333' y='5.333' fill='%23FFFFFF'/%3E%3Crect width='24' height='5.334' y='10.666' fill='%23D21034'/%3E%3Cpath d='M12 6.2l1 2.1 2.3.2-1.8 1.5.6 2.2-2.1-1.2-2.1 1.2.6-2.2-1.8-1.5 2.3-.2z' fill='%23000000'/%3E%3C/svg%3E";
+
+const getFlagSrc = (flagCode: string) => {
+  if (flagCode === "somaliland") {
+    return SOMALILAND_FLAG_SVG;
+  }
+  return `https://flagcdn.com/w20/${flagCode}.png`;
+};
+
+const getDisplayCountryName = (countryName: string) => {
+  const normalized = countryName.trim();
+  if (normalized === "Somalia" || normalized === "Somaliland") {
+    return "Somaliland";
+  }
+  return normalized;
+};
+
 const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
   const globeEl = useRef<GlobeMethods | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,6 +124,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
   const createHtmlElement = useCallback(
     (d: object): HTMLElement => {
       const data = d as GlobeMarkerData;
+      const displayName = getDisplayCountryName(data.name);
       const el = document.createElement("div");
 
       // Container style
@@ -109,8 +159,30 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
       textContainer.style.transition = "all 0.2s ease";
 
       // Region Name
+      const flagCode = getCountryFlagCode(displayName);
+      const flagNode = flagCode
+        ? document.createElement("img")
+        : document.createElement("span");
+
+      if (flagCode) {
+        const flagImg = flagNode as HTMLImageElement;
+        flagImg.src = getFlagSrc(flagCode);
+        flagImg.alt = `${displayName} flag`;
+        flagImg.loading = "lazy";
+        flagImg.style.width = "14px";
+        flagImg.style.height = "10px";
+        flagImg.style.objectFit = "cover";
+        flagImg.style.borderRadius = "2px";
+        flagImg.style.boxShadow = "0 0 0 1px rgba(255,255,255,0.15)";
+      } else {
+        const flagSpan = flagNode as HTMLSpanElement;
+        flagSpan.textContent = "🌍";
+        flagSpan.style.fontSize = "12px";
+        flagSpan.style.lineHeight = "1";
+      }
+
       const nameSpan = document.createElement("span");
-      nameSpan.textContent = data.name;
+      nameSpan.textContent = displayName;
       nameSpan.style.color = "rgba(255, 255, 255, 0.95)";
       nameSpan.style.fontFamily = "sans-serif";
       nameSpan.style.fontSize = "12px";
@@ -126,6 +198,7 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
       countSpan.style.borderLeft = "1px solid rgba(255,255,255,0.2)";
       countSpan.style.paddingLeft = "6px";
 
+      textContainer.appendChild(flagNode);
       textContainer.appendChild(nameSpan);
       if (data.count) textContainer.appendChild(countSpan);
 
