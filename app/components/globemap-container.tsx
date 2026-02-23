@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GlobeMarkerData } from "../types";
 
 const GlobeMap = dynamic(() => import("./Globe"), {
@@ -25,7 +25,6 @@ interface ApiLocation {
 
 const GlobeMapContainer = () => {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
-  const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [stats, setStats] = useState({ totalCountries: 0, totalCities: 0 });
 
@@ -80,11 +79,9 @@ const GlobeMapContainer = () => {
           totalCountries: uniqueCountries.size,
           totalCities: uniqueCities.size,
         });
-        setLoading(false);
       })
       .catch((err) => {
         setErrorMsg(err.message || "Failed to load data");
-        setLoading(false);
       });
   }, []);
 
@@ -142,13 +139,27 @@ const GlobeMapContainer = () => {
                   </div>
 
                   <div className="globe-mini-card p-3 border border-white border-opacity-10">
-                    <span className="d-block text-white-50 text-uppercase fw-bold ls-wider mini-label">Total Countries</span>
-                    <h3 className="text-white fw-bold mb-0 mt-1">{stats.totalCountries.toLocaleString()}</h3>
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="counter-icon-box mini-icon-box shadow-sm">
+                        <i className="bi bi-globe2 text-white"></i>
+                      </div>
+                      <div className="text-start">
+                        <span className="d-block text-white-50 text-uppercase fw-bold ls-wider mini-label">Total Countries</span>
+                        <h3 className="text-white fw-bold mb-0 mt-1">{stats.totalCountries.toLocaleString()}</h3>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="globe-mini-card p-3 border border-white border-opacity-10">
-                    <span className="d-block text-white-50 text-uppercase fw-bold ls-wider mini-label">Total Cities</span>
-                    <h3 className="text-white fw-bold mb-0 mt-1">{stats.totalCities.toLocaleString()}</h3>
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="counter-icon-box mini-icon-box shadow-sm">
+                        <i className="bi bi-geo-alt-fill text-white"></i>
+                      </div>
+                      <div className="text-start">
+                        <span className="d-block text-white-50 text-uppercase fw-bold ls-wider mini-label">Total Cities</span>
+                        <h3 className="text-white fw-bold mb-0 mt-1">{stats.totalCities.toLocaleString()}</h3>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

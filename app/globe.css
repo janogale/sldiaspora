@@ -40,28 +40,46 @@
   align-items: stretch;
   gap: 10px;
   width: 100%;
-  max-width: 980px;
+  max-width: 780px;
 }
 
 .globe-mini-card {
-  background: linear-gradient(135deg, #1e293b 0%, #24334f 100%);
-  border-radius: 16px;
+  background: linear-gradient(135deg, #303032 0%, #2f3e60 100%);
+  border-radius: 20px !important;
   min-width: 0;
-  display: flex;
+  display: grid;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.4);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
   position: relative;
   z-index: 10;
+  backdrop-filter: blur(16px);
+  min-height: 100px;
+  transition: all 0.25s ease;
+}
+
+.globe-mini-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .globe-mini-card h3 {
-  font-size: 1.7rem;
-  line-height: 1;
+  font-size: 2.5rem;
+  line-height: 1.2;
 }
 
 .mini-label {
-  font-size: 0.64rem;
+  font-size: 1.1rem;
+}
+
+.mini-icon-box {
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+}
+
+.mini-icon-box .pulse-ring {
+  display: none;
 }
 
 .fw-black { font-weight: 900; }
@@ -124,9 +142,15 @@
   .globe-mini-card {
     padding: 0.85rem !important;
     min-width: 100%;
+    min-height: 86px;
   }
   .globe-mini-card h3 {
-    font-size: 1.35rem;
+    font-size: 1.2rem;
+  }
+  .mini-icon-box {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
   }
   .display-5 { font-size: 2.4rem; }
 }
