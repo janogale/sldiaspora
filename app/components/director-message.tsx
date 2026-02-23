@@ -1,5 +1,6 @@
 import React from "react";
 import { Quote } from "lucide-react";
+import Image from "next/image";
 
 const DirectorMessage = () => {
   return (
@@ -67,15 +68,10 @@ const DirectorMessage = () => {
                 }}
               />
               <img
-                src="/director.png"
-                alt="Director-General"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  display: "block",
-                  objectFit: "cover",
-                }}
-              />
+                  src="/assets/imgs/concact/ugbad-img.jpeg"
+                  alt="Director-General"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+                />
               <div
                 style={{
                   position: "absolute",

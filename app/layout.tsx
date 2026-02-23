@@ -1,6 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
 import Footer from "./components/footer";
+import MemberRegistrationModal from "./components/member-registration-modal";
 import "./globals.css";
 import "./globe.css"
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="/assets/css/main.css" />
       </head>
       <body>
+        <MemberRegistrationModal />
         {children}
         <Footer />
         <Script

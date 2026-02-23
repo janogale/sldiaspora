@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GlobeMarkerData } from "../types";
 
 const GlobeMap = dynamic(() => import("./Globe"), {
@@ -25,8 +25,8 @@ interface ApiLocation {
 
 const GlobeMapContainer = () => {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
-  const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [stats, setStats] = useState({ totalCountries: 0, totalCities: 0 });
 
   useEffect(() => {
     fetch("https://sldp.duckdns.org/items/locations")
@@ -38,8 +38,16 @@ const GlobeMapContainer = () => {
         const rawLocations = data.data || [];
         const countryMap = new Map<string, { count: number; latSum: number; lngSum: number; name: string }>();
 
+        const uniqueCountries = new Set<string>();
+        const uniqueCities = new Set<string>();
+
         rawLocations.forEach((loc) => {
           const country = loc.country || "Unknown Region";
+          uniqueCountries.add(country);
+          if (loc.city?.trim()) {
+            uniqueCities.add(`${country}::${loc.city.trim().toLowerCase()}`);
+          }
+
           const mapData = loc.map;
           if (!mapData?.coordinates || mapData.coordinates.length < 2) return;
 
@@ -67,11 +75,13 @@ const GlobeMapContainer = () => {
         }));
 
         setLocations(mappedData);
-        setLoading(false);
+        setStats({
+          totalCountries: uniqueCountries.size,
+          totalCities: uniqueCities.size,
+        });
       })
       .catch((err) => {
         setErrorMsg(err.message || "Failed to load data");
-        setLoading(false);
       });
   }, []);
 
@@ -106,22 +116,48 @@ const GlobeMapContainer = () => {
 
               {/* Bottom Counter - Pin to corner to keep map center clear */}
               <div className="d-flex justify-content-center justify-content-md-start">
-                <div className="globe-counter-floating p-4 shadow-2xl border border-white border-opacity-10 pointer-events-auto">
-                  <div className="d-flex align-items-center gap-4">
-                    <div className="counter-icon-box shadow-sm">
-                      <div className="pulse-ring"></div>
-                      <i className="bi bi-people-fill text-white"></i>
+                <div className="globe-status-group pointer-events-auto">
+                  <div className="globe-counter-floating p-4 shadow-2xl border border-white border-opacity-10">
+                    <div className="d-flex align-items-center gap-4">
+                      <div className="counter-icon-box shadow-sm">
+                        <div className="pulse-ring"></div>
+                        <i className="bi bi-people-fill text-white"></i>
+                      </div>
+                      <div className="text-start">
+                        <span className="d-block text-white-50 text-uppercase fw-bold ls-wider">Total Registered Members</span>
+                        <h2 className="display-5 fw-black text-white mb-0 mt-n1 fw-bold">
+                          {totalMembers.toLocaleString()}
+                        </h2>
+                        <div className="d-flex align-items-center gap-2 mt-1 mb-2">
+                          <span className="live-dot"></span>
+                          <span className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">
+                            Live
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-start">
-                      <span className="d-block text-white-50 text-uppercase fw-bold ls-wider">Total Registered Members</span>
-                      <h2 className="display-5 fw-black text-white mb-0 mt-n1 fw-bold">
-                        {totalMembers.toLocaleString()}
-                      </h2>
-                      <div className="d-flex align-items-center gap-2 mt-1 mb-2">
-                        <span className="live-dot"></span>
-                        <span className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">
-                          Live
-                        </span>
+                  </div>
+
+                  <div className="globe-mini-card p-3 border border-white border-opacity-10">
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="counter-icon-box mini-icon-box shadow-sm">
+                        <i className="bi bi-globe2 text-white"></i>
+                      </div>
+                      <div className="text-start">
+                        <span className="d-block text-white-50 text-uppercase fw-bold ls-wider mini-label">Total Countries</span>
+                        <h3 className="text-white fw-bold mb-0 mt-1">{stats.totalCountries.toLocaleString()}</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="globe-mini-card p-3 border border-white border-opacity-10">
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="counter-icon-box mini-icon-box shadow-sm">
+                        <i className="bi bi-geo-alt-fill text-white"></i>
+                      </div>
+                      <div className="text-start">
+                        <span className="d-block text-white-50 text-uppercase fw-bold ls-wider mini-label">Total Cities</span>
+                        <h3 className="text-white fw-bold mb-0 mt-1">{stats.totalCities.toLocaleString()}</h3>
                       </div>
                     </div>
                   </div>

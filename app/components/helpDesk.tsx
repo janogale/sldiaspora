@@ -1,40 +1,43 @@
-import React, { type ReactNode } from "react";
+import React, { type ReactNode, useState } from "react";
 
 type IconType = "phone" | "email" | "location" | "clock";
 
-const tabs = [
+type DeskContent = {
+  id: string;
+  title: string;
+  phone: { href: string; value: string };
+  email: { href: string; value: string };
+  location: { href: string; value: string };
+  officeHours: string;
+  pickupMessage: string;
+};
+
+const deskTabs: DeskContent[] = [
   {
     id: "nav-airport",
     title: "Airport",
-    // Array of images for the carousel
-    carouselImgs: [
-      "/assets/slides/1.jpg",
-      "/assets/slides/2.jpg",
-      "/assets/slides/3.jpg",
-    ],
+    phone: { href: "tel:252638880240", value: "+252 63 8880240" },
+    email: { href: "mailto:info@sldiaspora.org", value: "info@sldiaspora.org" },
+    location: {
+      href: "https://maps.google.com/?q=Egal+International+Airport+Hargeisa",
+      value: "Egal International Airport, Hargeisa, Somaliland",
+    },
+    officeHours: "7:30am - 3:00pm",
+    pickupMessage:
+      "Airport pickup desk is available 2 hours before departure flights and after all arrivals.",
   },
   {
     id: "nav-ministry",
     title: "Ministry",
-    carouselImgs: [
-      "/assets/slides/4.jpg",
-      "/assets/slides/5.jpg",
-    ],
-  },
-];
-
-const contactItems = [
-  { key: "call", label: "Phone", href: "tel:252638880240", value: "+252 63 8880240", icon: "phone" },
-  { key: "email", label: "Email", href: "mailto:info@sldiaspora.org", value: "info@sldiaspora.org", icon: "email" },
-  { key: "location", label: "Office Location", href: "https://maps.app.goo.gl/qo96x3AZEVEfdxSX8", value: "Shacab Area, Wadada Madax-tooyada,\nHargeisa", icon: "location" },
-] satisfies Array<{ key: string; label: string; href: string; value: string; icon: IconType }>;
-
-const hours = [
-  { key: "office", label: "Office Hours", time: "7:30am - 3pm" },
-  {
-    key: "airport-desk",
-    label: "Airport Welcome Desk Hours",
-    time: "2 hours prior to all departure flights. Available after all arrival flights.",
+    phone: { href: "tel:252637777000", value: "+252 63 7777000" },
+    email: { href: "mailto:diaspora.mofa@sldgov.org", value: "diaspora.mofa@sldgov.org" },
+    location: {
+      href: "https://maps.app.goo.gl/qo96x3AZEVEfdxSX8",
+      value: "Shacab Area, Wadada Madax-tooyada, Hargeisa",
+    },
+    officeHours: "7:00am - 2:00pm",
+    pickupMessage:
+      "Pickup coordination support is available during office hours through the help desk team.",
   },
 ];
 
@@ -53,115 +56,197 @@ type IconWrapperProps = {
 
 const IconWrapper: React.FC<IconWrapperProps> = ({ type }) => {
   return (
-    <svg width="24" height="24" viewBox="0 0 26 26" fill="none" className="me-3">
-      {icons[type]}
-    </svg>
+    <span
+      className="helpdesk-icon d-inline-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
+      style={{ width: 44, height: 44, background: "#ecf7f0", border: "1px solid #d7ebde" }}
+    >
+      <svg width="20" height="20" viewBox="0 0 26 26" fill="none">
+        {icons[type]}
+      </svg>
+    </span>
   );
 };
 
 const HelpDesk = () => {
+  const [activeDeskId, setActiveDeskId] = useState(deskTabs[0].id);
+
+  const getContactItems = (desk: DeskContent) => [
+    { key: "call", label: "Phone", href: desk.phone.href, value: desk.phone.value, icon: "phone" as IconType },
+    { key: "email", label: "Email", href: desk.email.href, value: desk.email.value, icon: "email" as IconType },
+    {
+      key: "contact",
+      label: "Contact",
+      href: desk.location.href,
+      value: desk.location.value,
+      icon: "location" as IconType,
+    },
+  ];
+
+  const activeDesk = deskTabs.find((desk) => desk.id === activeDeskId) ?? deskTabs[0];
+
   return (
-    <section className="py-5 bg-light">
+    <section className="helpdesk-section py-4" style={{ background: "linear-gradient(180deg, #f8fbff 0%, #f3f7fb 100%)" }}>
       <div className="container">
         {/* Header */}
-        <div className="text-center mb-4 mb-md-5">
-          <span className="text-uppercase fw-bold text-success small">Help Desk</span>
-          <h2 className="display-5 fw-bold mt-2 mb-0">We’ve got you covered</h2>
+        <div className="helpdesk-header text-center mb-4">
+          <span
+            className="text-uppercase fw-bold small d-inline-block px-3 py-2 rounded-pill"
+            style={{ color: "#0b6b35", background: "#eaf7ef", letterSpacing: "0.08em" }}
+          >
+            Help Desk
+          </span>
+          <h2 className="display-6 fw-bold mt-2 mb-2">We’ve got you covered</h2>
+          <p className="text-muted mb-0">Choose a desk to view direct contact information and working hours.</p>
         </div>
 
         {/* Tab Navigation */}
-        <ul className="nav nav-pills justify-content-center mb-5" id="helpTab" role="tablist">
-          {tabs.map((t, i) => (
+        <ul
+          className="helpdesk-tabs nav nav-pills justify-content-center mb-4 p-2 rounded-pill shadow-sm"
+          id="helpTab"
+          role="tablist"
+          style={{ background: "#ffffff", border: "1px solid #e6edf5", maxWidth: 420, margin: "0 auto" }}
+        >
+          {deskTabs.map((t) => {
+            const isActive = t.id === activeDeskId;
+
+            return (
             <li className="nav-item" key={t.id}>
               <button
-                className={`nav-link px-4 py-2 mx-2 rounded-pill fw-bold ${i === 0 ? "active bg-success" : "text-dark bg-white border"}`}
+                className={`helpdesk-tab-btn nav-link px-4 py-2 mx-1 rounded-pill fw-semibold ${isActive ? "active text-white" : "text-dark bg-white"}`}
                 id={`${t.id}-tab`}
-                data-bs-toggle="tab"
-                data-bs-target={`#${t.id}-pane`}
                 type="button"
                 role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveDeskId(t.id)}
+                style={
+                  isActive
+                    ? {
+                        background: "linear-gradient(135deg, #0a7f3f, #0b6b35)",
+                        boxShadow: "0 8px 18px rgba(10,127,63,0.25)",
+                      }
+                    : { border: "1px solid #e4eaf2" }
+                }
               >
                 {t.title}
               </button>
             </li>
-          ))}
+          );
+          })}
         </ul>
 
         {/* Tab Content */}
-        <div className="tab-content border rounded-4 bg-white shadow-sm p-3 p-md-4" id="helpTabContent">
-          {tabs.map((t, i) => (
-            <div
-              key={t.id}
-              className={`tab-pane fade ${i === 0 ? "show active" : ""}`}
-              id={`${t.id}-pane`}
-              role="tabpanel"
-              tabIndex={0}
-            >
-              <div className="row g-4 align-items-start">
-                {/* Contact Column */}
-                <div className="col-lg-4 border-end-lg">
-                  <h5 className="mb-4 fw-bold">Contact Info</h5>
-                  {contactItems.map((item) => (
-                    <div className="d-flex align-items-start mb-3 p-3 rounded-3 bg-light" key={item.key}>
+        <div className="helpdesk-content tab-content rounded-4 bg-white shadow-sm p-3 p-md-4 border" id="helpTabContent" style={{ borderColor: "#e4eaf2" }}>
+          <div className="row g-3 align-items-stretch">
+            {/* Contact Column */}
+            <div className="col-lg-7 d-flex">
+              <div className="w-100 h-100">
+                <h5 className="helpdesk-title mb-3 fw-bold text-dark">Contact Information</h5>
+                <div className="d-flex flex-column gap-2 h-100">
+                  {getContactItems(activeDesk).map((item) => (
+                    <div
+                      className="helpdesk-card d-flex align-items-start p-3 rounded-3 border shadow-sm"
+                      style={{ background: "#f8fafc", borderColor: "#e7edf4", minHeight: 84 }}
+                      key={item.key}
+                    >
                       <IconWrapper type={item.icon} />
                       <div>
-                        <small className="text-muted d-block">{item.label}</small>
-                        <a href={item.href} className="text-decoration-none text-dark fw-bold">
-                          {item.value.split("\n").map((line, idx) => (
-                            <span key={idx}>{line}<br /></span>
-                          ))}
+                        <small className="text-muted d-block mb-1">{item.label}</small>
+                        <a href={item.href} className="text-decoration-none text-dark fw-semibold" style={{ whiteSpace: "pre-line" }}>
+                          {item.value}
                         </a>
                       </div>
                     </div>
                   ))}
                 </div>
-
-                {/* Hours Column */}
-                <div className="col-lg-3 border-end-lg">
-                  <h5 className="mb-4 fw-bold">Opening Hours</h5>
-                  {hours.map((h) => (
-                    <div className="mb-3 p-3 rounded-3 bg-light" key={h.key}>
-                      <small className="text-muted d-block">{h.label}</small>
-                      <div className="d-flex align-items-start fw-bold">
-                        <IconWrapper type="clock" />
-                        <span>{h.time}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Small Carousel Column */}
-                <div className="col-lg-5">
-                  <div id={`carousel-${t.id}`} className="carousel slide carousel-fade shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
-                    <div className="carousel-inner">
-                      {t.carouselImgs.map((img, imgIdx) => (
-                        <div className={`carousel-item ${imgIdx === 0 ? "active" : ""}`} key={imgIdx}>
-                          <img 
-                            src={img} 
-                            className="d-block w-100 object-fit-cover" 
-                            style={{ height: "340px" }} 
-                            alt={`Slide ${imgIdx}`} 
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    {/* Carousel Controls */}
-                    <button className="carousel-control-prev" type="button" data-bs-target={`#carousel-${t.id}`} data-bs-slide="prev">
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next" type="button" data-bs-target={`#carousel-${t.id}`} data-bs-slide="next">
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
-                  </div>
-                </div>
-                
               </div>
             </div>
-          ))}
+
+            {/* Hours + Pickup Message Column */}
+            <div className="col-lg-5 d-flex">
+              <div className="w-100 h-100 d-flex flex-column">
+                <h5 className="helpdesk-title mb-3 fw-bold text-dark">Opening Hours</h5>
+                <div
+                  className="helpdesk-card helpdesk-side-card p-3 rounded-3 border mb-3 shadow-sm d-flex flex-column justify-content-center"
+                  style={{ background: "#f8fafc", borderColor: "#e7edf4", minHeight: 132 }}
+                >
+                  <small className="text-muted d-block mb-2">Office Hours</small>
+                  <div className="d-flex align-items-start fw-semibold text-dark">
+                    <IconWrapper type="clock" />
+                    <span>{activeDesk.officeHours}</span>
+                  </div>
+                </div>
+
+                <div
+                  className="helpdesk-card helpdesk-side-card p-3 mb-3 rounded-3 border shadow-sm d-flex flex-column justify-content-center"
+                  style={{ background: "#f2f9f4", borderColor: "#dceee3", minHeight: 132 }}
+                >
+                  <small className="text-muted d-block mb-2">Pickup Message</small>
+                  <div className="d-flex align-items-start ">
+                    <IconWrapper type="clock" />
+                    <span className="text-dark fw-medium">{activeDesk.pickupMessage}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <style jsx>{`
+        @media (max-width: 767.98px) {
+          .helpdesk-section {
+            padding-top: 1.25rem !important;
+            padding-bottom: 1.25rem !important;
+          }
+
+          .helpdesk-header {
+            margin-bottom: 0.875rem !important;
+          }
+
+          .helpdesk-header h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.4rem !important;
+          }
+
+          .helpdesk-tabs {
+            margin-bottom: 0.95rem !important;
+            padding: 0.35rem !important;
+          }
+
+          .helpdesk-tab-btn {
+            padding: 0.42rem 0.85rem !important;
+            font-size: 0.88rem;
+          }
+
+          .helpdesk-content {
+            padding: 0.75rem !important;
+          }
+
+          .helpdesk-title {
+            margin-bottom: 0.65rem !important;
+            font-size: 1rem;
+          }
+
+          .helpdesk-card {
+            padding: 0.65rem !important;
+            min-height: 72px !important;
+          }
+
+          .helpdesk-side-card {
+            min-height: 106px !important;
+          }
+
+          .helpdesk-icon {
+            width: 36px !important;
+            height: 36px !important;
+            margin-right: 0.6rem !important;
+          }
+
+          .helpdesk-icon :global(svg) {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      `}</style>
     </section>
   );
 };
