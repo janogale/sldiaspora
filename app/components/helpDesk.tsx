@@ -30,7 +30,7 @@ const deskTabs: DeskContent[] = [
     id: "nav-ministry",
     title: "Ministry",
     phone: { href: "tel:252637777000", value: "+252 63 7777000" },
-    email: { href: "mailto:info@sldiaspora.org", value: "info@sldiaspora.org" },
+    email: { href: "mailto:diaspora.mofa@sldgov.org", value: "diaspora.mofa@sldgov.org" },
     location: {
       href: "https://maps.app.goo.gl/qo96x3AZEVEfdxSX8",
       value: "Shacab Area, Wadada Madax-tooyada, Hargeisa",
@@ -57,7 +57,7 @@ type IconWrapperProps = {
 const IconWrapper: React.FC<IconWrapperProps> = ({ type }) => {
   return (
     <span
-      className="d-inline-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
+      className="helpdesk-icon d-inline-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
       style={{ width: 44, height: 44, background: "#ecf7f0", border: "1px solid #d7ebde" }}
     >
       <svg width="20" height="20" viewBox="0 0 26 26" fill="none">
@@ -85,10 +85,10 @@ const HelpDesk = () => {
   const activeDesk = deskTabs.find((desk) => desk.id === activeDeskId) ?? deskTabs[0];
 
   return (
-    <section className="py-4" style={{ background: "linear-gradient(180deg, #f8fbff 0%, #f3f7fb 100%)" }}>
+    <section className="helpdesk-section py-4" style={{ background: "linear-gradient(180deg, #f8fbff 0%, #f3f7fb 100%)" }}>
       <div className="container">
         {/* Header */}
-        <div className="text-center mb-4">
+        <div className="helpdesk-header text-center mb-4">
           <span
             className="text-uppercase fw-bold small d-inline-block px-3 py-2 rounded-pill"
             style={{ color: "#0b6b35", background: "#eaf7ef", letterSpacing: "0.08em" }}
@@ -101,7 +101,7 @@ const HelpDesk = () => {
 
         {/* Tab Navigation */}
         <ul
-          className="nav nav-pills justify-content-center mb-4 p-2 rounded-pill shadow-sm"
+          className="helpdesk-tabs nav nav-pills justify-content-center mb-4 p-2 rounded-pill shadow-sm"
           id="helpTab"
           role="tablist"
           style={{ background: "#ffffff", border: "1px solid #e6edf5", maxWidth: 420, margin: "0 auto" }}
@@ -112,7 +112,7 @@ const HelpDesk = () => {
             return (
             <li className="nav-item" key={t.id}>
               <button
-                className={`nav-link px-4 py-2 mx-1 rounded-pill fw-semibold ${isActive ? "active text-white" : "text-dark bg-white"}`}
+                className={`helpdesk-tab-btn nav-link px-4 py-2 mx-1 rounded-pill fw-semibold ${isActive ? "active text-white" : "text-dark bg-white"}`}
                 id={`${t.id}-tab`}
                 type="button"
                 role="tab"
@@ -135,16 +135,16 @@ const HelpDesk = () => {
         </ul>
 
         {/* Tab Content */}
-        <div className="tab-content rounded-4 bg-white shadow-sm p-3 p-md-4 border" id="helpTabContent" style={{ borderColor: "#e4eaf2" }}>
+        <div className="helpdesk-content tab-content rounded-4 bg-white shadow-sm p-3 p-md-4 border" id="helpTabContent" style={{ borderColor: "#e4eaf2" }}>
           <div className="row g-3 align-items-stretch">
             {/* Contact Column */}
             <div className="col-lg-7 d-flex">
               <div className="w-100 h-100">
-                <h5 className="mb-3 fw-bold text-dark">Contact Information</h5>
+                <h5 className="helpdesk-title mb-3 fw-bold text-dark">Contact Information</h5>
                 <div className="d-flex flex-column gap-2 h-100">
                   {getContactItems(activeDesk).map((item) => (
                     <div
-                      className="d-flex align-items-start p-3 rounded-3 border shadow-sm"
+                      className="helpdesk-card d-flex align-items-start p-3 rounded-3 border shadow-sm"
                       style={{ background: "#f8fafc", borderColor: "#e7edf4", minHeight: 84 }}
                       key={item.key}
                     >
@@ -164,9 +164,9 @@ const HelpDesk = () => {
             {/* Hours + Pickup Message Column */}
             <div className="col-lg-5 d-flex">
               <div className="w-100 h-100 d-flex flex-column">
-                <h5 className="mb-3 fw-bold text-dark">Opening Hours</h5>
+                <h5 className="helpdesk-title mb-3 fw-bold text-dark">Opening Hours</h5>
                 <div
-                  className="p-3 rounded-3 border mb-3 shadow-sm d-flex flex-column justify-content-center"
+                  className="helpdesk-card helpdesk-side-card p-3 rounded-3 border mb-3 shadow-sm d-flex flex-column justify-content-center"
                   style={{ background: "#f8fafc", borderColor: "#e7edf4", minHeight: 132 }}
                 >
                   <small className="text-muted d-block mb-2">Office Hours</small>
@@ -177,11 +177,11 @@ const HelpDesk = () => {
                 </div>
 
                 <div
-                  className="p-3 rounded-3 border shadow-sm d-flex flex-column justify-content-center"
+                  className="helpdesk-card helpdesk-side-card p-3 mb-3 rounded-3 border shadow-sm d-flex flex-column justify-content-center"
                   style={{ background: "#f2f9f4", borderColor: "#dceee3", minHeight: 132 }}
                 >
                   <small className="text-muted d-block mb-2">Pickup Message</small>
-                  <div className="d-flex align-items-start">
+                  <div className="d-flex align-items-start ">
                     <IconWrapper type="clock" />
                     <span className="text-dark fw-medium">{activeDesk.pickupMessage}</span>
                   </div>
@@ -191,6 +191,62 @@ const HelpDesk = () => {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        @media (max-width: 767.98px) {
+          .helpdesk-section {
+            padding-top: 1.25rem !important;
+            padding-bottom: 1.25rem !important;
+          }
+
+          .helpdesk-header {
+            margin-bottom: 0.875rem !important;
+          }
+
+          .helpdesk-header h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.4rem !important;
+          }
+
+          .helpdesk-tabs {
+            margin-bottom: 0.95rem !important;
+            padding: 0.35rem !important;
+          }
+
+          .helpdesk-tab-btn {
+            padding: 0.42rem 0.85rem !important;
+            font-size: 0.88rem;
+          }
+
+          .helpdesk-content {
+            padding: 0.75rem !important;
+          }
+
+          .helpdesk-title {
+            margin-bottom: 0.65rem !important;
+            font-size: 1rem;
+          }
+
+          .helpdesk-card {
+            padding: 0.65rem !important;
+            min-height: 72px !important;
+          }
+
+          .helpdesk-side-card {
+            min-height: 106px !important;
+          }
+
+          .helpdesk-icon {
+            width: 36px !important;
+            height: 36px !important;
+            margin-right: 0.6rem !important;
+          }
+
+          .helpdesk-icon :global(svg) {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      `}</style>
     </section>
   );
 };
