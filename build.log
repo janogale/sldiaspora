@@ -1,0 +1,45 @@
+
+> diapora@0.1.0 build
+> next build --turbopack
+
+   ▲ Next.js 15.5.9 (Turbopack)
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Finished writing to disk in 108ms
+ ✓ Compiled successfully in 10.9s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/15) ...
+   Generating static pages (3/15) 
+   Generating static pages (7/15) 
+   Generating static pages (11/15) 
+ ✓ Generating static pages (15/15)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                         Size  First Load JS
+┌ ○ /                            37.2 kB         159 kB
+├ ○ /_not-found                      0 B         122 kB
+├ ○ /about                       13.2 kB         135 kB
+├ ƒ /api/member-register             0 B            0 B
+├ ○ /blogs                           0 B         124 kB
+├ ƒ /blogs/[id]                      0 B         124 kB
+├ ○ /contact                     7.21 kB         129 kB
+├ ○ /department-structure        6.43 kB         129 kB
+├ ○ /events                      6.27 kB         128 kB
+├ ƒ /events/[id]                 2.93 kB         125 kB
+├ ○ /galleries                   8.68 kB         131 kB
+├ ○ /guidlines                   11.3 kB         133 kB
+├ ○ /investment                  6.17 kB         128 kB
+└ ○ /register                    89.9 kB         214 kB
++ First Load JS shared by all     126 kB
+  ├ chunks/0e4889d356df2fcb.js   58.9 kB
+  ├ chunks/8082ab48faca5ea1.js   17.2 kB
+  └ chunks/c789469a7e88ec1b.js   21.8 kB
+  └ other shared chunks (total)  28.3 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

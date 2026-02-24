@@ -1,3 +1,5 @@
+'use client';
+
 import React, { type ReactNode, useState } from "react";
 
 type IconType = "phone" | "email" | "location" | "clock";

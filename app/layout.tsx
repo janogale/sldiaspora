@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Footer from "./components/footer";
 import MemberRegistrationModal from "./components/member-registration-modal";
 import "./globals.css";
-import "./globe.css"
+import "./globe.css";
 
 import Script from "next/script";
 

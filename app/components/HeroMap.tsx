@@ -30,8 +30,6 @@ interface ApiLocation {
 
 function HeroMap() {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   useEffect(() => {
     // We use limit=-1 to fetch all items.
     // We remove the 'fields' param to ensure we get the full object as shown in your sample.
@@ -135,20 +133,15 @@ function HeroMap() {
         });
 
         if (mappedData.length === 0 && rawLocations.length > 0) {
-          setErrorMsg(
-            "Data loaded, but no valid coordinates found in 'map' field."
-          );
+          console.warn("Data loaded, but no valid coordinates found in 'map' field.");
         } else if (mappedData.length === 0) {
-          setErrorMsg("No location data found.");
+          console.warn("No location data found.");
         }
 
         setLocations(mappedData);
-        setLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching locations:", err);
-        setErrorMsg(err.message || "Failed to load data");
-        setLoading(false);
       });
   }, []);
 

@@ -1,7 +1,6 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
 import Blogs from "./components/blogs";
 import DiasporaInitiatives from "./components/diaspora-initiatives";
 import DirectorMessage from "./components/director-message";
@@ -18,16 +17,6 @@ import Services from "./components/services";
 import SomalilandFlagBanner from "./components/somaliland-flag-banner";
 import SomalilandFlagBanner2 from "./components/somaliland-flag-banner2";
 import VisaCategory from "./components/visa-category";
-import { GlobeMarkerData } from "./types";
-interface ApiLocation {
-  id: string;
-  city: string;
-  country: string;
-  map: {
-    type: string;
-    coordinates: number[]; // [lng, lat] per GeoJSON spec
-  } | null;
-}
 
 export default function Home() {
   return (

@@ -10,8 +10,6 @@ import {
   Network,
   Plane,
   UserCog,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -103,18 +101,6 @@ const IntroductionSection = () => {
 
     return () => clearInterval(interval);
   }, [isAutoPlaying, showAllImages]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
-    setIsAutoPlaying(false);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + sliderImages.length) % sliderImages.length
-    );
-    setIsAutoPlaying(false);
-  };
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
