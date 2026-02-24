@@ -26,12 +26,12 @@ const deskTabs: DeskContent[] = [
     },
     officeHours: "7:30am - 3:00pm",
     pickupMessage:
-      "Airport pickup desk is available 2 hours before departure flights and after all arrivals.",
+      "Airport Help Desk is available 2 hours before departures and after all arrivals.",
   },
   {
     id: "nav-ministry",
     title: "Ministry",
-    phone: { href: "tel:252637777000", value: "+252 63 7777000" },
+    phone: { href: "tel:252638880240", value: "+252 63 8880240" },
     email: { href: "mailto:diaspora.mofa@sldgov.org", value: "diaspora.mofa@sldgov.org" },
     location: {
       href: "https://maps.app.goo.gl/qo96x3AZEVEfdxSX8",

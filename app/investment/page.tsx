@@ -119,7 +119,7 @@ const InvestmentPage = () => {
                           fill={activeTab === "explore" ? "#fff" : "#063e1f"}
                         />
                       </svg>
-                      <span>Explore Somaliland</span>
+                      <span>Tourism</span>
                     </button>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ const InvestmentPage = () => {
                   <div className="investment-intro">
                     <div className="section-title2 mb-40">
                       <h2 className="section-title2__wrapper-title">
-                        Explore Somaliland
+                        Tourism
                       </h2>
                     </div>
                     <p
@@ -480,7 +480,7 @@ const InvestmentPage = () => {
                           marginBottom: 12,
                         }}
                       >
-                        Explore Somaliland
+                        Tourism
                       </h3>
                       <p
                         style={{

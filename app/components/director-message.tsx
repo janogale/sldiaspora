@@ -173,19 +173,20 @@ const DirectorMessage = () => {
                   Dear Members of the Somaliland Diaspora Community,
                 </p>
                 <p style={{ marginBottom: "20px" }}>
-                  Welcome to the Diaspora Service Guidebook, created by the
-                  Diaspora Department to serve as your essential resource and
-                  connection to Somaliland. This guide was developed to support
-                  and strengthen the vital relationship between Somaliland and
-                  its global diaspora community, recognizing your powerful role
-                  in the country’s social, economic, and political development.
+                  Welcome to the Diaspora Website & Portal, established by the Diaspora 
+                  Department as your primary gateway to Somaliland and its global community.
+                  This platform was designed to strengthen the vital bond between Somaliland 
+                  and its diaspora, recognizing the significant role you play in the 
+                  nation’s social, economic, and political development.
+
                 </p>
                 <p style={{ marginBottom: "20px" }}>
-                  Your contributions are central to Somaliland’s progress, and
-                  this guide reaffirms our commitment to facilitating your
-                  involvement and maximizing your impact. We invite you to
-                  explore the guide, connect with our services, and join us in
-                  building a stronger, united Somaliland.
+                  Your contributions are essential to the country’s continued progress. 
+                  Through this portal, we reaffirm our commitment to supporting your engagement, 
+                  facilitating meaningful collaboration, and maximizing your impact.
+                  We encourage you to explore the platform, 
+                  connect with available services, access valuable resources, 
+                  and join us in building a stronger and more united Somaliland.
                 </p>
                 <p
                   style={{
@@ -194,7 +195,7 @@ const DirectorMessage = () => {
                     color: "#006d21",
                   }}
                 >
-                  Thank you for your ongoing dedication
+                  Thank you for your ongoing dedication!
                 </p>
               </div>
 

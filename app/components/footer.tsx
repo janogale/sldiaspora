@@ -9,10 +9,10 @@ const Footer = () => {
           backgroundImage: `url(/assets/imgs/footer/footer1-bg-img.png)`,
         }}
       >
-        <div className="footer__border-bottom">
+        {/* <div className="footer__border-bottom">
           <div className="container">
-            <div className="footer-top d-flex justify-content-between pt-50 pb-50">
-              <div
+            <div className="footer-top d-flex justify-content-between pt-50 pb-50"> */}
+              {/* <div
                 className="footer-top-left d-flex wow fadeInLeft animated"
                 data-wow-delay=".2s"
               >
@@ -50,7 +50,7 @@ const Footer = () => {
                   Need help with investments, <br />
                   citizenship, or documentation?
                 </h3>
-              </div>
+              </div> */}
               {/* <div
                 className="footr-top-right d-flex wow fadeInLeft animated"
                 data-wow-delay=".3s"
@@ -87,9 +87,9 @@ const Footer = () => {
                   </h3>
                 </div>
               </div> */}
-            </div>
+            {/* </div>
           </div>
-        </div>
+        </div> */}
         <div className="container">
           <div className="row mb-minus-40 footer-wrap">
             <div className="col-lg-4 col-md-6 col-sm-6">
@@ -98,10 +98,10 @@ const Footer = () => {
                 data-wow-delay=".2s"
               >
                 <span className="footer__widget-item-1-location">
-                  <img
+                  {/* <img
                     src="./assets/imgs/footer/footer1-bg-location-img.png"
                     alt="img not found"
-                  />
+                  /> */}
                 </span>
                 <div className="footer__logo mb-30">
                   <Link href="/">
@@ -125,9 +125,9 @@ const Footer = () => {
                   <a href="https://instagram.com/">
                     <i className="fa-brands fa-instagram"></i>
                   </a>
-                  <a href="https://www.youtube.com/">
+                  {/* <a href="https://www.youtube.com/">
                     <i className="fa-brands fa-youtube"></i>
-                  </a>
+                  </a> */}
                   <a href="https://linkedin.com/">
                     <i className="fa-brands fa-linkedin"></i>
                   </a>
@@ -221,7 +221,7 @@ const Footer = () => {
                       <p>
                         {" "}
                         Receive the latest opportunities, news, updates directly
-                        from the governmen
+                        from the government
                       </p>
                     </li>
                   </ul>

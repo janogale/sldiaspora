@@ -199,7 +199,7 @@ export default function DepartmentHierarchy() {
               fill="#444"
               textAnchor="middle"
             >
-              Diaspora Engagement
+              Cultural & Community Affairs
             </text>
             <text
               x="150"
@@ -232,7 +232,7 @@ export default function DepartmentHierarchy() {
               fill="#444"
               textAnchor="middle"
             >
-              Community Development
+              Policy & Strategic Engagement
             </text>
             <text
               x="450"
@@ -265,7 +265,7 @@ export default function DepartmentHierarchy() {
               fill="#444"
               textAnchor="middle"
             >
-              Digital Outreach & Research
+              Research, Data & Digital Engagement
             </text>
             <text
               x="750"

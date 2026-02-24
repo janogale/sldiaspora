@@ -37,7 +37,7 @@ export const ServicesList = [
     title: "Community Development",
     icon: Building2,
     description:
-      "Partners with diaspora groups on healthcare, education, Infrastructure, and social welfare projects.",
+      "Partners with diaspora groups on healthcare, education, infrastructure, and social welfare projects.",
   },
   {
     id: 5,
