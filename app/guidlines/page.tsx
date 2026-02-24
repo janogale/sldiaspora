@@ -121,7 +121,7 @@ function Page() {
           desc: "",
         },
       ],
-      image: "/id.jpg",
+      image: "/NID.png",
     },
     {
       id: 3,
