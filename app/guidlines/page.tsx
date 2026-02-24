@@ -33,7 +33,7 @@ function Page() {
       items: [
         {
           title:
-            "Provide a copy of their voter registration card issued during the election period.",
+            "Provide your National ID for proof of nationality.",
           desc: "",
         },
         {
