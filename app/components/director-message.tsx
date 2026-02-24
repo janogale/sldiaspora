@@ -1,6 +1,5 @@
 import React from "react";
 import { Quote } from "lucide-react";
-import Image from "next/image";
 
 const DirectorMessage = () => {
   return (

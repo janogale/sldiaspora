@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
 
 // Gallery preview data - showing 6 images from recent events
 const galleryPreviewData = [

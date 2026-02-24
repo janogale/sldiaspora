@@ -186,13 +186,8 @@ export default function RegisterForm() {
   };
 
   const handleUpdateProfile = async () => {
-    const data = getValues();
-
     setIsSubmitting(true);
     setLoadingMessage("Updating your profile...");
-
-    const base = "https://sldp.duckdns.org";
-    const updateUrl = `${base}/users/me`;
 
     try {
       // Get the access token from state first, then localStorage
