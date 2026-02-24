@@ -25,7 +25,7 @@ function Services() {
                 className="section-title2__wrapper-title  wow fadeInLeft animated"
                 data-wow-delay=".3s"
               >
-                Empowering the Somaliland diaspora
+                Empowering the Somaliland Diaspora
               </h2>
             </div>
             <div

@@ -9,10 +9,10 @@ const Footer = () => {
           backgroundImage: `url(/assets/imgs/footer/footer1-bg-img.png)`,
         }}
       >
-        <div className="footer__border-bottom">
+        {/* <div className="footer__border-bottom">
           <div className="container">
-            <div className="footer-top d-flex justify-content-between pt-50 pb-50">
-              <div
+            <div className="footer-top d-flex justify-content-between pt-50 pb-50"> */}
+              {/* <div
                 className="footer-top-left d-flex wow fadeInLeft animated"
                 data-wow-delay=".2s"
               >
@@ -50,7 +50,7 @@ const Footer = () => {
                   Need help with investments, <br />
                   citizenship, or documentation?
                 </h3>
-              </div>
+              </div> */}
               {/* <div
                 className="footr-top-right d-flex wow fadeInLeft animated"
                 data-wow-delay=".3s"
@@ -87,9 +87,9 @@ const Footer = () => {
                   </h3>
                 </div>
               </div> */}
-            </div>
+            {/* </div>
           </div>
-        </div>
+        </div> */}
         <div className="container">
           <div className="row mb-minus-40 footer-wrap">
             <div className="col-lg-4 col-md-6 col-sm-6">
