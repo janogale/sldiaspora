@@ -98,10 +98,10 @@ const Footer = () => {
                 data-wow-delay=".2s"
               >
                 <span className="footer__widget-item-1-location">
-                  <img
+                  {/* <img
                     src="./assets/imgs/footer/footer1-bg-location-img.png"
                     alt="img not found"
-                  />
+                  /> */}
                 </span>
                 <div className="footer__logo mb-30">
                   <Link href="/">
@@ -125,9 +125,9 @@ const Footer = () => {
                   <a href="https://instagram.com/">
                     <i className="fa-brands fa-instagram"></i>
                   </a>
-                  <a href="https://www.youtube.com/">
+                  {/* <a href="https://www.youtube.com/">
                     <i className="fa-brands fa-youtube"></i>
-                  </a>
+                  </a> */}
                   <a href="https://linkedin.com/">
                     <i className="fa-brands fa-linkedin"></i>
                   </a>
@@ -221,7 +221,7 @@ const Footer = () => {
                       <p>
                         {" "}
                         Receive the latest opportunities, news, updates directly
-                        from the governmen
+                        from the government
                       </p>
                     </li>
                   </ul>
