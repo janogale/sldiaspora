@@ -140,3 +140,45 @@ body {
 .cta-register-btn:hover .animate-arrow {
   transform: translateX(6px);
 }
+
+@media (max-width: 768px) {
+	.home-hero-section {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
+
+	.hero-heading-block {
+		padding-bottom: 0.5rem !important;
+	}
+
+	.hero-community-subtitle {
+		padding-bottom: 0.6rem !important;
+		font-size: 0.95rem !important;
+		line-height: 1.5 !important;
+	}
+
+	.hero-main-title {
+		font-size: clamp(1.45rem, 5vw, 2rem) !important;
+		line-height: 1.35 !important;
+		max-width: 95% !important;
+	}
+
+	.hero-cta-wrap {
+		margin-top: 0.55rem !important;
+		margin-bottom: 0.35rem !important;
+	}
+
+	.cta-register-btn {
+		min-width: 0 !important;
+		width: 100% !important;
+		max-width: 330px;
+		padding: 12px 16px !important;
+		border-radius: 16px !important;
+		font-size: 1rem !important;
+	}
+
+	.hero-cta-label {
+		font-size: 0.96rem !important;
+		letter-spacing: 0.02em;
+	}
+}
