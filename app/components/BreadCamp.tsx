@@ -1,10 +1,11 @@
 import Link from "next/link";
 interface Props {
   title: string;
+  marginBottom?: string;
 }
-function BreadCamp({ title }: Props) {
+function BreadCamp({ title, marginBottom = "10rem" }: Props) {
   return (
-    <main style={{ marginBottom: "10rem " }}>
+    <main style={{ marginBottom }}>
       <div
         className="breadcrumb__area  breadcrumb-space overflow-hidden custom-width position-relative z-1"
         // data-background="/assets/imgs/breadcrumb/breadcrumb.png"
