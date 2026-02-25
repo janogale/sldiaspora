@@ -99,7 +99,7 @@ const GlobeMapContainer = () => {
             </div>
 
             {/* 2. UI Overlay Layer (pointer-events-none) */}
-            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3 p-md-4 pointer-events-none">
+            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3 p-md-4 pointer-events-none globe-ui-overlay">
               
               {/* Header */}
               <div className="d-flex justify-content-between align-items-start">
@@ -115,7 +115,7 @@ const GlobeMapContainer = () => {
               </div>
 
               {/* Bottom Counter - Pin to corner to keep map center clear */}
-              <div className="d-flex justify-content-center justify-content-md-start">
+              <div className="d-flex justify-content-center justify-content-md-start globe-status-wrap">
                 <div className="globe-status-group pointer-events-auto">
                   <div className="globe-counter-floating p-4 shadow-2xl border border-white border-opacity-10">
                     <div className="d-flex align-items-center gap-4">

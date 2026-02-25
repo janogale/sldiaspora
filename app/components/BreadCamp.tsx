@@ -1,10 +1,16 @@
 import Link from "next/link";
 interface Props {
   title: string;
+  marginBottom?: string;
+  titleTopPadding?: string;
 }
-function BreadCamp({ title }: Props) {
+function BreadCamp({
+  title,
+  marginBottom = "10rem",
+  titleTopPadding,
+}: Props) {
   return (
-    <main style={{ marginBottom: "10rem " }}>
+    <main style={{ marginBottom }}>
       <div
         className="breadcrumb__area  breadcrumb-space overflow-hidden custom-width position-relative z-1"
         // data-background="/assets/imgs/breadcrumb/breadcrumb.png"
@@ -13,7 +19,10 @@ function BreadCamp({ title }: Props) {
         <div className="container">
           <div className="row align-items-center justify-content-between">
             <div className="col-12">
-              <div className="breadcrumb__content">
+              <div
+                className="breadcrumb__content"
+                style={titleTopPadding ? { paddingTop: titleTopPadding } : undefined}
+              >
                 <div className="breadcrumb__title-wrapper mb-15 mb-sm-10 mb-xs-5">
                   <h1
                     className="breadcrumb__title color-white wow fadeInLeft animated"

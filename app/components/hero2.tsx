@@ -11,7 +11,7 @@ import GlobeMapContainer from "./globemap-container";
 const MapSection = () => {
   return (
     <section
-      className="overflow-hidden p-relative gray-bg section-space-bottom-170 overflow-hidden"
+      className="overflow-hidden p-relative gray-bg overflow-hidden home-hero-section"
       style={{ background: "#006D21", paddingBottom: "0rem" }}
     >
       <div className="banner2__area p-relative">
@@ -26,10 +26,10 @@ const MapSection = () => {
         <div className="banner2__padding-space2">
           <div className="contdainer">
             <div className="row align-items-center justify-content-center">
-              <div className="col-lg-12 col-md-12 pb-50">
+              <div className="col-lg-12 col-md-12 pb-50 hero-heading-block">
                 <div className="banner2__content p-relative text-center">
                   <h6
-                    className="banner2__subtitled wow fadeInLeft animated"
+                    className="banner2__subtitled hero-community-subtitle wow fadeInLeft animated"
                     data-wow-delay=".2s"
                     style={{ color: "white", paddingBottom: "5rem" }}
                   >
@@ -45,19 +45,19 @@ const MapSection = () => {
                     />
                   </h6>
                   <h1
-                    className="banner2__title wow fadeInLeft animated mx-auto"
+                    className="banner2__title hero-main-title wow fadeInLeft animated mx-auto"
                     data-wow-delay=".4s"
                     style={{ maxWidth: 900 }}
                   >
                     Your official portal for engagement, investment and
                     nation-building.
                   </h1>
-                  <div className="d-flex justify-content-center align-items-center my-4 h-25">
+                  <div className="d-flex justify-content-center align-items-center my-4 h-25 hero-cta-wrap">
                     <Link
                       href="https://admin.sldiaspora.org/admin/register"
                       className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg h-25"
                     >
-                      <span className="fw-bold text-uppercase text-xl">
+                      <span className="fw-bold text-uppercase text-xl hero-cta-label">
                         Become a Member
                       </span>
                       <i className="fa-solid fa-arrow-right animate-arrow"></i>

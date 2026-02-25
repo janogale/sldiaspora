@@ -1,6 +1,7 @@
 .root {
-  padding: 48px 0;
-  background: linear-gradient(180deg, #f7fbf9 0%, #f4f8f7 100%);
+  padding: 64px 0;
+  background: radial-gradient(circle at top right, rgba(80, 254, 168, 0.14), transparent 38%),
+    linear-gradient(180deg, #f7fbf9 0%, #f4f8f7 100%);
 }
 .inner {
   max-width: 1200px;
@@ -9,42 +10,82 @@
 }
 .top {
   display: flex;
-  gap: 32px;
+  gap: 36px;
   align-items: center;
   flex-wrap: wrap;
 }
 .lead {
   flex: 1 1 480px;
   min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(7, 43, 32, 0.08);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 16px 42px rgba(2, 48, 29, 0.08);
+  backdrop-filter: blur(2px);
 }
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
   color: #0b5b39;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(4, 122, 76, 0.1);
+  border: 1px solid rgba(4, 122, 76, 0.16);
+  border-radius: 999px;
+  padding: 7px 12px;
 }
 .heading {
   color: #072b20;
-  font-size: 28px;
-  margin: 0 0 12px 0;
+  font-size: clamp(1.8rem, 1.5vw + 1.2rem, 2.35rem);
+  line-height: 1.24;
+  margin: 0 0 14px 0;
 }
 .introText {
   color: #475569;
-  line-height: 1.7;
-  font-size: 16px;
+  line-height: 1.78;
+  font-size: 1.04rem;
+}
+
+.introText p {
+  margin: 0 0 12px;
+}
+
+.introText p:last-child {
+  margin-bottom: 0;
 }
 .imageBox {
   flex: 0 0 420px;
   min-width: 260px;
-  border-radius: 14px;
+  height: 39rem;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 14px 48px rgba(2, 48, 29, 0.06);
+  border: 1px solid rgba(7, 43, 32, 0.1);
+  box-shadow: 0 22px 56px rgba(2, 48, 29, 0.14);
+  background: #ffffff;
 }
 
 .slider {
   position: relative;
   width: 100%;
-  height: 30rem;
+  height: 100%;
   overflow: hidden;
+}
+
+.slider::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 90px;
+  background: linear-gradient(180deg, rgba(7, 43, 32, 0) 0%, rgba(7, 43, 32, 0.35) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .sliderTrack {
@@ -71,6 +112,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   display: block;
 }
 
@@ -109,20 +151,25 @@
 
 .dots {
   position: absolute;
-  bottom: 20px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-  z-index: 10;
+  z-index: 12;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 999px;
+  padding: 8px 10px;
+  backdrop-filter: blur(4px);
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.86);
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
@@ -136,7 +183,7 @@
 .dot.activeDot {
   background: #047a4c;
   border-color: #047a4c;
-  width: 32px;
+  width: 28px;
   border-radius: 6px;
 }
 
@@ -182,6 +229,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   display: block;
   transition: transform 0.3s ease;
 }
@@ -274,33 +322,42 @@
   font-size: 14px;
 }
 .ctaRow {
-  margin-top: 18px;
+  margin-top: 20px;
   display: flex;
   gap: 12px;
   align-items: center;
 }
 .cta {
-  background: #047a4c;
+  background: linear-gradient(135deg, #047a4c 0%, #006d21 100%);
   color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
+  padding: 11px 18px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: 600;
-  box-shadow: 0 8px 30px rgba(4, 122, 76, 0.12);
+  box-shadow: 0 10px 26px rgba(4, 122, 76, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(4, 122, 76, 0.24);
 }
 .cta.secondary {
   background: transparent;
   color: #047a4c;
-  border: 1px solid rgba(4, 122, 76, 0.12);
+  border: 1px solid rgba(4, 122, 76, 0.22);
+  box-shadow: none;
 }
 
 @media (max-width: 640px) {
   .heading { font-size: 22px; }
+  .lead { padding: 20px; }
+  .imageBox { height: 25rem; }
   .icon { width: 40px; height: 40px; }
   
   .slider {
-    height: 20rem;
+    height: 100%;
   }
   
   .sliderBtn {

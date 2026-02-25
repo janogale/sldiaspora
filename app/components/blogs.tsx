@@ -1,6 +1,26 @@
 import Link from "next/link";
+import { getArticles, getAssetUrl } from "@/lib/articles";
 
-const Blogs = () => {
+function stripHtml(input: string): string {
+  return input.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function formatDate(value: string | null): string {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+const Blogs = async () => {
+  const articles = (await getArticles()).slice(0, 3);
+  const lead = articles[0];
+  const side = articles.slice(1);
+
   return (
     <section
       className="latest-blog2__area section-space-bottom overflow-hidden "
@@ -52,7 +72,7 @@ const Blogs = () => {
               className="section-title2__button wow fadeInLeft animated"
               data-wow-delay=".4s"
             >
-              <Link href="/blog">
+              <Link href="/blogs">
                 All Blogs <i className="fa-solid fa-arrow-right"></i>
               </Link>
             </div>
@@ -60,136 +80,88 @@ const Blogs = () => {
         </div>
         <div className="row">
           <div className="col-xl-6">
-            <div
-              className="latest-blog2__thumb wow fadeInLeft animated"
-              data-wow-delay=".2s"
-            >
-              <img
-                src="/assets/imgs/blog/blog-home-2/blog-home-2-left-img.png"
-                alt="img not found"
-              />
-            </div>
-            <div
-              className="latest-blog2__content wow fadeInLeft animated"
-              data-wow-delay=".3s"
-            >
-              <div className="latest-blog2__content-meta mb-20">
-                <ul>
-                  <li>
-                    <span>
-                      <i className="fa-solid fa-calendar-days"></i>October 19,
-                      2022
-                    </span>
-                  </li>
-                  <li>
-                    <Link href="/blog-details">
-                      <i className="fa-regular fa-user"></i>By admin
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <h3 className="latest-blog2__content-title mb-20">
-                <Link href="/blog-details">
-                  Cultural Encounters and Connections Cruise Booking and
-                  Packages
-                </Link>
-              </h3>
-              <p>
-                Lorem Ipsum is simply dummy text the printing and typese Destina
-                tion Weddings and Honeymoon Packages Lorem Ipsum has been{" "}
-              </p>
-              <Link href="/blog-details" className="latest-blog2__content-btn">
-                Read More <i className="fa-solid fa-arrow-right"></i>
-              </Link>
-            </div>
+            {lead ? (
+              <>
+                <div
+                  className="latest-blog2__thumb wow fadeInLeft animated"
+                  data-wow-delay=".2s"
+                >
+                  <img
+                    src={lead.featuredImage ? getAssetUrl(lead.featuredImage) : "/assets/imgs/blog/blog-home-2/blog-home-2-left-img.png"}
+                    alt={lead.title}
+                  />
+                </div>
+                <div
+                  className="latest-blog2__content wow fadeInLeft animated"
+                  data-wow-delay=".3s"
+                >
+                  <div className="latest-blog2__content-meta mb-20">
+                    <ul>
+                      <li>
+                        <span>
+                          <i className="fa-solid fa-calendar-days"></i>
+                          {formatDate(lead.dateCreated || lead.dateUpdated)}
+                        </span>
+                      </li>
+                      <li>
+                        <Link href={`/blogs/${lead.id}`}>
+                          <i className="fa-regular fa-user"></i>By admin
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <h3 className="latest-blog2__content-title mb-20">
+                    <Link href={`/blogs/${lead.id}`}>{lead.title}</Link>
+                  </h3>
+                  <p>{stripHtml(lead.content).slice(0, 220)}...</p>
+                  <Link href={`/blogs/${lead.id}`} className="latest-blog2__content-btn">
+                    Read More <i className="fa-solid fa-arrow-right"></i>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <p>No articles available yet.</p>
+            )}
           </div>
           <div className="col-xl-6">
-            <div
-              className="latest-blog2__right-content wow fadeInLeft animated"
-              data-wow-delay=".4s"
-            >
-              <div className="latest-blog2__right-content-img">
-                <img
-                  src="/assets/imgs/blog/blog-home-2/blog-home-2-right-img1.png"
-                  alt="img not found"
-                />
-              </div>
-              <div className="latest-blog2__right-content-text">
-                <div className="latest-blog2__right-content-text-meta">
-                  <ul>
-                    <li>
-                      <span>
-                        <i className="fa-solid fa-calendar-days"></i>October 19,
-                        2022
-                      </span>
-                    </li>
-                    <li>
-                      <Link href="/blog-details">
-                        <i className="fa-regular fa-user"></i>By admin
-                      </Link>
-                    </li>
-                  </ul>
+            {side.map((article, index) => (
+              <div
+                key={article.id}
+                className={`latest-blog2__right-content ${index > 0 ? "mt-30" : ""} wow fadeInLeft animated`}
+                data-wow-delay={index === 0 ? ".4s" : ".5s"}
+              >
+                <div className="latest-blog2__right-content-img">
+                  <img
+                    src={article.featuredImage ? getAssetUrl(article.featuredImage) : "/assets/imgs/blog/blog-home-2/blog-home-2-right-img1.png"}
+                    alt={article.title}
+                  />
                 </div>
-                <h3 className="latest-blog2__content-title mb-20">
-                  <Link href="/blog-details">
-                    Remote Destinations and Hideaways
+                <div className="latest-blog2__right-content-text">
+                  <div className="latest-blog2__right-content-text-meta">
+                    <ul>
+                      <li>
+                        <span>
+                          <i className="fa-solid fa-calendar-days"></i>
+                          {formatDate(article.dateCreated || article.dateUpdated)}
+                        </span>
+                      </li>
+                      <li>
+                        <Link href={`/blogs/${article.id}`}>
+                          <i className="fa-regular fa-user"></i>By admin
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <h3 className="latest-blog2__content-title mb-20">
+                    <Link href={`/blogs/${article.id}`}>{article.title}</Link>
+                  </h3>
+                  <p>{stripHtml(article.content).slice(0, 120)}...</p>
+                  <Link href={`/blogs/${article.id}`} className="latest-blog2__right-content-text-btn">
+                    Read More <i className="fa-solid fa-arrow-right"></i>
                   </Link>
-                </h3>
-                <p>
-                  Lorem Ipsum is simply dummy text the printing an typese
-                  Destina tion Weddings Honeym{" "}
-                </p>
-                <Link
-                  href="/blog-details"
-                  className="latest-blog2__right-content-text-btn"
-                >
-                  Read More <i className="fa-solid fa-arrow-right"></i>
-                </Link>
-              </div>
-            </div>
-            <div
-              className="latest-blog2__right-content mt-30 wow fadeInLeft animated"
-              data-wow-delay=".5s"
-            >
-              <div className="latest-blog2__right-content-img">
-                <img
-                  src="/assets/imgs/blog/blog-home-2/blog-home-2-right-img2.png"
-                  alt="img not found"
-                />
-              </div>
-              <div className="latest-blog2__right-content-text">
-                <div className="latest-blog2__right-content-text-meta">
-                  <ul>
-                    <li>
-                      <span>
-                        <i className="fa-solid fa-calendar-days"></i>October 19,
-                        2022
-                      </span>
-                    </li>
-                    <li>
-                      <Link href="/blog-details">
-                        <i className="fa-regular fa-user"></i>By admin
-                      </Link>
-                    </li>
-                  </ul>
                 </div>
-                <h3 className="latest-blog2__content-title mb-20">
-                  <Link href="/blog-details">
-                    Hiking Through Nature&apos;s Beauty
-                  </Link>
-                </h3>
-                <p>
-                  Lorem Ipsum is simply dummy text the printing an typese
-                  Destina tion Weddings Honeym{" "}
-                </p>
-                <Link
-                  href="/blog-details"
-                  className="latest-blog2__right-content-text-btn"
-                >
-                  Read More <i className="fa-solid fa-arrow-right"></i>
-                </Link>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

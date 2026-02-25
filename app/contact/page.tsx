@@ -1,6 +1,7 @@
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import HelpDesk from "../components/helpDesk";
+import styles from "./page.module.css";
 
 function Page() {
   return (
@@ -8,21 +9,21 @@ function Page() {
       {" "}
       <div style={{ margin: "2rem" }}></div>
       <Header />
-      <BreadCamp title="Contact Us" />
+      <BreadCamp title="Contact Us" marginBottom="2rem" titleTopPadding="1rem" />
       <section
-        className="contact-us__area section pt-100 section-space-bottom overflow-hidden"
-        style={{ background: "#f8f9fa" }}
+        className="contact-us__area section section-space-bottom overflow-hidden"
+        style={{ background: "#f8f9fa", paddingTop: "0" }}
       >
         <div className="container">
           <div className="row align-items-stretch g-4">
             <div className="col-lg-6 d-flex">
               <div
-                className="contact-us__widget mb-0 shadow-sm"
+                className={`contact-us__widget mb-0 shadow-sm ${styles.contactMediaCard}`}
                 data-tilt
-                style={{ borderRadius: "16px", overflow: "hidden", height: "620px", width: "100%" }}
+                style={{ borderRadius: "16px", overflow: "hidden", width: "100%" }}
               >
                 <img
-                  src="/assets/imgs/concact/ugbad-img.jpeg"
+                  src="/assets/imgs/about/image3.jpg"
                   alt="img not found"
                   style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                 />
@@ -30,10 +31,10 @@ function Page() {
             </div>
             <div className="col-lg-6">
               <div
-                className="contact-us__title-wrapper bg-white shadow-sm"
-                style={{ borderRadius: "16px", padding: "28px", height: "720px", display: "flex", flexDirection: "column", justifyContent: "center" }}
+                className={`contact-us__title-wrapper bg-white shadow-sm ${styles.contactFormCard}`}
+                style={{ borderRadius: "16px", padding: "28px", display: "flex", flexDirection: "column", justifyContent: "center" }}
               >
-                <div className="section__title-wrapper mb-40">
+                <div className={`section__title-wrapper mb-40 ${styles.contactTitleWrapper}`}>
                   <h6
                     className="section__title-wrapper-black-subtitle mb-10 wow fadeInLeft animated"
                     data-wow-delay=".2s"
@@ -69,7 +70,7 @@ function Page() {
                     </svg>
                   </h6>
                   <h2
-                    className="section__title-wrapper-title wow fadeInLeft animated"
+                    className={`section__title-wrapper-title wow fadeInLeft animated ${styles.contactTitle}`}
                     data-wow-delay=".3s"
                     style={{ fontSize: "2.2rem", lineHeight: 1.2 }}
                   >
@@ -155,7 +156,7 @@ function Page() {
                       <div className="col-12">
                         <button
                           type="submit"
-                          className="contact-btn mt-30 wow fadeInLeft animated"
+                          className={`contact-btn mt-30 wow fadeInLeft animated ${styles.contactBtn}`}
                           data-wow-delay=".8s"
                         >
                           Send Message

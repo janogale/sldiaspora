@@ -90,35 +90,40 @@ function Page() {
       title: "National ID Card",
       desc: [
         {
-          body: "Districts facilitate issuance of national identity card. They perform the initial screening and verification process to ensure that only eligible citizens are granted the national ID card. Now, the districts can carry out this function by online, and if you want, you can apply in person.",
+          body: "To obtain a Somaliland National ID card (also known as the Somaliland National Identity Card), which is issued to eligible Somaliland citizens—typically from age 15 and up—through the Interior Ministry’s civic registration system in coordination with local district registration offices:",
         },
-        { body: "Steps to apply for a new National ID card are:" },
+        {
+          body: "Use the process below as a practical guide for both local and diaspora applicants. Requirements may vary slightly by district or mission.",
+        },
       ],
       items: [
         {
-          title: "Login or register an account as an applicant",
-          desc: "",
+          title: "1) Confirm Eligibility",
+          desc: "You must be a Somaliland citizen (by birth or descent), normally 15 years or older, and able to prove lineage/citizenship or community ties.",
         },
         {
-          title:
-            "From your dashboard select apply new National ID. Fill out the application form and submit it. The technical officers at the Local government will review and verify the application.",
-          desc: "",
+          title: "2) Prepare Required Documents",
+          desc: "Commonly used documents include: birth certificate (if available), Somaliland passport or parent’s ID/passport (proof of descent), and country-of-residence ID/passport for diaspora identity verification. Where documents are limited, community/elder verification or affidavit may be requested.",
         },
         {
-          title:
-            "After approval, an invoice will be generated and a notification for payment shall be sent via SMS or email. Open the invoice from your dashboard and select Pay Now.",
-          desc: "",
+          title: "3) Submit Application (Online or In Person)",
+          desc: "Apply through district civic registration offices, or through the official e-service portal when available. Diaspora applicants may be processed via Somaliland missions, liaison offices, or approved registration campaigns.",
         },
         {
-          title:
-            "Upon successful payment, the application will proceed to the Director of Tax for approval/revert.",
-          desc: "",
+          title: "4) Verification and Screening",
+          desc: "Local registration officials review your application and verify records. Diaspora files may require additional anti-fraud checks and lineage confirmation before approval.",
         },
-        { title: "Download and print your national ID card form ", desc: "" },
         {
-          title:
-            "Ministry of Interior issues the National ID and the applicant shall collect the ID in person from the district’s civic registration department",
-          desc: "",
+          title: "5) Biometric Enrollment",
+          desc: "Applicants are typically enrolled biometrically (photo, fingerprints, and signature; retinal scan may be requested where supported).",
+        },
+        {
+          title: "6) Payment, Issuance, and Collection",
+          desc: "After approval, pay the required fee (and any applicable service surcharge). The Ministry of Interior finalizes issuance, and the applicant is notified for in-person collection from the designated registration office/mission.",
+        },
+        {
+          title: "7) Diaspora Practical Note",
+          desc: "Processing time can be quick once all requirements are complete, but diaspora applications may take longer due to verification, document checks, and logistics.",
         },
       ],
       image: "/NID.png",
@@ -228,8 +233,8 @@ function Page() {
     <div>
       <div style={{ margin: "2rem" }}></div>
       <Header />
-      <BreadCamp title="Guidelines & Resources" />
-      <section className="coaching-details__area pt-100 section-space-bottom">
+      <BreadCamp title="Guidelines & Resources"  />
+      <section className="coaching-details__area pt-0 section-space-bottom">
         <div className="container">
           <div className="row">
             <div className="col-lg-4">
