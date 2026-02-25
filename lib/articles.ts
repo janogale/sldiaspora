@@ -99,7 +99,17 @@ export function getAssetUrl(fileId: string): string {
 }
 
 export async function getArticles(): Promise<Article[]> {
-  const records = await directus.request(readItems("articles", { fields: ["*"] }));
+  const records = await directus.request(
+    readItems("articles", {
+      fields: ["*"],
+      filter: {
+        status: {
+          _eq: "published",
+        },
+      },
+      sort: ["-date_created", "-id"],
+    })
+  );
   return (records as RawArticle[]).map(normalizeArticle);
 }
 
