@@ -127,22 +127,15 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .globe-master-card { 
-    height: auto;
+    height: 85vh;
     min-height: 460px;
   }
-  .globe-section {
-    padding-top: 0.25rem !important;
-    padding-bottom: 0.35rem !important;
-  }
   .globe-ui-overlay {
-    padding: 0.9rem !important;
-  }
-  .globe-status-wrap {
-    margin-top: 0.6rem;
+    padding: 1rem !important;
   }
   .globe-counter-floating {
     min-width: 0;
-    padding: 1rem !important;
+    padding: 1.25rem !important;
     border-radius: 20px !important;
   }
   .globe-status-group {
@@ -154,37 +147,32 @@
     grid-column: 1 / -1;
   }
   .globe-mini-card {
-    padding: 0.7rem !important;
+    padding: 0.85rem !important;
     min-width: 100%;
-    min-height: 78px;
+    min-height: 86px;
   }
   .globe-mini-card h3 {
-    font-size: 1.05rem;
+    font-size: 1.2rem;
   }
   .mini-icon-box {
-    width: 28px;
-    height: 28px;
-    font-size: 0.82rem;
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
   }
   .mini-label {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
   }
-  .display-5 { font-size: 1.7rem; }
+  .display-5 { font-size: 2.4rem; }
 }
 
 @media (max-width: 575.98px) {
   .globe-master-card {
-    min-height: 420px;
+    min-height: 400px;
     border-radius: 14px !important;
   }
 
-  .globe-section {
-    padding-top: 0 !important;
-    padding-bottom: 0.2rem !important;
-  }
-
   .globe-ui-overlay {
-    padding: 0.7rem !important;
+    padding: 0.75rem !important;
   }
 
   .globe-status-group {
