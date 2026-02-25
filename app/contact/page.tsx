@@ -8,10 +8,10 @@ function Page() {
       {" "}
       <div style={{ margin: "2rem" }}></div>
       <Header />
-      <BreadCamp title="Contact Us" />
+      <BreadCamp title="Contact Us" marginBottom="2rem" />
       <section
-        className="contact-us__area section pt-100 section-space-bottom overflow-hidden"
-        style={{ background: "#f8f9fa" }}
+        className="contact-us__area section section-space-bottom overflow-hidden"
+        style={{ background: "#f8f9fa", paddingTop: "0" }}
       >
         <div className="container">
           <div className="row align-items-stretch g-4">
@@ -22,7 +22,7 @@ function Page() {
                 style={{ borderRadius: "16px", overflow: "hidden", height: "620px", width: "100%" }}
               >
                 <img
-                  src="/assets/imgs/concact/ugbad-img.jpeg"
+                  src="/assets/imgs/about/image3.jpg"
                   alt="img not found"
                   style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                 />
