@@ -1,0 +1,41 @@
+.contactMediaCard {
+  height: 620px;
+}
+
+.contactFormCard {
+  min-height: 620px;
+}
+
+@media (max-width: 991.98px) {
+  .contactMediaCard {
+    height: 340px;
+  }
+
+  .contactFormCard {
+    min-height: auto;
+    padding: 22px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .contactMediaCard {
+    height: 250px;
+  }
+
+  .contactFormCard {
+    padding: 18px !important;
+  }
+
+  .contactTitleWrapper {
+    margin-bottom: 22px !important;
+  }
+
+  .contactTitle {
+    font-size: 1.6rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .contactBtn {
+    width: 100%;
+  }
+}
