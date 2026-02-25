@@ -233,8 +233,8 @@ function Page() {
     <div>
       <div style={{ margin: "2rem" }}></div>
       <Header />
-      <BreadCamp title="Guidelines & Resources" />
-      <section className="coaching-details__area pt-100 section-space-bottom">
+      <BreadCamp title="Guidelines & Resources"  />
+      <section className="coaching-details__area pt-0 section-space-bottom">
         <div className="container">
           <div className="row">
             <div className="col-lg-4">
