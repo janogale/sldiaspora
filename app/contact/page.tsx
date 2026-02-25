@@ -9,7 +9,7 @@ function Page() {
       {" "}
       <div style={{ margin: "2rem" }}></div>
       <Header />
-      <BreadCamp title="Contact Us" marginBottom="2rem" />
+      <BreadCamp title="Contact Us" marginBottom="2rem" titleTopPadding="1rem" />
       <section
         className="contact-us__area section section-space-bottom overflow-hidden"
         style={{ background: "#f8f9fa", paddingTop: "0" }}
