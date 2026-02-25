@@ -1,7 +1,11 @@
 import { NextRequest } from "next/server";
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL || "https://admin.sldiaspora.org";
-const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
+const DIRECTUS_ASSET_TOKEN =
+  process.env.DIRECTUS_ADMIN_TOKEN ||
+  process.env.DIRECTUS_TOKEN ||
+  process.env.DIRECTUS_STATIC_TOKEN ||
+  process.env.DIRECTUS_ACCESS_TOKEN;
 
 type RouteContext = {
   params: Promise<{
@@ -24,8 +28,8 @@ export async function GET(request: NextRequest, context: RouteContext) {
   });
 
   const headers: HeadersInit = {};
-  if (DIRECTUS_ADMIN_TOKEN) {
-    headers.Authorization = `Bearer ${DIRECTUS_ADMIN_TOKEN}`;
+  if (DIRECTUS_ASSET_TOKEN) {
+    headers.Authorization = `Bearer ${DIRECTUS_ASSET_TOKEN}`;
   }
 
   const upstream = await fetch(upstreamUrl.toString(), {
@@ -35,6 +39,13 @@ export async function GET(request: NextRequest, context: RouteContext) {
   });
 
   if (!upstream.ok || !upstream.body) {
+    if ((upstream.status === 401 || upstream.status === 403) && !DIRECTUS_ASSET_TOKEN) {
+      return new Response(
+        "Directus asset access is forbidden. Set DIRECTUS_ADMIN_TOKEN (or DIRECTUS_TOKEN) in deployment environment.",
+        { status: upstream.status }
+      );
+    }
+
     return new Response("Asset not available", { status: upstream.status || 404 });
   }
 
