@@ -143,6 +143,20 @@ export default function AboutUs() {
           padding-bottom: 2rem !important;
         }
 
+        .about-compact-sections .section-title2__wrapper-title,
+        .about-compact-sections .section__title-wrapper-title {
+          font-size: 2.8rem !important;
+          line-height: 1.3 !important;
+        }
+
+        .about-compact-sections .overview__text-title,
+        .about-compact-sections h3,
+        .about-compact-sections h4,
+        .about-compact-sections h5 {
+          font-size: 1.6rem !important;
+          line-height: 1.4 !important;
+        }
+
         .about-compact-sections .department-hierarchy-section {
           margin-top: 0 !important;
           padding-top: 2rem !important;

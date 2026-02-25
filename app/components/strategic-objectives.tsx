@@ -135,8 +135,8 @@ const StrategicObjectives = () => {
                   </h4>
                   <p
                     style={{
-                      fontSize: "1rem",
-                      lineHeight: "1.6",
+                      fontSize: "1.2rem",
+                      lineHeight: "1.8",
                       color: "#666",
                       marginBottom: 0,
                     }}
