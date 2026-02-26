@@ -291,10 +291,10 @@ export default function DepartmentHierarchy() {
             </div>
             <div className="mobile-connector" />
             <div className="mobile-col">
-              <div className="mobile-card">Diaspora Engagement Section</div>
-              <div className="mobile-card">Community Development Section</div>
+              <div className="mobile-card">Cultural & Community Affairs Section</div>
+              <div className="mobile-card">Policy & Strategic Engagement Section</div>
               <div className="mobile-card">
-                Digital Outreach & Research Section
+                Research, Data & Digital Engagement Section
               </div>
             </div>
           </div>
