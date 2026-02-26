@@ -11,32 +11,32 @@ import {
 const CoreValues = () => {
   const values = [
     {
-      icon: <Users size={40} />,
+      icon: <Users size={30} />,
       title: "Solidarity",
       delay: ".2s",
     },
     {
-      icon: <Heart size={40} />,
+      icon: <Heart size={30} />,
       title: "Commitment",
       delay: ".3s",
     },
     {
-      icon: <Handshake size={40} />,
+      icon: <Handshake size={30} />,
       title: "Teamwork",
       delay: ".4s",
     },
     {
-      icon: <HandHeart size={40} />,
+      icon: <HandHeart size={30} />,
       title: "Volunteerism",
       delay: ".5s",
     },
     {
-      icon: <MessageCircle size={40} />,
+      icon: <MessageCircle size={30} />,
       title: "Communication",
       delay: ".6s",
     },
     {
-      icon: <Shield size={40} />,
+      icon: <Shield size={30} />,
       title: "Responsibility",
       delay: ".7s",
     },
@@ -72,15 +72,15 @@ const CoreValues = () => {
 
         <div className="row g-4">
           {values.map((value, index) => (
-            <div key={index} className="col-lg-4 col-md-6">
+            <div key={index} className="col-sm-6 col-lg-4">
               <div
-                className="wow fadeInUp animated"
+                className="wow fadeInUp animated core-value-card"
                 data-wow-delay={value.delay}
                 style={{
                   background:
                     "linear-gradient(135deg, #f8faf9 0%, #ffffff 100%)",
                   borderRadius: "16px",
-                  padding: "40px 30px",
+                  padding: "26px 20px",
                   textAlign: "center",
                   border: "2px solid rgba(0, 109, 33, 0.1)",
                   transition: "all 0.3s ease",
@@ -100,24 +100,26 @@ const CoreValues = () => {
                 }}
               >
                 <div
+                  className="core-value-icon"
                   style={{
-                    width: "80px",
-                    height: "80px",
+                    width: "62px",
+                    height: "62px",
                     background:
                       "linear-gradient(135deg, #006d21 0%, #009b2e 100%)",
-                    borderRadius: "20px",
+                    borderRadius: "16px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 24px",
+                    margin: "0 auto 14px",
                     color: "#ffffff",
                   }}
                 >
                   {value.icon}
                 </div>
                 <h3
+                  className="core-value-title"
                   style={{
-                    fontSize: "1.5rem",
+                    fontSize: "1.2rem",
                     fontWeight: "700",
                     color: "#1a1a1a",
                     marginBottom: 0,
@@ -130,6 +132,27 @@ const CoreValues = () => {
           ))}
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 767px) {
+          .core-value-card {
+            padding: 18px 14px !important;
+            border-radius: 12px !important;
+          }
+
+          .core-value-icon {
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 12px !important;
+            margin-bottom: 10px !important;
+          }
+
+          .core-value-title {
+            font-size: 1rem !important;
+            line-height: 1.35 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };
