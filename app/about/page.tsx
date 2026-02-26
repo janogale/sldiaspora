@@ -80,7 +80,7 @@ export default function AboutUs() {
               </div>
             </div>
             <div className="row mb-minus-30">
-              <div className=" col-6 col-sm-6">
+              <div className="col-12 col-md-6">
                 <div
                   className="overview__item mb-30 wow fadeInLeft animated"
                   data-wow-delay=".3s"
@@ -104,7 +104,7 @@ export default function AboutUs() {
                   </div>
                 </div>
               </div>
-              <div className=" col-6 col-sm-6">
+              <div className="col-12 col-md-6">
                 <div
                   className="overview__item mb-30 wow fadeInLeft animated"
                   data-wow-delay=".4s"
@@ -160,6 +160,26 @@ export default function AboutUs() {
         .about-compact-sections .department-hierarchy-section {
           margin-top: 0 !important;
           padding-top: 2rem !important;
+        }
+
+        @media (max-width: 767px) {
+          .about-compact-sections .section-title2__wrapper-title,
+          .about-compact-sections .section__title-wrapper-title {
+            font-size: 1.9rem !important;
+            line-height: 1.3 !important;
+          }
+
+          .about-compact-sections .overview__item {
+            padding: 1rem !important;
+          }
+
+          .about-compact-sections .overview__text-title,
+          .about-compact-sections h3,
+          .about-compact-sections h4,
+          .about-compact-sections h5 {
+            font-size: 1.25rem !important;
+            margin-bottom: 0.75rem !important;
+          }
         }
       `}</style>
     </>

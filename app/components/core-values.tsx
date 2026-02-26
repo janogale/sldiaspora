@@ -11,41 +11,41 @@ import {
 const CoreValues = () => {
   const values = [
     {
-      icon: <Users size={40} />,
+      icon: <Users size={30} />,
       title: "Solidarity",
       delay: ".2s",
     },
     {
-      icon: <Heart size={40} />,
+      icon: <Heart size={30} />,
       title: "Commitment",
       delay: ".3s",
     },
     {
-      icon: <Handshake size={40} />,
+      icon: <Handshake size={30} />,
       title: "Teamwork",
       delay: ".4s",
     },
     {
-      icon: <HandHeart size={40} />,
+      icon: <HandHeart size={30} />,
       title: "Volunteerism",
       delay: ".5s",
     },
     {
-      icon: <MessageCircle size={40} />,
+      icon: <MessageCircle size={30} />,
       title: "Communication",
       delay: ".6s",
     },
     {
-      icon: <Shield size={40} />,
+      icon: <Shield size={30} />,
       title: "Responsibility",
       delay: ".7s",
     },
   ];
 
   return (
-    <section className="section-space" style={{ background: "#ffffff" }}>
+    <section className="section-space core-values-section">
       <div className="container">
-        <div className="row mb-50">
+        <div className="row mb-35">
           <div className="col-12 text-center">
             <div className="section__title-wrapper">
               <h6 className="section__title-wrapper-black-subtitle mb-10">
@@ -70,66 +70,149 @@ const CoreValues = () => {
           </div>
         </div>
 
-        <div className="row g-4">
+        <div className="row core-values-grid">
           {values.map((value, index) => (
-            <div key={index} className="col-lg-4 col-md-6">
+            <div key={index} className="col-12 col-md-6 col-lg-4 mb-3">
               <div
-                className="wow fadeInUp animated"
+                className="wow fadeInUp animated core-value-card"
                 data-wow-delay={value.delay}
-                style={{
-                  background:
-                    "linear-gradient(135deg, #f8faf9 0%, #ffffff 100%)",
-                  borderRadius: "16px",
-                  padding: "40px 30px",
-                  textAlign: "center",
-                  border: "2px solid rgba(0, 109, 33, 0.1)",
-                  transition: "all 0.3s ease",
-                  height: "100%",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-8px)";
-                  e.currentTarget.style.borderColor = "#006d21";
-                  e.currentTarget.style.boxShadow =
-                    "0 12px 30px rgba(0, 109, 33, 0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "rgba(0, 109, 33, 0.1)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
               >
-                <div
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    background:
-                      "linear-gradient(135deg, #006d21 0%, #009b2e 100%)",
-                    borderRadius: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 24px",
-                    color: "#ffffff",
-                  }}
-                >
+                <span className="core-value-number">{String(index + 1).padStart(2, "0")}</span>
+                <div className="core-value-icon">
                   {value.icon}
                 </div>
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "700",
-                    color: "#1a1a1a",
-                    marginBottom: 0,
-                  }}
-                >
-                  {value.title}
-                </h3>
+                <h3 className="core-value-title">{value.title}</h3>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      <style jsx>{`
+        .core-values-section {
+          background: var(--rr-common-white);
+          padding-top: 56px !important;
+          padding-bottom: 56px !important;
+        }
+
+        .core-values-grid {
+          margin-bottom: -0.25rem;
+        }
+
+        .core-value-card {
+          position: relative;
+          height: 100%;
+          padding: 12px 14px;
+          text-align: left;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          background: linear-gradient(
+            120deg,
+            rgba(241, 245, 235, 0.55) 0%,
+            var(--rr-common-white) 100%
+          );
+          border: 1px solid rgba(3, 72, 51, 0.12);
+          transition: transform 0.25s ease, box-shadow 0.25s ease,
+            border-color 0.3s ease;
+          box-shadow: 0 6px 14px rgba(3, 72, 51, 0.06);
+          overflow: hidden;
+        }
+
+        .core-value-card::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          background: linear-gradient(
+            180deg,
+            var(--rr-theme-primary) 0%,
+            var(--rr-heading-primary) 100%
+          );
+        }
+
+        .core-value-card:hover {
+          transform: translateY(-3px);
+          border-color: rgba(0, 109, 33, 0.28);
+          box-shadow: 0 12px 22px rgba(3, 72, 51, 0.14);
+        }
+
+        .core-value-number {
+          position: absolute;
+          top: 50%;
+          right: 10px;
+          transform: translateY(-50%);
+          font-size: 0.68rem;
+          font-weight: var(--rr-fw-bold);
+          letter-spacing: 0.08em;
+          color: rgba(3, 72, 51, 0.32);
+        }
+
+        .core-value-icon {
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--rr-common-white);
+          background: linear-gradient(
+            135deg,
+            var(--rr-theme-primary) 0%,
+            var(--rr-heading-primary) 100%
+          );
+          box-shadow: 0 6px 12px rgba(3, 72, 51, 0.18);
+          transition: transform 0.3s ease;
+        }
+
+        .core-value-card:hover .core-value-icon {
+          transform: scale(1.04);
+        }
+
+        .core-value-title {
+          margin: 0;
+          font-size: 1.02rem;
+          line-height: 1.3;
+          color: var(--rr-heading-primary);
+          font-weight: var(--rr-fw-bold);
+          padding-right: 22px;
+        }
+
+        @media (max-width: 767px) {
+          .core-values-section {
+            padding-top: 42px !important;
+            padding-bottom: 42px !important;
+          }
+
+          .core-value-card {
+            padding: 10px 12px;
+            border-radius: 10px;
+            gap: 10px;
+          }
+
+          .core-value-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 8px;
+          }
+
+          .core-value-title {
+            font-size: 0.95rem;
+            line-height: 1.25;
+            padding-right: 18px;
+          }
+
+          .core-value-number {
+            right: 8px;
+            font-size: 0.62rem;
+          }
+        }
+      `}</style>
     </section>
   );
 };
