@@ -84,7 +84,7 @@ const galleryData = [
     description:
       "Establishment of the interministerial task force for diaspora coordination",
     folder:
-      "Interministerial Task Force Establishment/Interministerial Task Force Establishment",
+      "Interministerial Task Force Establishment",
     images: [
       "490607389_1082087983960261_69337729245276194_n.jpg",
       "490765958_1082088283960231_483629678252474134_n.jpg",
@@ -115,7 +115,7 @@ const galleryData = [
     description:
       "Workshop for validating the national diaspora policy framework",
     folder:
-      "National Diaspora Policy Validation Workshop/National Diaspora Policy Validation Workshop",
+      "National Diaspora Policy Validation Workshop",
     images: [
       "518328098_1155356866633372_1960477033848110088_n.jpg",
       "518331937_1155361416632917_2635698330612660050_n.jpg",
@@ -154,6 +154,15 @@ const galleryData = [
 export default function Galleries() {
   const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const buildImagePath = (folder: string, fileName: string) => {
+    const safeFolder = folder
+      .split("/")
+      .map((segment) => encodeURIComponent(segment))
+      .join("/");
+    const safeFileName = encodeURIComponent(fileName);
+    return `/assets/imgs/${safeFolder}/${safeFileName}`;
+  };
 
   const handleEventClick = (eventId: number) => {
     setSelectedEvent(selectedEvent === eventId ? null : eventId);
@@ -295,7 +304,7 @@ export default function Galleries() {
 
                 <div className="row g-3">
                   {event.images.map((image, index) => {
-                    const imagePath = `/assets/imgs/${event.folder}/${image}`;
+                    const imagePath = buildImagePath(event.folder, image);
                     return (
                       <div key={index} className="col-lg-3 col-md-4 col-sm-6">
                         <div
