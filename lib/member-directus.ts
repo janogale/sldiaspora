@@ -164,7 +164,7 @@ export const listApprovedMembers = async () => {
   ].join(",");
 
   const response = await directusFetch(
-    `/items/members?filter[status][_eq]=approved&fields=${encodeURIComponent(
+    `/items/members?filter[status][_in]=active,published&fields=${encodeURIComponent(
       fields
     )}&sort=-date_created&limit=200`
   );

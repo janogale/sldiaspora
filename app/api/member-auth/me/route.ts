@@ -23,7 +23,9 @@ export async function GET() {
       return NextResponse.json({ message: "Member not found." }, { status: 404 });
     }
 
-    const members = await listApprovedMembers();
+    const memberStatus = String(member.status || "").trim().toLowerCase();
+    const canSeeDirectory = memberStatus === "active" || memberStatus === "published";
+    const members = canSeeDirectory ? await listApprovedMembers() : [];
 
     return NextResponse.json(
       {
