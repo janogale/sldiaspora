@@ -153,6 +153,7 @@ export const listApprovedMembers = async () => {
   const fields = [
     "id",
     "full_name",
+    "address",
     "profession",
     "country",
     "city",
