@@ -15,6 +15,7 @@
 
 # next.js
 /.next/
+/.next-tmp/
 /out/
 
 # ignore HTML files

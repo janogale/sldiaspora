@@ -2,14 +2,35 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
+type InterestOption =
+  | ""
+  | "charity"
+  | "networking"
+  | "community_building"
+  | "skills_knowledge_transfer"
+  | "advocacy"
+  | "other";
+
+type SecondaryDocumentType = "passport" | "driving_license" | "";
+
 type RegisterFormState = {
   fullName: string;
   phone: string;
   email: string;
   address: string;
+  city: string;
   country: string;
+  password: string;
+  confirmPassword: string;
+
   profession: string;
+  countryOfNationality: string;
+  areasOfInterest: InterestOption;
+  areasOfInterestOther: string;
+  shareContactPreference: "none" | "email" | "phone";
+
   nationalIdCode: string;
+  secondaryDocumentType: SecondaryDocumentType;
   additionalNotes: string;
 };
 
@@ -18,9 +39,19 @@ const defaultFormState: RegisterFormState = {
   phone: "",
   email: "",
   address: "",
+  city: "",
   country: "",
+  password: "",
+  confirmPassword: "",
+
   profession: "",
+  countryOfNationality: "",
+  areasOfInterest: "",
+  areasOfInterestOther: "",
+  shareContactPreference: "none",
+
   nationalIdCode: "",
+  secondaryDocumentType: "",
   additionalNotes: "",
 };
 
@@ -32,19 +63,45 @@ function MemberRegistrationModal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
+
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
+  const [secondaryDocument, setSecondaryDocument] = useState<File | null>(null);
+
   const hasIdCode = formState.nationalIdCode.trim().length > 0;
   const hasIdPhoto = !!nationalIdPhoto;
 
+  const passwordsMatch =
+    formState.password.length >= 6 && formState.password === formState.confirmPassword;
+
   const canSubmit = useMemo(() => {
-    return (
+    const hasRequiredBasics =
       formState.fullName.trim().length > 1 &&
       formState.phone.trim().length > 5 &&
-      formState.address.trim().length > 4 &&
-      (hasIdPhoto || hasIdCode) &&
-      hasIdPhoto !== hasIdCode
+      formState.email.trim().length > 3 &&
+      formState.address.trim().length > 3 &&
+      formState.city.trim().length > 1 &&
+      formState.country.trim().length > 1;
+
+    const hasOneIdMethod = (hasIdPhoto || hasIdCode) && hasIdPhoto !== hasIdCode;
+
+    const hasSecondaryDoc =
+      !!secondaryDocument &&
+      (formState.secondaryDocumentType === "passport" ||
+        formState.secondaryDocumentType === "driving_license");
+
+    const hasOtherInterestText =
+      formState.areasOfInterest !== "other" ||
+      formState.areasOfInterestOther.trim().length > 1;
+
+    return (
+      hasRequiredBasics &&
+      passwordsMatch &&
+      hasOneIdMethod &&
+      hasSecondaryDoc &&
+      hasOtherInterestText
     );
-  }, [formState, hasIdCode, hasIdPhoto]);
+  }, [formState, hasIdCode, hasIdPhoto, passwordsMatch, secondaryDocument]);
 
   const openModal = () => {
     setErrorMessage("");
@@ -92,26 +149,19 @@ function MemberRegistrationModal() {
     };
   }, []);
 
-  const handleChange = (
-    key: keyof RegisterFormState,
-    value: string
-  ) => {
+  const handleChange = (key: keyof RegisterFormState, value: string) => {
     if (key === "nationalIdCode" && value.trim().length > 0 && nationalIdPhoto) {
       setNationalIdPhoto(null);
     }
-    setFormState((prev) => ({ ...prev, [key]: value }));
-  };
 
-  const handlePhotoChange = (file: File | null) => {
-    if (file) {
-      setFormState((prev) => ({ ...prev, nationalIdCode: "" }));
-    }
-    setNationalIdPhoto(file);
+    setFormState((prev) => ({ ...prev, [key]: value }));
   };
 
   const resetForm = () => {
     setFormState(defaultFormState);
+    setProfilePicture(null);
     setNationalIdPhoto(null);
+    setSecondaryDocument(null);
     setErrorMessage("");
   };
 
@@ -120,7 +170,7 @@ function MemberRegistrationModal() {
 
     if (!canSubmit) {
       setErrorMessage(
-        "Please complete required fields and choose only one verification method: upload ID photo or enter shared code."
+        "Please complete required fields, choose one ID verification method, and upload passport or driving licence."
       );
       return;
     }
@@ -134,13 +184,34 @@ function MemberRegistrationModal() {
       payload.append("phone", formState.phone.trim());
       payload.append("email", formState.email.trim());
       payload.append("address", formState.address.trim());
+      payload.append("city", formState.city.trim());
       payload.append("country", formState.country.trim());
+      payload.append("password", formState.password);
+
       payload.append("profession", formState.profession.trim());
+      payload.append("countryOfNationality", formState.countryOfNationality.trim());
+
+      const interestValue =
+        formState.areasOfInterest === "other"
+          ? `other:${formState.areasOfInterestOther.trim()}`
+          : formState.areasOfInterest;
+      payload.append("areasOfInterest", interestValue);
+      payload.append("shareContactPreference", formState.shareContactPreference);
+
       payload.append("nationalIdCode", formState.nationalIdCode.trim());
+      payload.append("secondaryDocumentType", formState.secondaryDocumentType);
       payload.append("additionalNotes", formState.additionalNotes.trim());
+
+      if (profilePicture) {
+        payload.append("profilePicture", profilePicture);
+      }
 
       if (nationalIdPhoto) {
         payload.append("nationalIdPhoto", nationalIdPhoto);
+      }
+
+      if (secondaryDocument) {
+        payload.append("secondaryDocument", secondaryDocument);
       }
 
       const response = await fetch("/api/member-register", {
@@ -148,7 +219,7 @@ function MemberRegistrationModal() {
         body: payload,
       });
 
-      const result = await response.json();
+      const result = await response.json().catch(() => null);
 
       if (!response.ok) {
         setErrorMessage(result?.message || "Failed to submit registration.");
@@ -212,13 +283,13 @@ function MemberRegistrationModal() {
           <div
             style={{
               width: "100%",
-              maxWidth: "700px",
+              maxWidth: "760px",
               maxHeight: "90vh",
               overflow: "auto",
               background: "#ffffff",
               borderRadius: "16px",
               border: "1px solid #d4e4da",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 107, 33, 0.1)",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
             }}
             onClick={(event) => event.stopPropagation()}
           >
@@ -238,27 +309,11 @@ function MemberRegistrationModal() {
                 }}
               >
                 <div>
-                  <div
-                    style={{
-                      display: "inline-block",
-                      fontSize: "0.7rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      color: "#006d21",
-                      background: "#e6f3ea",
-                      border: "1px solid #c8dfd2",
-                      borderRadius: "6px",
-                      padding: "6px 12px",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    SOMALILAND DIASPORA NETWORK
-                  </div>
                   <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 700, fontSize: "1.5rem" }}>
                     Member Registration
                   </h3>
-                  <p style={{ margin: "0", color: "#5a6b76", fontSize: "0.94rem", lineHeight: "1.5" }}>
-                    Join the official Somaliland Diaspora community and connect with members worldwide.
+                  <p style={{ margin: 0, color: "#5a6b76", fontSize: "0.94rem", lineHeight: "1.5" }}>
+                    Default status is <strong>pending</strong>. You can login after admin approval.
                   </p>
                 </div>
                 <button
@@ -271,17 +326,7 @@ function MemberRegistrationModal() {
                     fontSize: "24px",
                     cursor: "pointer",
                     fontWeight: 300,
-                    flexShrink: 0,
-                    padding: "0",
-                    width: "32px",
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#006d21")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
                 >
                   ✕
                 </button>
@@ -289,91 +334,36 @@ function MemberRegistrationModal() {
             </div>
 
             <form onSubmit={handleSubmit} style={{ padding: "24px" }}>
-              <div
-                style={{
-                  border: "1px solid #d1e8da",
-                  background: "linear-gradient(135deg, #f0faf5 0%, #e8f7f1 100%)",
-                  borderRadius: "10px",
-                  padding: "14px 16px",
-                  marginBottom: "20px",
-                  color: "#0f5132",
-                  fontSize: "0.92rem",
-                  lineHeight: "1.5",
-                }}
-              >
-                <strong>Verification Method:</strong> Choose one option only — <strong>Upload National ID photo</strong> or <strong>enter shared code</strong>.
-              </div>
-
               <div className="row g-4">
                 <div className="col-12">
                   <div style={sectionCardStyle}>
-                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", letterSpacing: "0.5px", textTransform: "uppercase" }}>📋 Personal Information</div>
+                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", textTransform: "uppercase" }}>
+                      Personal Details
+                    </div>
                     <div className="row g-3">
                       <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>Full Name *</label>
-                        <input
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.fullName}
-                          onChange={(event) => handleChange("fullName", event.target.value)}
-                          placeholder="Enter full name"
-                          required
-                        />
+                        <label style={labelStyle}>Full Name *</label>
+                        <input className="form-control" style={inputStyle} value={formState.fullName} onChange={(e) => handleChange("fullName", e.target.value)} required />
                       </div>
                       <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>Phone *</label>
-                        <input
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.phone}
-                          onChange={(event) => handleChange("phone", event.target.value)}
-                          placeholder="e.g. +252..."
-                          required
-                        />
-                      </div>
-
-                      <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>Email (Optional)</label>
-                        <input
-                          type="email"
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.email}
-                          onChange={(event) => handleChange("email", event.target.value)}
-                          placeholder="name@email.com"
-                        />
+                        <label style={labelStyle}>Phone *</label>
+                        <input className="form-control" style={inputStyle} value={formState.phone} onChange={(e) => handleChange("phone", e.target.value)} required />
                       </div>
                       <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>Country</label>
-                        <input
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.country}
-                          onChange={(event) => handleChange("country", event.target.value)}
-                          placeholder="Country"
-                        />
-                      </div>
-
-                      <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>Address *</label>
-                        <input
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.address}
-                          onChange={(event) => handleChange("address", event.target.value)}
-                          placeholder="Residential address"
-                          required
-                        />
+                        <label style={labelStyle}>Email *</label>
+                        <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} required />
                       </div>
                       <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>Profession</label>
-                        <input
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.profession}
-                          onChange={(event) => handleChange("profession", event.target.value)}
-                          placeholder="Your profession"
-                        />
+                        <label style={labelStyle}>Address *</label>
+                        <input className="form-control" style={inputStyle} value={formState.address} onChange={(e) => handleChange("address", e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>City *</label>
+                        <input className="form-control" style={inputStyle} value={formState.city} onChange={(e) => handleChange("city", e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Country *</label>
+                        <input className="form-control" style={inputStyle} value={formState.country} onChange={(e) => handleChange("country", e.target.value)} required />
                       </div>
                     </div>
                   </div>
@@ -381,135 +371,123 @@ function MemberRegistrationModal() {
 
                 <div className="col-12">
                   <div style={sectionCardStyle}>
-                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", letterSpacing: "0.5px", textTransform: "uppercase" }}>
-                      🔐 Identity Verification
+                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", textTransform: "uppercase" }}>
+                      Login Credentials
                     </div>
                     <div className="row g-3">
                       <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>
-                          Upload National ID Photo
-                        </label>
-                        <input
-                          type="file"
-                          accept="image/*,.pdf"
-                          className="form-control"
-                          style={inputStyle}
-                          disabled={hasIdCode}
-                          onChange={(event) => handlePhotoChange(event.target.files?.[0] || null)}
-                        />
-                        <small style={{ color: "#6b7280", display: "inline-block", marginTop: "6px" }}>
-                          {hasIdCode
-                            ? "Disabled because shared code is entered."
-                            : nationalIdPhoto
-                              ? `Selected: ${nationalIdPhoto.name}`
-                              : "Accepted: JPG, PNG, PDF"}
-                        </small>
+                        <label style={labelStyle}>Password *</label>
+                        <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} required minLength={6} />
                       </div>
-
                       <div className="col-md-6">
-                        <label className="form-label" style={labelStyle}>
-                          Shared Code (if no ID photo)
-                        </label>
-                        <input
-                          className="form-control"
-                          style={inputStyle}
-                          value={formState.nationalIdCode}
-                          disabled={hasIdPhoto}
-                          onChange={(event) => handleChange("nationalIdCode", event.target.value)}
-                          placeholder="Enter invitation/shared code"
-                        />
-                        <small style={{ color: "#6b7280", display: "inline-block", marginTop: "6px" }}>
-                          {hasIdPhoto
-                            ? "Disabled because ID photo is uploaded."
-                            : "Use this only when you do not upload an ID photo."}
-                        </small>
+                        <label style={labelStyle}>Confirm Password *</label>
+                        <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} required minLength={6} />
+                        {formState.confirmPassword && !passwordsMatch && (
+                          <small style={{ color: "#b91c1c" }}>Passwords do not match.</small>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="col-12">
-                  <label className="form-label" style={labelStyle}>Additional Information</label>
-                  <textarea
-                    className="form-control"
-                    style={{ ...inputStyle, minHeight: "96px" }}
-                    rows={3}
-                    value={formState.additionalNotes}
-                    onChange={(event) => handleChange("additionalNotes", event.target.value)}
-                    placeholder="Any details you want admin to review"
-                  />
+                  <div style={sectionCardStyle}>
+                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", textTransform: "uppercase" }}>
+                      Profile (Optional except Name/Country/City)
+                    </div>
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Profile Picture (Optional)</label>
+                        <input type="file" accept="image/*" className="form-control" style={inputStyle} onChange={(e) => setProfilePicture(e.target.files?.[0] || null)} />
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Profession (Optional)</label>
+                        <input className="form-control" style={inputStyle} value={formState.profession} onChange={(e) => handleChange("profession", e.target.value)} />
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Country of Nationality (Optional)</label>
+                        <input className="form-control" style={inputStyle} value={formState.countryOfNationality} onChange={(e) => handleChange("countryOfNationality", e.target.value)} />
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Area of Interest (Optional)</label>
+                        <select className="form-control" style={inputStyle} value={formState.areasOfInterest} onChange={(e) => handleChange("areasOfInterest", e.target.value)}>
+                          <option value="">Select area</option>
+                          <option value="charity">Charity</option>
+                          <option value="networking">Networking</option>
+                          <option value="community_building">Community Building</option>
+                          <option value="skills_knowledge_transfer">Skills &amp; Knowledge Transfer</option>
+                          <option value="advocacy">Advocacy</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+
+                      {formState.areasOfInterest === "other" && (
+                        <div className="col-md-6">
+                          <label style={labelStyle}>Other Interest *</label>
+                          <input className="form-control" style={inputStyle} value={formState.areasOfInterestOther} onChange={(e) => handleChange("areasOfInterestOther", e.target.value)} />
+                        </div>
+                      )}
+
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Share contact when connecting</label>
+                        <select className="form-control" style={inputStyle} value={formState.shareContactPreference} onChange={(e) => handleChange("shareContactPreference", e.target.value)}>
+                          <option value="none">Don&apos;t share by default</option>
+                          <option value="email">Share email</option>
+                          <option value="phone">Share phone</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <div style={sectionCardStyle}>
+                    <div style={{ fontWeight: 700, color: "#006d21", marginBottom: "16px", fontSize: "0.95rem", textTransform: "uppercase" }}>
+                      Verification Documents
+                    </div>
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <label style={labelStyle}>National ID Photo (choose this OR code)</label>
+                        <input type="file" accept="image/*,.pdf" className="form-control" style={inputStyle} disabled={hasIdCode} onChange={(e) => setNationalIdPhoto(e.target.files?.[0] || null)} />
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Shared Code (choose this OR ID photo)</label>
+                        <input className="form-control" style={inputStyle} value={formState.nationalIdCode} disabled={hasIdPhoto} onChange={(e) => handleChange("nationalIdCode", e.target.value)} />
+                      </div>
+
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Secondary Document Type *</label>
+                        <select className="form-control" style={inputStyle} value={formState.secondaryDocumentType} onChange={(e) => handleChange("secondaryDocumentType", e.target.value)} required>
+                          <option value="">Select one</option>
+                          <option value="passport">Passport</option>
+                          <option value="driving_license">Driving Licence</option>
+                        </select>
+                      </div>
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Upload Passport or Driving Licence *</label>
+                        <input type="file" accept="image/*,.pdf" className="form-control" style={inputStyle} onChange={(e) => setSecondaryDocument(e.target.files?.[0] || null)} required />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <label style={labelStyle}>Additional Notes (Optional)</label>
+                  <textarea className="form-control" style={{ ...inputStyle, minHeight: "96px" }} rows={3} value={formState.additionalNotes} onChange={(e) => handleChange("additionalNotes", e.target.value)} />
                 </div>
               </div>
 
               {errorMessage && (
-                <div
-                  style={{
-                    marginTop: "16px",
-                    marginBottom: "8px",
-                    borderRadius: "10px",
-                    border: "1px solid #f5d5d5",
-                    background: "#fef2f2",
-                    color: "#991b1b",
-                    padding: "12px 14px",
-                    fontSize: "0.92rem",
-                    lineHeight: "1.5",
-                  }}
-                >
+                <div style={{ marginTop: "16px", borderRadius: "10px", border: "1px solid #f5d5d5", background: "#fef2f2", color: "#991b1b", padding: "12px 14px", fontSize: "0.92rem" }}>
                   ⚠️ {errorMessage}
                 </div>
               )}
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "24px" }}>
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  style={{
-                    border: "1.5px solid #d4e4da",
-                    background: "#ffffff",
-                    color: "#1f2937",
-                    borderRadius: "8px",
-                    padding: "10px 18px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    fontSize: "0.94rem",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#f8fdfb";
-                    e.currentTarget.style.borderColor = "#c8dfd2";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "#ffffff";
-                    e.currentTarget.style.borderColor = "#d4e4da";
-                  }}
-                >
+                <button type="button" onClick={closeModal} style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "8px", padding: "10px 18px", fontWeight: 600, cursor: "pointer", fontSize: "0.94rem" }}>
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !canSubmit}
-                  style={{
-                    border: "none",
-                    background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21",
-                    color: "#ffffff",
-                    borderRadius: "8px",
-                    padding: "10px 20px",
-                    fontWeight: 600,
-                    cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer",
-                    fontSize: "0.94rem",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isSubmitting && canSubmit) {
-                      e.currentTarget.style.background = "#005a1a";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isSubmitting && canSubmit) {
-                      e.currentTarget.style.background = "#006d21";
-                    }
-                  }}
-                >
+                <button type="submit" disabled={isSubmitting || !canSubmit} style={{ border: "none", background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21", color: "#ffffff", borderRadius: "8px", padding: "10px 20px", fontWeight: 600, cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer", fontSize: "0.94rem" }}>
                   {isSubmitting ? "Submitting..." : "Submit Registration"}
                 </button>
               </div>
@@ -518,7 +496,7 @@ function MemberRegistrationModal() {
         </div>
       )}
 
-            {showSuccess && (
+      {showSuccess && (
         <div
           style={{
             position: "fixed",
@@ -529,18 +507,17 @@ function MemberRegistrationModal() {
             alignItems: "center",
             justifyContent: "center",
             padding: "16px",
-            backdropFilter: "blur(2px)",
           }}
           onClick={() => setShowSuccess(false)}
         >
           <div
             style={{
               width: "100%",
-              maxWidth: "480px",
+              maxWidth: "520px",
               background: "#ffffff",
               borderRadius: "16px",
               border: "1px solid #d4e4da",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 107, 33, 0.1)",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
               padding: "28px",
             }}
             onClick={(event) => event.stopPropagation()}
@@ -551,10 +528,10 @@ function MemberRegistrationModal() {
                 Registration Submitted
               </h3>
               <p style={{ marginBottom: "12px", color: "#1f2937", lineHeight: "1.6" }}>
-                Thank you for joining the Somaliland Diaspora network!
+                Your account is now <strong>pending</strong> and awaits admin approval.
               </p>
               <p style={{ marginBottom: "20px", color: "#5a6b76", fontSize: "0.92rem", lineHeight: "1.6" }}>
-                Our team will review your information within 2-3 days. You&#39;ll receive a notification once your membership is approved.
+                Once approved, you can login and access your member dashboard to view your profile and other members.
               </p>
               <button
                 type="button"
@@ -568,12 +545,9 @@ function MemberRegistrationModal() {
                   fontWeight: 600,
                   cursor: "pointer",
                   fontSize: "0.94rem",
-                  transition: "background 0.2s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#005a1a")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "#006d21")}
               >
-                Got it, thanks!
+                Done
               </button>
             </div>
           </div>
