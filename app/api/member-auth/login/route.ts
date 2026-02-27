@@ -92,12 +92,13 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
+    const fallback = "Unable to login right now. Please try again.";
+    const message =
+      error instanceof Error && error.message ? error.message : fallback;
     return NextResponse.json(
       {
-        message: getDirectusErrorMessage(
-          error,
-          "Unable to login right now. Please try again."
-        ),
+        message,
+        stage: "member-auth-login",
       },
       { status: 500 }
     );
