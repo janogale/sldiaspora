@@ -65,7 +65,7 @@ const Blogs = async () => {
                 className="section-title2__wrapper-title  wow fadeInLeft animated"
                 data-wow-delay=".3s"
               >
-                Adventure Thrills and <br /> Excitement Await
+                Latest News and Articles
               </h2>
             </div>
             <div
