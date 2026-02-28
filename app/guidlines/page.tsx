@@ -190,7 +190,7 @@ function Page() {
         },
         {
           title: "Register a Business in Somaliland",
-          desc: '<a href="https://mott.govsomaliland.org/article/steps-business-registration" target="_blank" rel="noopener noreferrer">https://mott.govsomaliland.org/article/steps-business-registration</a>',
+          desc: '<a href="https://brls.govsomaliland.org/site/" target="_blank" rel="noopener noreferrer">https://brls.govsomaliland.org/site/</a>',
         },
         {
           title: "Register a New Local NGO",
@@ -206,7 +206,7 @@ function Page() {
         },
         {
           title: "Document Authentication Service",
-          desc: "Contact the Diaspora Department for document authentication services",
+          desc: '<a href="https://sldiaspora.org/contact" target="_blank" rel="noopener noreferrer">https://sldiaspora.org/contact</a> (Contact us for authentication requests)',
         },
         {
           title: "Contact SL Diaspora Associations & Networks",

@@ -23,7 +23,7 @@ function Page() {
                 style={{ borderRadius: "16px", overflow: "hidden", width: "100%" }}
               >
                 <img
-                  src="/assets/imgs/about/image3.jpg"
+                  src="/team-img.jpeg"
                   alt="img not found"
                   style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                 />
