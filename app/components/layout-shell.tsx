@@ -10,9 +10,10 @@ type LayoutShellProps = {
 
 export default function LayoutShell({ children }: LayoutShellProps) {
   const pathname = usePathname();
-  const isMemberLoginPage = pathname?.startsWith("/member-login");
+  const isMemberAuthLayout =
+    pathname?.startsWith("/member-login") || pathname?.startsWith("/member-dashboard");
 
-  if (isMemberLoginPage) {
+  if (isMemberAuthLayout) {
     return <>{children}</>;
   }
 
