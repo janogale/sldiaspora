@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
@@ -50,6 +51,13 @@ export default function MemberLoginPage() {
         <div className="container">
           <div className="row justify-content-center align-items-center">
             <div className="col-xl-6 col-lg-7 col-md-10">
+              <div className={styles.backButtonWrap}>
+                <Link href="/" className={styles.backButton}>
+                  <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
+                  Back to Website
+                </Link>
+              </div>
+
               <div className={styles.loginCard}>
                 <div className={styles.logoWrap}>
                   <Image
