@@ -1,14 +1,15 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import BreadCamp from "../components/BreadCamp";
-import Header from "../components/header";
+import styles from "./page.module.css";
 
 export default function MemberLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -44,87 +45,78 @@ export default function MemberLoginPage() {
   };
 
   return (
-    <main>
-      <div style={{ margin: "2rem" }} />
-      <Header />
-      <BreadCamp title="Member Login" />
-
-      <section className="pt-100 pb-100">
+    <main className={styles.loginPage}>
+      <section className={styles.loginSection}>
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-xl-6 col-lg-7 col-md-9">
-              <div
-                style={{
-                  border: "1px solid #d4e4da",
-                  borderRadius: "14px",
-                  padding: "28px",
-                  background: "#fff",
-                  boxShadow: "0 12px 35px rgba(0,0,0,0.08)",
-                }}
-              >
-                <h3 style={{ marginBottom: "10px", color: "#034833" }}>Sign In</h3>
-                <p style={{ color: "#5a6b76", marginBottom: "20px" }}>
-                  Approved members can access the dashboard and connect with others.
+          <div className="row justify-content-center align-items-center">
+            <div className="col-xl-6 col-lg-7 col-md-10">
+              <div className={styles.loginCard}>
+                <div className={styles.logoWrap}>
+                  <Image
+                    src="/assets/imgs/logo/logo.png"
+                    alt="Somaliland Diaspora Department"
+                    width={220}
+                    height={72}
+                    priority
+                    className={styles.logoImage}
+                  />
+                </div>
+
+                <h1 className={styles.title}>Welcome Back</h1>
+                <p className={styles.subtitle}>
+                  Sign in to your member account to access your dashboard and diaspora services.
                 </p>
 
-                <form onSubmit={handleSubmit}>
-                  <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontWeight: 600, display: "block", marginBottom: "6px" }}>
-                      Email
+                <form onSubmit={handleSubmit} className={styles.form}>
+                  <div className={styles.fieldGroup}>
+                    <label htmlFor="member-email" className={styles.label}>
+                      Email Address
                     </label>
                     <input
+                      id="member-email"
                       type="email"
-                      className="form-control"
+                      className={`form-control ${styles.input}`}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
+                      placeholder="member@example.com"
                       required
                     />
                   </div>
 
-                  <div style={{ marginBottom: "14px" }}>
-                    <label style={{ fontWeight: 600, display: "block", marginBottom: "6px" }}>
+                  <div className={styles.fieldGroup}>
+                    <label htmlFor="member-password" className={styles.label}>
                       Password
                     </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
+                    <div className={styles.passwordWrap}>
+                      <input
+                        id="member-password"
+                        type={showPassword ? "text" : "password"}
+                        className={`form-control ${styles.input} ${styles.passwordInput}`}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
+                        placeholder="Enter your password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className={styles.togglePassword}
+                        onClick={() => setShowPassword((current) => !current)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        <i
+                          className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </div>
                   </div>
 
-                  {error && (
-                    <div
-                      style={{
-                        marginBottom: "14px",
-                        border: "1px solid #f5d5d5",
-                        background: "#fef2f2",
-                        color: "#991b1b",
-                        borderRadius: "8px",
-                        padding: "10px 12px",
-                        fontSize: "0.92rem",
-                      }}
-                    >
-                      {error}
-                    </div>
-                  )}
+                  {error && <div className={styles.errorBox}>{error}</div>}
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                      width: "100%",
-                      border: "none",
-                      background: loading ? "#95bea4" : "#006d21",
-                      color: "#fff",
-                      borderRadius: "8px",
-                      padding: "11px 16px",
-                      fontWeight: 600,
-                      cursor: loading ? "not-allowed" : "pointer",
-                    }}
-                  >
-                    {loading ? "Signing in..." : "Login"}
+                  <button type="submit" disabled={loading} className={styles.loginButton}>
+                    {loading ? "Signing in..." : "Sign In"}
                   </button>
                 </form>
               </div>
