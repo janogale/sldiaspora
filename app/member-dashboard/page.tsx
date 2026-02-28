@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
@@ -60,6 +60,8 @@ export default function MemberDashboardPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MembersListItem | null>(null);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -92,6 +94,18 @@ export default function MemberDashboardPage() {
 
     loadDashboard();
   }, [router]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!profileMenuRef.current) return;
+      if (!profileMenuRef.current.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
 
   const otherMembers = useMemo(
     () => members.filter((item) => item.id && item.id !== member?.id),
@@ -175,8 +189,11 @@ export default function MemberDashboardPage() {
         <div className={styles.layoutGrid}>
           <aside className={styles.sidebar}>
             <div className={styles.brandBlock}>
-              <img src="/assets/imgs/logo/logo.png" alt="SLDD" className={styles.brandLogo} />
-              <p>Member Dashboard</p>
+              <div className={styles.brandLogoWrap}>
+                <img src="/assets/imgs/logo/logo.png" alt="SLDD" className={styles.brandLogo} />
+              </div>
+              <h3>SLDD</h3>
+              <p>Professional Member Dashboard</p>
             </div>
 
             <nav className={styles.sidebarNav}>
@@ -185,6 +202,7 @@ export default function MemberDashboardPage() {
                 className={`${styles.navBtn} ${activeSection === "members" ? styles.navBtnActive : ""}`}
                 onClick={() => setActiveSection("members")}
               >
+                <i className="fa-solid fa-users"></i>
                 Members
               </button>
               <button
@@ -192,6 +210,7 @@ export default function MemberDashboardPage() {
                 className={`${styles.navBtn} ${activeSection === "profile" ? styles.navBtnActive : ""}`}
                 onClick={() => setActiveSection("profile")}
               >
+                <i className="fa-solid fa-user"></i>
                 Profile
               </button>
               <button
@@ -199,22 +218,53 @@ export default function MemberDashboardPage() {
                 className={`${styles.navBtn} ${activeSection === "settings" ? styles.navBtnActive : ""}`}
                 onClick={() => setActiveSection("settings")}
               >
+                <i className="fa-solid fa-gear"></i>
                 Settings
               </button>
+              <button className={styles.navBtn} type="button" onClick={handleLogout}>
+                <i className="fa-solid fa-right-from-bracket"></i>
+                Logout
+              </button>
             </nav>
-
-            <button className={styles.logoutBtn} type="button" onClick={handleLogout}>
-              Logout
-            </button>
           </aside>
 
           <section className={styles.mainPanel}>
             <header className={styles.topBar}>
-              <div>
+              <div className={styles.topBarTitle}>
                 <h1>Welcome, {member.full_name || "Member"}</h1>
                 <p>Manage your network and profile information from one place.</p>
               </div>
-              <span className={styles.statusBadge}>{String(member.status || "active").toUpperCase()}</span>
+              <div className={styles.topBarRight}>
+                <span className={styles.statusBadge}>{String(member.status || "active").toUpperCase()}</span>
+                <div className={styles.profileMenu} ref={profileMenuRef}>
+                  <button
+                    type="button"
+                    className={styles.profileMenuTrigger}
+                    onClick={() => setIsProfileMenuOpen((current) => !current)}
+                    aria-label="Open profile menu"
+                  >
+                    <img
+                      src={
+                        resolveAssetPath(member.profile_picture) ||
+                        "/assets/imgs/about/about-big-img.png"
+                      }
+                      alt={member.full_name}
+                    />
+                  </button>
+                  {isProfileMenuOpen && (
+                    <div className={styles.profileDropdown}>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className={styles.dropdownLogoutBtn}
+                      >
+                        <i className="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </header>
 
             {success && <div className={styles.successBanner}>{success}</div>}
