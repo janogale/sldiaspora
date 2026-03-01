@@ -266,58 +266,58 @@ export default function MemberDashboardPage() {
                 </div>
               </div>
             </header>
+            <div className={styles.contentWrap}>
+              {success && <div className={styles.successBanner}>{success}</div>}
+              {error && <div className={styles.errorBanner}>{error}</div>}
 
-            {success && <div className={styles.successBanner}>{success}</div>}
-            {error && <div className={styles.errorBanner}>{error}</div>}
+              {activeSection === 'members' && (
+                <div className={styles.card}>
+                  <div className={styles.cardHead}>
+                    <h2>Members Directory</h2>
+                    <span>{filteredMembers.length} total</span>
+                  </div>
 
-            {activeSection === 'members' && (
-              <div className={styles.card}>
-                <div className={styles.cardHead}>
-                  <h2>Members Directory</h2>
-                  <span>{filteredMembers.length} total</span>
-                </div>
+                  <div className={styles.searchWrap}>
+                    <input
+                      value={searchTerm}
+                      onChange={(event) => setSearchTerm(event.target.value)}
+                      placeholder="Search by name, profession, city or country"
+                      className={styles.searchInput}
+                    />
+                  </div>
 
-                <div className={styles.searchWrap}>
-                  <input
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    placeholder="Search by name, profession, city or country"
-                    className={styles.searchInput}
-                  />
-                </div>
-
-                {filteredMembers.length === 0 ? (
-                  <div className={styles.emptyState}>No members found.</div>
-                ) : (
-                  <div className={styles.tableWrap}>
-                    <table className={styles.table}>
-                      <thead>
-                        <tr>
-                          <th>Member</th>
-                          <th>Profession</th>
-                          <th>Location</th>
-                          <th>Interest</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredMembers.map((item) => (
-                          <tr key={item.id}>
-                            <td>
-                              <div className={styles.memberCell}>
-                                <img
-                                  src={
-                                    resolveAssetPath(item.profile_picture) ||
-                                    '/favicon.png'
-                                  }
-                                  alt={item.full_name}
-                                />
-                                <div>
-                                  <strong>{item.full_name}</strong>
-                                  <span>{item.contact_email || 'No email shared'}</span>
+                  {filteredMembers.length === 0 ? (
+                    <div className={styles.emptyState}>No members found.</div>
+                  ) : (
+                    <div className={styles.tableWrap}>
+                      <table className={styles.table}>
+                        <thead>
+                          <tr>
+                            <th>Member</th>
+                            <th>Profession</th>
+                            <th>Location</th>
+                            <th>Interest</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredMembers.map((item) => (
+                            <tr key={item.id}>
+                              <td>
+                                <div className={styles.memberCell}>
+                                  <img
+                                    src={
+                                      resolveAssetPath(item.profile_picture) ||
+                                      '/favicon.png'
+                                    }
+                                    alt={item.full_name}
+                                  />
+                                  <div>
+                                    <strong>{item.full_name}</strong>
+                                    <span>{item.contact_email || 'No email shared'}</span>
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
+                              </td>
                             <td>{item.profession || '-'}</td>
                             <td>{[item.city || '', item.country || ''].filter(Boolean).join(', ') || '-'}</td>
                             <td>{item.areas_of_interest || '-'}</td>
@@ -412,6 +412,7 @@ export default function MemberDashboardPage() {
                 </div>
               </div>
             )}
+          </div>
           </section>
         </div>
       )}
