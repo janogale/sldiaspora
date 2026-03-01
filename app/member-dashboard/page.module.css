@@ -235,6 +235,44 @@
   margin-bottom: 20px;
 }
 
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filterLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.filterButton {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  height: 44px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.filterButton:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
 .searchInput,
 .selectInput,
 .textArea {
@@ -313,13 +351,13 @@
 
 .memberCell strong {
   display: block;
-  font-size: 0.875rem;
+  font-size: 1.4rem;
   color: #111827;
   font-weight: 600;
 }
 
 .memberCell span {
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   color: #6b7280;
 }
 
@@ -541,6 +579,14 @@
 
   .topBar {
     flex-wrap: wrap;
+  }
+
+  .filterRow {
+    grid-template-columns: 1fr;
+  }
+
+  .filterButton {
+    width: 100%;
   }
 
   .profileGrid,

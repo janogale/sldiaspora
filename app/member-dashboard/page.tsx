@@ -53,6 +53,9 @@ export default function MemberDashboardPage() {
 
   const [activeSection, setActiveSection] = useState<DashboardSection>('members');
   const [searchTerm, setSearchTerm] = useState('');
+  const [professionFilter, setProfessionFilter] = useState('all');
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [interestFilter, setInterestFilter] = useState('all');
 
   const [connectingId, setConnectingId] = useState<string>('');
   const [shareContact, setShareContact] = useState<'none' | 'email' | 'phone'>('none');
@@ -112,18 +115,48 @@ export default function MemberDashboardPage() {
     [members, member?.id]
   );
 
+  const extractInterests = (value?: string) =>
+    value ? value.split(/[,;/]/).map((item) => item.trim()).filter(Boolean) : [];
+
+  const filterOptions = useMemo(() => {
+    const getUnique = (items: Array<string | undefined>) =>
+      Array.from(new Set(items.filter(Boolean).map((item) => item!.trim()).filter(Boolean))).sort();
+
+    return {
+      professions: getUnique(otherMembers.map((item) => item.profession)),
+      countries: getUnique(otherMembers.map((item) => item.country)),
+      interests: getUnique(otherMembers.flatMap((item) => extractInterests(item.areas_of_interest))),
+    };
+  }, [otherMembers]);
+
   const filteredMembers = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    if (!term) return otherMembers;
+    const professionKey = professionFilter.toLowerCase();
+    const countryKey = countryFilter.toLowerCase();
+    const interestKey = interestFilter.toLowerCase();
 
-    return otherMembers.filter((item) =>
-      [item.full_name, item.profession, item.city, item.country, item.areas_of_interest]
+    return otherMembers.filter((item) => {
+      if (professionFilter !== 'all' && (item.profession || '').toLowerCase() !== professionKey) {
+        return false;
+      }
+      if (countryFilter !== 'all' && (item.country || '').toLowerCase() !== countryKey) {
+        return false;
+      }
+      if (interestFilter !== 'all') {
+        const interests = extractInterests(item.areas_of_interest).map((value) => value.toLowerCase());
+        if (!interests.includes(interestKey)) {
+          return false;
+        }
+      }
+      if (!term) return true;
+
+      return [item.full_name, item.profession, item.city, item.country, item.areas_of_interest]
         .filter(Boolean)
         .join(' ')
         .toLowerCase()
-        .includes(term)
-    );
-  }, [otherMembers, searchTerm]);
+        .includes(term);
+    });
+  }, [otherMembers, searchTerm, professionFilter, countryFilter, interestFilter]);
 
   const handleLogout = async () => {
     await fetch('/api/member-auth/logout', { method: 'POST' }).catch(() => null);
@@ -275,6 +308,66 @@ export default function MemberDashboardPage() {
                   <div className={styles.cardHead}>
                     <h2>Members Directory</h2>
                     <span>{filteredMembers.length} total</span>
+                  </div>
+
+                  <div className={styles.filterRow}>
+                    <div className={styles.filterGroup}>
+                      <label className={styles.filterLabel}>Profession</label>
+                      <select
+                        className={styles.selectInput}
+                        value={professionFilter}
+                        onChange={(event) => setProfessionFilter(event.target.value)}
+                      >
+                        <option value="all">All professions</option>
+                        {filterOptions.professions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className={styles.filterGroup}>
+                      <label className={styles.filterLabel}>Country</label>
+                      <select
+                        className={styles.selectInput}
+                        value={countryFilter}
+                        onChange={(event) => setCountryFilter(event.target.value)}
+                      >
+                        <option value="all">All countries</option>
+                        {filterOptions.countries.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className={styles.filterGroup}>
+                      <label className={styles.filterLabel}>Interest</label>
+                      <select
+                        className={styles.selectInput}
+                        value={interestFilter}
+                        onChange={(event) => setInterestFilter(event.target.value)}
+                      >
+                        <option value="all">All interests</option>
+                        {filterOptions.interests.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.filterButton}
+                      onClick={() => {
+                        setSearchTerm('');
+                        setProfessionFilter('all');
+                        setCountryFilter('all');
+                        setInterestFilter('all');
+                      }}
+                    >
+                      Clear filters
+                    </button>
                   </div>
 
                   <div className={styles.searchWrap}>
