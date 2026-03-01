@@ -230,39 +230,15 @@ export default function MemberDashboardPage() {
 
           <section className={styles.mainPanel}>
             <header className={styles.topBar}>
-              <div className={styles.topBarTitle}>
-                <h1>Welcome, {member.full_name || "Member"}</h1>
-                <p>Manage your network and profile information from one place.</p>
-              </div>
-              <div className={styles.topBarRight}>
-                <span className={styles.statusBadge}>{String(member.status || "active").toUpperCase()}</span>
-                <div className={styles.profileMenu} ref={profileMenuRef}>
-                  <button
-                    type="button"
-                    className={styles.profileMenuTrigger}
-                    onClick={() => setIsProfileMenuOpen((current) => !current)}
-                    aria-label="Open profile menu"
-                  >
-                    <img
-                      src={
-                        resolveAssetPath(member.profile_picture) ||
-                        "/assets/imgs/about/about-big-img.png"
-                      }
-                      alt={member.full_name}
-                    />
-                  </button>
-                  {isProfileMenuOpen && (
-                    <div className={styles.profileDropdown}>
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className={styles.dropdownLogoutBtn}
-                      >
-                        <i className="fa-solid fa-right-from-bracket"></i>
-                        Logout
-                      </button>
-                    </div>
-                  )}
+              <div className={styles.topBarBrand}>
+                <img
+                  src={resolveAssetPath(member.profile_picture) || "/assets/imgs/logo/logo.png"}
+                  alt={member.full_name || "Member"}
+                  className={styles.topBarAvatar}
+                />
+                <div className={styles.topBarTitle}>
+                  <h1>Welcome, {member.full_name || "Member"}</h1>
+                  <p>Member Portal</p>
                 </div>
               </div>
             </header>
