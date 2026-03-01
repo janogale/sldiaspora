@@ -246,7 +246,7 @@ export default function MemberDashboardPage() {
                     <img
                       src={
                         resolveAssetPath(member.profile_picture) ||
-                        '/assets/imgs/about/about-big-img.png'
+                        '/favicon.png'
                       }
                       alt={member.full_name}
                     />
@@ -308,7 +308,7 @@ export default function MemberDashboardPage() {
                                 <img
                                   src={
                                     resolveAssetPath(item.profile_picture) ||
-                                    '/assets/imgs/about/about-big-img.png'
+                                    '/favicon.png'
                                   }
                                   alt={item.full_name}
                                 />
