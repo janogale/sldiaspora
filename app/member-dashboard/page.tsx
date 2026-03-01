@@ -254,7 +254,11 @@ export default function MemberDashboardPage() {
                 <i className="fa-solid fa-gear"></i>
                 Settings
               </button>
-              <button className={styles.navBtn} type="button" onClick={handleLogout}>
+              <button
+                className={`${styles.navBtn} ${styles.logoutBtn}`}
+                type="button"
+                onClick={handleLogout}
+              >
                 <i className="fa-solid fa-right-from-bracket"></i>
                 Logout
               </button>
@@ -513,16 +517,65 @@ export default function MemberDashboardPage() {
       {isModalOpen && selectedMember && (
         <div className={styles.modalBackdrop} onClick={closeConnectModal}>
           <div className={styles.modalCard} onClick={(event) => event.stopPropagation()}>
-            <h3>{selectedMember.full_name}</h3>
-            <p>{[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}</p>
+            <div className={styles.modalHeader}>
+              <img
+                src={
+                  resolveAssetPath(selectedMember.profile_picture) ||
+                  '/favicon.png'
+                }
+                alt={selectedMember.full_name}
+              />
+              <div>
+                <h3>{selectedMember.full_name}</h3>
+                <p>{selectedMember.profession || 'Profession not shared'}</p>
+              </div>
+            </div>
+            <p className={styles.modalSubtitle}>
+              {[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}
+            </p>
             <div className={styles.modalDetails}>
               <div>
-                <span>Profession</span>
-                <strong>{selectedMember.profession || '-'}</strong>
+                <span>Email</span>
+                <strong>{selectedMember.contact_email || 'No email shared'}</strong>
+              </div>
+              <div>
+                <span>Phone</span>
+                <strong>{selectedMember.contact_phone || 'No phone shared'}</strong>
+              </div>
+              <div>
+                <span>Address</span>
+                <strong>{selectedMember.address || '-'}</strong>
               </div>
               <div>
                 <span>Interest</span>
                 <strong>{selectedMember.areas_of_interest || '-'}</strong>
+              </div>
+            </div>
+
+            <div className={styles.modalForm}>
+              <div>
+                <label className={styles.modalLabel}>Share contact</label>
+                <select
+                  className={styles.selectInput}
+                  value={shareContact}
+                  onChange={(event) =>
+                    setShareContact(event.target.value as 'none' | 'email' | 'phone')
+                  }
+                >
+                  <option value="none">No contact details</option>
+                  <option value="email">Share my email</option>
+                  <option value="phone">Share my phone</option>
+                </select>
+              </div>
+              <div>
+                <label className={styles.modalLabel}>Message</label>
+                <textarea
+                  className={styles.modalTextArea}
+                  value={requestMessage}
+                  onChange={(event) => setRequestMessage(event.target.value)}
+                  placeholder="Write a short message to introduce yourself"
+                />
+                <p className={styles.modalHelper}>This message will be sent directly to the member by email.</p>
               </div>
             </div>
             <div className={styles.modalActions}>

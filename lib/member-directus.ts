@@ -231,6 +231,9 @@ export const sendConnectionEmail = async (options: {
   toEmail: string;
   toName: string;
   fromName: string;
+  fromEmail?: string;
+  fromPhone?: string;
+  fromAddress?: string;
   fromCity?: string;
   fromCountry?: string;
   shareContact: "none" | "email" | "phone";
@@ -245,12 +248,34 @@ export const sendConnectionEmail = async (options: {
       ? `Shared phone: ${options.sharedPhone}`
       : "No contact details shared yet. Reply through the platform.";
 
+  const safeValue = (value?: string) => (value && value.trim() ? value : "Not provided");
+
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
       <h2 style="color: #006d21; margin-bottom: 12px;">New Connection Request</h2>
       <p>Hello ${options.toName || "Member"},</p>
       <p><strong>${options.fromName}</strong> wants to connect with you on the Somaliland Diaspora platform.</p>
       <p>${contactLine}</p>
+      <table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Email</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromEmail)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Phone</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromPhone)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Address</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromAddress)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Location</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromCity)}${
+    options.fromCountry ? `, ${safeValue(options.fromCountry)}` : ""
+  }</td>
+        </tr>
+      </table>
       ${
         options.message
           ? `<p><strong>Message:</strong><br/>${options.message.replace(/</g, "&lt;")}</p>`

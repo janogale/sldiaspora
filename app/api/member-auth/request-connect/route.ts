@@ -52,7 +52,11 @@ export async function POST(request: Request) {
     }
 
     const targetEmail =
-      typeof targetMember.email === "string" ? targetMember.email.trim() : "";
+      typeof (targetMember as { contact_email?: unknown }).contact_email === "string"
+        ? String((targetMember as { contact_email?: string }).contact_email).trim()
+        : typeof targetMember.email === "string"
+        ? targetMember.email.trim()
+        : "";
 
     if (!targetEmail) {
       return NextResponse.json(
@@ -65,6 +69,9 @@ export async function POST(request: Request) {
       toEmail: targetEmail,
       toName: String(targetMember.full_name || "Member"),
       fromName: String(fromMember.full_name || "Member"),
+      fromEmail: String(fromMember.email || ""),
+      fromPhone: String(fromMember.phone || ""),
+      fromAddress: String(fromMember.address || ""),
       fromCity: String(fromMember.city || ""),
       fromCountry: String(fromMember.country || ""),
       shareContact,
