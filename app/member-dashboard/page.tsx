@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import styles from "./page.module.css";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import styles from './page.module.css';
 
 type DashboardMember = {
   id: string;
@@ -32,13 +32,13 @@ type MembersListItem = {
   contact_phone?: string;
 };
 
-type DashboardSection = "members" | "profile" | "settings";
+type DashboardSection = 'members' | 'profile' | 'settings';
 
 const resolveAssetPath = (
   fileValue: string | { id?: string } | null | undefined
 ): string | null => {
   if (!fileValue) return null;
-  if (typeof fileValue === "string") return `/api/directus-assets/${fileValue}`;
+  if (typeof fileValue === 'string') return `/api/directus-assets/${fileValue}`;
   if (fileValue.id) return `/api/directus-assets/${fileValue.id}`;
   return null;
 };
@@ -46,17 +46,17 @@ const resolveAssetPath = (
 export default function MemberDashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [member, setMember] = useState<DashboardMember | null>(null);
   const [members, setMembers] = useState<MembersListItem[]>([]);
 
-  const [activeSection, setActiveSection] = useState<DashboardSection>("members");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [activeSection, setActiveSection] = useState<DashboardSection>('members');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const [connectingId, setConnectingId] = useState<string>("");
-  const [shareContact, setShareContact] = useState<"none" | "email" | "phone">("none");
-  const [requestMessage, setRequestMessage] = useState("");
+  const [connectingId, setConnectingId] = useState<string>('');
+  const [shareContact, setShareContact] = useState<'none' | 'email' | 'phone'>('none');
+  const [requestMessage, setRequestMessage] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MembersListItem | null>(null);
@@ -66,27 +66,27 @@ export default function MemberDashboardPage() {
   useEffect(() => {
     const loadDashboard = async () => {
       setLoading(true);
-      setError("");
+      setError('');
 
       try {
-        const response = await fetch("/api/member-auth/me", { method: "GET" });
+        const response = await fetch('/api/member-auth/me', { method: 'GET' });
 
         if (response.status === 401) {
-          router.push("/member-login");
+          router.push('/member-login');
           return;
         }
 
         const result = await response.json().catch(() => null);
 
         if (!response.ok) {
-          setError(result?.message || "Unable to load dashboard.");
+          setError(result?.message || 'Unable to load dashboard.');
           return;
         }
 
         setMember(result.member || null);
         setMembers(Array.isArray(result.members) ? result.members : []);
       } catch {
-        setError("Unable to load dashboard.");
+        setError('Unable to load dashboard.');
       } finally {
         setLoading(false);
       }
@@ -103,8 +103,8 @@ export default function MemberDashboardPage() {
       }
     };
 
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
   const otherMembers = useMemo(
@@ -119,22 +119,22 @@ export default function MemberDashboardPage() {
     return otherMembers.filter((item) =>
       [item.full_name, item.profession, item.city, item.country, item.areas_of_interest]
         .filter(Boolean)
-        .join(" ")
+        .join(' ')
         .toLowerCase()
         .includes(term)
     );
   }, [otherMembers, searchTerm]);
 
   const handleLogout = async () => {
-    await fetch("/api/member-auth/logout", { method: "POST" }).catch(() => null);
-    router.push("/member-login");
+    await fetch('/api/member-auth/logout', { method: 'POST' }).catch(() => null);
+    router.push('/member-login');
   };
 
   const openConnectModal = (memberItem: MembersListItem) => {
     setSelectedMember(memberItem);
     setIsModalOpen(true);
-    setSuccess("");
-    setError("");
+    setSuccess('');
+    setError('');
   };
 
   const closeConnectModal = () => {
@@ -146,13 +146,13 @@ export default function MemberDashboardPage() {
     if (!selectedMember?.id) return;
 
     setConnectingId(selectedMember.id);
-    setError("");
-    setSuccess("");
+    setError('');
+    setSuccess('');
 
     try {
-      const response = await fetch("/api/member-auth/request-connect", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/member-auth/request-connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           targetMemberId: selectedMember.id,
           shareContact,
@@ -163,17 +163,17 @@ export default function MemberDashboardPage() {
       const result = await response.json().catch(() => null);
 
       if (!response.ok) {
-        setError(result?.message || "Failed to send connection request.");
+        setError(result?.message || 'Failed to send connection request.');
         return;
       }
 
-      setSuccess("Connection request sent successfully.");
-      setRequestMessage("");
+      setSuccess('Connection request sent successfully.');
+      setRequestMessage('');
       closeConnectModal();
     } catch {
-      setError("Failed to send connection request.");
+      setError('Failed to send connection request.');
     } finally {
-      setConnectingId("");
+      setConnectingId('');
     }
   };
 
@@ -190,33 +190,33 @@ export default function MemberDashboardPage() {
           <aside className={styles.sidebar}>
             <div className={styles.brandBlock}>
               <div className={styles.brandLogoWrap}>
-                <img src="/assets/imgs/logo/logo.png" alt="SLDD" className={styles.brandLogo} />
+                <img src="/logo.svg" alt="Somaliland Diaspora" className={styles.brandLogo} />
               </div>
-              <h3>SLDD</h3>
+              <h3>Somaliland Diaspora</h3>
               <p>Professional Member Dashboard</p>
             </div>
 
             <nav className={styles.sidebarNav}>
               <button
                 type="button"
-                className={`${styles.navBtn} ${activeSection === "members" ? styles.navBtnActive : ""}`}
-                onClick={() => setActiveSection("members")}
+                className={`${styles.navBtn} ${activeSection === 'members' ? styles.navBtnActive : ''}`}
+                onClick={() => setActiveSection('members')}
               >
                 <i className="fa-solid fa-users"></i>
                 Members
               </button>
               <button
                 type="button"
-                className={`${styles.navBtn} ${activeSection === "profile" ? styles.navBtnActive : ""}`}
-                onClick={() => setActiveSection("profile")}
+                className={`${styles.navBtn} ${activeSection === 'profile' ? styles.navBtnActive : ''}`}
+                onClick={() => setActiveSection('profile')}
               >
                 <i className="fa-solid fa-user"></i>
                 Profile
               </button>
               <button
                 type="button"
-                className={`${styles.navBtn} ${activeSection === "settings" ? styles.navBtnActive : ""}`}
-                onClick={() => setActiveSection("settings")}
+                className={`${styles.navBtn} ${activeSection === 'settings' ? styles.navBtnActive : ''}`}
+                onClick={() => setActiveSection('settings')}
               >
                 <i className="fa-solid fa-gear"></i>
                 Settings
@@ -230,15 +230,39 @@ export default function MemberDashboardPage() {
 
           <section className={styles.mainPanel}>
             <header className={styles.topBar}>
-              <div className={styles.topBarBrand}>
-                <img
-                  src={resolveAssetPath(member.profile_picture) || "/assets/imgs/logo/logo.png"}
-                  alt={member.full_name || "Member"}
-                  className={styles.topBarAvatar}
-                />
-                <div className={styles.topBarTitle}>
-                  <h1>Welcome, {member.full_name || "Member"}</h1>
-                  <p>Member Portal</p>
+              <div className={styles.topBarTitle}>
+                <h1>Welcome, {member.full_name || 'Member'}</h1>
+                <p>Manage your network and profile information from one place.</p>
+              </div>
+              <div className={styles.topBarRight}>
+                <span className={styles.statusBadge}>{String(member.status || 'active').toUpperCase()}</span>
+                <div className={styles.profileMenu} ref={profileMenuRef}>
+                  <button
+                    type="button"
+                    className={styles.profileMenuTrigger}
+                    onClick={() => setIsProfileMenuOpen((current) => !current)}
+                    aria-label="Open profile menu"
+                  >
+                    <img
+                      src={
+                        resolveAssetPath(member.profile_picture) ||
+                        '/assets/imgs/about/about-big-img.png'
+                      }
+                      alt={member.full_name}
+                    />
+                  </button>
+                  {isProfileMenuOpen && (
+                    <div className={styles.profileDropdown}>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className={styles.dropdownLogoutBtn}
+                      >
+                        <i className="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </header>
@@ -246,7 +270,7 @@ export default function MemberDashboardPage() {
             {success && <div className={styles.successBanner}>{success}</div>}
             {error && <div className={styles.errorBanner}>{error}</div>}
 
-            {activeSection === "members" && (
+            {activeSection === 'members' && (
               <div className={styles.card}>
                 <div className={styles.cardHead}>
                   <h2>Members Directory</h2>
@@ -284,19 +308,19 @@ export default function MemberDashboardPage() {
                                 <img
                                   src={
                                     resolveAssetPath(item.profile_picture) ||
-                                    "/assets/imgs/about/about-big-img.png"
+                                    '/assets/imgs/about/about-big-img.png'
                                   }
                                   alt={item.full_name}
                                 />
                                 <div>
                                   <strong>{item.full_name}</strong>
-                                  <span>{item.contact_email || "No email shared"}</span>
+                                  <span>{item.contact_email || 'No email shared'}</span>
                                 </div>
                               </div>
                             </td>
-                            <td>{item.profession || "-"}</td>
-                            <td>{[item.city || "", item.country || ""].filter(Boolean).join(", ") || "-"}</td>
-                            <td>{item.areas_of_interest || "-"}</td>
+                            <td>{item.profession || '-'}</td>
+                            <td>{[item.city || '', item.country || ''].filter(Boolean).join(', ') || '-'}</td>
+                            <td>{item.areas_of_interest || '-'}</td>
                             <td>
                               <button type="button" className={styles.actionBtn} onClick={() => openConnectModal(item)}>
                                 View & Connect
@@ -311,52 +335,52 @@ export default function MemberDashboardPage() {
               </div>
             )}
 
-            {activeSection === "profile" && (
+            {activeSection === 'profile' && (
               <div className={styles.card}>
                 <div className={styles.profileHead}>
                   <img
                     src={
                       resolveAssetPath(member.profile_picture) ||
-                      "/assets/imgs/about/about-big-img.png"
+                      '/assets/imgs/about/about-big-img.png'
                     }
                     alt={member.full_name}
                   />
                   <div>
                     <h2>{member.full_name}</h2>
-                    <p>{member.profession || "Profession not shared"}</p>
+                    <p>{member.profession || 'Profession not shared'}</p>
                   </div>
                 </div>
 
                 <div className={styles.profileGrid}>
                   <div>
                     <span>Email</span>
-                    <strong>{member.email || "-"}</strong>
+                    <strong>{member.email || '-'}</strong>
                   </div>
                   <div>
                     <span>Phone</span>
-                    <strong>{member.phone || "-"}</strong>
+                    <strong>{member.phone || '-'}</strong>
                   </div>
                   <div>
                     <span>City</span>
-                    <strong>{member.city || "-"}</strong>
+                    <strong>{member.city || '-'}</strong>
                   </div>
                   <div>
                     <span>Country</span>
-                    <strong>{member.country || "-"}</strong>
+                    <strong>{member.country || '-'}</strong>
                   </div>
                   <div>
                     <span>Nationality</span>
-                    <strong>{member.country_of_nationality || "-"}</strong>
+                    <strong>{member.country_of_nationality || '-'}</strong>
                   </div>
                   <div>
                     <span>Areas of Interest</span>
-                    <strong>{member.areas_of_interest || "-"}</strong>
+                    <strong>{member.areas_of_interest || '-'}</strong>
                   </div>
                 </div>
               </div>
             )}
 
-            {activeSection === "settings" && (
+            {activeSection === 'settings' && (
               <div className={styles.card}>
                 <div className={styles.cardHead}>
                   <h2>Connection Settings</h2>
@@ -368,7 +392,7 @@ export default function MemberDashboardPage() {
                       className={styles.selectInput}
                       value={shareContact}
                       onChange={(event) =>
-                        setShareContact(event.target.value as "none" | "email" | "phone")
+                        setShareContact(event.target.value as 'none' | 'email' | 'phone')
                       }
                     >
                       <option value="none">No contact details</option>
@@ -396,15 +420,15 @@ export default function MemberDashboardPage() {
         <div className={styles.modalBackdrop} onClick={closeConnectModal}>
           <div className={styles.modalCard} onClick={(event) => event.stopPropagation()}>
             <h3>{selectedMember.full_name}</h3>
-            <p>{[selectedMember.city || "", selectedMember.country || ""].filter(Boolean).join(", ") || "Location not shared"}</p>
+            <p>{[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}</p>
             <div className={styles.modalDetails}>
               <div>
                 <span>Profession</span>
-                <strong>{selectedMember.profession || "-"}</strong>
+                <strong>{selectedMember.profession || '-'}</strong>
               </div>
               <div>
                 <span>Interest</span>
-                <strong>{selectedMember.areas_of_interest || "-"}</strong>
+                <strong>{selectedMember.areas_of_interest || '-'}</strong>
               </div>
             </div>
             <div className={styles.modalActions}>
@@ -417,7 +441,7 @@ export default function MemberDashboardPage() {
                 onClick={handleConnect}
                 disabled={connectingId === selectedMember.id}
               >
-                {connectingId === selectedMember.id ? "Sending..." : "Send Request"}
+                {connectingId === selectedMember.id ? 'Sending...' : 'Send Request'}
               </button>
             </div>
           </div>

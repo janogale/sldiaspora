@@ -3,7 +3,7 @@
   background: #f8faf9;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .layoutGrid {
@@ -14,9 +14,9 @@
 }
 
 .sidebar {
-  background: #0f6b3a;
+  background: #0a6534;
   border-right: 0;
-  color: #f0fdf4;
+  color: #ecfdf5;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
 
 .brandLogoWrap {
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgb(250, 250, 250);
   padding: 12px;
   display: inline-flex;
   margin-bottom: 12px;
@@ -48,7 +48,7 @@
 .brandBlock p {
   margin: 4px 0 0;
   font-size: 0.85rem;
-  color: rgba(240, 253, 244, 0.75);
+  color: rgba(236, 253, 245, 0.75);
 }
 
 .brandLogo {
@@ -65,12 +65,12 @@
 .navBtn {
   border: 0;
   background: transparent;
-  color: rgba(240, 253, 244, 0.82);
+  color: rgba(236, 253, 245, 0.85);
   border-radius: 8px;
   padding: 12px 16px;
   text-align: left;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -78,13 +78,13 @@
 }
 
 .navBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   color: #ffffff;
 }
 
 .navBtnActive {
   background: #ffffff;
-  color: #0f6b3a;
+  color: #0a6534;
 }
 
 .navBtn i {
@@ -97,35 +97,20 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0 24px 24px;
+  padding: 24px;
   background: #f8faf9;
 }
 
 .topBar {
   background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  border-radius: 0;
-  padding: 18px 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px 24px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 16px;
   align-items: center;
-  box-shadow: none;
-}
-
-.topBarBrand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.topBarAvatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  object-fit: cover;
-  border: 1px solid #e5e7eb;
-  background: #f3f4f6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .topBarTitle {
@@ -135,14 +120,14 @@
 .topBar h1 {
   margin: 0;
   color: #111827;
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .topBar p {
   margin: 6px 0 0;
   color: #6b7280;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }
 
 .statusBadge {
@@ -258,8 +243,8 @@
 .searchInput:focus,
 .selectInput:focus,
 .textArea:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  border-color: #0a6534;
+  box-shadow: 0 0 0 3px rgba(10, 101, 52, 0.1);
 }
 
 .textArea {
@@ -344,13 +329,13 @@
 .actionBtn,
 .primaryBtn {
   border: 0;
-  background: #10b981;
+  background: #0a6534;
   color: #ffffff;
 }
 
 .actionBtn:hover,
 .primaryBtn:hover {
-  background: #059669;
+  background: #055228;
 }
 
 .secondaryBtn {
@@ -510,6 +495,23 @@
   justify-content: flex-end;
   gap: 12px;
   margin-top: 20px;
+}
+
+.dashboardPage,
+.dashboardPage h1,
+.dashboardPage h2,
+.dashboardPage h3,
+.dashboardPage p,
+.dashboardPage span,
+.dashboardPage label,
+.dashboardPage input,
+.dashboardPage select,
+.dashboardPage textarea,
+.dashboardPage button,
+.dashboardPage th,
+.dashboardPage td,
+.dashboardPage li {
+  font-size: 1.5rem;
 }
 
 @media (max-width: 991px) {
