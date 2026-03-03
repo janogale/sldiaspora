@@ -160,6 +160,11 @@ function MemberRegistrationModal() {
     setFormState((prev) => ({ ...prev, [key]: value }));
   };
 
+  const setSecondaryDocumentType = (value: SecondaryDocumentType) => {
+    setSecondaryDocument(null);
+    setFormState((prev) => ({ ...prev, secondaryDocumentType: value }));
+  };
+
   const resetForm = () => {
     setFormState(defaultFormState);
     setIdMethod("");
@@ -538,18 +543,60 @@ function MemberRegistrationModal() {
                     </div>
                   )}
 
+                  <label style={{ ...labelStyle, marginBottom: "12px" }}>
+                    International Document *
+                  </label>
+                  <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "16px" }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.2rem", color: "#1f2937" }}>
+                      <input
+                        type="radio"
+                        name="secondaryDocMethod"
+                        checked={formState.secondaryDocumentType === "passport"}
+                        onChange={() => setSecondaryDocumentType("passport")}
+                      />
+                      Upload Passport
+                    </label>
+                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.2rem", color: "#1f2937" }}>
+                      <input
+                        type="radio"
+                        name="secondaryDocMethod"
+                        checked={formState.secondaryDocumentType === "driving_license"}
+                        onChange={() => setSecondaryDocumentType("driving_license")}
+                      />
+                      Upload Driving Licence
+                    </label>
+                  </div>
+
                   <div className="row g-3">
                     <div className="col-md-6">
-                      <label style={labelStyle}>International Document *</label>
-                      <select className="form-control" style={inputStyle} value={formState.secondaryDocumentType} onChange={(e) => handleChange("secondaryDocumentType", e.target.value)} required>
-                        <option value="">Choose one</option>
-                        <option value="passport">Passport</option>
-                        <option value="driving_license">Driving Licence</option>
-                      </select>
+                      <label style={labelStyle}>Passport Upload</label>
+                      <input
+                        type="file"
+                        accept="image/*,.pdf"
+                        className="form-control"
+                        style={inputStyle}
+                        disabled={formState.secondaryDocumentType !== "passport"}
+                        required={formState.secondaryDocumentType === "passport"}
+                        onChange={(e) => {
+                          if (formState.secondaryDocumentType !== "passport") return;
+                          setSecondaryDocument(e.target.files?.[0] || null);
+                        }}
+                      />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Upload Selected Document *</label>
-                      <input type="file" accept="image/*,.pdf" className="form-control" style={inputStyle} onChange={(e) => setSecondaryDocument(e.target.files?.[0] || null)} required />
+                      <label style={labelStyle}>Driving Licence Upload</label>
+                      <input
+                        type="file"
+                        accept="image/*,.pdf"
+                        className="form-control"
+                        style={inputStyle}
+                        disabled={formState.secondaryDocumentType !== "driving_license"}
+                        required={formState.secondaryDocumentType === "driving_license"}
+                        onChange={(e) => {
+                          if (formState.secondaryDocumentType !== "driving_license") return;
+                          setSecondaryDocument(e.target.files?.[0] || null);
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
