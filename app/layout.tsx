@@ -1,7 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import type { Metadata } from "next";
-import Footer from "./components/footer";
-import MemberRegistrationModal from "./components/member-registration-modal";
+import LayoutShell from "./components/layout-shell";
 import "./globals.css";
 import "./globe.css";
 
@@ -32,9 +31,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="/assets/css/main.css" />
       </head>
       <body>
-        <MemberRegistrationModal />
-        {children}
-        <Footer />
+        <LayoutShell>{children}</LayoutShell>
         <Script
           src="https://code.jquery.com/jquery-3.6.0.min.js"
           strategy="beforeInteractive" // loads before page is interactive

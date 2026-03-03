@@ -80,3 +80,56 @@ If you also create `email` and `country` in Directus later, the modal already ca
 - New registrations are stored with `status = pending`.
 - Admin reviews in Directus and changes status to `active`.
 - Once active, your dashboard logic can allow access to member profile, activities, and articles.
+
+## Member Activation Welcome Email
+
+When a member status is `active` or `published`, the app can send a welcome email with:
+
+- full name
+- email
+- phone
+- verification message
+- member login link (`/member-login`)
+
+### Required `members` field for one-time email
+
+Add one datetime field in Directus `members` collection (any one of these names):
+
+- `activation_email_sent_at` (recommended)
+- `welcome_email_sent_at`
+- `status_notification_sent_at`
+
+This prevents duplicate emails.
+
+### Automatic trigger points
+
+1. Login trigger (already enabled)
+
+- On `POST /api/member-auth/login`, if member is active/published and email has not been sent, welcome email is sent once.
+
+2. Immediate admin status-change trigger (recommended)
+
+- Endpoint: `POST /api/member-auth/activation-notify`
+- Optional header for security: `x-member-webhook-secret`
+
+Add this env if you want to secure the endpoint:
+
+```env
+MEMBER_STATUS_WEBHOOK_SECRET=your_secret_here
+NEXT_PUBLIC_SITE_URL=https://your-site-domain.com
+```
+
+Example webhook payload:
+
+```json
+{
+	"memberId": "123",
+	"status": "active"
+}
+```
+
+Use a Directus Flow/Webhook on `members` update where status changes to `active` or `published`.
+
+### Security note
+
+For safety, passwords are not included in email. Members should use the password they created during registration.

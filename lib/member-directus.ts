@@ -98,6 +98,28 @@ export const createMemberRecord = async (payload: Record<string, unknown>) => {
   return { response, result };
 };
 
+export const updateMemberRecord = async (
+  memberId: string,
+  payload: Record<string, unknown>
+) => {
+  const response = await directusFetch(
+    `/items/members/${encodeURIComponent(memberId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  const result = (await response.json().catch(() => null)) as DirectusResult<
+    Record<string, unknown>
+  > | null;
+
+  return { response, result };
+};
+
 export const filterPayloadByFields = (
   payload: Record<string, unknown>,
   allowedFields: Set<string> | null
@@ -231,6 +253,9 @@ export const sendConnectionEmail = async (options: {
   toEmail: string;
   toName: string;
   fromName: string;
+  fromEmail?: string;
+  fromPhone?: string;
+  fromAddress?: string;
   fromCity?: string;
   fromCountry?: string;
   shareContact: "none" | "email" | "phone";
@@ -245,12 +270,34 @@ export const sendConnectionEmail = async (options: {
       ? `Shared phone: ${options.sharedPhone}`
       : "No contact details shared yet. Reply through the platform.";
 
+  const safeValue = (value?: string) => (value && value.trim() ? value : "Not provided");
+
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
       <h2 style="color: #006d21; margin-bottom: 12px;">New Connection Request</h2>
       <p>Hello ${options.toName || "Member"},</p>
       <p><strong>${options.fromName}</strong> wants to connect with you on the Somaliland Diaspora platform.</p>
       <p>${contactLine}</p>
+      <table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Email</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromEmail)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Phone</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromPhone)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Address</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromAddress)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Location</td>
+          <td style="padding: 6px 0;">${safeValue(options.fromCity)}${
+    options.fromCountry ? `, ${safeValue(options.fromCountry)}` : ""
+  }</td>
+        </tr>
+      </table>
       ${
         options.message
           ? `<p><strong>Message:</strong><br/>${options.message.replace(/</g, "&lt;")}</p>`
@@ -275,4 +322,122 @@ export const sendConnectionEmail = async (options: {
   });
 
   return response.ok;
+};
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const resolveAppBaseUrl = () => {
+  const fromEnv =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.APP_BASE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL;
+
+  if (fromEnv && fromEnv.trim()) {
+    return fromEnv.replace(/\/$/, "");
+  }
+
+  return "http://localhost:3000";
+};
+
+export const maybeSendActivationWelcomeEmail = async (
+  member: Record<string, unknown>
+) => {
+  const status = String(member.status || "").trim().toLowerCase();
+  const isEligibleStatus = status === "active" || status === "published";
+  if (!isEligibleStatus) {
+    return { sent: false, reason: "not_eligible_status" as const };
+  }
+
+  const memberId = String(member.id || "").trim();
+  const toEmail = String(member.email || "").trim().toLowerCase();
+  const fullName = String(member.full_name || "Member").trim() || "Member";
+  const phone = String(member.phone || "Not provided").trim() || "Not provided";
+
+  if (!memberId || !toEmail) {
+    return { sent: false, reason: "missing_member_id_or_email" as const };
+  }
+
+  const candidateTrackingFields = [
+    "activation_email_sent_at",
+    "welcome_email_sent_at",
+    "status_notification_sent_at",
+  ];
+
+  const allowedFields = await getMemberCollectionFields();
+  const trackingField =
+    candidateTrackingFields.find((field) => allowedFields?.has(field)) || null;
+
+  if (!trackingField) {
+    return { sent: false, reason: "missing_tracking_field" as const };
+  }
+
+  const alreadySent = String(member[trackingField] || "").trim().length > 0;
+  if (alreadySent) {
+    return { sent: false, reason: "already_sent" as const };
+  }
+
+  const loginUrl = `${resolveAppBaseUrl()}/member-login`;
+  const verificationMessage =
+    "Your account has been verified and activated. You can now login to the Member Dashboard.";
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
+      <h2 style="color: #006d21; margin-bottom: 12px;">Welcome to Diaspora Member Portal</h2>
+      <p>Hello ${escapeHtml(fullName)},</p>
+      <p>${escapeHtml(verificationMessage)}</p>
+      <table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Full Name</td>
+          <td style="padding: 6px 0;">${escapeHtml(fullName)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Email</td>
+          <td style="padding: 6px 0;">${escapeHtml(toEmail)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-weight: 600;">Phone</td>
+          <td style="padding: 6px 0;">${escapeHtml(phone)}</td>
+        </tr>
+      </table>
+      <p style="margin: 10px 0 16px;">
+        For security, we never email your password. Use the password you created during registration.
+      </p>
+      <a href="${escapeHtml(loginUrl)}" style="display: inline-block; background: #006d21; color: #ffffff; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-weight: 600;">Open Member Login</a>
+      <p style="margin-top: 14px; color: #4b5563; font-size: 14px;">
+        If the button does not work, open this link: ${escapeHtml(loginUrl)}
+      </p>
+    </div>
+  `;
+
+  const response = await directusFetch("/utils/send/mail", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: toEmail,
+      subject: "Welcome to Diaspora Member Portal",
+      html,
+    }),
+  });
+
+  if (!response.ok) {
+    return { sent: false, reason: "mail_failed" as const };
+  }
+
+  const markPayload = filterPayloadByFields(
+    { [trackingField]: new Date().toISOString() },
+    allowedFields
+  );
+  if (Object.keys(markPayload).length > 0) {
+    await updateMemberRecord(memberId, markPayload);
+  }
+
+  return { sent: true as const, reason: "sent" as const };
 };
