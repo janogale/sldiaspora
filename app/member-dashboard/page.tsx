@@ -15,6 +15,7 @@ type DashboardMember = {
   country_of_nationality?: string;
   profession?: string;
   areas_of_interest?: string;
+  additional_notes?: string;
   profile_picture?: string | { id?: string } | null;
   status: string;
 };
@@ -65,6 +66,14 @@ export default function MemberDashboardPage() {
   const [selectedMember, setSelectedMember] = useState<MembersListItem | null>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
+  const [profileBio, setProfileBio] = useState('');
+  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [savingPassword, setSavingPassword] = useState(false);
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -87,6 +96,7 @@ export default function MemberDashboardPage() {
         }
 
         setMember(result.member || null);
+        setProfileBio(result?.member?.additional_notes || '');
         setMembers(Array.isArray(result.members) ? result.members : []);
       } catch {
         setError('Unable to load dashboard.');
@@ -207,6 +217,94 @@ export default function MemberDashboardPage() {
       setError('Failed to send connection request.');
     } finally {
       setConnectingId('');
+    }
+  };
+
+  const handleProfileSave = async () => {
+    setSavingProfile(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const payload = new FormData();
+      payload.append('bio', profileBio.trim());
+      if (profilePictureFile) {
+        payload.append('profilePicture', profilePictureFile);
+      }
+
+      const response = await fetch('/api/member-auth/profile', {
+        method: 'PATCH',
+        body: payload,
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        setError(result?.message || 'Unable to update profile.');
+        return;
+      }
+
+      if (result?.member) {
+        setMember(result.member);
+      }
+      setProfilePictureFile(null);
+      setSuccess(result?.message || 'Profile updated successfully.');
+    } catch {
+      setError('Unable to update profile.');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const handlePasswordSave = async () => {
+    setSavingPassword(true);
+    setError('');
+    setSuccess('');
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setError('Please complete all password fields.');
+      setSavingPassword(false);
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setError('New password must be at least 6 characters.');
+      setSavingPassword(false);
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError('New password and confirmation do not match.');
+      setSavingPassword(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/member-auth/password', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        setError(result?.message || 'Unable to update password.');
+        return;
+      }
+
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setSuccess(result?.message || 'Password updated successfully.');
+    } catch {
+      setError('Unable to update password.');
+    } finally {
+      setSavingPassword(false);
     }
   };
 
@@ -444,7 +542,7 @@ export default function MemberDashboardPage() {
                   />
                   <div>
                     <h2>{member.full_name}</h2>
-                    <p>{member.profession || 'Profession not shared'}</p>
+                    <p>Profile Information</p>
                   </div>
                 </div>
 
@@ -474,38 +572,89 @@ export default function MemberDashboardPage() {
                     <strong>{member.areas_of_interest || '-'}</strong>
                   </div>
                 </div>
+
+                <div className={styles.profileEditor}>
+                  <h3>Edit Profile (Photo & Bio Only)</h3>
+                  <div className={styles.settingsGrid}>
+                    <div>
+                      <label>Profile Photo</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className={styles.selectInput}
+                        onChange={(event) => setProfilePictureFile(event.target.files?.[0] || null)}
+                      />
+                    </div>
+                    <div>
+                      <label>Bio</label>
+                      <textarea
+                        className={styles.textArea}
+                        value={profileBio}
+                        onChange={(event) => setProfileBio(event.target.value)}
+                        placeholder="Write your short bio"
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.profileActions}>
+                    <button
+                      type="button"
+                      className={styles.primaryBtn}
+                      onClick={handleProfileSave}
+                      disabled={savingProfile}
+                    >
+                      {savingProfile ? 'Saving...' : 'Save Profile'}
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
             {activeSection === 'settings' && (
               <div className={styles.card}>
                 <div className={styles.cardHead}>
-                  <h2>Connection Settings</h2>
+                  <h2>Password Settings</h2>
                 </div>
                 <div className={styles.settingsGrid}>
                   <div>
-                    <label>Share with requests</label>
-                    <select
+                    <label>Current Password</label>
+                    <input
+                      type="password"
                       className={styles.selectInput}
-                      value={shareContact}
-                      onChange={(event) =>
-                        setShareContact(event.target.value as 'none' | 'email' | 'phone')
-                      }
-                    >
-                      <option value="none">No contact details</option>
-                      <option value="email">Share my email</option>
-                      <option value="phone">Share my phone</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label>Default message</label>
-                    <textarea
-                      className={styles.textArea}
-                      value={requestMessage}
-                      onChange={(event) => setRequestMessage(event.target.value)}
-                      placeholder="Write a short message for your connection requests"
+                      value={currentPassword}
+                      onChange={(event) => setCurrentPassword(event.target.value)}
+                      placeholder="Enter current password"
                     />
                   </div>
+                  <div>
+                    <label>New Password</label>
+                    <input
+                      type="password"
+                      className={styles.selectInput}
+                      value={newPassword}
+                      onChange={(event) => setNewPassword(event.target.value)}
+                      placeholder="Enter new password"
+                    />
+                  </div>
+                  <div>
+                    <label>Confirm New Password</label>
+                    <input
+                      type="password"
+                      className={styles.selectInput}
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                      placeholder="Confirm new password"
+                    />
+                  </div>
+                </div>
+                <div className={styles.profileActions}>
+                  <button
+                    type="button"
+                    className={styles.primaryBtn}
+                    onClick={handlePasswordSave}
+                    disabled={savingPassword}
+                  >
+                    {savingPassword ? 'Updating...' : 'Change Password'}
+                  </button>
                 </div>
               </div>
             )}
