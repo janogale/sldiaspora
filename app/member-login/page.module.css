@@ -1,13 +1,13 @@
 .loginPage {
   min-height: 100vh;
-  background: linear-gradient(140deg, #f4faf7 0%, #ffffff 45%, #edf5f1 100%);
+  background: linear-gradient(130deg, #dff3e7 0%, #ecf8f0 45%, #dbefe4 100%);
 }
 
 .loginSection {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  padding: 56px 0;
+  align-items: flex-start;
+  padding: 42px 0 56px;
 }
 
 .backButtonWrap {
@@ -18,12 +18,12 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #cfe0d7;
+  border: 1px solid #d3e4db;
   background: #ffffff;
   color: #0d5b35;
-  border-radius: 10px;
-  padding: 9px 14px;
-  font-size: 0.93rem;
+  border-radius: 12px;
+  padding: 10px 15px;
+  font-size: 1.5rem;
   font-weight: 600;
   text-decoration: none;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
@@ -36,18 +36,34 @@
   transform: translateY(-1px);
 }
 
-.loginCard {
+.loginShell {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  border: 1px solid #dbeae2;
+  border-radius: 24px;
   background: #ffffff;
-  border: 1px solid #dcebe3;
-  border-radius: 20px;
-  padding: 36px 32px;
-  box-shadow: 0 20px 45px rgba(2, 29, 17, 0.1);
+  overflow: hidden;
+  box-shadow: 0 22px 55px rgba(2, 29, 17, 0.11);
+}
+
+.brandPanel {
+  padding: 42px 34px;
+  background: linear-gradient(160deg, #0a6b38 0%, #0a5a2f 100%);
+  color: #eefaf3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .logoWrap {
   display: flex;
-  justify-content: center;
-  margin-bottom: 18px;
+  align-items: center;
+  width: fit-content;
+  background: #ffffff;
+  border: 1px solid #d8e7df;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
 }
 
 .logoImage {
@@ -56,48 +72,97 @@
   height: auto;
 }
 
+.brandTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.brandSubtitle {
+  margin: 12px 0 0;
+  font-size: 1.5rem;
+  color: rgba(241, 250, 245, 0.9);
+  line-height: 1.65;
+}
+
+.brandList {
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.brandList li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 1.5rem;
+  color: rgba(241, 250, 245, 0.95);
+}
+
+.brandList i {
+  color: #9ef5c2;
+}
+
+.loginCard {
+  background: #ffffff;
+  padding: 42px 36px;
+}
+
+.mobileLogoWrap {
+  display: none;
+  width: fit-content;
+  background: #ffffff;
+  border: 1px solid #d8e7df;
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
 .title {
   margin: 0;
-  text-align: center;
+  text-align: left;
   color: #053c2b;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.25;
 }
 
 .subtitle {
   margin: 10px 0 0;
-  text-align: center;
-  color: #567567;
-  font-size: 0.99rem;
+  text-align: left;
+  color: #547164;
+  font-size: 1.5rem;
   line-height: 1.6;
 }
 
 .form {
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 .fieldGroup {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .label {
   display: block;
-  margin-bottom: 7px;
+  margin-bottom: 8px;
   color: #0b3326;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.5rem;
 }
 
 .input {
-  border: 1px solid #c9ddd3;
-  border-radius: 10px;
-  min-height: 48px;
-  padding: 0.7rem 0.95rem;
-  background: #fbfefd;
+  border: 1px solid #c8dbd1;
+  border-radius: 12px;
+  min-height: 50px;
+  padding: 0.75rem 0.98rem;
+  background: #fbfefc;
   box-shadow: none;
   color: #193228;
-  font-size: 0.96rem;
+  font-size: 1.5rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
@@ -132,7 +197,7 @@
   border: 0;
   background: transparent;
   color: #0d6b37;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   padding: 2px 4px;
   border-radius: 6px;
@@ -148,24 +213,24 @@
 }
 
 .errorBox {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   border: 1px solid #f4d2d2;
   background: #fff1f1;
   color: #8b1a1a;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 0.92rem;
+  border-radius: 12px;
+  padding: 11px 13px;
+  font-size: 1.5rem;
 }
 
 .loginButton {
   width: 100%;
   border: 0;
-  border-radius: 12px;
-  min-height: 48px;
+  border-radius: 14px;
+  min-height: 50px;
   background: linear-gradient(140deg, #0c7f40 0%, #065c2d 100%);
   color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.5rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -179,21 +244,61 @@
   cursor: not-allowed;
 }
 
+.footerNote {
+  margin: 15px 0 0;
+  color: #667f73;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.footerNote a {
+  color: #0a6b38;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footerNote a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1199px) {
+  .loginShell {
+    grid-template-columns: 1fr;
+  }
+
+  .brandPanel {
+    display: none;
+  }
+
+  .mobileLogoWrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+}
+
 @media (max-width: 767px) {
   .loginSection {
-    padding: 24px 0;
+    padding: 20px 0 28px;
   }
 
   .backButtonWrap {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .loginCard {
-    border-radius: 16px;
-    padding: 28px 20px;
+    padding: 26px 18px;
+  }
+
+  .loginShell {
+    border-radius: 18px;
   }
 
   .title {
-    font-size: 1.65rem;
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
   }
 }
