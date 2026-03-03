@@ -90,6 +90,13 @@ export async function POST(request: Request) {
 
     const result = await maybeSendActivationWelcomeEmail(member);
 
+    const failureStatus =
+      result.reason === "mail_failed"
+        ? 502
+        : result.reason === "missing_member_id_or_email"
+        ? 400
+        : 200;
+
     return NextResponse.json(
       {
         message: result.sent
@@ -97,7 +104,7 @@ export async function POST(request: Request) {
           : "Activation email skipped.",
         ...result,
       },
-      { status: 200 }
+      { status: failureStatus }
     );
   } catch (error) {
     const message =
