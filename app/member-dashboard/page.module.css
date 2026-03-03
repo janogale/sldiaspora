@@ -299,6 +299,7 @@
 .selectInput,
 .textArea {
   width: 100%;
+  box-sizing: border-box;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 12px 16px;
@@ -549,6 +550,7 @@
   padding: 20px;
   z-index: 1000;
   backdrop-filter: blur(4px);
+  overflow-y: auto;
 }
 
 .modalCard {
@@ -559,8 +561,6 @@
   padding: 18px;
   box-shadow: 0 26px 48px rgba(3, 28, 17, 0.18);
   position: relative;
-  max-height: calc(100vh - 40px);
-  overflow: auto;
 }
 
 .modalContent {
@@ -571,7 +571,8 @@
 .modalCloseBtn {
   position: sticky;
   top: 0;
-  margin-left: auto;
+  margin-right: auto;
+  margin-left: 0;
   border: 1px solid #d6e4dc;
   background: #ffffff;
   color: #3b4b42;
@@ -641,6 +642,7 @@
 
 .modalTextArea {
   width: 100%;
+  box-sizing: border-box;
   border: 1px solid #cddcd3;
   border-radius: 12px;
   padding: 12px 14px;
@@ -766,7 +768,6 @@
 
   .modalCard {
     border-radius: 14px;
-    max-height: calc(100vh - 24px);
     padding: 14px;
   }
 

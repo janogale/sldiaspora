@@ -90,12 +90,12 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { message: "Connection request sent successfully." },
+      { message: "Message sent successfully." },
       { status: 200 }
     );
   } catch {
     return NextResponse.json(
-      { message: "Failed to send connection request." },
+      { message: "Failed to send message." },
       { status: 500 }
     );
   }

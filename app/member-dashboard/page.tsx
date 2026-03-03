@@ -206,15 +206,15 @@ export default function MemberDashboardPage() {
       const result = await response.json().catch(() => null);
 
       if (!response.ok) {
-        setError(result?.message || 'Failed to send connection request.');
+        setError(result?.message || 'Failed to send message.');
         return;
       }
 
-      setSuccess('Connection request sent successfully.');
+      setSuccess('Message sent successfully.');
       setRequestMessage('');
       closeConnectModal();
     } catch {
-      setError('Failed to send connection request.');
+      setError('Failed to send message.');
     } finally {
       setConnectingId('');
     }
@@ -730,7 +730,7 @@ export default function MemberDashboardPage() {
                   onClick={handleConnect}
                   disabled={connectingId === selectedMember.id}
                 >
-                  {connectingId === selectedMember.id ? 'Sending...' : 'Send Request'}
+                  {connectingId === selectedMember.id ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
             </div>
