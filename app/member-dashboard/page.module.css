@@ -543,11 +543,12 @@
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(2, 19, 11, 0.55);
   display: grid;
   place-items: center;
-  padding: 16px;
-  z-index: 999;
+  padding: 20px;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modalCard {
@@ -555,8 +556,40 @@
   border-radius: 16px;
   background: #ffffff;
   border: 1px solid #dfe9e3;
-  padding: 26px;
+  padding: 18px;
   box-shadow: 0 26px 48px rgba(3, 28, 17, 0.18);
+  position: relative;
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+}
+
+.modalContent {
+  display: grid;
+  gap: 12px;
+}
+
+.modalCloseBtn {
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  border: 1px solid #d6e4dc;
+  background: #ffffff;
+  color: #3b4b42;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.modalCloseBtn:hover {
+  background: #f3f8f5;
+  border-color: #bdd5c8;
 }
 
 .modalHeader {
@@ -718,5 +751,40 @@
   .profileGrid,
   .settingsGrid {
     grid-template-columns: 1fr;
+  }
+
+  .modalCard {
+    width: min(560px, 100%);
+    padding: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .modalBackdrop {
+    padding: 12px;
+  }
+
+  .modalCard {
+    border-radius: 14px;
+    max-height: calc(100vh - 24px);
+    padding: 14px;
+  }
+
+  .modalHeader {
+    align-items: flex-start;
+  }
+
+  .modalHeader img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .modalActions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .modalActions button {
+    width: 100%;
   }
 }
