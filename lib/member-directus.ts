@@ -20,6 +20,8 @@ const sendHtmlEmail = async (options: {
 
   const gmailUser = process.env.GMAIL_USER;
   const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+  const gmailFrom = process.env.GMAIL_FROM ||
+    (gmailUser ? `Sldiaspora <${gmailUser}>` : undefined);
 
   const canUseSmtp = !!smtpHost && !!smtpUser && !!smtpPass && !!smtpFrom;
   const canUseGmail = !!gmailUser && !!gmailAppPassword;
@@ -48,7 +50,9 @@ const sendHtmlEmail = async (options: {
             },
           };
 
-      const fromAddress = canUseSmtp ? smtpFrom : gmailUser;
+      const fromAddress = canUseSmtp
+        ? smtpFrom
+        : gmailFrom || gmailUser;
 
       const transporter = nodemailer.createTransport(transport);
       await transporter.sendMail({
@@ -455,41 +459,64 @@ export const maybeSendActivationWelcomeEmail = async (
   }
 
   const loginUrl = `${resolveAppBaseUrl()}/member-login`;
+  const logoUrl = `${resolveAppBaseUrl()}/assets/imgs/logo/logo.png`;
   const verificationMessage =
     "Your account has been verified and activated. You can now login to the Member Dashboard.";
 
   const html = `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-      <h2 style="color: #006d21; margin-bottom: 12px;">Welcome to Diaspora Member Portal</h2>
-      <p>Hello ${escapeHtml(fullName)},</p>
-      <p>${escapeHtml(verificationMessage)}</p>
-      <table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
-        <tr>
-          <td style="padding: 6px 0; font-weight: 600;">Full Name</td>
-          <td style="padding: 6px 0;">${escapeHtml(fullName)}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; font-weight: 600;">Email</td>
-          <td style="padding: 6px 0;">${escapeHtml(toEmail)}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; font-weight: 600;">Phone</td>
-          <td style="padding: 6px 0;">${escapeHtml(phone)}</td>
-        </tr>
-      </table>
-      <p style="margin: 10px 0 16px;">
-        For security, we never email your password. Use the password you created during registration.
-      </p>
-      <a href="${escapeHtml(loginUrl)}" style="display: inline-block; background: #006d21; color: #ffffff; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-weight: 600;">Open Member Login</a>
-      <p style="margin-top: 14px; color: #4b5563; font-size: 14px;">
-        If the button does not work, open this link: ${escapeHtml(loginUrl)}
-      </p>
+    <div style="font-family: Arial, sans-serif; background: #f4f7f5; padding: 24px; color: #1f2937;">
+      <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #d8e6dc; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);">
+        <div style="background: linear-gradient(135deg, #f0faf4 0%, #ffffff 100%); padding: 20px 24px; border-bottom: 1px solid #e5efe8;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="${escapeHtml(logoUrl)}" alt="Sldiaspora" width="42" height="42" style="border-radius: 8px; object-fit: contain; background: #ffffff; border: 1px solid #d9e9df;" />
+            <div>
+              <div style="font-size: 20px; font-weight: 700; color: #006d21; margin-bottom: 2px;">Welcome to Sldiaspora Member Portal</div>
+              <div style="font-size: 13px; color: #64748b;">Official Member Activation Notice</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 22px 24px 24px; line-height: 1.6;">
+          <p style="margin: 0 0 10px;">Hello <strong>${escapeHtml(fullName)}</strong>,</p>
+          <p style="margin: 0 0 16px;">${escapeHtml(verificationMessage)}</p>
+
+          <table style="width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 15px;">
+            <tr>
+              <td style="padding: 9px 0; font-weight: 600; color: #0f172a; width: 34%; border-bottom: 1px solid #eef3ef;">Full Name</td>
+              <td style="padding: 9px 0; color: #334155; border-bottom: 1px solid #eef3ef;">${escapeHtml(fullName)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 9px 0; font-weight: 600; color: #0f172a; border-bottom: 1px solid #eef3ef;">Email</td>
+              <td style="padding: 9px 0; color: #334155; border-bottom: 1px solid #eef3ef;">${escapeHtml(toEmail)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 9px 0; font-weight: 600; color: #0f172a; border-bottom: 1px solid #eef3ef;">Phone</td>
+              <td style="padding: 9px 0; color: #334155; border-bottom: 1px solid #eef3ef;">${escapeHtml(phone)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 9px 0; font-weight: 600; color: #0f172a;">Password</td>
+              <td style="padding: 9px 0; color: #334155;">•••••••• (hidden for security)</td>
+            </tr>
+          </table>
+
+          <div style="margin: 6px 0 16px; color: #475569; font-size: 14px;">
+            Use the password you created during registration to login.
+          </div>
+
+          <a href="${escapeHtml(loginUrl)}" style="display: inline-block; background: #006d21; color: #ffffff; text-decoration: none; padding: 11px 18px; border-radius: 8px; font-weight: 600;">Open Member Login</a>
+
+          <p style="margin: 14px 0 0; color: #64748b; font-size: 13px;">
+            If the button does not work, open this link:<br />
+            <a href="${escapeHtml(loginUrl)}" style="color: #0369a1; text-decoration: none;">${escapeHtml(loginUrl)}</a>
+          </p>
+        </div>
+      </div>
     </div>
   `;
 
   const emailSent = await sendHtmlEmail({
     to: toEmail,
-    subject: "Welcome to Diaspora Member Portal",
+    subject: "Welcome to SlDiaspora Member Portal",
     html,
   });
 
