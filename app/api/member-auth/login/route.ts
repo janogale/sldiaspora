@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getMemberByEmail,
   getDirectusErrorMessage,
+  maybeSendActivationWelcomeEmail,
 } from "@/lib/member-directus";
 import {
   memberSessionCookie,
@@ -58,6 +59,8 @@ export async function POST(request: Request) {
         { status: 403 }
       );
     }
+
+    await maybeSendActivationWelcomeEmail(member).catch(() => null);
 
     const memberId = String(member.id || "");
     const token = signMemberSession({
