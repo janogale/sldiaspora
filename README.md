@@ -133,3 +133,30 @@ Use a Directus Flow/Webhook on `members` update where status changes to `active`
 ### Security note
 
 For safety, passwords are not included in email. Members should use the password they created during registration.
+
+### SMTP / Gmail fallback (recommended)
+
+If Directus mail utility is unavailable, the app can send emails directly using SMTP.
+
+Option A: Generic SMTP
+
+```env
+SMTP_HOST=smtp.your-provider.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-user
+SMTP_PASS=your-password
+SMTP_FROM="Somaliland Diaspora <no-reply@sldiaspora.org>"
+```
+
+Option B: Gmail SMTP (App Password)
+
+```env
+GMAIL_USER=youraccount@gmail.com
+GMAIL_APP_PASSWORD=your_16_char_google_app_password
+```
+
+Notes:
+
+- Add these env vars in Vercel Production and redeploy.
+- For Gmail, enable 2-Step Verification and create an App Password.

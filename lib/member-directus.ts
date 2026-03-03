@@ -6,6 +6,88 @@ type DirectusResult<T> = {
   errors?: Array<{ message?: string }>;
 };
 
+const sendHtmlEmail = async (options: {
+  to: string;
+  subject: string;
+  html: string;
+}) => {
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = Number(process.env.SMTP_PORT || 587);
+  const smtpSecure = String(process.env.SMTP_SECURE || "false") === "true";
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpFrom = process.env.SMTP_FROM || smtpUser;
+
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+
+  const canUseSmtp = !!smtpHost && !!smtpUser && !!smtpPass && !!smtpFrom;
+  const canUseGmail = !!gmailUser && !!gmailAppPassword;
+
+  if (canUseSmtp || canUseGmail) {
+    try {
+      const nodemailer = await import("nodemailer");
+
+      const transport = canUseSmtp
+        ? {
+            host: smtpHost,
+            port: smtpPort,
+            secure: smtpSecure,
+            auth: {
+              user: smtpUser,
+              pass: smtpPass,
+            },
+          }
+        : {
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+              user: gmailUser,
+              pass: gmailAppPassword,
+            },
+          };
+
+      const fromAddress = canUseSmtp ? smtpFrom : gmailUser;
+
+      const transporter = nodemailer.createTransport(transport);
+      await transporter.sendMail({
+        from: fromAddress,
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+      });
+
+      return true;
+    } catch (error) {
+      console.error("smtp email send failed", error);
+    }
+  }
+
+  const candidatePaths = ["/utils/send/mail", "/utils/email/send"];
+  for (const path of candidatePaths) {
+    try {
+      const response = await directusFetch(path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: options.to,
+          subject: options.subject,
+          html: options.html,
+        }),
+      });
+
+      if (response.ok) return true;
+    } catch {
+      continue;
+    }
+  }
+
+  return false;
+};
+
 export const getDirectusAdminToken = () => {
   if (!DIRECTUS_ADMIN_TOKEN) {
     throw new Error("Missing DIRECTUS_ADMIN_TOKEN in environment.");
@@ -309,19 +391,11 @@ export const sendConnectionEmail = async (options: {
     </div>
   `;
 
-  const response = await directusFetch("/utils/send/mail", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      to: options.toEmail,
-      subject: "Somaliland Diaspora: New connection request",
-      html,
-    }),
+  return sendHtmlEmail({
+    to: options.toEmail,
+    subject: "Somaliland Diaspora: New connection request",
+    html,
   });
-
-  return response.ok;
 };
 
 const escapeHtml = (value: string) =>
@@ -373,13 +447,11 @@ export const maybeSendActivationWelcomeEmail = async (
   const trackingField =
     candidateTrackingFields.find((field) => allowedFields?.has(field)) || null;
 
-  if (!trackingField) {
-    return { sent: false, reason: "missing_tracking_field" as const };
-  }
-
-  const alreadySent = String(member[trackingField] || "").trim().length > 0;
-  if (alreadySent) {
-    return { sent: false, reason: "already_sent" as const };
+  if (trackingField) {
+    const alreadySent = String(member[trackingField] || "").trim().length > 0;
+    if (alreadySent) {
+      return { sent: false, reason: "already_sent" as const };
+    }
   }
 
   const loginUrl = `${resolveAppBaseUrl()}/member-login`;
@@ -415,28 +487,24 @@ export const maybeSendActivationWelcomeEmail = async (
     </div>
   `;
 
-  const response = await directusFetch("/utils/send/mail", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      to: toEmail,
-      subject: "Welcome to Diaspora Member Portal",
-      html,
-    }),
+  const emailSent = await sendHtmlEmail({
+    to: toEmail,
+    subject: "Welcome to Diaspora Member Portal",
+    html,
   });
 
-  if (!response.ok) {
+  if (!emailSent) {
     return { sent: false, reason: "mail_failed" as const };
   }
 
-  const markPayload = filterPayloadByFields(
-    { [trackingField]: new Date().toISOString() },
-    allowedFields
-  );
-  if (Object.keys(markPayload).length > 0) {
-    await updateMemberRecord(memberId, markPayload);
+  if (trackingField) {
+    const markPayload = filterPayloadByFields(
+      { [trackingField]: new Date().toISOString() },
+      allowedFields
+    );
+    if (Object.keys(markPayload).length > 0) {
+      await updateMemberRecord(memberId, markPayload);
+    }
   }
 
   return { sent: true as const, reason: "sent" as const };
