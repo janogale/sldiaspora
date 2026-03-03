@@ -40,6 +40,7 @@ export async function GET() {
           country_of_nationality: member.country_of_nationality || "",
           profession: member.profession || "",
           areas_of_interest: member.areas_of_interest || "",
+          additional_notes: member.additional_notes || "",
           profile_picture: member.profile_picture || null,
           status: member.status || "",
         },

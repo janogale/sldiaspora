@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await sendConnectionEmail({
+    const sent = await sendConnectionEmail({
       toEmail: targetEmail,
       toName: String(targetMember.full_name || "Member"),
       fromName: String(fromMember.full_name || "Member"),
@@ -82,13 +82,20 @@ export async function POST(request: Request) {
       message,
     });
 
+    if (!sent) {
+      return NextResponse.json(
+        { message: "Failed to send email notification." },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json(
-      { message: "Connection request sent successfully." },
+      { message: "Message sent successfully." },
       { status: 200 }
     );
   } catch {
     return NextResponse.json(
-      { message: "Failed to send connection request." },
+      { message: "Failed to send message." },
       { status: 500 }
     );
   }
