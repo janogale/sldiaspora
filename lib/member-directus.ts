@@ -360,13 +360,19 @@ export const sendConnectionEmail = async (options: {
   const contactLine =
     options.shareContact === "email" && options.sharedEmail
       ? `Shared email: ${escapeHtml(options.sharedEmail)}`
-      : options.shareContact === "phone" && options.sharedPhone
-      ? `Shared phone: ${escapeHtml(options.sharedPhone)}`
+      : options.shareContact === "phone"
+      ? "Phone sharing is enabled on the platform."
       : "No contact details shared yet. Reply through the platform.";
 
   const html = `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #f3f8f5; padding: 18px;">
-      <div style="max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #dfe9e3; border-radius: 12px; padding: 20px;">
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #eef7f1; padding: 20px;">
+      <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #dce9e2; border-radius: 14px; overflow: hidden;">
+      <div style="background: linear-gradient(135deg, #edf8f0 0%, #ffffff 100%); border-bottom: 1px solid #e5efe8; padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+        <img src="${escapeHtml(resolveAppBaseUrl())}/assets/imgs/logo/logo.png" alt="Somaliland Diaspora" width="34" height="34" style="border-radius: 6px; background: #ffffff; border: 1px solid #d8e7de;" />
+        <div style="font-size: 16px; font-weight: 700; color: #006d21;">Somaliland Diaspora Member Portal</div>
+      </div>
+
+      <div style="padding: 20px;">
       <h2 style="color: #006d21; margin: 0 0 12px;">Message from Sldiaspora Member</h2>
       <p style="margin: 0 0 12px;">Hello ${escapeHtml(options.toName || "Member")},</p>
       <p style="margin: 0 0 10px;"><strong>${escapeHtml(safeName)}</strong> sent you a connection request on the Sldiaspora Member Portal.</p>
@@ -376,10 +382,6 @@ export const sendConnectionEmail = async (options: {
         <tr>
           <td style="padding: 6px 0; font-weight: 600;">Email</td>
           <td style="padding: 6px 0;">${escapeHtml(safeEmail)}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; font-weight: 600;">Phone</td>
-          <td style="padding: 6px 0;">${escapeHtml(safeValue(options.fromPhone))}</td>
         </tr>
         <tr>
           <td style="padding: 6px 0; font-weight: 600;">Address</td>
@@ -401,6 +403,7 @@ export const sendConnectionEmail = async (options: {
       <p style="margin-top: 14px; color: #4b5563; font-size: 14px;">
         Sender location: ${escapeHtml(options.fromCity || "N/A")}, ${escapeHtml(options.fromCountry || "N/A")}
       </p>
+      </div>
       </div>
     </div>
   `;
