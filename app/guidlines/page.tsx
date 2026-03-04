@@ -23,6 +23,49 @@ function Page() {
 
   const data = [
     {
+      id: 7,
+      title: "Residence Visa",
+      desc: [
+        {
+          body: "Residence Visa for Somalilanders with Foreign Passports",
+        },
+        {
+          body: "Members of the Somaliland diaspora who return frequently or plan to stay in the country for employment or other purposes while using their foreign passports may apply for a residence visa through the Immigration Department.",
+        },
+        {
+          body: "A residence visa can be issued for either one year or three years. Applicants are required to pay the standard government fees of $82 for one year or $252 for three years at the Inland Revenue Office located within the Immigration Department compound.",
+        },
+        {
+          body: "This visa is particularly beneficial for diaspora members who travel in and out of Somaliland multiple times during the year, as holders of this residence visa are exempt from paying the $60 entry fee each time they enter the country.",
+        },
+      ],
+      items: [
+        {
+          title: "Application Requirements",
+          desc: "",
+        },
+        {
+          title: "A copy of your Somaliland National Identity Card",
+          desc: "",
+        },
+        {
+          title:
+            "A copy of your foreign passport (and present the original passport)",
+          desc: "",
+        },
+        {
+          title:
+            "A formal application letter addressed to the Immigration Department specifying the requested duration (one year or three years)",
+          desc: "",
+        },
+        {
+          title: "Processing Time",
+          desc: "The residence visa is typically issued within one to two working days.",
+        },
+      ],
+      image: "/Residence-img.jpeg",
+    },
+    {
       id: 5,
       title: "Passport Application",
       desc: [
@@ -297,7 +340,12 @@ function Page() {
                           alt={guide.title}
                           width={900}
                           height={500}
-                          style={{ width: "100%", height: "auto" }}
+                          style={{
+                            width: "100%",
+                            height: "auto",
+                            maxHeight: "420px",
+                            objectFit: "contain", 
+                          }}
                         />
                       </div>
                       <h2
