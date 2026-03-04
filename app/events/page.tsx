@@ -134,9 +134,6 @@ function Page() {
             data-wow-delay={event.delay}
           >
             <div className="visa-offer__item-thumb">
-              <div className="visa-offer__item-thumb-small-img">
-                <img src={event.smallImg} alt={event.title} />
-              </div>
               <img src={event.mainImg} alt={event.title} />
             </div>
             <div className="visa-offer__item-content">
