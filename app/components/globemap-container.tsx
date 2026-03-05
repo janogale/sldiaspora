@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { GlobeMarkerData } from "../types";
 
 const GlobeMap = dynamic(() => import("./Globe"), {
@@ -23,69 +23,158 @@ interface ApiLocation {
   } | null;
 }
 
+const countryCoordsCache = new Map<string, [number, number]>();
+
+const getCountryCoordinates = async (
+  country: string
+): Promise<[number, number] | null> => {
+  const key = country.trim().toLowerCase();
+  if (!key) return null;
+
+  if (countryCoordsCache.has(key)) {
+    return countryCoordsCache.get(key)!;
+  }
+
+  const fetchFromRestCountries = async (fullText: boolean) => {
+    const url = `https://restcountries.com/v3.1/name/${encodeURIComponent(
+      country
+    )}${fullText ? "?fullText=true" : ""}`;
+    const response = await fetch(url);
+    if (!response.ok) return null;
+
+    const result = (await response.json().catch(() => null)) as
+      | Array<{ latlng?: number[] }>
+      | null;
+
+    const latlng = result?.[0]?.latlng;
+    if (!latlng || latlng.length < 2) return null;
+
+    const [lat, lng] = latlng;
+    if (typeof lat !== "number" || typeof lng !== "number") return null;
+
+    return [lng, lat] as [number, number];
+  };
+
+  const coordinates =
+    (await fetchFromRestCountries(true)) ??
+    (await fetchFromRestCountries(false));
+
+  if (coordinates) {
+    countryCoordsCache.set(key, coordinates);
+  }
+
+  return coordinates;
+};
+
 const GlobeMapContainer = () => {
   const [locations, setLocations] = useState<GlobeMarkerData[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [stats, setStats] = useState({ totalCountries: 0, totalCities: 0 });
+  const [totalMembers, setTotalMembers] = useState(0);
 
   useEffect(() => {
-    fetch("https://sldp.duckdns.org/items/locations")
-      .then((res) => {
+    const loadMemberMap = async () => {
+      try {
+        const res = await fetch("/api/members-map");
         if (!res.ok) throw new Error(`API status: ${res.status}`);
-        return res.json();
-      })
-      .then((data: { data: ApiLocation[] }) => {
-        const rawLocations = data.data || [];
-        const countryMap = new Map<string, { count: number; latSum: number; lngSum: number; name: string }>();
+
+        const data = (await res.json().catch(() => null)) as {
+          data?: ApiLocation[];
+        } | null;
+
+        const rawMembers = data?.data || [];
+        setTotalMembers(rawMembers.length);
+
+        const countryMap = new Map<
+          string,
+          { count: number; latSum: number; lngSum: number; name: string }
+        >();
 
         const uniqueCountries = new Set<string>();
         const uniqueCities = new Set<string>();
 
-        rawLocations.forEach((loc) => {
-          const country = loc.country || "Unknown Region";
+        const countryCoordMap = new Map<string, [number, number]>();
+        await Promise.all(
+          Array.from(
+            new Set(
+              rawMembers
+                .map((member) => member.country?.trim())
+                .filter((country): country is string => Boolean(country))
+            )
+          ).map(async (country) => {
+            const coordinates = await getCountryCoordinates(country);
+            if (coordinates) {
+              countryCoordMap.set(country, coordinates);
+            }
+          })
+        );
+
+        rawMembers.forEach((member) => {
+          const country = member.country?.trim() || "Unknown Region";
           uniqueCountries.add(country);
-          if (loc.city?.trim()) {
-            uniqueCities.add(`${country}::${loc.city.trim().toLowerCase()}`);
+
+          if (member.city?.trim()) {
+            uniqueCities.add(`${country}::${member.city.trim().toLowerCase()}`);
           }
 
-          const mapData = loc.map;
-          if (!mapData?.coordinates || mapData.coordinates.length < 2) return;
+          const memberCoords = member.map?.coordinates;
+          const fallbackCoords = countryCoordMap.get(country);
 
-          const [lng, lat] = mapData.coordinates;
+          const coordinates =
+            memberCoords && memberCoords.length >= 2 ? memberCoords : fallbackCoords;
+
+          if (!coordinates) return;
+
+          const [lng, lat] = coordinates;
+          if (typeof lng !== "number" || typeof lat !== "number") return;
+
           if (!countryMap.has(country)) {
-            countryMap.set(country, { count: 0, latSum: 0, lngSum: 0, name: country });
+            countryMap.set(country, {
+              count: 0,
+              latSum: 0,
+              lngSum: 0,
+              name: country,
+            });
           }
+
           const entry = countryMap.get(country)!;
           entry.count += 1;
           entry.latSum += lat;
           entry.lngSum += lng;
         });
 
-        const mappedData: GlobeMarkerData[] = Array.from(countryMap.values()).map((entry, index) => ({
-          id: `country-${index}`,
-          name: entry.name,
-          code: `${entry.count.toLocaleString()} Member${entry.count !== 1 ? "s" : ""}`,
-          lat: entry.latSum / entry.count,
-          lng: entry.lngSum / entry.count,
-          type: "Country Group",
-          status: "online",
-          size: Math.max(1.2, Math.log(entry.count) * 1.5),
-          color: "#00E676",
-          count: entry.count,
-        }));
+        const mappedData: GlobeMarkerData[] = Array.from(countryMap.values()).map(
+          (entry, index) => ({
+            id: `country-${index}`,
+            name: entry.name,
+            code: `${entry.count.toLocaleString()} Member${
+              entry.count !== 1 ? "s" : ""
+            }`,
+            lat: entry.latSum / entry.count,
+            lng: entry.lngSum / entry.count,
+            type: "Country Group",
+            status: "online",
+            size: Math.max(1.2, Math.log(entry.count) * 1.5),
+            color: "#00E676",
+            count: entry.count,
+          })
+        );
 
         setLocations(mappedData);
         setStats({
           totalCountries: uniqueCountries.size,
           totalCities: uniqueCities.size,
         });
-      })
-      .catch((err) => {
-        setErrorMsg(err.message || "Failed to load data");
-      });
-  }, []);
+        setErrorMsg(null);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to load member data";
+        setErrorMsg(message);
+      }
+    };
 
-  const totalMembers = useMemo(() => locations.reduce((sum, loc) => sum + (loc.count ?? 0), 0), [locations]);
+    loadMemberMap();
+  }, []);
 
   return (
     <section className="globe-section container-fluid px-3 py-4">
