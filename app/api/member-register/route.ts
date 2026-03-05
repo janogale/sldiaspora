@@ -6,6 +6,7 @@ import {
   getMemberCollectionFields,
   getMemberByEmail,
   uploadDirectusFile,
+  validateSharedCode,
 } from "@/lib/member-directus";
 import { hashMemberPassword } from "@/lib/member-auth";
 
@@ -88,6 +89,19 @@ export async function POST(request: Request) {
         { message: "Please upload National ID photo or enter shared code." },
         { status: 400 }
       );
+    }
+
+    if (nationalIdCode) {
+      const isValidSharedCode = await validateSharedCode(nationalIdCode);
+      if (!isValidSharedCode) {
+        return NextResponse.json(
+          {
+            message:
+              "Invalid shared code. Please use 'Click here to get code' and select a valid code from the official list.",
+          },
+          { status: 400 }
+        );
+      }
     }
 
     if (!secondaryDocument) {

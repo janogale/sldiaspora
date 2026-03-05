@@ -12,7 +12,6 @@ type RegisterFormState = {
   address: string;
   city: string;
   country: string;
-  selectedCountryCode: string;
   nationalIdCode: string;
   secondaryDocumentType: SecondaryDocumentType;
   password: string;
@@ -27,7 +26,6 @@ const defaultFormState: RegisterFormState = {
   address: "",
   city: "",
   country: "",
-  selectedCountryCode: "+252",
   nationalIdCode: "",
   secondaryDocumentType: "",
   password: "",
@@ -35,42 +33,14 @@ const defaultFormState: RegisterFormState = {
   additionalNotes: "",
 };
 
-const COUNTRY_PHONE_CODES = [
-  { country: "Somaliland / Somalia", code: "+252" },
-  { country: "Kenya", code: "+254" },
-  { country: "Ethiopia", code: "+251" },
-  { country: "Djibouti", code: "+253" },
-  { country: "Uganda", code: "+256" },
-  { country: "Tanzania", code: "+255" },
-  { country: "Rwanda", code: "+250" },
-  { country: "South Africa", code: "+27" },
-  { country: "Egypt", code: "+20" },
-  { country: "Saudi Arabia", code: "+966" },
-  { country: "United Arab Emirates", code: "+971" },
-  { country: "Qatar", code: "+974" },
-  { country: "Türkiye", code: "+90" },
-  { country: "India", code: "+91" },
-  { country: "Pakistan", code: "+92" },
-  { country: "Malaysia", code: "+60" },
-  { country: "Australia", code: "+61" },
-  { country: "Germany", code: "+49" },
-  { country: "France", code: "+33" },
-  { country: "Italy", code: "+39" },
-  { country: "Netherlands", code: "+31" },
-  { country: "Sweden", code: "+46" },
-  { country: "Norway", code: "+47" },
-  { country: "United Kingdom", code: "+44" },
-  { country: "Ireland", code: "+353" },
-  { country: "United States", code: "+1" },
-  { country: "Canada", code: "+1" },
-  { country: "Mexico", code: "+52" },
-  { country: "Brazil", code: "+55" },
-  { country: "South Korea", code: "+82" },
-  { country: "Japan", code: "+81" },
-  { country: "China", code: "+86" },
-];
+type SharedCodeOption = {
+  code: string;
+  label: string;
+};
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
+const SHARED_CODES_WEB_EXCEL_PATH =
+  "/doc/Contact%20Directory%20of%20Somaliland%20Diaspora%20Community%20Associations.xlsx";
 
 function MemberRegistrationModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,6 +50,8 @@ function MemberRegistrationModal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
   const [idMethod, setIdMethod] = useState<IdVerificationMethod>("");
+  const [sharedCodes, setSharedCodes] = useState<SharedCodeOption[]>([]);
+  const [isLoadingCodes, setIsLoadingCodes] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
@@ -96,9 +68,15 @@ function MemberRegistrationModal() {
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
+  const isSelectedCodeValid = useMemo(() => {
+    const value = formState.nationalIdCode.trim();
+    if (!value) return false;
+    return sharedCodes.some((item) => item.code === value);
+  }, [formState.nationalIdCode, sharedCodes]);
+
   const hasValidIdMethod =
     (idMethod === "national_id" && !!nationalIdPhoto) ||
-    (idMethod === "code" && formState.nationalIdCode.trim().length > 0);
+    (idMethod === "code" && isSelectedCodeValid);
 
   const hasSecondaryDoc =
     !!secondaryDocument &&
@@ -109,6 +87,31 @@ function MemberRegistrationModal() {
     return hasRequiredBasics && hasValidIdMethod && hasSecondaryDoc && passwordsMatch;
   }, [hasRequiredBasics, hasValidIdMethod, hasSecondaryDoc, passwordsMatch]);
 
+  const loadSharedCodes = async () => {
+    setIsLoadingCodes(true);
+    try {
+      const response = await fetch("/api/shared-codes", { method: "GET" });
+      const result = (await response.json().catch(() => null)) as {
+        data?: SharedCodeOption[];
+        message?: string;
+      } | null;
+
+      if (!response.ok) {
+        setSharedCodes([]);
+        if (result?.message) setErrorMessage(result.message);
+        return;
+      }
+
+      const items = Array.isArray(result?.data) ? result!.data : [];
+      setSharedCodes(items);
+    } catch {
+      setSharedCodes([]);
+      setErrorMessage("Unable to load shared codes right now.");
+    } finally {
+      setIsLoadingCodes(false);
+    }
+  };
+
   const openModal = () => {
     setErrorMessage("");
     setCurrentStep(1);
@@ -117,6 +120,11 @@ function MemberRegistrationModal() {
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const openCodesExcel = () => {
+    if (typeof window === "undefined") return;
+    window.open(SHARED_CODES_WEB_EXCEL_PATH, "_blank", "noopener,noreferrer");
   };
 
   useEffect(() => {
@@ -155,6 +163,14 @@ function MemberRegistrationModal() {
       document.removeEventListener("keydown", onEsc);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (idMethod !== "code") return;
+    if (sharedCodes.length > 0 || isLoadingCodes) return;
+
+    loadSharedCodes();
+  }, [idMethod, isOpen, sharedCodes.length, isLoadingCodes]);
 
   const handleChange = (key: keyof RegisterFormState, value: string) => {
     setFormState((prev) => ({ ...prev, [key]: value }));
@@ -197,15 +213,6 @@ function MemberRegistrationModal() {
     setCurrentStep((prev) => (prev === 1 ? prev : ((prev - 1) as 1 | 2 | 3)));
   };
 
-  const copySelectedCode = async () => {
-    try {
-      await navigator.clipboard.writeText(formState.selectedCountryCode);
-      setErrorMessage(`Copied ${formState.selectedCountryCode}. Now enter your code below.`);
-    } catch {
-      setErrorMessage("Could not copy automatically. Please copy the selected code manually.");
-    }
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -233,10 +240,7 @@ function MemberRegistrationModal() {
       payload.append("areasOfInterest", "");
       payload.append("shareContactPreference", "none");
 
-      const finalCode =
-        idMethod === "code"
-          ? `${formState.selectedCountryCode} ${formState.nationalIdCode.trim()}`.trim()
-          : "";
+      const finalCode = idMethod === "code" ? formState.nationalIdCode.trim() : "";
       payload.append("nationalIdCode", finalCode);
       payload.append("secondaryDocumentType", formState.secondaryDocumentType);
       payload.append("additionalNotes", formState.additionalNotes.trim());
@@ -482,15 +486,58 @@ function MemberRegistrationModal() {
                       />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Enter Code (Country Code + Your Code)</label>
+                      <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "8px" }}>
+                        Enter Code *
+                        <button
+                          type="button"
+                          onClick={openCodesExcel}
+                          style={{
+                            width: "26px",
+                            height: "26px",
+                            borderRadius: "999px",
+                            border: "1px solid #006d21",
+                            background: "#ffffff",
+                            color: "#006d21",
+                            fontWeight: 800,
+                            fontSize: "1rem",
+                            lineHeight: 1,
+                            cursor: "pointer",
+                          }}
+                          aria-label="Click here to get code"
+                          title="Click here to get code"
+                        >
+                          ?
+                        </button>
+                        <button
+                          type="button"
+                          onClick={openCodesExcel}
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            color: "#006d21",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                            fontWeight: 600,
+                            fontSize: "1.05rem",
+                          }}
+                        >
+                          Click here to get code
+                        </button>
+                      </label>
                       <input
                         className="form-control"
                         style={inputStyle}
                         value={formState.nationalIdCode}
                         disabled={idMethod !== "code"}
                         onChange={(e) => handleChange("nationalIdCode", e.target.value)}
-                        placeholder="Enter your code"
+                        placeholder="Select code from list"
+                        readOnly={idMethod === "code"}
                       />
+                      {idMethod === "code" && !isSelectedCodeValid && formState.nationalIdCode.trim() && (
+                        <small style={{ color: "#b91c1c", fontSize: "1.05rem" }}>
+                          Please choose a valid code from the list.
+                        </small>
+                      )}
                     </div>
                   </div>
 
@@ -504,26 +551,29 @@ function MemberRegistrationModal() {
                         marginBottom: "20px",
                       }}
                     >
-                      <label style={labelStyle}>Select Country Code (view all listed codes and copy one)</label>
+                      <label style={labelStyle}>Choose official code from list</label>
                       <div className="row g-2">
-                        <div className="col-md-8">
+                        <div className="col-md-9">
                           <select
                             className="form-control"
                             style={inputStyle}
-                            value={formState.selectedCountryCode}
-                            onChange={(e) => handleChange("selectedCountryCode", e.target.value)}
+                            value={formState.nationalIdCode}
+                            onChange={(e) => handleChange("nationalIdCode", e.target.value)}
                           >
-                            {COUNTRY_PHONE_CODES.map((item) => (
-                              <option key={`${item.country}-${item.code}`} value={item.code}>
-                                {item.country} ({item.code})
+                            <option value="">
+                              {isLoadingCodes ? "Loading codes..." : "Select a valid code"}
+                            </option>
+                            {sharedCodes.map((item) => (
+                              <option key={item.code} value={item.code}>
+                                {item.label}
                               </option>
                             ))}
                           </select>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-md-3">
                           <button
                             type="button"
-                            onClick={copySelectedCode}
+                            onClick={loadSharedCodes}
                             style={{
                               width: "100%",
                               minHeight: "64px",
@@ -536,10 +586,13 @@ function MemberRegistrationModal() {
                               cursor: "pointer",
                             }}
                           >
-                            Copy Code
+                            Refresh
                           </button>
                         </div>
                       </div>
+                      <small style={{ color: "#475569", fontSize: "1rem", display: "block", marginTop: "8px" }}>
+                        Only official listed codes are accepted. Sample or manual codes are blocked.
+                      </small>
                     </div>
                   )}
 
