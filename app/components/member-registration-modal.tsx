@@ -48,6 +48,7 @@ function MemberRegistrationModal() {
   const [modalView, setModalView] = useState<"choice" | "register">("choice");
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showCodeHelp, setShowCodeHelp] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
@@ -124,6 +125,7 @@ function MemberRegistrationModal() {
   const closeModal = () => {
     setIsOpen(false);
     setModalView("choice");
+    setShowCodeHelp(false);
   };
 
   const openRegisterFlow = () => {
@@ -165,6 +167,7 @@ function MemberRegistrationModal() {
       if (event.key === "Escape") {
         setIsOpen(false);
         setShowSuccess(false);
+        setShowCodeHelp(false);
       }
     };
 
@@ -651,6 +654,24 @@ function MemberRegistrationModal() {
                         >
                           Click here to get code
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowCodeHelp(true)}
+                          style={{
+                            border: "1px solid #006d21",
+                            background: "#f0fbf4",
+                            color: "#006d21",
+                            borderRadius: "999px",
+                            padding: "4px 10px",
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            fontSize: "0.98rem",
+                          }}
+                          aria-label="Read code help"
+                          title="Read code help"
+                        >
+                          Help / Read
+                        </button>
                       </label>
                       <input
                         className="form-control"
@@ -873,6 +894,90 @@ function MemberRegistrationModal() {
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {showCodeHelp && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.35)",
+            zIndex: 10001,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "16px",
+          }}
+          onClick={() => setShowCodeHelp(false)}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "580px",
+              background: "#ffffff",
+              borderRadius: "16px",
+              border: "1px solid #d4e4da",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
+              overflow: "hidden",
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div
+              style={{
+                padding: "16px 20px",
+                background: "linear-gradient(130deg, #edf8f1 0%, #ffffff 100%)",
+                borderBottom: "1px solid #e3eee7",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "12px",
+              }}
+            >
+              <h4 style={{ margin: 0, color: "#0f5132", fontSize: "1.35rem", fontWeight: 800 }}>
+                Code Verification Help
+              </h4>
+              <button
+                type="button"
+                onClick={() => setShowCodeHelp(false)}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: "#6b7280",
+                  fontSize: "1.6rem",
+                  lineHeight: 1,
+                  cursor: "pointer",
+                }}
+                aria-label="Close help modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: "20px" }}>
+              <p style={{ margin: 0, color: "#334155", fontSize: "1.12rem", lineHeight: 1.75 }}>
+                If you don&apos;t have Somaliland national ID, please contact your local Somaliland diaspora association to verify your nationality and provide you with a verification code.
+              </p>
+
+              <div style={{ marginTop: "16px", textAlign: "right" }}>
+                <button
+                  type="button"
+                  onClick={() => setShowCodeHelp(false)}
+                  style={{
+                    border: "none",
+                    background: "#006d21",
+                    color: "#ffffff",
+                    borderRadius: "10px",
+                    padding: "10px 16px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  I Understand
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
