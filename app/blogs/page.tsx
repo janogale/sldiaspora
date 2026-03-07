@@ -40,6 +40,10 @@ const cardBodyStyle = {
   padding: "20px 20px 24px",
 } as const;
 
+const newsSectionStyle = {
+  paddingTop: "18px",
+} as const;
+
 function getFirstContentLink(input: string): string | null {
   const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
   const href = match?.[1]?.trim();
@@ -65,7 +69,7 @@ export default async function Page() {
       <Header />
       <BreadCamp title="News" />
 
-      <section className="blog__area section-space">
+      <section className="blog__area section-space" style={newsSectionStyle}>
         <div className="container">
           <div className="row">
             <div className="col-12">
