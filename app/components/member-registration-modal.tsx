@@ -658,19 +658,20 @@ function MemberRegistrationModal() {
                           type="button"
                           onClick={() => setShowCodeHelp(true)}
                           style={{
-                            border: "1px solid #006d21",
-                            background: "#f0fbf4",
+                            border: "none",
+                            background: "transparent",
                             color: "#006d21",
-                            borderRadius: "999px",
-                            padding: "4px 10px",
+                            textDecoration: "underline",
                             cursor: "pointer",
                             fontWeight: 700,
-                            fontSize: "0.98rem",
+                            fontSize: "1.02rem",
+                            padding: 0,
+                            marginLeft: "auto",
                           }}
-                          aria-label="Read code help"
-                          title="Read code help"
+                          aria-label="Read about verification code"
+                          title="Read about verification code"
                         >
-                          Help / Read
+                          Read About Code
                         </button>
                       </label>
                       <input
@@ -936,7 +937,7 @@ function MemberRegistrationModal() {
               }}
             >
               <h4 style={{ margin: 0, color: "#0f5132", fontSize: "1.35rem", fontWeight: 800 }}>
-                Code Verification Help
+                About Verification Code
               </h4>
               <button
                 type="button"
