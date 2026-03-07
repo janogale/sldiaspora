@@ -40,8 +40,7 @@ type SharedCodeOption = {
 };
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
-const SHARED_CODES_WEB_EXCEL_PATH =
-  "/doc/Contact%20Directory%20of%20Somaliland%20Diaspora%20Community%20Associations.xlsx";
+const SHARED_CODES_WEB_EXCEL_PATH = "/api/shared-codes-webexcel";
 
 function MemberRegistrationModal() {
   const router = useRouter();

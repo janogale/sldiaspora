@@ -36,7 +36,6 @@ export async function GET() {
         return `
           <tr>
             <td>${index + 1}</td>
-            <td>${escapeHtml(item.code)}</td>
             <td>${escapeHtml(parsed.country)}</td>
             <td>${escapeHtml(parsed.association)}</td>
             <td>${escapeHtml(parsed.contact)}</td>
@@ -68,14 +67,13 @@ export async function GET() {
   <div class="wrap">
     <div class="head">
       <h1>Contact Directory of Somaliland Diaspora Community Associations</h1>
-      <p>Choose a valid code from this list and paste/select it in registration. Manual sample codes are blocked.</p>
+      <p>Association directory view. Code values are hidden in this public list.</p>
     </div>
     ${codes.length > 0
       ? `<table>
           <thead>
             <tr>
               <th>#</th>
-              <th>Code</th>
               <th>Country</th>
               <th>Association</th>
               <th>Contact Person</th>
