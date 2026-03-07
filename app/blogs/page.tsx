@@ -1,23 +1,34 @@
-import Link from "next/link";
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import { getArticles, getAssetUrl } from "@/lib/articles";
 
 export const dynamic = "force-dynamic";
 
-function stripHtml(input: string): string {
-  return input.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-}
+const articleTitleStyle = {
+  color: "#0a6d3a",
+  fontWeight: 600,
+  fontSize: "2.7rem",
+  lineHeight: 1.35,
+  letterSpacing: "0.01em",
+  textWrap: "balance",
+  fontFamily: '"Sora", "Manrope", "Segoe UI", sans-serif',
+  marginBottom: "18px",
+} as const;
 
-function formatDate(value: string | null): string {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-GB", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+function getFirstContentLink(input: string): string | null {
+  const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
+  const href = match?.[1]?.trim();
+  if (!href) return null;
+
+  if (
+    href.startsWith("http://") ||
+    href.startsWith("https://") ||
+    href.startsWith("/")
+  ) {
+    return href;
+  }
+
+  return null;
 }
 
 export default async function Page() {
@@ -27,7 +38,7 @@ export default async function Page() {
     <div>
       <div style={{ margin: "2rem" }}></div>
       <Header />
-      <BreadCamp title="News & Development" />
+      <BreadCamp title="News" />
 
       <section className="blog__area section-space">
         <div className="container">
@@ -37,10 +48,10 @@ export default async function Page() {
                 <p>No articles available yet.</p>
               ) : (
                 articles.map((article) => {
-                  const excerpt = stripHtml(article.content).slice(0, 280);
                   const imageUrl = article.featuredImage
                     ? getAssetUrl(article.featuredImage)
                     : "/assets/imgs/blog/blog-1img.png";
+                  const contentLink = getFirstContentLink(article.content);
 
                   return (
                     <div className="blog__content mb-80" key={article.id}>
@@ -48,23 +59,15 @@ export default async function Page() {
                         <img src={imageUrl} alt={article.title} />
                       </div>
 
-                      <ul className="blog__content-meta mt-20 d-flex">
-                        <li>
-                          <Link href={`/blogs/${article.id}`}>By Admin</Link>
-                        </li>
-                        <li>
-                          <span>{formatDate(article.dateCreated)}</span>
-                        </li>
-                      </ul>
-
                       <div className="blog__content-text mt-20">
-                        <h2 className="blog__content-text-title">
-                          <Link href={`/blogs/${article.id}`}>{article.title}</Link>
+                        <h2 className="blog__content-text-title" style={articleTitleStyle}>
+                          {article.title}
                         </h2>
-                        <p>{excerpt}{excerpt.length >= 280 ? "..." : ""}</p>
-                        <Link href={`/blogs/${article.id}`} className="rr-btn mt-40">
-                          Learn More
-                        </Link>
+                        {contentLink ? (
+                          <a href={contentLink} className="rr-btn mt-40">
+                            Read More
+                          </a>
+                        ) : null}
                       </div>
                     </div>
                   );
