@@ -48,7 +48,7 @@ export default function MemberLoginPage() {
   return (
     <main className={styles.loginPage}>
       <section className={styles.loginSection}>
-        <div className="container">
+        <div className={`container ${styles.loginContainer}`}>
           <div className={styles.backButtonWrap}>
             <Link href="/" className={styles.backButton}>
               <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
@@ -58,6 +58,7 @@ export default function MemberLoginPage() {
 
           <div className={styles.loginShell}>
             <div className={styles.brandPanel}>
+              <p className={styles.kicker}>Somaliland Diaspora Department</p>
               <div className={styles.logoWrap}>
                 <Image
                   src="/assets/imgs/logo/logo.png"
@@ -73,6 +74,11 @@ export default function MemberLoginPage() {
               <p className={styles.brandSubtitle}>
                 Securely access your profile, member dashboard, and diaspora services in one place.
               </p>
+
+              <div className={styles.liveBadge}>
+                <span className={styles.liveDot} aria-hidden="true"></span>
+                Member Services Online
+              </div>
 
               <ul className={styles.brandList}>
                 <li>
@@ -105,6 +111,11 @@ export default function MemberLoginPage() {
               <p className={styles.subtitle}>
                 Sign in to your member account to access your dashboard and diaspora services.
               </p>
+
+              <div className={styles.securityNote}>
+                <i className="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                Secured member authentication
+              </div>
 
               <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.fieldGroup}>

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type SecondaryDocumentType = "passport" | "driving_license" | "";
 type IdVerificationMethod = "national_id" | "code" | "";
@@ -43,7 +44,9 @@ const SHARED_CODES_WEB_EXCEL_PATH =
   "/doc/Contact%20Directory%20of%20Somaliland%20Diaspora%20Community%20Associations.xlsx";
 
 function MemberRegistrationModal() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [modalView, setModalView] = useState<"choice" | "register">("choice");
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -114,12 +117,25 @@ function MemberRegistrationModal() {
 
   const openModal = () => {
     setErrorMessage("");
+    setModalView("choice");
     setCurrentStep(1);
     setIsOpen(true);
   };
 
   const closeModal = () => {
     setIsOpen(false);
+    setModalView("choice");
+  };
+
+  const openRegisterFlow = () => {
+    setErrorMessage("");
+    setModalView("register");
+    setCurrentStep(1);
+  };
+
+  const goToMemberLogin = () => {
+    closeModal();
+    router.push("/member-login");
   };
 
   const openCodesExcel = () => {
@@ -313,6 +329,21 @@ function MemberRegistrationModal() {
     fontSize: "2.1rem",
   } as const;
 
+  const modalGradientHeader = {
+    padding: "28px",
+    borderBottom: "1px solid #d7e8de",
+    background:
+      "radial-gradient(circle at 8% 0%, rgba(0,109,33,0.2) 0%, rgba(255,255,255,1) 36%), linear-gradient(125deg, #e9f8ef 0%, #ffffff 60%)",
+  } as const;
+
+  const choiceCardBaseStyle = {
+    border: "1.5px solid #d4e4da",
+    borderRadius: "18px",
+    padding: "22px",
+    background: "#ffffff",
+    boxShadow: "0 12px 30px rgba(9, 54, 26, 0.08)",
+  } as const;
+
   return (
     <>
       {isOpen && (
@@ -343,13 +374,7 @@ function MemberRegistrationModal() {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <div
-              style={{
-                padding: "28px",
-                borderBottom: "1px solid #e0ebe5",
-                background: "linear-gradient(135deg, #f0f9f4 0%, #ffffff 100%)",
-              }}
-            >
+            <div style={modalGradientHeader}>
               <div
                 style={{
                   display: "flex",
@@ -359,11 +384,13 @@ function MemberRegistrationModal() {
                 }}
               >
                 <div>
-                  <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem" }}>
-                    Member Registration
+                  <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem", lineHeight: 1.1 }}>
+                    {modalView === "choice" ? "Welcome, Member" : "Become a Member"}
                   </h3>
                   <p style={{ margin: 0, color: "#5a6b76", fontSize: "1.3rem", lineHeight: "1.6" }}>
-                    Step {currentStep} of 3. Default status is <strong>pending</strong>. Login is enabled after admin approval.
+                    {modalView === "choice"
+                      ? "Choose how you want to continue. Sign in if you already have an account, or start your membership registration."
+                      : `Step ${currentStep} of 3. Default status is pending. Login is enabled after admin approval.`}
                   </p>
                 </div>
                 <button
@@ -383,29 +410,131 @@ function MemberRegistrationModal() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ padding: "28px" }}>
-              <div style={{ display: "flex", gap: "12px", marginBottom: "22px", flexWrap: "wrap" }}>
-                {[1, 2, 3].map((step) => (
-                  <div
-                    key={step}
-                    style={{
-                      border: `1.5px solid ${currentStep === step ? "#006d21" : "#d4e4da"}`,
-                      background: currentStep === step ? "#ecfdf3" : "#ffffff",
-                      color: currentStep === step ? "#065f46" : "#5a6b76",
-                      borderRadius: "999px",
-                      padding: "10px 16px",
-                      fontWeight: 700,
-                      fontSize: "1.2rem",
-                    }}
-                  >
-                    {step === 1 && "1. Information"}
-                    {step === 2 && "2. Identification"}
-                    {step === 3 && "3. Password & Message"}
+            {modalView === "choice" && (
+              <div style={{ padding: "28px" }}>
+                <div
+                  style={{
+                    borderRadius: "20px",
+                    border: "1px solid #d9e9df",
+                    background:
+                      "linear-gradient(155deg, rgba(241,250,245,1) 0%, rgba(255,255,255,1) 55%, rgba(238,248,242,1) 100%)",
+                    padding: "24px",
+                  }}
+                >
+                  <div className="row g-3">
+                    <div className="col-lg-6">
+                      <div style={choiceCardBaseStyle}>
+                        <div
+                          style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "999px",
+                            background: "#eefbf2",
+                            color: "#006d21",
+                            display: "grid",
+                            placeItems: "center",
+                            fontWeight: 800,
+                            marginBottom: "12px",
+                          }}
+                        >
+                          01
+                        </div>
+                        <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "1.6rem", fontWeight: 800 }}>
+                          Sign In
+                        </h4>
+                        <p style={{ margin: "0 0 16px 0", color: "#475569", fontSize: "1.12rem", lineHeight: 1.6 }}>
+                          Already registered and approved? Go directly to member login.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={goToMemberLogin}
+                          style={{
+                            width: "100%",
+                            border: "none",
+                            background: "linear-gradient(135deg, #006d21 0%, #0a8f3d 100%)",
+                            color: "#ffffff",
+                            borderRadius: "12px",
+                            minHeight: "52px",
+                            fontWeight: 700,
+                            fontSize: "1.15rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Open Member Login
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-lg-6">
+                      <div style={choiceCardBaseStyle}>
+                        <div
+                          style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "999px",
+                            background: "#fff5ea",
+                            color: "#9a3412",
+                            display: "grid",
+                            placeItems: "center",
+                            fontWeight: 800,
+                            marginBottom: "12px",
+                          }}
+                        >
+                          02
+                        </div>
+                        <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "1.6rem", fontWeight: 800 }}>
+                          Become a Member
+                        </h4>
+                        <p style={{ margin: "0 0 16px 0", color: "#475569", fontSize: "1.12rem", lineHeight: 1.6 }}>
+                          New member? Complete your profile and identification in the registration form.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={openRegisterFlow}
+                          style={{
+                            width: "100%",
+                            border: "1px solid #006d21",
+                            background: "#ffffff",
+                            color: "#006d21",
+                            borderRadius: "12px",
+                            minHeight: "52px",
+                            fontWeight: 700,
+                            fontSize: "1.15rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Start Membership Form
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
+            )}
 
-              {currentStep === 1 && (
+            {modalView === "register" && (
+              <form onSubmit={handleSubmit} style={{ padding: "28px" }}>
+                <div style={{ display: "flex", gap: "12px", marginBottom: "22px", flexWrap: "wrap" }}>
+                  {[1, 2, 3].map((step) => (
+                    <div
+                      key={step}
+                      style={{
+                        border: `1.5px solid ${currentStep === step ? "#006d21" : "#d4e4da"}`,
+                        background: currentStep === step ? "#ecfdf3" : "#ffffff",
+                        color: currentStep === step ? "#065f46" : "#5a6b76",
+                        borderRadius: "999px",
+                        padding: "10px 16px",
+                        fontWeight: 700,
+                        fontSize: "1.2rem",
+                      }}
+                    >
+                      {step === 1 && "1. Information"}
+                      {step === 2 && "2. Identification"}
+                      {step === 3 && "3. Password & Message"}
+                    </div>
+                  ))}
+                </div>
+
+                {currentStep === 1 && (
                 <div style={sectionCardStyle}>
                   <div style={stepTitleStyle}>First Information Section</div>
                   <div className="row g-3">
@@ -439,9 +568,9 @@ function MemberRegistrationModal() {
                     </div>
                   </div>
                 </div>
-              )}
+                )}
 
-              {currentStep === 2 && (
+                {currentStep === 2 && (
                 <div style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Second Identification Section</div>
 
@@ -653,9 +782,9 @@ function MemberRegistrationModal() {
                     </div>
                   </div>
                 </div>
-              )}
+                )}
 
-              {currentStep === 3 && (
+                {currentStep === 3 && (
                 <div style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Third Password & Message Section</div>
                   <div className="row g-3">
@@ -684,66 +813,67 @@ function MemberRegistrationModal() {
                     </div>
                   </div>
                 </div>
-              )}
+                )}
 
-              {errorMessage && (
+                {errorMessage && (
                 <div style={{ marginTop: "16px", borderRadius: "12px", border: "1px solid #f5d5d5", background: "#fef2f2", color: "#991b1b", padding: "12px 14px", fontSize: "1.2rem" }}>
                   ⚠️ {errorMessage}
                 </div>
-              )}
+                )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
-                <button type="button" onClick={closeModal} style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "12px", padding: "12px 20px", fontWeight: 600, cursor: "pointer", fontSize: "1.2rem" }}>
-                  Cancel
-                </button>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
+                  <button type="button" onClick={closeModal} style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "12px", padding: "12px 20px", fontWeight: 600, cursor: "pointer", fontSize: "1.2rem" }}>
+                    Cancel
+                  </button>
 
-                <div style={{ display: "flex", gap: "10px" }}>
-                  {currentStep > 1 && (
-                    <button
-                      type="button"
-                      onClick={goPrevStep}
-                      style={{
-                        border: "1.5px solid #d4e4da",
-                        background: "#ffffff",
-                        color: "#1f2937",
-                        borderRadius: "12px",
-                        padding: "12px 20px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        fontSize: "1.2rem",
-                      }}
-                    >
-                      Back
-                    </button>
-                  )}
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    {currentStep > 1 && (
+                      <button
+                        type="button"
+                        onClick={goPrevStep}
+                        style={{
+                          border: "1.5px solid #d4e4da",
+                          background: "#ffffff",
+                          color: "#1f2937",
+                          borderRadius: "12px",
+                          padding: "12px 20px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          fontSize: "1.2rem",
+                        }}
+                      >
+                        Back
+                      </button>
+                    )}
 
-                  {currentStep < 3 && (
-                    <button
-                      type="button"
-                      onClick={goNextStep}
-                      style={{
-                        border: "none",
-                        background: "#006d21",
-                        color: "#ffffff",
-                        borderRadius: "12px",
-                        padding: "12px 22px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        fontSize: "1.2rem",
-                      }}
-                    >
-                      Continue
-                    </button>
-                  )}
+                    {currentStep < 3 && (
+                      <button
+                        type="button"
+                        onClick={goNextStep}
+                        style={{
+                          border: "none",
+                          background: "#006d21",
+                          color: "#ffffff",
+                          borderRadius: "12px",
+                          padding: "12px 22px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          fontSize: "1.2rem",
+                        }}
+                      >
+                        Continue
+                      </button>
+                    )}
 
-                  {currentStep === 3 && (
-                    <button type="submit" disabled={isSubmitting || !canSubmit} style={{ border: "none", background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer", fontSize: "1.2rem" }}>
-                      {isSubmitting ? "Submitting..." : "Submit Registration"}
-                    </button>
-                  )}
+                    {currentStep === 3 && (
+                      <button type="submit" disabled={isSubmitting || !canSubmit} style={{ border: "none", background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer", fontSize: "1.2rem" }}>
+                        {isSubmitting ? "Submitting..." : "Submit Registration"}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            )}
           </div>
         </div>
       )}
