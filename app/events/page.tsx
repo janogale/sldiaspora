@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CalendarDays,
   ChevronLeft,
@@ -12,19 +12,87 @@ import {
 } from "lucide-react";
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
-import { events } from "../data/events";
+
+type EventItem = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  datetime: string;
+  mainImg: string;
+  sortDate?: string | null;
+};
 
 function Page() {
+  const [eventsData, setEventsData] = useState<EventItem[]>([]);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+  const [eventsError, setEventsError] = useState("");
+
   const [currentMonth, setCurrentMonth] = useState(() => {
     const today = new Date();
     return new Date(today.getFullYear(), today.getMonth(), 1);
   });
   const [selectedDateKey, setSelectedDateKey] = useState<string | null>(null);
 
-  const parseEventDate = (datetime: string) => {
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadEvents = async () => {
+      try {
+        setIsLoadingEvents(true);
+        setEventsError("");
+
+        const response = await fetch("/api/events", { method: "GET" });
+        const result = (await response.json().catch(() => null)) as
+          | { data?: EventItem[]; message?: string }
+          | null;
+
+        if (!response.ok) {
+          if (!isMounted) return;
+          setEventsData([]);
+          setEventsError(result?.message || "Unable to load events right now.");
+          return;
+        }
+
+        if (!isMounted) return;
+        setEventsData(Array.isArray(result?.data) ? result!.data : []);
+      } catch {
+        if (!isMounted) return;
+        setEventsData([]);
+        setEventsError("Unable to load events right now.");
+      } finally {
+        if (isMounted) setIsLoadingEvents(false);
+      }
+    };
+
+    loadEvents();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const parseEventDate = (datetime: string, sortDate?: string | null) => {
+    if (sortDate) {
+      const parsed = new Date(sortDate);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+
     try {
       const parts = datetime.split(" ");
-      if (parts.length < 3) return new Date(datetime);
+      if (parts.length < 3) {
+        const fallback = new Date(datetime);
+        if (!Number.isNaN(fallback.getTime())) return fallback;
+        return new Date();
+      }
+
+      // Support legacy format: YYYY-MM-DD HH:mm AM/PM
+      const datePart = parts[0] || "";
+      if (!datePart.includes("-")) {
+        const fallback = new Date(datetime);
+        if (!Number.isNaN(fallback.getTime())) return fallback;
+        return new Date();
+      }
+
       const [year, month, day] = parts[0].split("-").map(Number);
       const [hourStr, minuteStr] = parts[1].split(":");
       const ampm = parts[2].toUpperCase();
@@ -32,9 +100,13 @@ function Page() {
       const minute = Number(minuteStr || 0);
       if (ampm === "PM" && hour !== 12) hour += 12;
       if (ampm === "AM" && hour === 12) hour = 0;
-      return new Date(year, month - 1, day, hour, minute || 0);
+      const parsed = new Date(year, month - 1, day, hour, minute || 0);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+      return new Date();
     } catch {
-      return new Date(datetime);
+      const fallback = new Date(datetime);
+      if (!Number.isNaN(fallback.getTime())) return fallback;
+      return new Date();
     }
   };
 
@@ -46,10 +118,10 @@ function Page() {
   };
 
   const eventCalendar = useMemo(() => {
-    const map = new Map<string, typeof events>();
+    const map = new Map<string, Array<EventItem & { dateObject: Date }>>();
 
-    const normalized = events
-      .map((event) => ({ ...event, dateObject: parseEventDate(event.datetime) }))
+    const normalized = eventsData
+      .map((event) => ({ ...event, dateObject: parseEventDate(event.datetime, event.sortDate) }))
       .sort((a, b) => a.dateObject.getTime() - b.dateObject.getTime());
 
     normalized.forEach((event) => {
@@ -59,7 +131,7 @@ function Page() {
     });
 
     return { map, normalized };
-  }, []);
+  }, [eventsData]);
 
   const today = new Date();
   const todayKey = toDateKey(today);
@@ -131,7 +203,7 @@ function Page() {
         <div className="col-lg-6 col-md-6" key={`${event.id}-${idx}`}>
           <div
             className="visa-offer__item mb-30 wow fadeInLeft animated"
-            data-wow-delay={event.delay}
+            data-wow-delay={`${0.2 + (idx % 4) * 0.1}s`}
           >
             <div className="visa-offer__item-thumb">
               <img src={event.mainImg} alt={event.title} />
@@ -178,6 +250,22 @@ function Page() {
         }}
       >
         <div className="container">
+          {eventsError && (
+            <div
+              style={{
+                marginBottom: "18px",
+                border: "1px solid #f2d7d5",
+                borderRadius: "12px",
+                padding: "12px 14px",
+                color: "#8b1c1c",
+                background: "#fff5f5",
+                fontSize: "0.95rem",
+              }}
+            >
+              {eventsError}
+            </div>
+          )}
+
           <div className="section-title2 mb-40">
             <div className="section-title2__wrapper">
               <span
@@ -275,6 +363,12 @@ function Page() {
                     gap: "8px",
                   }}
                 >
+                  {isLoadingEvents && (
+                    <div style={{ marginBottom: "10px", color: "#4b5563", fontSize: "0.92rem" }}>
+                      Loading events...
+                    </div>
+                  )}
+
                   {daysOfWeek.map((day) => (
                     <div
                       key={day}
