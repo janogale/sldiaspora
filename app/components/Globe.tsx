@@ -37,8 +37,48 @@ const countryFlagCodeMap: Record<string, string> = {
   Switzerland: "ch",
 };
 
-const getCountryFlagCode = (countryName: string) => {
+const countryCodeCache = new Map<string, string | null>();
+
+const getKnownCountryFlagCode = (countryName: string) => {
   return countryFlagCodeMap[countryName.trim()] || null;
+};
+
+const resolveCountryFlagCode = async (countryName: string) => {
+  const normalizedName = countryName.trim();
+  const cacheKey = normalizedName.toLowerCase();
+
+  if (!cacheKey) return null;
+
+  if (countryCodeCache.has(cacheKey)) {
+    return countryCodeCache.get(cacheKey) ?? null;
+  }
+
+  const knownCode = getKnownCountryFlagCode(normalizedName);
+  if (knownCode) {
+    countryCodeCache.set(cacheKey, knownCode);
+    return knownCode;
+  }
+
+  const tryLookup = async (fullText: boolean) => {
+    const url = `https://restcountries.com/v3.1/name/${encodeURIComponent(
+      normalizedName
+    )}${fullText ? "?fullText=true" : ""}`;
+
+    const response = await fetch(url);
+    if (!response.ok) return null;
+
+    const payload = (await response.json().catch(() => null)) as
+      | Array<{ cca2?: string }>
+      | null;
+
+    const code = payload?.[0]?.cca2?.toLowerCase();
+    return code || null;
+  };
+
+  const resolvedCode = (await tryLookup(true)) ?? (await tryLookup(false));
+  countryCodeCache.set(cacheKey, resolvedCode);
+
+  return resolvedCode;
 };
 
 const SOMALILAND_FLAG_SVG =
@@ -159,26 +199,43 @@ const GlobeComponent: React.FC<GlobeProps> = ({ data, onRegionClick }) => {
       textContainer.style.transition = "all 0.2s ease";
 
       // Region Name
-      const flagCode = getCountryFlagCode(displayName);
-      const flagNode = flagCode
-        ? document.createElement("img")
-        : document.createElement("span");
+      const flagNode = document.createElement("span");
 
-      if (flagCode) {
-        const flagImg = flagNode as HTMLImageElement;
-        flagImg.src = getFlagSrc(flagCode);
-        flagImg.alt = `${displayName} flag`;
-        flagImg.loading = "lazy";
-        flagImg.style.width = "14px";
-        flagImg.style.height = "10px";
-        flagImg.style.objectFit = "cover";
-        flagImg.style.borderRadius = "2px";
-        flagImg.style.boxShadow = "0 0 0 1px rgba(255,255,255,0.15)";
-      } else {
-        const flagSpan = flagNode as HTMLSpanElement;
+      const applyFlag = (flagCode: string | null) => {
+        while (flagNode.firstChild) {
+          flagNode.removeChild(flagNode.firstChild);
+        }
+
+        if (flagCode) {
+          const flagImg = document.createElement("img");
+          flagImg.src = getFlagSrc(flagCode);
+          flagImg.alt = `${displayName} flag`;
+          flagImg.loading = "lazy";
+          flagImg.style.width = "14px";
+          flagImg.style.height = "10px";
+          flagImg.style.objectFit = "cover";
+          flagImg.style.borderRadius = "2px";
+          flagImg.style.boxShadow = "0 0 0 1px rgba(255,255,255,0.15)";
+          flagNode.appendChild(flagImg);
+          return;
+        }
+
+        const flagSpan = document.createElement("span");
         flagSpan.textContent = "🌍";
         flagSpan.style.fontSize = "12px";
         flagSpan.style.lineHeight = "1";
+        flagNode.appendChild(flagSpan);
+      };
+
+      const initialCode = getKnownCountryFlagCode(displayName);
+      applyFlag(initialCode);
+
+      if (!initialCode) {
+        resolveCountryFlagCode(displayName)
+          .then((resolvedCode) => applyFlag(resolvedCode))
+          .catch(() => {
+            applyFlag(null);
+          });
       }
 
       const nameSpan = document.createElement("span");

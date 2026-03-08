@@ -1,19 +1,31 @@
 import Link from "next/link";
 import { getArticles, getAssetUrl } from "@/lib/articles";
 
-function stripHtml(input: string): string {
-  return input.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-}
+const articleTitleStyle = {
+  color: "#0a6d3a",
+  fontWeight: 600,
+  fontSize: "2.4rem",
+  lineHeight: 1.35,
+  letterSpacing: "0.01em",
+  textWrap: "balance",
+  fontFamily: '"Sora", "Manrope", "Segoe UI", sans-serif',
+  marginBottom: "18px",
+} as const;
 
-function formatDate(value: string | null): string {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-GB", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+function getFirstContentLink(input: string): string | null {
+  const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
+  const href = match?.[1]?.trim();
+  if (!href) return null;
+
+  if (
+    href.startsWith("http://") ||
+    href.startsWith("https://") ||
+    href.startsWith("/")
+  ) {
+    return href;
+  }
+
+  return null;
 }
 
 const Blogs = async () => {
@@ -95,28 +107,14 @@ const Blogs = async () => {
                   className="latest-blog2__content wow fadeInLeft animated"
                   data-wow-delay=".3s"
                 >
-                  <div className="latest-blog2__content-meta mb-20">
-                    <ul>
-                      <li>
-                        <span>
-                          <i className="fa-solid fa-calendar-days"></i>
-                          {formatDate(lead.dateCreated || lead.dateUpdated)}
-                        </span>
-                      </li>
-                      <li>
-                        <Link href={`/blogs/${lead.id}`}>
-                          <i className="fa-regular fa-user"></i>By admin
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <h3 className="latest-blog2__content-title mb-20">
-                    <Link href={`/blogs/${lead.id}`}>{lead.title}</Link>
+                  <h3 className="latest-blog2__content-title mb-20" style={articleTitleStyle}>
+                    {lead.title}
                   </h3>
-                  <p>{stripHtml(lead.content).slice(0, 220)}...</p>
-                  <Link href={`/blogs/${lead.id}`} className="latest-blog2__content-btn">
-                    Read More <i className="fa-solid fa-arrow-right"></i>
-                  </Link>
+                  {getFirstContentLink(lead.content) ? (
+                    <a href={getFirstContentLink(lead.content)!} className="latest-blog2__content-btn">
+                      Read More <i className="fa-solid fa-arrow-right"></i>
+                    </a>
+                  ) : null}
                 </div>
               </>
             ) : (
@@ -137,28 +135,17 @@ const Blogs = async () => {
                   />
                 </div>
                 <div className="latest-blog2__right-content-text">
-                  <div className="latest-blog2__right-content-text-meta">
-                    <ul>
-                      <li>
-                        <span>
-                          <i className="fa-solid fa-calendar-days"></i>
-                          {formatDate(article.dateCreated || article.dateUpdated)}
-                        </span>
-                      </li>
-                      <li>
-                        <Link href={`/blogs/${article.id}`}>
-                          <i className="fa-regular fa-user"></i>By admin
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <h3 className="latest-blog2__content-title mb-20">
-                    <Link href={`/blogs/${article.id}`}>{article.title}</Link>
+                  <h3 className="latest-blog2__content-title mb-20" style={articleTitleStyle}>
+                    {article.title}
                   </h3>
-                  <p>{stripHtml(article.content).slice(0, 120)}...</p>
-                  <Link href={`/blogs/${article.id}`} className="latest-blog2__right-content-text-btn">
-                    Read More <i className="fa-solid fa-arrow-right"></i>
-                  </Link>
+                  {getFirstContentLink(article.content) ? (
+                    <a
+                      href={getFirstContentLink(article.content)!}
+                      className="latest-blog2__right-content-text-btn"
+                    >
+                      Read More <i className="fa-solid fa-arrow-right"></i>
+                    </a>
+                  ) : null}
                 </div>
               </div>
             ))}

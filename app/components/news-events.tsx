@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   CalendarDays,
@@ -12,19 +12,81 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
-import { events } from "../data/events";
+
+type EventItem = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  datetime: string;
+  mainImg: string;
+  sortDate?: string | null;
+};
 
 const NewsEvents = () => {
+  const [eventsData, setEventsData] = useState<EventItem[]>([]);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+
   const [currentMonth, setCurrentMonth] = useState(() => {
     const today = new Date();
     return new Date(today.getFullYear(), today.getMonth(), 1);
   });
   const [selectedDateKey, setSelectedDateKey] = useState<string | null>(null);
 
-  const parseEventDate = (datetime: string) => {
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadEvents = async () => {
+      try {
+        setIsLoadingEvents(true);
+        const response = await fetch("/api/events", { method: "GET" });
+        const result = (await response.json().catch(() => null)) as
+          | { data?: EventItem[] }
+          | null;
+
+        if (!isMounted) return;
+
+        if (!response.ok) {
+          setEventsData([]);
+          return;
+        }
+
+        setEventsData(Array.isArray(result?.data) ? result!.data : []);
+      } catch {
+        if (!isMounted) return;
+        setEventsData([]);
+      } finally {
+        if (isMounted) setIsLoadingEvents(false);
+      }
+    };
+
+    loadEvents();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const parseEventDate = (datetime: string, sortDate?: string | null) => {
+    if (sortDate) {
+      const parsed = new Date(sortDate);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+
     try {
       const parts = datetime.split(" ");
-      if (parts.length < 3) return new Date(datetime);
+      if (parts.length < 3) {
+        const fallback = new Date(datetime);
+        if (!Number.isNaN(fallback.getTime())) return fallback;
+        return new Date();
+      }
+
+      const datePart = parts[0] || "";
+      if (!datePart.includes("-")) {
+        const fallback = new Date(datetime);
+        if (!Number.isNaN(fallback.getTime())) return fallback;
+        return new Date();
+      }
+
       const [year, month, day] = parts[0].split("-").map(Number);
       const [hourStr, minuteStr] = parts[1].split(":");
       const ampm = parts[2].toUpperCase();
@@ -34,9 +96,13 @@ const NewsEvents = () => {
       if (ampm === "PM" && hour !== 12) hour += 12;
       if (ampm === "AM" && hour === 12) hour = 0;
 
-      return new Date(year, month - 1, day, hour, minute || 0);
+      const parsed = new Date(year, month - 1, day, hour, minute || 0);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+      return new Date();
     } catch {
-      return new Date(datetime);
+      const fallback = new Date(datetime);
+      if (!Number.isNaN(fallback.getTime())) return fallback;
+      return new Date();
     }
   };
 
@@ -48,10 +114,10 @@ const NewsEvents = () => {
   };
 
   const eventCalendar = useMemo(() => {
-    const map = new Map<string, typeof events>();
+    const map = new Map<string, Array<EventItem & { dateObject: Date }>>();
 
-    const normalized = events
-      .map((event) => ({ ...event, dateObject: parseEventDate(event.datetime) }))
+    const normalized = eventsData
+      .map((event) => ({ ...event, dateObject: parseEventDate(event.datetime, event.sortDate) }))
       .sort((a, b) => a.dateObject.getTime() - b.dateObject.getTime());
 
     normalized.forEach((event) => {
@@ -61,7 +127,7 @@ const NewsEvents = () => {
     });
 
     return { map, normalized };
-  }, []);
+  }, [eventsData]);
 
   const today = new Date();
   const todayKey = toDateKey(today);
@@ -103,9 +169,11 @@ const NewsEvents = () => {
   const selectedDateEvents = eventCalendar.map.get(effectiveSelectedDateKey) ?? [];
 
   const diasporaCountriesCount = useMemo(() => {
-    const countries = new Set(events.map((event) => event.location.split(",").pop()?.trim() || "Unknown"));
+    const countries = new Set(
+      eventsData.map((event) => event.location.split(",").pop()?.trim() || "Unknown")
+    );
     return countries.size;
-  }, []);
+  }, [eventsData]);
 
   const handleMonthChange = (direction: "prev" | "next") => {
     setCurrentMonth((prev) =>
@@ -159,7 +227,7 @@ const NewsEvents = () => {
 
             <div className="d-flex gap-2 flex-wrap mt-3">
               <span className="badge bg-success-subtle text-success-emphasis border px-3 py-2">
-                <CalendarDays size={14} className="me-1" /> {events.length} Total Events
+                <CalendarDays size={14} className="me-1" /> {eventsData.length} Total Events
               </span>
               <span className="badge bg-light text-dark border px-3 py-2">
                 <MapPin size={14} className="me-1" /> {diasporaCountriesCount} Countries
@@ -320,7 +388,7 @@ const NewsEvents = () => {
                 }}
               >
                 <CalendarDays size={16} color="#006d21" />
-                {monthEventCount} event(s) in {monthLabel}
+                {isLoadingEvents ? "Loading events..." : `${monthEventCount} event(s) in ${monthLabel}`}
               </div>
             </div>
           </div>

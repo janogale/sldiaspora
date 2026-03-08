@@ -292,7 +292,12 @@ export const listApprovedMembers = async () => {
 };
 
 export const validateSharedCode = async (code: string) => {
-  if (!code.trim()) return true;
+  const normalizedCode = code.trim();
+  if (!normalizedCode) return false;
+
+  if (SYSTEM_SAMPLE_SHARED_CODES.some((item) => item.code === normalizedCode)) {
+    return true;
+  }
 
   const candidateCollections = [
     "member_shared_codes",
@@ -304,7 +309,7 @@ export const validateSharedCode = async (code: string) => {
 
   for (const collection of candidateCollections) {
     const query = `/items/${collection}?filter[code][_eq]=${encodeURIComponent(
-      code
+      normalizedCode
     )}&limit=1`;
 
     const response = await directusFetch(query);
@@ -329,10 +334,77 @@ export const validateSharedCode = async (code: string) => {
   }
 
   if (!checkedAnyCollection) {
-    return true;
+    return false;
   }
 
   return false;
+};
+
+export type SharedCodeItem = {
+  code: string;
+  label: string;
+};
+
+const SYSTEM_SAMPLE_SHARED_CODES: SharedCodeItem[] = [
+  { code: "SLD-UK-483921", label: "SLD-UK-483921 — UK Somaliland Association · UK · Assigned officer: Amina Noor" },
+  { code: "SLD-US-274510", label: "SLD-US-274510 — North America Somaliland Community · USA · Assigned officer: Abdirahman Ali" },
+  { code: "SLD-SE-908144", label: "SLD-SE-908144 — Sweden Somaliland Association · Sweden · Assigned officer: Hodan Ismail" },
+  { code: "SLD-AE-551203", label: "SLD-AE-551203 — UAE Somaliland Community · UAE · Assigned officer: Mubarik Hassan" },
+  { code: "SLD-ET-660732", label: "SLD-ET-660732 — Ethiopia Somaliland Community · Ethiopia · Assigned officer: Fadumo Yusuf" },
+  { code: "SLD-CA-119845", label: "SLD-CA-119845 — Canada Somaliland Association · Canada · Assigned officer: Ibrahim Jama" },
+];
+
+export const listSharedCodes = async (): Promise<SharedCodeItem[]> => {
+  const candidateCollections = [
+    "member_shared_codes",
+    "shared_codes",
+    "verification_codes",
+  ];
+
+  const dedup = new Map<string, SharedCodeItem>();
+
+  SYSTEM_SAMPLE_SHARED_CODES.forEach((item) => {
+    dedup.set(item.code, item);
+  });
+
+  for (const collection of candidateCollections) {
+    const query = `/items/${collection}?fields=code,name,title,country,description&limit=1000`;
+    const response = await directusFetch(query);
+
+    if (response.status === 404) {
+      continue;
+    }
+
+    if (!response.ok) {
+      continue;
+    }
+
+    const result = (await response.json().catch(() => null)) as DirectusResult<
+      Array<Record<string, unknown>>
+    > | null;
+
+    const rows = result?.data || [];
+
+    rows.forEach((row) => {
+      const code = String(row.code || "").trim();
+      if (!code) return;
+
+      const name = String(row.name || row.title || "").trim();
+      const country = String(row.country || "").trim();
+      const description = String(row.description || "").trim();
+
+      const parts = [name, country, description].filter(Boolean);
+      const label = parts.length > 0 ? `${code} — ${parts.join(" · ")}` : code;
+
+      if (!dedup.has(code)) {
+        dedup.set(code, { code, label });
+      }
+    });
+  }
+
+  return Array.from(dedup.values()).sort((a, b) =>
+    a.code.localeCompare(b.code)
+  );
 };
 
 export const sendConnectionEmail = async (options: {

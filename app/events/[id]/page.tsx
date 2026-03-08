@@ -1,16 +1,24 @@
-"use client";
 import BreadCamp from "@/app/components/BreadCamp";
 import Header from "@/app/components/header";
-import { events } from "@/app/data/events";
-import { useParams } from "next/navigation";
+import { getEventById } from "@/lib/events";
+import { notFound } from "next/navigation";
 
-const EventDetailsPage = () => {
-  const params = useParams<{ id: string }>();
-  const event = events.find((e) => e.id === parseInt(params.id));
+export const dynamic = "force-dynamic";
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function EventDetailsPage({ params }: Props) {
+  const { id } = await params;
+  const event = await getEventById(id);
 
   if (!event) {
-    return <div>Event not found</div>;
+    notFound();
   }
+
+  const dateTimeParts = event.datetime.split(" ");
+  const timeLabel = dateTimeParts.length > 1 ? dateTimeParts.slice(1).join(" ") : "TBA";
 
   return (
     <div>
@@ -23,11 +31,8 @@ const EventDetailsPage = () => {
           <div className="row">
             <div className="col-lg-8">
               <div className="visa-details__content">
-                <div
-                  className="coaching-details__content-top-img pb-20"
-                  data-tilt
-                >
-                  <img src={event.mainImg} alt="img not found" />
+                <div className="coaching-details__content-top-img pb-20" data-tilt>
+                  <img src={event.mainImg} alt={event.title} />
                 </div>
                 <h2
                   className="visa-details__content-title mb-20 wow fadeInLeft animated"
@@ -35,18 +40,10 @@ const EventDetailsPage = () => {
                 >
                   {event.title}
                 </h2>
-                <p className=" wow fadeInLeft animated" data-wow-delay=".3s">
+                <p className="wow fadeInLeft animated" data-wow-delay=".3s">
                   {event.description}
                 </p>
 
-                <p>
-                  Aliquam eros justo, posuere loborti viverra laoreet matti
-                  ullamcorper posuere viverra .Aliquam eros justo, posuere
-                  lobortis viverra laoreet augue mattis fmentum ullamcorper
-                  viverra laoreet Aliquam eros justo, posuere loborti viverra
-                  laoreet matti ullamcorper posuere viverra .Aliquam eros justo,
-                  posu
-                </p>
                 <div
                   className="visa-details__content-list mb-30 mt-20 wow fadeInLeft animated"
                   data-wow-delay=".5s"
@@ -59,34 +56,15 @@ const EventDetailsPage = () => {
                       Date: <span>{event.datetime}</span>
                     </li>
                     <li className="mt-20">
-                      Time:{" "}
-                      <span>
-                        {event.datetime.split(" ")[1] +
-                          " " +
-                          event.datetime.split(" ")[2]}
-                      </span>
+                      Time: <span>{timeLabel}</span>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            {/* <div className="col-lg-4">
-              <div
-                className="visa-details__widget mt-30 wow fadeInLeft animated"
-                data-wow-delay=".3s"
-              >
-                <div className="visa-details__widget-icon">
-                  <i className="fa-solid fa-phone"></i>
-                </div>
-                <h3 className="mt-15">GET TOUCH</h3>
-                <a href="tel:+888123456765">(+888) 123 456 765</a>
-              </div>
-            </div> */}
           </div>
         </div>
       </section>
     </div>
   );
-};
-
-export default EventDetailsPage;
+}

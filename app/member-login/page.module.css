@@ -1,6 +1,43 @@
 .loginPage {
+  --ink: #0c2f37;
+  --ink-soft: #4b666d;
+  --line: #d6e4e1;
+  --brand-1: #0b5b49;
+  --brand-2: #17775e;
+  --brand-3: #2a9c7c;
+  --accent: #d46c31;
+  --accent-soft: #fff2e8;
   min-height: 100vh;
-  background: linear-gradient(130deg, #dff3e7 0%, #ecf8f0 45%, #dbefe4 100%);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(212, 108, 49, 0.18), transparent 40%),
+    radial-gradient(circle at 87% 16%, rgba(23, 119, 94, 0.2), transparent 38%),
+    linear-gradient(145deg, #f6f0e6 0%, #f4fbf7 45%, #ecf6ef 100%);
+}
+
+.loginPage::before,
+.loginPage::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.loginPage::before {
+  width: 420px;
+  height: 420px;
+  top: -170px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(212, 108, 49, 0.24) 0%, rgba(212, 108, 49, 0.03) 68%, transparent 76%);
+}
+
+.loginPage::after {
+  width: 520px;
+  height: 520px;
+  right: -180px;
+  bottom: -230px;
+  background: radial-gradient(circle, rgba(23, 119, 94, 0.2) 0%, rgba(23, 119, 94, 0.03) 68%, transparent 78%);
 }
 
 .loginSection {
@@ -8,51 +45,77 @@
   display: flex;
   align-items: flex-start;
   padding: 42px 0 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.loginContainer {
+  animation: panel-enter 420ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
 }
 
 .backButtonWrap {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .backButton {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  border: 1px solid #d3e4db;
-  background: #ffffff;
-  color: #0d5b35;
-  border-radius: 12px;
-  padding: 10px 15px;
+  gap: 10px;
+  border: 1px solid rgba(12, 47, 55, 0.18);
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 16px;
   font-size: 1.5rem;
   font-weight: 600;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
   text-decoration: none;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(3px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .backButton:hover {
-  background: #f1f8f4;
-  border-color: #b8d0c3;
-  color: #08482a;
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(12, 47, 55, 0.32);
+  color: #05272e;
   transform: translateY(-1px);
+  box-shadow: 0 9px 20px rgba(4, 23, 27, 0.08);
 }
 
 .loginShell {
   display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  border: 1px solid #dbeae2;
-  border-radius: 24px;
-  background: #ffffff;
+  grid-template-columns: 1fr 1.12fr;
+  border: 1px solid rgba(12, 47, 55, 0.12);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.94);
   overflow: hidden;
-  box-shadow: 0 22px 55px rgba(2, 29, 17, 0.11);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 32px 80px rgba(3, 26, 33, 0.16);
 }
 
 .brandPanel {
-  padding: 42px 34px;
-  background: linear-gradient(160deg, #0a6b38 0%, #0a5a2f 100%);
+  padding: 44px 36px;
+  background:
+    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 38%),
+    linear-gradient(150deg, #0a4e4a 0%, #136e54 52%, #1a8a65 100%);
   color: #eefaf3;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.kicker {
+  margin: 0 0 14px;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: rgba(246, 255, 250, 0.92);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.5rem;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .logoWrap {
@@ -60,9 +123,9 @@
   align-items: center;
   width: fit-content;
   background: #ffffff;
-  border: 1px solid #d8e7df;
-  border-radius: 14px;
-  padding: 10px 14px;
+  border: 1px solid #cde2da;
+  border-radius: 16px;
+  padding: 11px 15px;
   margin-bottom: 20px;
 }
 
@@ -76,15 +139,42 @@
   margin: 0;
   font-size: 1.5rem;
   line-height: 1.2;
-  font-weight: 700;
+  font-weight: 800;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
   color: #ffffff;
 }
 
 .brandSubtitle {
   margin: 12px 0 0;
   font-size: 1.5rem;
-  color: rgba(241, 250, 245, 0.9);
+  color: rgba(241, 250, 245, 0.93);
   line-height: 1.65;
+  max-width: 38ch;
+}
+
+.liveBadge {
+  margin: 16px 0 0;
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 14px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f7fffb;
+  background: rgba(0, 0, 0, 0.14);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
+}
+
+.liveDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #90ffd0;
+  box-shadow: 0 0 0 4px rgba(144, 255, 208, 0.2);
+  animation: pulse-dot 1.6s ease-in-out infinite;
 }
 
 .brandList {
@@ -92,24 +182,26 @@
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 12px;
+  gap: 11px;
 }
 
 .brandList li {
   display: flex;
-  align-items: center;
-  gap: 9px;
+  align-items: flex-start;
+  gap: 10px;
   font-size: 1.5rem;
-  color: rgba(241, 250, 245, 0.95);
+  line-height: 1.5;
+  color: rgba(241, 250, 245, 0.96);
 }
 
 .brandList i {
   color: #9ef5c2;
+  margin-top: 3px;
 }
 
 .loginCard {
-  background: #ffffff;
-  padding: 42px 36px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(250, 252, 250, 0.98) 100%);
+  padding: 44px 38px;
 }
 
 .mobileLogoWrap {
@@ -124,22 +216,40 @@
 .title {
   margin: 0;
   text-align: left;
-  color: #053c2b;
+  color: var(--ink);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.25;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
 }
 
 .subtitle {
   margin: 10px 0 0;
   text-align: left;
-  color: #547164;
+  color: var(--ink-soft);
   font-size: 1.5rem;
   line-height: 1.6;
+  max-width: 44ch;
+}
+
+.securityNote {
+  margin-top: 13px;
+  margin-bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 999px;
+  border: 1px solid #e8dacb;
+  background: var(--accent-soft);
+  color: #8c430c;
+  padding: 7px 12px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
 }
 
 .form {
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .fieldGroup {
@@ -149,36 +259,38 @@
 .label {
   display: block;
   margin-bottom: 8px;
-  color: #0b3326;
-  font-weight: 600;
+  color: var(--ink);
+  font-weight: 700;
   font-size: 1.5rem;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
 }
 
 .input {
-  border: 1px solid #c8dbd1;
-  border-radius: 12px;
+  border: 1.3px solid #bfd6d2;
+  border-radius: 14px;
   min-height: 50px;
-  padding: 0.75rem 0.98rem;
-  background: #fbfefc;
+  padding: 0.78rem 1rem;
+  background: #f9fdfc;
   box-shadow: none;
-  color: #193228;
+  color: #17353a;
   font-size: 1.5rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .input:hover {
-  border-color: #a8c4b5;
+  border-color: #9ebdb5;
   background: #ffffff;
 }
 
 .input:focus {
-  border-color: #0a7a3a;
-  box-shadow: 0 0 0 3px rgba(10, 122, 58, 0.13);
+  border-color: #1d8f70;
+  box-shadow: 0 0 0 4px rgba(29, 143, 112, 0.16);
   background: #ffffff;
+  transform: translateY(-1px);
 }
 
 .input::placeholder {
-  color: #7c9789;
+  color: #7c9895;
 }
 
 .passwordWrap {
@@ -196,29 +308,29 @@
   transform: translateY(-50%);
   border: 0;
   background: transparent;
-  color: #0d6b37;
+  color: #116e58;
   font-size: 1.5rem;
   font-weight: 600;
   padding: 2px 4px;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .togglePassword:hover {
-  background: rgba(10, 122, 58, 0.08);
+  background: rgba(20, 130, 103, 0.12);
 }
 
 .togglePassword:focus-visible {
-  outline: 2px solid rgba(10, 122, 58, 0.35);
+  outline: 2px solid rgba(20, 130, 103, 0.35);
   outline-offset: 1px;
 }
 
 .errorBox {
   margin-bottom: 16px;
-  border: 1px solid #f4d2d2;
-  background: #fff1f1;
+  border: 1px solid #efcdcc;
+  background: #fff2f1;
   color: #8b1a1a;
-  border-radius: 12px;
-  padding: 11px 13px;
+  border-radius: 14px;
+  padding: 12px 13px;
   font-size: 1.5rem;
 }
 
@@ -227,33 +339,36 @@
   border: 0;
   border-radius: 14px;
   min-height: 50px;
-  background: linear-gradient(140deg, #0c7f40 0%, #065c2d 100%);
+  background: linear-gradient(136deg, #17775e 0%, #0d5f4b 62%, #0a4f40 100%);
   color: #ffffff;
   font-weight: 700;
   font-size: 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  letter-spacing: 0.01em;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .loginButton:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(6, 92, 45, 0.25);
+  box-shadow: 0 14px 28px rgba(11, 73, 59, 0.3);
+  filter: saturate(1.08);
 }
 
 .loginButton:disabled {
-  opacity: 0.7;
+  opacity: 0.72;
   cursor: not-allowed;
 }
 
 .footerNote {
-  margin: 15px 0 0;
-  color: #667f73;
+  margin: 16px 0 0;
+  color: #5f7672;
   font-size: 1.5rem;
   text-align: center;
 }
 
 .footerNote a {
-  color: #0a6b38;
-  font-weight: 600;
+  color: #0f7158;
+  font-weight: 700;
   text-decoration: none;
 }
 
@@ -261,9 +376,36 @@
   text-decoration: underline;
 }
 
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(144, 255, 208, 0.25);
+  }
+
+  70% {
+    box-shadow: 0 0 0 7px rgba(144, 255, 208, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(144, 255, 208, 0);
+  }
+}
+
 @media (max-width: 1199px) {
   .loginShell {
     grid-template-columns: 1fr;
+    border-radius: 24px;
   }
 
   .brandPanel {
@@ -286,6 +428,11 @@
     margin-bottom: 10px;
   }
 
+  .backButton {
+    font-size: 1.5rem;
+    padding: 9px 14px;
+  }
+
   .loginCard {
     padding: 26px 18px;
   }
@@ -299,6 +446,11 @@
   }
 
   .subtitle {
+    font-size: 1.5rem;
+  }
+
+  .securityNote {
+    margin-top: 12px;
     font-size: 1.5rem;
   }
 }

@@ -61,9 +61,10 @@
   margin-bottom: 0;
 }
 .imageBox {
-  flex: 0 0 420px;
+  flex: 0 0 480px;
+  width: 480px;
   min-width: 260px;
-  height: 39rem;
+  height: 41rem;
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(7, 43, 32, 0.1);

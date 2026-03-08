@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type SecondaryDocumentType = "passport" | "driving_license" | "";
 type IdVerificationMethod = "national_id" | "code" | "";
@@ -12,7 +13,6 @@ type RegisterFormState = {
   address: string;
   city: string;
   country: string;
-  selectedCountryCode: string;
   nationalIdCode: string;
   secondaryDocumentType: SecondaryDocumentType;
   password: string;
@@ -27,7 +27,6 @@ const defaultFormState: RegisterFormState = {
   address: "",
   city: "",
   country: "",
-  selectedCountryCode: "+252",
   nationalIdCode: "",
   secondaryDocumentType: "",
   password: "",
@@ -35,51 +34,27 @@ const defaultFormState: RegisterFormState = {
   additionalNotes: "",
 };
 
-const COUNTRY_PHONE_CODES = [
-  { country: "Somaliland / Somalia", code: "+252" },
-  { country: "Kenya", code: "+254" },
-  { country: "Ethiopia", code: "+251" },
-  { country: "Djibouti", code: "+253" },
-  { country: "Uganda", code: "+256" },
-  { country: "Tanzania", code: "+255" },
-  { country: "Rwanda", code: "+250" },
-  { country: "South Africa", code: "+27" },
-  { country: "Egypt", code: "+20" },
-  { country: "Saudi Arabia", code: "+966" },
-  { country: "United Arab Emirates", code: "+971" },
-  { country: "Qatar", code: "+974" },
-  { country: "Türkiye", code: "+90" },
-  { country: "India", code: "+91" },
-  { country: "Pakistan", code: "+92" },
-  { country: "Malaysia", code: "+60" },
-  { country: "Australia", code: "+61" },
-  { country: "Germany", code: "+49" },
-  { country: "France", code: "+33" },
-  { country: "Italy", code: "+39" },
-  { country: "Netherlands", code: "+31" },
-  { country: "Sweden", code: "+46" },
-  { country: "Norway", code: "+47" },
-  { country: "United Kingdom", code: "+44" },
-  { country: "Ireland", code: "+353" },
-  { country: "United States", code: "+1" },
-  { country: "Canada", code: "+1" },
-  { country: "Mexico", code: "+52" },
-  { country: "Brazil", code: "+55" },
-  { country: "South Korea", code: "+82" },
-  { country: "Japan", code: "+81" },
-  { country: "China", code: "+86" },
-];
+type SharedCodeOption = {
+  code: string;
+  label: string;
+};
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
+const SHARED_CODES_WEB_EXCEL_PATH = "/api/shared-codes-webexcel";
 
 function MemberRegistrationModal() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [modalView, setModalView] = useState<"choice" | "register">("choice");
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showCodeHelp, setShowCodeHelp] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
   const [idMethod, setIdMethod] = useState<IdVerificationMethod>("");
+  const [sharedCodes, setSharedCodes] = useState<SharedCodeOption[]>([]);
+  const [isLoadingCodes, setIsLoadingCodes] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
@@ -96,9 +71,15 @@ function MemberRegistrationModal() {
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
+  const isSelectedCodeValid = useMemo(() => {
+    const value = formState.nationalIdCode.trim();
+    if (!value) return false;
+    return sharedCodes.some((item) => item.code === value);
+  }, [formState.nationalIdCode, sharedCodes]);
+
   const hasValidIdMethod =
     (idMethod === "national_id" && !!nationalIdPhoto) ||
-    (idMethod === "code" && formState.nationalIdCode.trim().length > 0);
+    (idMethod === "code" && isSelectedCodeValid);
 
   const hasSecondaryDoc =
     !!secondaryDocument &&
@@ -109,14 +90,58 @@ function MemberRegistrationModal() {
     return hasRequiredBasics && hasValidIdMethod && hasSecondaryDoc && passwordsMatch;
   }, [hasRequiredBasics, hasValidIdMethod, hasSecondaryDoc, passwordsMatch]);
 
+  const loadSharedCodes = async () => {
+    setIsLoadingCodes(true);
+    try {
+      const response = await fetch("/api/shared-codes", { method: "GET" });
+      const result = (await response.json().catch(() => null)) as {
+        data?: SharedCodeOption[];
+        message?: string;
+      } | null;
+
+      if (!response.ok) {
+        setSharedCodes([]);
+        if (result?.message) setErrorMessage(result.message);
+        return;
+      }
+
+      const items = Array.isArray(result?.data) ? result!.data : [];
+      setSharedCodes(items);
+    } catch {
+      setSharedCodes([]);
+      setErrorMessage("Unable to load shared codes right now.");
+    } finally {
+      setIsLoadingCodes(false);
+    }
+  };
+
   const openModal = () => {
     setErrorMessage("");
+    setModalView("choice");
     setCurrentStep(1);
     setIsOpen(true);
   };
 
   const closeModal = () => {
     setIsOpen(false);
+    setModalView("choice");
+    setShowCodeHelp(false);
+  };
+
+  const openRegisterFlow = () => {
+    setErrorMessage("");
+    setModalView("register");
+    setCurrentStep(1);
+  };
+
+  const goToMemberLogin = () => {
+    closeModal();
+    router.push("/member-login");
+  };
+
+  const openCodesExcel = () => {
+    if (typeof window === "undefined") return;
+    window.open(SHARED_CODES_WEB_EXCEL_PATH, "_blank", "noopener,noreferrer");
   };
 
   useEffect(() => {
@@ -142,6 +167,7 @@ function MemberRegistrationModal() {
       if (event.key === "Escape") {
         setIsOpen(false);
         setShowSuccess(false);
+        setShowCodeHelp(false);
       }
     };
 
@@ -155,6 +181,14 @@ function MemberRegistrationModal() {
       document.removeEventListener("keydown", onEsc);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (idMethod !== "code") return;
+    if (sharedCodes.length > 0 || isLoadingCodes) return;
+
+    loadSharedCodes();
+  }, [idMethod, isOpen, sharedCodes.length, isLoadingCodes]);
 
   const handleChange = (key: keyof RegisterFormState, value: string) => {
     setFormState((prev) => ({ ...prev, [key]: value }));
@@ -197,15 +231,6 @@ function MemberRegistrationModal() {
     setCurrentStep((prev) => (prev === 1 ? prev : ((prev - 1) as 1 | 2 | 3)));
   };
 
-  const copySelectedCode = async () => {
-    try {
-      await navigator.clipboard.writeText(formState.selectedCountryCode);
-      setErrorMessage(`Copied ${formState.selectedCountryCode}. Now enter your code below.`);
-    } catch {
-      setErrorMessage("Could not copy automatically. Please copy the selected code manually.");
-    }
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -233,10 +258,7 @@ function MemberRegistrationModal() {
       payload.append("areasOfInterest", "");
       payload.append("shareContactPreference", "none");
 
-      const finalCode =
-        idMethod === "code"
-          ? `${formState.selectedCountryCode} ${formState.nationalIdCode.trim()}`.trim()
-          : "";
+      const finalCode = idMethod === "code" ? formState.nationalIdCode.trim() : "";
       payload.append("nationalIdCode", finalCode);
       payload.append("secondaryDocumentType", formState.secondaryDocumentType);
       payload.append("additionalNotes", formState.additionalNotes.trim());
@@ -309,6 +331,21 @@ function MemberRegistrationModal() {
     fontSize: "2.1rem",
   } as const;
 
+  const modalGradientHeader = {
+    padding: "28px",
+    borderBottom: "1px solid #d7e8de",
+    background:
+      "radial-gradient(circle at 8% 0%, rgba(0,109,33,0.2) 0%, rgba(255,255,255,1) 36%), linear-gradient(125deg, #e9f8ef 0%, #ffffff 60%)",
+  } as const;
+
+  const choiceCardBaseStyle = {
+    border: "1.5px solid #d4e4da",
+    borderRadius: "18px",
+    padding: "22px",
+    background: "#ffffff",
+    boxShadow: "0 12px 30px rgba(9, 54, 26, 0.08)",
+  } as const;
+
   return (
     <>
       {isOpen && (
@@ -339,13 +376,7 @@ function MemberRegistrationModal() {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <div
-              style={{
-                padding: "28px",
-                borderBottom: "1px solid #e0ebe5",
-                background: "linear-gradient(135deg, #f0f9f4 0%, #ffffff 100%)",
-              }}
-            >
+            <div style={modalGradientHeader}>
               <div
                 style={{
                   display: "flex",
@@ -355,11 +386,13 @@ function MemberRegistrationModal() {
                 }}
               >
                 <div>
-                  <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem" }}>
-                    Member Registration
+                  <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem", lineHeight: 1.1 }}>
+                    {modalView === "choice" ? "Welcome, Member" : "Become a Member"}
                   </h3>
                   <p style={{ margin: 0, color: "#5a6b76", fontSize: "1.3rem", lineHeight: "1.6" }}>
-                    Step {currentStep} of 3. Default status is <strong>pending</strong>. Login is enabled after admin approval.
+                    {modalView === "choice"
+                      ? "Choose how you want to continue. Sign in if you already have an account, or start your membership registration."
+                      : `Step ${currentStep} of 3. Default status is pending. Login is enabled after admin approval.`}
                   </p>
                 </div>
                 <button
@@ -379,29 +412,131 @@ function MemberRegistrationModal() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ padding: "28px" }}>
-              <div style={{ display: "flex", gap: "12px", marginBottom: "22px", flexWrap: "wrap" }}>
-                {[1, 2, 3].map((step) => (
-                  <div
-                    key={step}
-                    style={{
-                      border: `1.5px solid ${currentStep === step ? "#006d21" : "#d4e4da"}`,
-                      background: currentStep === step ? "#ecfdf3" : "#ffffff",
-                      color: currentStep === step ? "#065f46" : "#5a6b76",
-                      borderRadius: "999px",
-                      padding: "10px 16px",
-                      fontWeight: 700,
-                      fontSize: "1.2rem",
-                    }}
-                  >
-                    {step === 1 && "1. Information"}
-                    {step === 2 && "2. Identification"}
-                    {step === 3 && "3. Password & Message"}
+            {modalView === "choice" && (
+              <div style={{ padding: "28px" }}>
+                <div
+                  style={{
+                    borderRadius: "20px",
+                    border: "1px solid #d9e9df",
+                    background:
+                      "linear-gradient(155deg, rgba(241,250,245,1) 0%, rgba(255,255,255,1) 55%, rgba(238,248,242,1) 100%)",
+                    padding: "24px",
+                  }}
+                >
+                  <div className="row g-3">
+                    <div className="col-lg-6">
+                      <div style={choiceCardBaseStyle}>
+                        <div
+                          style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "999px",
+                            background: "#eefbf2",
+                            color: "#006d21",
+                            display: "grid",
+                            placeItems: "center",
+                            fontWeight: 800,
+                            marginBottom: "12px",
+                          }}
+                        >
+                          01
+                        </div>
+                        <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "1.6rem", fontWeight: 800 }}>
+                          Sign In
+                        </h4>
+                        <p style={{ margin: "0 0 16px 0", color: "#475569", fontSize: "1.12rem", lineHeight: 1.6 }}>
+                          Already registered and approved? Go directly to member login.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={goToMemberLogin}
+                          style={{
+                            width: "100%",
+                            border: "none",
+                            background: "linear-gradient(135deg, #006d21 0%, #0a8f3d 100%)",
+                            color: "#ffffff",
+                            borderRadius: "12px",
+                            minHeight: "52px",
+                            fontWeight: 700,
+                            fontSize: "1.15rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Open Member Login
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-lg-6">
+                      <div style={choiceCardBaseStyle}>
+                        <div
+                          style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "999px",
+                            background: "#fff5ea",
+                            color: "#9a3412",
+                            display: "grid",
+                            placeItems: "center",
+                            fontWeight: 800,
+                            marginBottom: "12px",
+                          }}
+                        >
+                          02
+                        </div>
+                        <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "1.6rem", fontWeight: 800 }}>
+                          Become a Member
+                        </h4>
+                        <p style={{ margin: "0 0 16px 0", color: "#475569", fontSize: "1.12rem", lineHeight: 1.6 }}>
+                          New member? Complete your profile and identification in the registration form.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={openRegisterFlow}
+                          style={{
+                            width: "100%",
+                            border: "1px solid #006d21",
+                            background: "#ffffff",
+                            color: "#006d21",
+                            borderRadius: "12px",
+                            minHeight: "52px",
+                            fontWeight: 700,
+                            fontSize: "1.15rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Start Membership Form
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
+            )}
 
-              {currentStep === 1 && (
+            {modalView === "register" && (
+              <form onSubmit={handleSubmit} style={{ padding: "28px" }}>
+                <div style={{ display: "flex", gap: "12px", marginBottom: "22px", flexWrap: "wrap" }}>
+                  {[1, 2, 3].map((step) => (
+                    <div
+                      key={step}
+                      style={{
+                        border: `1.5px solid ${currentStep === step ? "#006d21" : "#d4e4da"}`,
+                        background: currentStep === step ? "#ecfdf3" : "#ffffff",
+                        color: currentStep === step ? "#065f46" : "#5a6b76",
+                        borderRadius: "999px",
+                        padding: "10px 16px",
+                        fontWeight: 700,
+                        fontSize: "1.2rem",
+                      }}
+                    >
+                      {step === 1 && "1. Information"}
+                      {step === 2 && "2. Identification"}
+                      {step === 3 && "3. Password & Message"}
+                    </div>
+                  ))}
+                </div>
+
+                {currentStep === 1 && (
                 <div style={sectionCardStyle}>
                   <div style={stepTitleStyle}>First Information Section</div>
                   <div className="row g-3">
@@ -435,9 +570,9 @@ function MemberRegistrationModal() {
                     </div>
                   </div>
                 </div>
-              )}
+                )}
 
-              {currentStep === 2 && (
+                {currentStep === 2 && (
                 <div style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Second Identification Section</div>
 
@@ -482,15 +617,77 @@ function MemberRegistrationModal() {
                       />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Enter Code (Country Code + Your Code)</label>
+                      <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "8px" }}>
+                        Enter Code *
+                        <button
+                          type="button"
+                          onClick={openCodesExcel}
+                          style={{
+                            width: "26px",
+                            height: "26px",
+                            borderRadius: "999px",
+                            border: "1px solid #006d21",
+                            background: "#ffffff",
+                            color: "#006d21",
+                            fontWeight: 800,
+                            fontSize: "1rem",
+                            lineHeight: 1,
+                            cursor: "pointer",
+                          }}
+                          aria-label="Click here to get code"
+                          title="Click here to get code"
+                        >
+                          ?
+                        </button>
+                        <button
+                          type="button"
+                          onClick={openCodesExcel}
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            color: "#006d21",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                            fontWeight: 600,
+                            fontSize: "1.05rem",
+                          }}
+                        >
+                          Click here to get code
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowCodeHelp(true)}
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            color: "#006d21",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            fontSize: "1.02rem",
+                            padding: 0,
+                            marginLeft: "auto",
+                          }}
+                          aria-label="Read about verification code"
+                          title="Read about verification code"
+                        >
+                          Read About Code
+                        </button>
+                      </label>
                       <input
                         className="form-control"
                         style={inputStyle}
                         value={formState.nationalIdCode}
                         disabled={idMethod !== "code"}
                         onChange={(e) => handleChange("nationalIdCode", e.target.value)}
-                        placeholder="Enter your code"
+                        placeholder="Select code from list"
+                        readOnly={idMethod === "code"}
                       />
+                      {idMethod === "code" && !isSelectedCodeValid && formState.nationalIdCode.trim() && (
+                        <small style={{ color: "#b91c1c", fontSize: "1.05rem" }}>
+                          Please choose a valid code from the list.
+                        </small>
+                      )}
                     </div>
                   </div>
 
@@ -504,26 +701,29 @@ function MemberRegistrationModal() {
                         marginBottom: "20px",
                       }}
                     >
-                      <label style={labelStyle}>Select Country Code (view all listed codes and copy one)</label>
+                      <label style={labelStyle}>Choose official code from list</label>
                       <div className="row g-2">
-                        <div className="col-md-8">
+                        <div className="col-md-9">
                           <select
                             className="form-control"
                             style={inputStyle}
-                            value={formState.selectedCountryCode}
-                            onChange={(e) => handleChange("selectedCountryCode", e.target.value)}
+                            value={formState.nationalIdCode}
+                            onChange={(e) => handleChange("nationalIdCode", e.target.value)}
                           >
-                            {COUNTRY_PHONE_CODES.map((item) => (
-                              <option key={`${item.country}-${item.code}`} value={item.code}>
-                                {item.country} ({item.code})
+                            <option value="">
+                              {isLoadingCodes ? "Loading codes..." : "Select a valid code"}
+                            </option>
+                            {sharedCodes.map((item) => (
+                              <option key={item.code} value={item.code}>
+                                {item.label}
                               </option>
                             ))}
                           </select>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-md-3">
                           <button
                             type="button"
-                            onClick={copySelectedCode}
+                            onClick={loadSharedCodes}
                             style={{
                               width: "100%",
                               minHeight: "64px",
@@ -536,10 +736,13 @@ function MemberRegistrationModal() {
                               cursor: "pointer",
                             }}
                           >
-                            Copy Code
+                            Refresh
                           </button>
                         </div>
                       </div>
+                      <small style={{ color: "#475569", fontSize: "1rem", display: "block", marginTop: "8px" }}>
+                        Only official listed codes are accepted. Sample or manual codes are blocked.
+                      </small>
                     </div>
                   )}
 
@@ -600,9 +803,9 @@ function MemberRegistrationModal() {
                     </div>
                   </div>
                 </div>
-              )}
+                )}
 
-              {currentStep === 3 && (
+                {currentStep === 3 && (
                 <div style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Third Password & Message Section</div>
                   <div className="row g-3">
@@ -631,66 +834,151 @@ function MemberRegistrationModal() {
                     </div>
                   </div>
                 </div>
-              )}
+                )}
 
-              {errorMessage && (
+                {errorMessage && (
                 <div style={{ marginTop: "16px", borderRadius: "12px", border: "1px solid #f5d5d5", background: "#fef2f2", color: "#991b1b", padding: "12px 14px", fontSize: "1.2rem" }}>
                   ⚠️ {errorMessage}
                 </div>
-              )}
+                )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
-                <button type="button" onClick={closeModal} style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "12px", padding: "12px 20px", fontWeight: 600, cursor: "pointer", fontSize: "1.2rem" }}>
-                  Cancel
-                </button>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
+                  <button type="button" onClick={closeModal} style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "12px", padding: "12px 20px", fontWeight: 600, cursor: "pointer", fontSize: "1.2rem" }}>
+                    Cancel
+                  </button>
 
-                <div style={{ display: "flex", gap: "10px" }}>
-                  {currentStep > 1 && (
-                    <button
-                      type="button"
-                      onClick={goPrevStep}
-                      style={{
-                        border: "1.5px solid #d4e4da",
-                        background: "#ffffff",
-                        color: "#1f2937",
-                        borderRadius: "12px",
-                        padding: "12px 20px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        fontSize: "1.2rem",
-                      }}
-                    >
-                      Back
-                    </button>
-                  )}
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    {currentStep > 1 && (
+                      <button
+                        type="button"
+                        onClick={goPrevStep}
+                        style={{
+                          border: "1.5px solid #d4e4da",
+                          background: "#ffffff",
+                          color: "#1f2937",
+                          borderRadius: "12px",
+                          padding: "12px 20px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          fontSize: "1.2rem",
+                        }}
+                      >
+                        Back
+                      </button>
+                    )}
 
-                  {currentStep < 3 && (
-                    <button
-                      type="button"
-                      onClick={goNextStep}
-                      style={{
-                        border: "none",
-                        background: "#006d21",
-                        color: "#ffffff",
-                        borderRadius: "12px",
-                        padding: "12px 22px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        fontSize: "1.2rem",
-                      }}
-                    >
-                      Continue
-                    </button>
-                  )}
+                    {currentStep < 3 && (
+                      <button
+                        type="button"
+                        onClick={goNextStep}
+                        style={{
+                          border: "none",
+                          background: "#006d21",
+                          color: "#ffffff",
+                          borderRadius: "12px",
+                          padding: "12px 22px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          fontSize: "1.2rem",
+                        }}
+                      >
+                        Continue
+                      </button>
+                    )}
 
-                  {currentStep === 3 && (
-                    <button type="submit" disabled={isSubmitting || !canSubmit} style={{ border: "none", background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer", fontSize: "1.2rem" }}>
-                      {isSubmitting ? "Submitting..." : "Submit Registration"}
-                    </button>
-                  )}
+                    {currentStep === 3 && (
+                      <button type="submit" disabled={isSubmitting || !canSubmit} style={{ border: "none", background: isSubmitting || !canSubmit ? "#a8c9b5" : "#006d21", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: isSubmitting || !canSubmit ? "not-allowed" : "pointer", fontSize: "1.2rem" }}>
+                        {isSubmitting ? "Submitting..." : "Submit Registration"}
+                      </button>
+                    )}
+                  </div>
                 </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {showCodeHelp && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.35)",
+            zIndex: 10001,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "16px",
+          }}
+          onClick={() => setShowCodeHelp(false)}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "580px",
+              background: "#ffffff",
+              borderRadius: "16px",
+              border: "1px solid #d4e4da",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
+              overflow: "hidden",
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div
+              style={{
+                padding: "16px 20px",
+                background: "linear-gradient(130deg, #edf8f1 0%, #ffffff 100%)",
+                borderBottom: "1px solid #e3eee7",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "12px",
+              }}
+            >
+              <h4 style={{ margin: 0, color: "#0f5132", fontSize: "1.35rem", fontWeight: 800 }}>
+                About Verification Code
+              </h4>
+              <button
+                type="button"
+                onClick={() => setShowCodeHelp(false)}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: "#6b7280",
+                  fontSize: "1.6rem",
+                  lineHeight: 1,
+                  cursor: "pointer",
+                }}
+                aria-label="Close help modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: "20px" }}>
+              <p style={{ margin: 0, color: "#334155", fontSize: "1.12rem", lineHeight: 1.75 }}>
+                If you don&apos;t have Somaliland national ID, please contact your local Somaliland diaspora association to verify your nationality and provide you with a verification code.
+              </p>
+
+              <div style={{ marginTop: "16px", textAlign: "right" }}>
+                <button
+                  type="button"
+                  onClick={() => setShowCodeHelp(false)}
+                  style={{
+                    border: "none",
+                    background: "#006d21",
+                    color: "#ffffff",
+                    borderRadius: "10px",
+                    padding: "10px 16px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  I Understand
+                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
