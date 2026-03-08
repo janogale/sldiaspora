@@ -807,7 +807,7 @@ function MemberRegistrationModal() {
 
                 {currentStep === 3 && (
                 <div style={sectionCardStyle}>
-                  <div style={stepTitleStyle}>Third Password & Message Section</div>
+                  <div style={stepTitleStyle}> Password & Bio</div>
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label style={labelStyle}>Password (System Login) *</label>
@@ -821,7 +821,7 @@ function MemberRegistrationModal() {
                       )}
                     </div>
                     <div className="col-12">
-                      <label style={labelStyle}>Write small your BIO *</label>
+                      <label style={labelStyle}>Write a short BIO *</label>
                       <textarea
                         className="form-control"
                         style={{ ...inputStyle, minHeight: "132px", paddingTop: "12px", paddingBottom: "12px" }}
