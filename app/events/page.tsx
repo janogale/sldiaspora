@@ -226,7 +226,7 @@ function Page() {
               </div>
               <div className="visa-offer__item-content-btn mt-30">
                 <Link href={`/events/${event.id}`}>
-                  Join Now <i className="fa-solid fa-arrow-right"></i>
+                  Learn More <i className="fa-solid fa-arrow-right"></i>
                 </Link>
               </div>
             </div>
