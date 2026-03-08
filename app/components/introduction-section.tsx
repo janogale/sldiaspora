@@ -107,9 +107,7 @@ const IntroductionSection = () => {
             </div>
 
             <div className={styles.ctaRow}>
-              <Link href="/contact">
-                <button className={styles.cta}>Get Involved</button>
-              </Link>
+              
               <Link
                 target="_blank"
                 href="https://mfa.govsomaliland.org/article/diaspora-department"
