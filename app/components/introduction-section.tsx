@@ -1,75 +1,81 @@
-"use client";
-import React from "react";
 import styles from "./introduction-section.module.css";
 import {
-  Book,
-  DollarSign,
-  HandHelping,
+  Building2,
+  Circle,
+  FileText,
   Handshake,
+  HeartHandshake,
+  LifeBuoy,
+  Lightbulb,
+  LineChart,
   Map,
-  Network,
-  Plane,
-  UserCog,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
+import { getServices } from "../../lib/services";
 
-const services = [
-  {
-    id: 1,
-    title: "Diaspora Mapping",
-    text: "Building a comprehensive, dynamic database to identify skilled professionals, entrepreneurs, investors, and philanthropists and connect them with opportunities.",
-    icon: <Map />,
-  },
-  {
-    id: 2,
-    title: "Liaison with Government",
-    text: "Serving as the primary point of contact to ensure diaspora voices are heard and integrated into national development planning.",
-    icon: <Handshake />,
-  },
-  {
-    id: 3,
-    title: "Airport Help Desk",
-    text: "Dedicated desk at Egal International Airport offering arrival and departure assistance, guidance on immigration, customs and transport.",
-    icon: <Plane />,
-  },
-  {
-    id: 4,
-    title: "Knowledge Transfer",
-    text: "Facilitating diaspora experts to share knowledge and build capacity with local institutions, businesses, and government agencies.",
-    icon: <Book />,
-  },
-  {
-    id: 5,
-    title: "Private Investment",
-    text: "Supporting diaspora investors with guidance on opportunities, regulations, and business development to stimulate growth and jobs.",
-    icon: <DollarSign />,
-  },
-  {
-    id: 6,
-    title: "Community Development",
-    text: "Partnering with diaspora-led organizations on education, healthcare, infrastructure and social welfare initiatives for lasting impact.",
-    icon: <HandHelping />,
-  },
-  {
-    id: 7,
-    title: "Network Building & Engagement",
-    text: "Engaging diaspora communities worldwide through partnerships with committees, associations and youth groups.",
-    icon: <Network />,
-  },
-  {
-    id: 8,
-    title: "Coordination with Stakeholders",
-    text: "Collaborating with government agencies, international organizations and private partners to deliver coordinated initiatives.",
-    icon: <UserCog />,
-  },
-];
+const ICON_BY_KEY = {
+  handshake: Handshake,
+  map: Map,
+  linechart: LineChart,
+  chartline: LineChart,
+  chart: LineChart,
+  building2: Building2,
+  building: Building2,
+  users: Users,
+  usergroup: Users,
+  group: Users,
+  filetext: FileText,
+  file: FileText,
+  document: FileText,
+  lifebuoy: LifeBuoy,
+  supportagent: LifeBuoy,
+  headsetmic: LifeBuoy,
+  support: LifeBuoy,
+  hearthandshake: HeartHandshake,
+  community: HeartHandshake,
+  lightbulb: Lightbulb,
+  idea: Lightbulb,
+} as const;
+
+function normalizeIconKey(raw: string): keyof typeof ICON_BY_KEY | "fallback" {
+  const normalized = raw.toLowerCase();
+  const key = normalized.replace(/[^a-z0-9]/g, "");
+
+  if (key in ICON_BY_KEY) return key as keyof typeof ICON_BY_KEY;
+
+  const aliases: Array<[pattern: RegExp, target: keyof typeof ICON_BY_KEY]> = [
+    [/(handshake|hand-shake)/, "handshake"],
+    [/(^|[^a-z])map([^a-z]|$)|globe|location/, "map"],
+    [/(linechart|line-chart|chartline|chart|analytics|graph)/, "linechart"],
+    [/(building|office|home)/, "building2"],
+    [/(users|people|team|group)/, "users"],
+    [/(filetext|file-text|file|document|policy|doc)/, "filetext"],
+    [/(lifebuoy|life-buoy|supportagent|support_agent|support|headset|help|rescue)/, "lifebuoy"],
+    [/(hearthandshake|heart-handshake|community|care|solidarity)/, "hearthandshake"],
+    [/(lightbulb|light-bulb|idea|knowledge|innovation)/, "lightbulb"],
+  ];
+
+  for (const [pattern, target] of aliases) {
+    if (pattern.test(normalized) || pattern.test(key)) return target;
+  }
+
+  return "fallback";
+}
+
+function isMaterialSymbolName(value: string): boolean {
+  if (!value.trim()) return false;
+  return /[_\s:]/.test(value) || /^[a-z0-9_]+$/.test(value.trim());
+}
 
 const introImage = {
   src: "/team-img2.jpeg",
   alt: "Diaspora community gathering",
 };
 
-const IntroductionSection = () => {
+const IntroductionSection = async () => {
+  const services = await getServices();
+
   return (
     <section className={styles.root} aria-labelledby="diaspora-heading">
       <div className="container">
@@ -141,23 +147,45 @@ const IntroductionSection = () => {
           </p>
 
           <div className={styles.grid}>
-            {services.map((s) => (
+            {services.map((s) => {
+              const iconKey = normalizeIconKey(s.icon);
+              const Icon = iconKey === "fallback" ? Circle : ICON_BY_KEY[iconKey];
+              const renderMaterial = isMaterialSymbolName(s.icon);
+              const materialName = s.icon
+                .trim()
+                .toLowerCase()
+                .replace(/-/g, "_")
+                .replace(/^materialsymbols(outlined|rounded|sharp):/, "")
+                .replace(/^mi:/, "")
+                .replace(/^icon:/, "");
+
+              return (
               <article
                 key={s.id}
                 className={styles.card}
                 aria-labelledby={`svc-${s.id}`}
               >
                 <div className={styles.icon} aria-hidden>
-                  {s.icon}
+                  {renderMaterial ? (
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: 24, color: "#006d21", lineHeight: 1 }}
+                    >
+                      {materialName}
+                    </span>
+                  ) : (
+                    <Icon size={24} color="#006d21" />
+                  )}
                 </div>
                 <div>
                   <h4 id={`svc-${s.id}`} className={styles.cardTitle}>
                     {s.title}
                   </h4>
-                  <p className={styles.cardText}>{s.text}</p>
+                  <p className={styles.cardText}>{s.description}</p>
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -1,11 +1,5 @@
 import type { NextConfig } from "next";
 
-const isVercel = Boolean(process.env.VERCEL);
-
-const nextConfig: NextConfig = isVercel
-  ? {}
-  : {
-      distDir: ".next-tmp",
-    };
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
