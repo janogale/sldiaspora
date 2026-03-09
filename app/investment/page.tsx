@@ -1,13 +1,97 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import { Investments } from "../data/Investments";
 import { explorePlaces } from "../data/explores";
 
+type IntroContent = {
+  title: string;
+  paragraph1: string;
+  paragraph2: string;
+};
+
+type InvestmentSectorItem = {
+  id?: string;
+  title: string;
+  opportunities: string[];
+  image: string;
+  website: string;
+};
+
+type TourismPlaceItem = {
+  id?: string;
+  name: string;
+  description: string;
+  image: string;
+  map: string;
+};
+
+const DEFAULT_SECTOR_INTRO: IntroContent = {
+  title: "Priority Sectors for Investment",
+  paragraph1:
+    "Somaliland is a land of unexploited potential and emerging opportunities. Strategically located in the Horn of Africa, with an 850-kilometer coastline along the Gulf of Aden, it is a natural gateway to African and Middle Eastern markets. Blessed with abundant natural resources, a resilient and youthful population, and a deep-rooted cultural heritage, Somaliland offers a stable and investor-friendly environment.",
+  paragraph2:
+    "The government is prioritizing key growth sectors: agriculture, livestock, fisheries, technology, trade & logistics, mining, and renewable energy, each supported by a government committed to economic transformation and sustainable development. With competitive business policies, improving infrastructure, and a growing appetite for innovation, Somaliland stands ready to welcome forward-thinking investors and partners. We invite you to explore the opportunities that await in Somaliland, where tradition meets ambition and investment drives impact.",
+};
+
+const DEFAULT_TOURISM_INTRO: IntroContent = {
+  title: "Tourism",
+  paragraph1:
+    "Somaliland is a unique destination where rich culture, dramatic landscapes, and entrepreneurial opportunity meet. From ancient rock art sites and bustling markets to long stretches of coastline and mountain ranges, the region is ideal for both travelers and investors seeking authentic experiences and high-impact projects.",
+  paragraph2:
+    "Must-see destinations include Laas Geel's prehistoric paintings, the historic port town of Berbera, and the Cal Madow mountains. Whether you're exploring cultural heritage, eco-tourism, or locating strategic logistics hubs, Somaliland offers a welcoming environment and growing infrastructure to support sustainable travel and long-term investment.",
+};
+
 const InvestmentPage = () => {
   const [activeTab, setActiveTab] = useState<"sectors" | "explore">("sectors");
+  const [sectorIntro, setSectorIntro] = useState<IntroContent>(DEFAULT_SECTOR_INTRO);
+  const [tourismIntro, setTourismIntro] = useState<IntroContent>(DEFAULT_TOURISM_INTRO);
+  const [sectors, setSectors] = useState<InvestmentSectorItem[]>(Investments);
+  const [places, setPlaces] = useState<TourismPlaceItem[]>(explorePlaces);
+  const [tourismWebsite, setTourismWebsite] = useState("https://mott.govsomaliland.org/");
+  const [tourismWebsiteLabel, setTourismWebsiteLabel] = useState("MOTT Website");
+
+  useEffect(() => {
+    const loadDynamicContent = async () => {
+      try {
+        const response = await fetch("/api/investment-content", { method: "GET" });
+        const result = (await response.json().catch(() => null)) as {
+          data?: {
+            sectorIntro?: IntroContent;
+            tourismIntro?: IntroContent;
+            tourismWebsite?: string;
+            tourismWebsiteLabel?: string;
+            sectors?: InvestmentSectorItem[];
+            places?: TourismPlaceItem[];
+          };
+        } | null;
+
+        if (!response.ok || !result?.data) return;
+
+        if (result.data.sectorIntro) setSectorIntro(result.data.sectorIntro);
+        if (result.data.tourismIntro) setTourismIntro(result.data.tourismIntro);
+        if (result.data.tourismWebsite) setTourismWebsite(result.data.tourismWebsite);
+        if (result.data.tourismWebsiteLabel) {
+          setTourismWebsiteLabel(result.data.tourismWebsiteLabel);
+        }
+
+        if (Array.isArray(result.data.sectors) && result.data.sectors.length > 0) {
+          setSectors(result.data.sectors);
+        }
+
+        if (Array.isArray(result.data.places) && result.data.places.length > 0) {
+          setPlaces(result.data.places);
+        }
+      } catch {
+        // Keep static fallback content if API is unavailable.
+      }
+    };
+
+    loadDynamicContent();
+  }, []);
+
   return (
     <>
       <div style={{ margin: "2rem" }}></div>
@@ -132,33 +216,17 @@ const InvestmentPage = () => {
                   <div className="investment-intro">
                     <div className="section-title2 mb-40">
                       <h2 className="section-title2__wrapper-title">
-                        Priority Sectors for Investment
+                        {sectorIntro.title}
                       </h2>
                     </div>
                     <p
                       className="mb-20"
                       style={{ fontSize: "16px", lineHeight: "1.8" }}
                     >
-                      Somaliland is a land of unexploited potential and emerging
-                      opportunities. Strategically located in the Horn of
-                      Africa, with an 850-kilometer coastline along the Gulf of
-                      Aden, it is a natural gateway to African and Middle
-                      Eastern markets. Blessed with abundant natural resources,
-                      a resilient and youthful population, and a deep-rooted
-                      cultural heritage, Somaliland offers a stable and
-                      investor-friendly environment.
+                      {sectorIntro.paragraph1}
                     </p>
                     <p style={{ fontSize: "16px", lineHeight: "1.8" }}>
-                      The government is prioritizing key growth sectors:
-                      agriculture, livestock, fisheries, technology, trade &
-                      logistics, mining, and renewable energy, each supported by
-                      a government committed to economic transformation and
-                      sustainable development. With competitive business
-                      policies, improving infrastructure, and a growing appetite
-                      for innovation, Somaliland stands ready to welcome
-                      forward-thinking investors and partners. We invite you to
-                      explore the opportunities that await in Somaliland, where
-                      tradition meets ambition and investment drives impact.
+                      {sectorIntro.paragraph2}
                     </p>
                   </div>
                 </div>
@@ -170,28 +238,17 @@ const InvestmentPage = () => {
                   <div className="investment-intro">
                     <div className="section-title2 mb-40">
                       <h2 className="section-title2__wrapper-title">
-                        Tourism
+                        {tourismIntro.title}
                       </h2>
                     </div>
                     <p
                       className="mb-20"
                       style={{ fontSize: "16px", lineHeight: "1.8" }}
                     >
-                      Somaliland is a unique destination where rich culture,
-                      dramatic landscapes, and entrepreneurial opportunity meet.
-                      From ancient rock art sites and bustling markets to long
-                      stretches of coastline and mountain ranges, the region is
-                      ideal for both travelers and investors seeking authentic
-                      experiences and high-impact projects.
+                      {tourismIntro.paragraph1}
                     </p>
                     <p style={{ fontSize: "16px", lineHeight: "1.8" }}>
-                      Must-see destinations include Laas Geel&apos;s prehistoric
-                      paintings, the historic port town of Berbera, and the Cal
-                      Madow mountains. Whether you&apos;re exploring cultural
-                      heritage, eco-tourism, or locating strategic logistics
-                      hubs, Somaliland offers a welcoming environment and
-                      growing infrastructure to support sustainable travel and
-                      long-term investment.
+                      {tourismIntro.paragraph2}
                     </p>
                   </div>
                 </div>
@@ -202,7 +259,7 @@ const InvestmentPage = () => {
               <>
                 {/* Investment Sectors */}
                 <div className="row">
-                  {Investments.map((sector, index) => (
+                  {sectors.map((sector, index) => (
                     <div className="col-lg-6 col-md-6 mb-40" key={index}>
                       <div
                         className="investment-card"
@@ -505,7 +562,7 @@ const InvestmentPage = () => {
                           marginTop: 12,
                         }}
                       >
-                        {explorePlaces.map((place, idx) => (
+                        {places.map((place, idx) => (
                           <div
                             key={idx}
                             className="place-card"
@@ -598,7 +655,7 @@ const InvestmentPage = () => {
                                 }}
                               >
                                 <a
-                                  href="https://www.google.com/maps/dir/?api=1&destination=Somaliland"
+                                  href={place.map}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="rr-btn"
@@ -614,7 +671,7 @@ const InvestmentPage = () => {
                                   Get Directions
                                 </a>
                                 <a
-                                  href="https://mott.govsomaliland.org/"
+                                  href={tourismWebsite}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="rr-btn"
@@ -629,7 +686,7 @@ const InvestmentPage = () => {
                                     marginLeft: 8,
                                   }}
                                 >
-                                  MOTT Website
+                                  {tourismWebsiteLabel}
                                 </a>
                               </div>
                             </div>
