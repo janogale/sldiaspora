@@ -668,7 +668,7 @@ const InvestmentPage = () => {
                                     fontWeight: 600,
                                   }}
                                 >
-                                  Open Map
+                                  Get Directions
                                 </a>
                                 <a
                                   href={tourismWebsite}
