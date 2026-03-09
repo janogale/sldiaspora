@@ -92,7 +92,6 @@ function MemberRegistrationModal() {
 
   const countryOptions = useMemo(
     () => [
-      "Somaliland",
       "Afghanistan",
       "Albania",
       "Algeria",
@@ -252,7 +251,6 @@ function MemberRegistrationModal() {
       "Slovakia",
       "Slovenia",
       "Solomon Islands",
-      "Somalia",
       "South Africa",
       "South Korea",
       "South Sudan",
