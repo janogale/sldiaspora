@@ -119,6 +119,50 @@ function resolveImage(value: unknown, fallback = ""): string {
   return fallback;
 }
 
+function resolveMapLink(value: unknown, placeName = "Somaliland"): string {
+  // Case 1: direct URL pasted from Google Maps (or any map URL)
+  if (typeof value === "string") {
+    const raw = value.trim();
+    if (!raw) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(placeName)}`;
+    }
+
+    if (/^https?:\/\//i.test(raw)) return raw;
+
+    // Case 2: coordinates pasted as "lat,lng"
+    const coords = raw.match(/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/);
+    if (coords) {
+      return `https://www.google.com/maps/search/?api=1&query=${coords[1]},${coords[2]}`;
+    }
+
+    // Case 3: plain location text pasted in the field
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(raw)}`;
+  }
+
+  // Case 4: geometry/object field (for map picker data)
+  if (value && typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+
+    const lat = obj.lat ?? obj.latitude;
+    const lng = obj.lng ?? obj.lon ?? obj.longitude;
+    if (typeof lat === "number" && typeof lng === "number") {
+      return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    }
+
+    const mapType = obj.type;
+    const coordinates = obj.coordinates;
+    if (mapType === "Point" && Array.isArray(coordinates) && coordinates.length >= 2) {
+      const lon = coordinates[0];
+      const latitude = coordinates[1];
+      if (typeof lon === "number" && typeof latitude === "number") {
+        return `https://www.google.com/maps/search/?api=1&query=${latitude},${lon}`;
+      }
+    }
+  }
+
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(placeName)}`;
+}
+
 function parseOpportunities(value: unknown): string[] {
   if (Array.isArray(value)) {
     return value
@@ -204,7 +248,13 @@ function normalizeSector(row: Record<string, unknown>, index: number): Investmen
 function normalizePlace(row: Record<string, unknown>, index: number): TourismPlaceItem {
   const name = firstString(row, ["name", "title", "place_name"]);
   const description = firstString(row, ["description", "content", "details"]);
-  const map = firstString(row, ["map", "google_map", "map_link", "location_url"]);
+  const mapValue =
+    row.map_url ??
+    row.directions_url ??
+    row.google_map ??
+    row.map_link ??
+    row.location_url ??
+    row.map;
 
   const imageValue = row.image ?? row.main_image ?? row.cover_image ?? row.photo;
 
@@ -213,7 +263,7 @@ function normalizePlace(row: Record<string, unknown>, index: number): TourismPla
     name: name || "Untitled Place",
     description: description || "Description coming soon.",
     image: resolveImage(imageValue, "/assets/imgs/invest/laas.jpg"),
-    map: map || "https://www.google.com/maps/search/?api=1&query=Somaliland",
+    map: resolveMapLink(mapValue, name || "Somaliland"),
   };
 }
 
