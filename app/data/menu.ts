@@ -31,6 +31,12 @@ export const menuList: MenuItem[] = [
   {
     label: "Events",
     path: "/events",
+    children: [
+      {
+        label: "Gallery",
+        path: "/galleries",
+      },
+    ],
   },
   {
     label: "News",

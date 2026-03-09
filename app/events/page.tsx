@@ -211,7 +211,11 @@ function Page() {
             <div className="visa-offer__item-content">
               <div className="visa-offer__item-content-text">
                 <div className="visa-offer__item-content-text-title">
-                  <h5>{event.title}</h5>
+                  <h5>
+                    {event.location && event.location !== "Location to be announced"
+                      ? event.location
+                      : event.title}
+                  </h5>
                   <p>{event.description}</p>
                 </div>
                 <div className="visa-offer__item-content-text-button">
@@ -226,7 +230,7 @@ function Page() {
               </div>
               <div className="visa-offer__item-content-btn mt-30">
                 <Link href={`/events/${event.id}`}>
-                  Join Now <i className="fa-solid fa-arrow-right"></i>
+                  Learn More <i className="fa-solid fa-arrow-right"></i>
                 </Link>
               </div>
             </div>
@@ -498,7 +502,9 @@ function Page() {
 
                           <div style={{ padding: "14px" }}>
                             <h5 style={{ marginBottom: "8px", fontWeight: 700 }}>
-                              {event.title}
+                              {event.location && event.location !== "Location to be announced"
+                                ? event.location
+                                : event.title}
                             </h5>
                             <p style={{ color: "#666", marginBottom: "10px", fontSize: "0.92rem" }}>
                               {event.description}

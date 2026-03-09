@@ -440,7 +440,9 @@ const NewsEvents = () => {
 
                         <div style={{ padding: "14px" }}>
                           <h5 style={{ marginBottom: "8px", fontWeight: 700 }}>
-                            {event.title}
+                            {event.location && event.location !== "Location to be announced"
+                              ? event.location
+                              : event.title}
                           </h5>
                           <p style={{ color: "#666", marginBottom: "10px", fontSize: "0.92rem" }}>
                             {event.description}

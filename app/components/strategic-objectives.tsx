@@ -94,17 +94,6 @@ const StrategicObjectives = () => {
                   display: "flex",
                   gap: "20px",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateX(8px)";
-                  e.currentTarget.style.borderColor = "#006d21";
-                  e.currentTarget.style.boxShadow =
-                    "0 8px 24px rgba(0, 109, 33, 0.12)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateX(0)";
-                  e.currentTarget.style.borderColor = "rgba(0, 109, 33, 0.1)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
               >
                 <div
                   style={{

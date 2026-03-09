@@ -27,6 +27,10 @@ export default function RootLayout({
         <link rel="stylesheet" href="/assets/css/vendor/custom-font.css" />
         <link rel="stylesheet" href="/assets/css/vendor/magnific-popup.css" />
         <link rel="stylesheet" href="/assets/css/vendor/fontawesome-pro.css" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        />
         <link rel="stylesheet" href="/assets/css/vendor/spacing.css" />
         <link rel="stylesheet" href="/assets/css/main.css" />
       </head>

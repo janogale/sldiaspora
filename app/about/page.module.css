@@ -1,0 +1,43 @@
+.aboutCompactSections :global(.section-space) {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.aboutCompactSections :global(.section-title2__wrapper-title),
+.aboutCompactSections :global(.section__title-wrapper-title) {
+  font-size: 2.8rem !important;
+  line-height: 1.3 !important;
+}
+
+.aboutCompactSections :global(.overview__text-title),
+.aboutCompactSections :global(h3),
+.aboutCompactSections :global(h4),
+.aboutCompactSections :global(h5) {
+  font-size: 1.6rem !important;
+  line-height: 1.4 !important;
+}
+
+.aboutCompactSections :global(.department-hierarchy-section) {
+  margin-top: 0 !important;
+  padding-top: 2rem !important;
+}
+
+@media (max-width: 767px) {
+  .aboutCompactSections :global(.section-title2__wrapper-title),
+  .aboutCompactSections :global(.section__title-wrapper-title) {
+    font-size: 1.9rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .aboutCompactSections :global(.overview__item) {
+    padding: 1rem !important;
+  }
+
+  .aboutCompactSections :global(.overview__text-title),
+  .aboutCompactSections :global(h3),
+  .aboutCompactSections :global(h4),
+  .aboutCompactSections :global(h5) {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+}

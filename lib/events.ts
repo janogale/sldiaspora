@@ -12,6 +12,10 @@ type RawEvent = Record<string, unknown> & {
   content?: string;
   details?: string;
   location?: string;
+  city?: string;
+  country?: string;
+  city_name?: string;
+  country_name?: string;
   venue?: string;
   address?: string;
   datetime?: string;
@@ -56,8 +60,54 @@ const EVENT_COLLECTIONS: EventCollectionName[] = [
 function pickFirstString(obj: Record<string, unknown>, keys: string[]): string {
   for (const key of keys) {
     const value = obj[key];
-    if (typeof value === "string" && value.trim()) return value.trim();
+    const text = extractStringValue(value);
+    if (text) return text;
   }
+  return "";
+}
+
+function extractStringValue(value: unknown, depth = 0): string {
+  if (depth > 2 || value == null) return "";
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed;
+  }
+
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const text = extractStringValue(item, depth + 1);
+      if (text) return text;
+    }
+    return "";
+  }
+
+  if (typeof value !== "object") return "";
+
+  const obj = value as Record<string, unknown>;
+  const preferredKeys = [
+    "name",
+    "title",
+    "label",
+    "value",
+    "city",
+    "country",
+    "city_name",
+    "country_name",
+    "en",
+    "en_us",
+  ];
+
+  for (const key of preferredKeys) {
+    if (!(key in obj)) continue;
+    const text = extractStringValue(obj[key], depth + 1);
+    if (text) return text;
+  }
+
   return "";
 }
 
@@ -144,7 +194,26 @@ function normalizeDateTime(raw: RawEvent): string {
 function normalizeEvent(raw: RawEvent): EventItem {
   const title = pickFirstString(raw, ["title", "Title", "event_title", "event_name", "name"]);
   const description = pickFirstString(raw, ["description", "content", "details"]);
-  const location = pickFirstString(raw, ["location", "venue", "address"]);
+  const explicitLocation = pickFirstString(raw, ["location", "Location", "venue", "address"]);
+  const city = pickFirstString(raw, [
+    "city",
+    "City",
+    "city_name",
+    "cityName",
+    "event_city",
+    "location_city",
+  ]);
+  const country = pickFirstString(raw, [
+    "country",
+    "Country",
+    "country_name",
+    "countryName",
+    "event_country",
+    "location_country",
+  ]);
+
+  const cityCountry = [city, country].filter(Boolean).join(", ");
+  const location = cityCountry || explicitLocation;
 
   const imageFileId =
     toFileId(raw.main_image) ||

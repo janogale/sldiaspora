@@ -85,7 +85,7 @@ const Blogs = async () => {
               data-wow-delay=".4s"
             >
               <Link href="/blogs">
-                All Blogs <i className="fa-solid fa-arrow-right"></i>
+                All Articles <i className="fa-solid fa-arrow-right"></i>
               </Link>
             </div>
           </div>
