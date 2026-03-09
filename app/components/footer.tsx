@@ -1,6 +1,57 @@
+"use client";
+
 import Link from "next/link";
+import { FormEvent, useState } from "react";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | "">("");
+
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!email.trim()) {
+      setSubmitStatus("error");
+      setSubmitMessage("Please enter your email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitMessage("");
+    setSubmitStatus("");
+
+    try {
+      const response = await fetch("/api/newsletter-subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const result = (await response.json().catch(() => null)) as
+        | { message?: string }
+        | null;
+
+      if (!response.ok) {
+        setSubmitStatus("error");
+        setSubmitMessage(result?.message || "Unable to subscribe right now.");
+        return;
+      }
+
+      setSubmitStatus("success");
+      setSubmitMessage(result?.message || "Subscribed successfully.");
+      setEmail("");
+    } catch {
+      setSubmitStatus("error");
+      setSubmitMessage("Unable to subscribe right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer>
       <section
@@ -212,7 +263,7 @@ const Footer = () => {
                 data-wow-delay=".5s"
               >
                 <div className="footer__widget-title">
-                  <h4>Subscribe Our Newsletter</h4>
+                  <h4>Subscribe To Our Newsletter</h4>
                 </div>
 
                 <div className="footer__subscribe subscribe-2">
@@ -226,19 +277,17 @@ const Footer = () => {
                     </li>
                   </ul>
                   <div className="footer-form">
-                    <form action="#" className="rr-subscribe-form">
+                    <form className="rr-subscribe-form" onSubmit={handleNewsletterSubmit}>
                       <input
                         className="form-control"
                         type="email"
                         name="email"
                         placeholder="Enter Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                       />
-                      <input
-                        type="hidden"
-                        name="action"
-                        value="mailchimpsubscribe"
-                      />
-                      <button className="submit">
+                      <button className="submit" type="submit" disabled={isSubmitting}>
                         <svg
                           width="16"
                           height="15"
@@ -254,6 +303,18 @@ const Footer = () => {
                       </button>
                       <div className="clearfix"></div>
                     </form>
+                    {submitMessage && (
+                      <p
+                        style={{
+                          marginTop: "10px",
+                          marginBottom: 0,
+                          fontSize: "0.92rem",
+                          color: submitStatus === "success" ? "#50FEA8" : "#ffb4b4",
+                        }}
+                      >
+                        {submitMessage}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
