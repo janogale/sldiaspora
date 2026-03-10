@@ -676,6 +676,11 @@ export default function MemberDashboardPage() {
             </button>
 
             <div className={styles.modalContent}>
+              <div className={styles.modalTop}>
+                <h3>Connect With Member</h3>
+                <p>Send a short professional introduction message.</p>
+              </div>
+
               <div className={styles.modalHeader}>
                 <img
                   src={
@@ -684,15 +689,15 @@ export default function MemberDashboardPage() {
                   }
                   alt={selectedMember.full_name}
                 />
-                <div>
+                <div className={styles.modalIdentity}>
                   <h3>{selectedMember.full_name}</h3>
                   <p>{selectedMember.profession || 'Profession not shared'}</p>
+                  <span className={styles.modalLocation}>
+                    {[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}
+                  </span>
                 </div>
               </div>
 
-              <p className={styles.modalSubtitle}>
-                {[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}
-              </p>
               <div className={styles.modalForm}>
                 <div>
                   <label className={styles.modalLabel}>Share contact</label>
