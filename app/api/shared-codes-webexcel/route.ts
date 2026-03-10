@@ -85,7 +85,8 @@ export async function GET() {
       --head: #0f5132;
       --accent: #166534;
       --accent-soft: #eaf6ef;
-      --table-head: #edf4f0;
+      --table-head: #e9f2ec;
+      --glow: rgba(22, 101, 52, 0.16);
       --font: "Poppins", "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
@@ -125,8 +126,17 @@ export async function GET() {
       position: relative;
       z-index: 1;
     }
+    .wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #1f7a4a 0%, #63a678 60%, #a7d4bb 100%);
+      z-index: 2;
+    }
     .head {
-      padding: 20px;
+      padding: 22px 20px 18px;
       border-bottom: 1px solid var(--line);
       background: linear-gradient(135deg, #edf8f1 0%, #ffffff 72%);
     }
@@ -143,7 +153,7 @@ export async function GET() {
     }
     .controls {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto auto;
+      grid-template-columns: 2fr 1fr 1fr auto;
       gap: 10px;
       padding: 14px 20px 16px;
       border-bottom: 1px solid var(--line);
@@ -164,10 +174,12 @@ export async function GET() {
       border: 1px solid var(--line);
       padding: 10px 12px;
       min-height: 42px;
+      background: #ffffff;
     }
     input:focus, select:focus {
-      outline: 2px solid #c5e7d1;
+      outline: 3px solid #d7efdf;
       border-color: #91c9a8;
+      box-shadow: 0 0 0 5px var(--glow);
     }
     button {
       border: none;
@@ -176,13 +188,14 @@ export async function GET() {
       transition: transform 0.16s ease, opacity 0.16s ease;
     }
     button:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--accent); color: #fff; }
     .btn-soft { background: var(--accent-soft); color: #0f5132; border: 1px solid #b8dcc7; }
     .summary {
-      padding: 0 20px 12px;
+      padding: 10px 20px 12px;
       color: #5e6f66;
       font-size: 0.9rem;
       font-weight: 600;
+      background: linear-gradient(180deg, #fcfefd 0%, #f7fbf9 100%);
+      border-bottom: 1px solid #ebf2ee;
     }
     .table-wrap { overflow: auto; }
     table { width: 100%; border-collapse: collapse; min-width: 900px; }
@@ -245,7 +258,6 @@ export async function GET() {
             </select>
           </div>
           <button id="resetBtn" class="btn-soft" type="button">Reset</button>
-          <button id="exportBtn" class="btn-primary" type="button">Export CSV</button>
         </div>
         <div class="summary" id="summaryLine"></div>
         <div class="table-wrap">
@@ -271,12 +283,41 @@ export async function GET() {
             const countryFilter = document.getElementById("countryFilter");
             const cityFilter = document.getElementById("cityFilter");
             const resetBtn = document.getElementById("resetBtn");
-            const exportBtn = document.getElementById("exportBtn");
             const summaryLine = document.getElementById("summaryLine");
             const noResults = document.getElementById("noResults");
             const table = document.getElementById("directoryTable");
             const bodyRows = Array.from(table.querySelectorAll("tbody tr"));
             const total = bodyRows.length;
+
+            const cityMap = bodyRows.reduce((acc, row) => {
+              const country = (row.dataset.country || "").trim();
+              const city = (row.dataset.city || "").trim();
+              if (!city) return acc;
+              const key = country || "__all__";
+              if (!acc[key]) acc[key] = new Set();
+              acc[key].add(city);
+              return acc;
+            }, {});
+
+            const allCities = Array.from(new Set(bodyRows.map((row) => (row.dataset.city || "").trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+
+            const rebuildCityOptions = () => {
+              const selectedCountry = (countryFilter.value || "").trim();
+              const previousCity = cityFilter.value;
+
+              const cities = selectedCountry
+                ? Array.from(cityMap[selectedCountry] || []).sort((a, b) => a.localeCompare(b))
+                : allCities;
+
+              const options = ['<option value="">All Cities</option>']
+                .concat(cities.map((city) => '<option value="' + city + '">' + city + '</option>'))
+                .join('');
+
+              cityFilter.innerHTML = options;
+              if (cities.includes(previousCity)) {
+                cityFilter.value = previousCity;
+              }
+            };
 
             const applyFilters = () => {
               const q = (searchInput.value || "").trim().toLowerCase();
@@ -299,6 +340,14 @@ export async function GET() {
                 if (show) visible += 1;
               });
 
+              let counter = 0;
+              bodyRows.forEach((row) => {
+                if (row.style.display === "none") return;
+                counter += 1;
+                const firstCell = row.querySelector("td");
+                if (firstCell) firstCell.textContent = String(counter);
+              });
+
               summaryLine.textContent = "Showing " + visible + " of " + total + " associations";
               noResults.style.display = visible === 0 ? "block" : "none";
             };
@@ -306,35 +355,19 @@ export async function GET() {
             resetBtn.addEventListener("click", () => {
               searchInput.value = "";
               countryFilter.value = "";
+              rebuildCityOptions();
               cityFilter.value = "";
               applyFilters();
             });
 
-            exportBtn.addEventListener("click", () => {
-              const visibleRows = bodyRows.filter((row) => row.style.display !== "none");
-              const headers = ["#", "Association", "Contact Person", "Phone", "Email", "Country", "City"];
-              const csvRows = [headers.join(",")];
-
-              visibleRows.forEach((row) => {
-                const cells = Array.from(row.querySelectorAll("td")).map((cell) => {
-                  const value = (cell.textContent || "").trim().replace(/"/g, '""');
-                  return '"' + value + '"';
-                });
-                csvRows.push(cells.join(","));
-              });
-
-              const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
-              const link = document.createElement("a");
-              link.href = URL.createObjectURL(blob);
-              link.download = "somaliland-association-directory.csv";
-              link.click();
-              URL.revokeObjectURL(link.href);
-            });
-
             searchInput.addEventListener("input", applyFilters);
-            countryFilter.addEventListener("change", applyFilters);
+            countryFilter.addEventListener("change", () => {
+              rebuildCityOptions();
+              applyFilters();
+            });
             cityFilter.addEventListener("change", applyFilters);
 
+            rebuildCityOptions();
             applyFilters();
           })();
         </script>`
