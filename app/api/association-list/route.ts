@@ -138,8 +138,62 @@ export async function GET() {
       padding: 26px 24px 18px;
       border-bottom: 1px solid var(--line);
       background:
-        linear-gradient(120deg, rgba(24, 113, 81, 0.08) 0%, transparent 50%),
+        linear-gradient(120deg, rgba(24, 113, 81, 0.12) 0%, transparent 50%),
         linear-gradient(180deg, #fcfefd 0%, #f8fcfa 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .head::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(
+        90deg,
+        #1f8a4c 0%,
+        #1f8a4c 33%,
+        #ffffff 33%,
+        #ffffff 66%,
+        #c73939 66%,
+        #c73939 100%
+      );
+      border-bottom: 1px solid #d9e7df;
+    }
+    .head::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      top: -130px;
+      right: -80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(31, 138, 76, 0.16) 0%, rgba(31, 138, 76, 0) 72%);
+      pointer-events: none;
+    }
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #c9dfd3;
+      background: #f4fbf7;
+      color: #16553f;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.35px;
+      text-transform: uppercase;
+    }
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f8a4c 0%, #0f6e37 100%);
+      box-shadow: 0 0 0 2px #d9eee2;
     }
     .head h1 {
       margin: 0;
@@ -315,6 +369,7 @@ export async function GET() {
 <body>
   <div class="wrap">
     <div class="head">
+      <div class="brand-badge"><span class="brand-dot"></span>Somaliland Diaspora</div>
       <h1>Association List of Somaliland Diaspora Communities</h1>
       <p>Explore verified diaspora association contacts by country and city. Verification code values stay hidden in this public list.</p>
       <div class="meta">
