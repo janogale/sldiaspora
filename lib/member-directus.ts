@@ -299,76 +299,144 @@ export const validateSharedCode = async (code: string) => {
     return true;
   }
 
-  const candidateCollections = [
-    "member_shared_codes",
-    "shared_codes",
-    "verification_codes",
-  ];
-
-  let checkedAnyCollection = false;
-
-  for (const collection of candidateCollections) {
-    const query = `/items/${collection}?filter[code][_eq]=${encodeURIComponent(
-      normalizedCode
-    )}&limit=1`;
-
-    const response = await directusFetch(query);
-
-    if (response.status === 404) {
-      continue;
-    }
-
-    checkedAnyCollection = true;
-
-    if (!response.ok) {
-      continue;
-    }
-
-    const result = (await response.json().catch(() => null)) as DirectusResult<
-      Array<Record<string, unknown>>
-    > | null;
-
-    if ((result?.data?.length || 0) > 0) {
-      return true;
-    }
-  }
-
-  if (!checkedAnyCollection) {
-    return false;
-  }
-
-  return false;
+  const codes = await listSharedCodes();
+  return codes.some((item) => item.code === normalizedCode);
 };
 
 export type SharedCodeItem = {
   code: string;
   label: string;
+  association: string;
+  contactPerson: string;
+  phone: string;
+  email: string;
+  country: string;
+  city: string;
 };
 
 const SYSTEM_SAMPLE_SHARED_CODES: SharedCodeItem[] = [
-  { code: "SLD-UK-483921", label: "SLD-UK-483921 — UK Somaliland Association · UK · Assigned officer: Amina Noor" },
-  { code: "SLD-US-274510", label: "SLD-US-274510 — North America Somaliland Community · USA · Assigned officer: Abdirahman Ali" },
-  { code: "SLD-SE-908144", label: "SLD-SE-908144 — Sweden Somaliland Association · Sweden · Assigned officer: Hodan Ismail" },
-  { code: "SLD-AE-551203", label: "SLD-AE-551203 — UAE Somaliland Community · UAE · Assigned officer: Mubarik Hassan" },
-  { code: "SLD-ET-660732", label: "SLD-ET-660732 — Ethiopia Somaliland Community · Ethiopia · Assigned officer: Fadumo Yusuf" },
-  { code: "SLD-CA-119845", label: "SLD-CA-119845 — Canada Somaliland Association · Canada · Assigned officer: Ibrahim Jama" },
+  {
+    code: "SLD-UK-483921",
+    label: "SLD-UK-483921 — UK Somaliland Association · UK · Assigned officer: Amina Noor",
+    association: "UK Somaliland Association",
+    contactPerson: "Amina Noor",
+    phone: "",
+    email: "",
+    country: "UK",
+    city: "",
+  },
+  {
+    code: "SLD-US-274510",
+    label: "SLD-US-274510 — North America Somaliland Community · USA · Assigned officer: Abdirahman Ali",
+    association: "North America Somaliland Community",
+    contactPerson: "Abdirahman Ali",
+    phone: "",
+    email: "",
+    country: "USA",
+    city: "",
+  },
+  {
+    code: "SLD-SE-908144",
+    label: "SLD-SE-908144 — Sweden Somaliland Association · Sweden · Assigned officer: Hodan Ismail",
+    association: "Sweden Somaliland Association",
+    contactPerson: "Hodan Ismail",
+    phone: "",
+    email: "",
+    country: "Sweden",
+    city: "",
+  },
+  {
+    code: "SLD-AE-551203",
+    label: "SLD-AE-551203 — UAE Somaliland Community · UAE · Assigned officer: Mubarik Hassan",
+    association: "UAE Somaliland Community",
+    contactPerson: "Mubarik Hassan",
+    phone: "",
+    email: "",
+    country: "UAE",
+    city: "",
+  },
+  {
+    code: "SLD-ET-660732",
+    label: "SLD-ET-660732 — Ethiopia Somaliland Community · Ethiopia · Assigned officer: Fadumo Yusuf",
+    association: "Ethiopia Somaliland Community",
+    contactPerson: "Fadumo Yusuf",
+    phone: "",
+    email: "",
+    country: "Ethiopia",
+    city: "",
+  },
+  {
+    code: "SLD-CA-119845",
+    label: "SLD-CA-119845 — Canada Somaliland Association · Canada · Assigned officer: Ibrahim Jama",
+    association: "Canada Somaliland Association",
+    contactPerson: "Ibrahim Jama",
+    phone: "",
+    email: "",
+    country: "Canada",
+    city: "",
+  },
 ];
+
+const parseLegacyLabelParts = (label: string) => {
+  const withoutCodePrefix = label.includes("—")
+    ? label.split("—").slice(1).join("—").trim()
+    : "";
+
+  const parts = withoutCodePrefix
+    .split("·")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return {
+    association: parts[0] || "",
+    country: parts[1] || "",
+    contactPerson: (parts[2] || "").replace(/^assigned officer:\s*/i, ""),
+  };
+};
+
+const getRowText = (row: Record<string, unknown>, keys: string[]) => {
+  for (const key of keys) {
+    const value = row[key];
+    if (value === null || value === undefined) continue;
+    const text = String(value).trim();
+    if (text) return text;
+  }
+  return "";
+};
+
+const isActiveSharedCodeRow = (row: Record<string, unknown>) => {
+  const status = getRowText(row, ["status", "Status"]).toLowerCase();
+  const active = getRowText(row, ["active", "is_active", "isActive", "Active"]).toLowerCase();
+
+  if (!status && !active) return true;
+
+  if (status) {
+    if (["active", "published", "live", "approved"].includes(status)) return true;
+    if (["draft", "inactive", "archived", "disabled", "pending"].includes(status)) return false;
+  }
+
+  if (active) {
+    if (["true", "1", "yes", "y"].includes(active)) return true;
+    if (["false", "0", "no", "n"].includes(active)) return false;
+  }
+
+  return true;
+};
 
 export const listSharedCodes = async (): Promise<SharedCodeItem[]> => {
   const candidateCollections = [
+    "association_list",
+    "associations_list",
     "member_shared_codes",
     "shared_codes",
     "verification_codes",
   ];
 
   const dedup = new Map<string, SharedCodeItem>();
-
-  SYSTEM_SAMPLE_SHARED_CODES.forEach((item) => {
-    dedup.set(item.code, item);
-  });
+  let directusLoadedCount = 0;
 
   for (const collection of candidateCollections) {
-    const query = `/items/${collection}?fields=code,name,title,country,description&limit=1000`;
+    const query = `/items/${collection}?fields=*&limit=1000`;
     const response = await directusFetch(query);
 
     if (response.status === 404) {
@@ -386,19 +454,72 @@ export const listSharedCodes = async (): Promise<SharedCodeItem[]> => {
     const rows = result?.data || [];
 
     rows.forEach((row) => {
-      const code = String(row.code || "").trim();
+      if (!isActiveSharedCodeRow(row)) return;
+
+      const code = getRowText(row, [
+        "code",
+        "Code",
+        "national_id_code",
+        "member_code",
+      ]);
       if (!code) return;
 
-      const name = String(row.name || row.title || "").trim();
-      const country = String(row.country || "").trim();
-      const description = String(row.description || "").trim();
+      const legacySource = String(
+        row.label || row.title || row.name || row.description || ""
+      );
+      const fallbackFromLabel = parseLegacyLabelParts(legacySource);
+      const association = getRowText(row, [
+        "association",
+        "Association",
+        "organization",
+        "group",
+        "community_name",
+        "name",
+        "title",
+      ]) || fallbackFromLabel.association;
+      const contactPerson = getRowText(row, [
+        "contact_person",
+        "contactPerson",
+        "contact_person_name",
+        "contact",
+        "Contact",
+        "full_name",
+        "name",
+      ]) || fallbackFromLabel.contactPerson;
+      const phone = getRowText(row, ["phone", "Phone"]);
+      const email = getRowText(row, ["email", "Email"]);
+      const country = getRowText(row, ["country", "Country"]) || fallbackFromLabel.country;
+      const city = getRowText(row, ["city", "City"]);
 
-      const parts = [name, country, description].filter(Boolean);
-      const label = parts.length > 0 ? `${code} — ${parts.join(" · ")}` : code;
+      const description = String(row.description || "").trim();
+      const labelParts = [association, country, contactPerson ? `Assigned officer: ${contactPerson}` : ""]
+        .filter(Boolean);
+
+      const label = labelParts.length > 0
+        ? `${code} — ${labelParts.join(" · ")}`
+        : description
+        ? `${code} — ${description}`
+        : code;
 
       if (!dedup.has(code)) {
-        dedup.set(code, { code, label });
+        dedup.set(code, {
+          code,
+          label,
+          association,
+          contactPerson,
+          phone,
+          email,
+          country,
+          city,
+        });
+        directusLoadedCount += 1;
       }
+    });
+  }
+
+  if (directusLoadedCount === 0) {
+    SYSTEM_SAMPLE_SHARED_CODES.forEach((item) => {
+      dedup.set(item.code, item);
     });
   }
 

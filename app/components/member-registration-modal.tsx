@@ -40,7 +40,7 @@ type SharedCodeOption = {
 };
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
-const SHARED_CODES_WEB_EXCEL_PATH = "/api/shared-codes-webexcel";
+const SHARED_CODES_WEB_EXCEL_PATH = "/api/association-list";
 
 function MemberRegistrationModal() {
   const router = useRouter();
@@ -500,19 +500,19 @@ function MemberRegistrationModal() {
 
   const labelStyle = {
     fontWeight: 600,
-    fontSize: "1.35rem",
+    fontSize: "1.05rem",
     color: "#1f2937",
-    marginBottom: "12px",
+    marginBottom: "8px",
     display: "block",
-    letterSpacing: "0.2px",
+    letterSpacing: "0.12px",
   } as const;
 
   const inputStyle = {
     border: "1.5px solid #d4e4da",
     borderRadius: "12px",
-    minHeight: "64px",
-    boxShadow: "0 8px 20px rgba(10, 48, 24, 0.05)",
-    fontSize: "1.25rem",
+    minHeight: "56px",
+    boxShadow: "0 4px 12px rgba(10, 48, 24, 0.05)",
+    fontSize: "1.05rem",
     paddingLeft: "14px",
     paddingRight: "14px",
     transition: "all 0.2s ease",
@@ -521,19 +521,19 @@ function MemberRegistrationModal() {
   const sectionCardStyle = {
     border: "1px solid #d9e9df",
     borderRadius: "16px",
-    padding: "24px",
+    padding: "clamp(12px, 2.4vw, 24px)",
     background: "linear-gradient(140deg, #f7fcf9 0%, #f1fbf5 100%)",
   } as const;
 
   const stepTitleStyle = {
     fontWeight: 700,
     color: "#006d21",
-    marginBottom: "18px",
-    fontSize: "2.1rem",
+    marginBottom: "14px",
+    fontSize: "clamp(1.2rem, 2.4vw, 1.75rem)",
   } as const;
 
   const modalGradientHeader = {
-    padding: "28px",
+    padding: "clamp(14px, 2.5vw, 26px)",
     borderBottom: "1px solid #d7e8de",
     background:
       "radial-gradient(circle at 8% 0%, rgba(0,109,33,0.2) 0%, rgba(255,255,255,1) 36%), linear-gradient(125deg, #e9f8ef 0%, #ffffff 60%)",
@@ -542,7 +542,7 @@ function MemberRegistrationModal() {
   const choiceCardBaseStyle = {
     border: "1.5px solid #d4e4da",
     borderRadius: "18px",
-    padding: "22px",
+    padding: "clamp(14px, 2.2vw, 22px)",
     background: "#ffffff",
     boxShadow: "0 12px 30px rgba(9, 54, 26, 0.08)",
   } as const;
@@ -551,6 +551,7 @@ function MemberRegistrationModal() {
     <>
       {isOpen && (
         <div
+          className="member-register-overlay"
           style={{
             position: "fixed",
             inset: 0,
@@ -565,10 +566,11 @@ function MemberRegistrationModal() {
           onClick={closeModal}
         >
           <div
+            className="member-register-dialog"
             style={{
               width: "100%",
-              maxWidth: "960px",
-              maxHeight: "90vh",
+              maxWidth: "980px",
+              maxHeight: "92vh",
               overflow: "auto",
               background: "#ffffff",
               borderRadius: "20px",
@@ -577,7 +579,7 @@ function MemberRegistrationModal() {
             }}
             onClick={(event) => event.stopPropagation()}
           >
-            <div style={modalGradientHeader}>
+            <div style={modalGradientHeader} className="member-register-header">
               <div
                 style={{
                   display: "flex",
@@ -587,10 +589,10 @@ function MemberRegistrationModal() {
                 }}
               >
                 <div>
-                  <h3 style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem", lineHeight: 1.1 }}>
+                  <h3 className="member-register-title" style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem", lineHeight: 1.1 }}>
                     {modalView === "choice" ? "Welcome, Member" : "Become a Member"}
                   </h3>
-                  <p style={{ margin: 0, color: "#5a6b76", fontSize: "1.3rem", lineHeight: "1.6" }}>
+                  <p className="member-register-subtitle" style={{ margin: 0, color: "#5a6b76", fontSize: "1.3rem", lineHeight: "1.6" }}>
                     {modalView === "choice"
                       ? "Choose how you want to continue. Sign in if you already have an account, or start your membership registration."
                       : `Step ${currentStep} of 3. Default status is pending. Login is enabled after admin approval.`}
@@ -599,6 +601,7 @@ function MemberRegistrationModal() {
                 <button
                   type="button"
                   onClick={closeModal}
+                  className="member-register-close"
                   style={{
                     border: "none",
                     background: "transparent",
@@ -614,7 +617,7 @@ function MemberRegistrationModal() {
             </div>
 
             {modalView === "choice" && (
-              <div style={{ padding: "28px" }}>
+              <div className="member-register-choice" style={{ padding: "28px" }}>
                 <div
                   style={{
                     borderRadius: "20px",
@@ -624,9 +627,9 @@ function MemberRegistrationModal() {
                     padding: "24px",
                   }}
                 >
-                  <div className="row g-3">
+                  <div className="row g-3 member-form-grid">
                     <div className="col-lg-6">
-                      <div style={choiceCardBaseStyle}>
+                      <div className="member-choice-card" style={choiceCardBaseStyle}>
                         <div
                           style={{
                             width: "42px",
@@ -668,7 +671,7 @@ function MemberRegistrationModal() {
                       </div>
                     </div>
                     <div className="col-lg-6">
-                      <div style={choiceCardBaseStyle}>
+                      <div className="member-choice-card" style={choiceCardBaseStyle}>
                         <div
                           style={{
                             width: "42px",
@@ -715,11 +718,12 @@ function MemberRegistrationModal() {
             )}
 
             {modalView === "register" && (
-              <form onSubmit={handleSubmit} style={{ padding: "28px" }}>
+              <form onSubmit={handleSubmit} className="member-register-form" style={{ padding: "28px" }}>
                 <div style={{ display: "flex", gap: "12px", marginBottom: "22px", flexWrap: "wrap" }}>
                   {[1, 2, 3].map((step) => (
                     <div
                       key={step}
+                      className="member-step-chip"
                       style={{
                         border: `1.5px solid ${currentStep === step ? "#006d21" : "#d4e4da"}`,
                         background: currentStep === step ? "#ecfdf3" : "#ffffff",
@@ -738,7 +742,7 @@ function MemberRegistrationModal() {
                 </div>
 
                 {currentStep === 1 && (
-                <div style={sectionCardStyle}>
+                <div className="member-section-card" style={sectionCardStyle}>
                   <div style={stepTitleStyle}>First Information Section</div>
                   <div className="row g-3">
                     <div className="col-md-6">
@@ -787,7 +791,7 @@ function MemberRegistrationModal() {
                 )}
 
                 {currentStep === 2 && (
-                <div style={sectionCardStyle}>
+                <div className="member-section-card" style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Second Identification Section</div>
 
                   <label style={{ ...labelStyle, marginBottom: "12px" }}>Choose one: Somaliland National ID or Enter Code *</label>
@@ -818,7 +822,7 @@ function MemberRegistrationModal() {
                     </label>
                   </div>
 
-                  <div className="row g-3" style={{ marginBottom: "14px" }}>
+                  <div className="row g-3 member-form-grid" style={{ marginBottom: "14px" }}>
                     <div className="col-md-6">
                       <label style={labelStyle}>Somaliland National ID Upload</label>
                       <input
@@ -984,7 +988,7 @@ function MemberRegistrationModal() {
                     </label>
                   </div>
 
-                  <div className="row g-3">
+                  <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
                       <label style={labelStyle}>Passport Upload</label>
                       <input
@@ -1020,9 +1024,9 @@ function MemberRegistrationModal() {
                 )}
 
                 {currentStep === 3 && (
-                <div style={sectionCardStyle}>
+                <div className="member-section-card" style={sectionCardStyle}>
                   <div style={stepTitleStyle}> Password & Bio</div>
-                  <div className="row g-3">
+                  <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
                       <label style={labelStyle}>Password (System Login) *</label>
                       <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} required minLength={6} />
@@ -1051,12 +1055,12 @@ function MemberRegistrationModal() {
                 )}
 
                 {errorMessage && (
-                <div style={{ marginTop: "16px", borderRadius: "12px", border: "1px solid #f5d5d5", background: "#fef2f2", color: "#991b1b", padding: "12px 14px", fontSize: "1.2rem" }}>
+                <div className="member-form-error" style={{ marginTop: "16px", borderRadius: "12px", border: "1px solid #f5d5d5", background: "#fef2f2", color: "#991b1b", padding: "12px 14px", fontSize: "1.2rem" }}>
                   ⚠️ {errorMessage}
                 </div>
                 )}
 
-                <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
+                <div className="member-form-actions" style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
                   <button type="button" onClick={closeModal} style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "12px", padding: "12px 20px", fontWeight: 600, cursor: "pointer", fontSize: "1.2rem" }}>
                     Cancel
                   </button>
@@ -1254,6 +1258,183 @@ function MemberRegistrationModal() {
           </div>
         </div>
       )}
+
+      <style jsx global>{`
+        .member-register-overlay {
+          font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+        }
+
+        .member-register-dialog {
+          border-radius: 20px !important;
+          border: 1px solid #d7e8df !important;
+          background: #ffffff !important;
+          box-shadow: 0 28px 64px rgba(15, 23, 42, 0.22) !important;
+        }
+
+        .member-register-header {
+          position: sticky;
+          top: 0;
+          z-index: 4;
+          background:
+            radial-gradient(circle at 8% 0%, rgba(0, 109, 33, 0.22) 0%, rgba(255, 255, 255, 1) 34%),
+            linear-gradient(125deg, #e9f8ef 0%, #ffffff 58%) !important;
+          border-bottom: 1px solid #dbeae2 !important;
+        }
+
+        .member-register-title {
+          font-size: clamp(1.55rem, 2.8vw, 2.35rem) !important;
+          line-height: 1.15 !important;
+          letter-spacing: 0.2px;
+          margin-bottom: 6px !important;
+        }
+
+        .member-register-subtitle {
+          font-size: clamp(1rem, 1.45vw, 1.08rem) !important;
+          line-height: 1.6 !important;
+          max-width: 72ch;
+        }
+
+        .member-register-close {
+          font-size: 30px !important;
+          color: #64748b !important;
+        }
+
+        .member-choice-card,
+        .member-section-card {
+          border-color: #cfe4d8 !important;
+          background: linear-gradient(180deg, #ffffff 0%, #fbfefc 100%) !important;
+          box-shadow: 0 14px 28px rgba(9, 54, 26, 0.08) !important;
+        }
+
+        .member-section-card {
+          border-radius: 16px;
+        }
+
+        .member-register-choice,
+        .member-register-form {
+          padding: clamp(12px, 2.2vw, 26px) !important;
+        }
+
+        .member-register-dialog .form-control {
+          font-size: 1.03rem !important;
+          border-radius: 12px !important;
+          min-height: 56px !important;
+          border-color: #cadfd3 !important;
+          background: #ffffff !important;
+          box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04) !important;
+        }
+
+        .member-register-dialog .member-form-grid {
+          --bs-gutter-x: 1.4rem;
+          --bs-gutter-y: 1rem;
+        }
+
+        .member-register-dialog .form-control:focus {
+          border-color: #85c3a2 !important;
+          box-shadow: 0 0 0 3px rgba(0, 109, 33, 0.14) !important;
+        }
+
+        .member-register-dialog textarea.form-control {
+          min-height: 126px !important;
+        }
+
+        .member-register-dialog .member-step-chip {
+          font-size: 0.97rem !important;
+          padding: 10px 14px !important;
+          letter-spacing: 0.1px;
+          border-width: 1.5px !important;
+        }
+
+        .member-register-dialog button {
+          font-size: 1rem !important;
+        }
+
+        .member-register-dialog small {
+          font-size: 0.92rem !important;
+        }
+
+        .member-form-error {
+          font-size: 1rem !important;
+          line-height: 1.45;
+        }
+
+        .member-form-actions button {
+          min-height: 48px;
+          border-radius: 12px !important;
+          font-weight: 700 !important;
+          box-shadow: 0 8px 18px rgba(15, 23, 42, 0.09);
+        }
+
+        @media (max-width: 992px) {
+          .member-register-dialog {
+            max-width: min(96vw, 780px) !important;
+          }
+
+          .member-register-form .row > [class*="col-"] {
+            width: 100% !important;
+            flex: 0 0 100% !important;
+          }
+
+          .member-register-form [style*="Read About Code"] {
+            margin-left: 0 !important;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .member-register-overlay {
+            padding: 8px !important;
+            align-items: flex-end !important;
+          }
+
+          .member-register-dialog {
+            max-height: 94vh !important;
+            border-radius: 14px !important;
+          }
+
+          .member-register-header {
+            padding: 14px !important;
+          }
+
+          .member-register-title {
+            font-size: 1.35rem !important;
+          }
+
+          .member-register-subtitle {
+            font-size: 0.98rem !important;
+          }
+
+          .member-register-choice,
+          .member-register-form {
+            padding: 12px !important;
+          }
+
+          .member-form-actions {
+            flex-direction: column !important;
+            align-items: stretch !important;
+          }
+
+          .member-form-actions > div {
+            width: 100%;
+            display: grid !important;
+            grid-template-columns: 1fr;
+          }
+
+          .member-register-dialog button {
+            width: 100%;
+            min-height: 48px !important;
+          }
+
+          .member-register-dialog .member-step-chip {
+            width: 100%;
+            text-align: center;
+          }
+
+          .member-register-dialog .member-form-grid {
+            --bs-gutter-x: 0.85rem;
+            --bs-gutter-y: 0.85rem;
+          }
+        }
+      `}</style>
     </>
   );
 }
