@@ -75,167 +75,253 @@ export async function GET() {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Shared Codes Directory</title>
+  <title>Association List | Somaliland Diaspora</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/assets/imgs/logo/favicon.svg" />
+  <meta name="theme-color" content="#0f766e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f2f7f4;
+      --bg: #edf5f1;
       --surface: #ffffff;
-      --muted: #5f6e66;
-      --line: #d4e2da;
-      --head: #0f5132;
-      --accent: #166534;
-      --accent-soft: #eaf6ef;
-      --table-head: #e9f2ec;
-      --glow: rgba(22, 101, 52, 0.16);
-      --font: "Poppins", "Segoe UI", sans-serif;
+      --surface-soft: #f7fbf9;
+      --ink: #0f172a;
+      --muted: #56706b;
+      --line: #d4e4de;
+      --head: #0f5e48;
+      --accent: #116149;
+      --accent-2: #0f766e;
+      --accent-soft: #e6f4ee;
+      --table-head: #ecf5f1;
+      --font-body: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      --font-head: "Manrope", "Plus Jakarta Sans", sans-serif;
     }
     * { box-sizing: border-box; }
     body {
-      font-family: var(--font);
       margin: 0;
-      background:
-        radial-gradient(circle at 8% 0%, #dff2e7 0%, transparent 36%),
-        radial-gradient(circle at 95% 8%, #d9efe4 0%, transparent 32%),
-        var(--bg);
-      color: #0f172a;
+      font-family: var(--font-body);
+      color: var(--ink);
       min-height: 100vh;
-      padding: 20px 12px;
+      padding: 20px 14px;
+      background:
+        radial-gradient(1100px 500px at -10% -5%, #d7eee3 0%, transparent 55%),
+        radial-gradient(900px 420px at 110% 0%, #d4e9df 0%, transparent 52%),
+        linear-gradient(180deg, #f2f8f5 0%, #eef5f2 100%);
       position: relative;
     }
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background-image: url('/logo-main.png');
+      background-image: url('/assets/imgs/logo/logo.png');
       background-repeat: no-repeat;
-      background-position: center 68%;
-      background-size: min(46vw, 380px);
-      opacity: 0.06;
+      background-position: center 65%;
+      background-size: min(42vw, 360px);
+      opacity: 0.045;
       pointer-events: none;
       z-index: 0;
-      filter: saturate(0.85);
     }
     .wrap {
-      max-width: 1250px;
+      max-width: 1260px;
       margin: 0 auto;
-      background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 20px 35px rgba(15, 81, 50, 0.12);
+      background: var(--surface);
+      box-shadow: 0 22px 44px rgba(19, 83, 62, 0.14);
       position: relative;
       z-index: 1;
     }
-    .wrap::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto auto 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #1f7a4a 0%, #63a678 60%, #a7d4bb 100%);
-      z-index: 2;
-    }
     .head {
-      padding: 22px 20px 18px;
+      padding: 26px 24px 18px;
       border-bottom: 1px solid var(--line);
-      background: linear-gradient(135deg, #edf8f1 0%, #ffffff 72%);
+      background:
+        linear-gradient(120deg, rgba(24, 113, 81, 0.08) 0%, transparent 50%),
+        linear-gradient(180deg, #fcfefd 0%, #f8fcfa 100%);
     }
     .head h1 {
       margin: 0;
-      font-size: clamp(1.15rem, 2vw, 1.7rem);
-      color: var(--head);
-      letter-spacing: 0.2px;
+      font-family: var(--font-head);
+      font-size: clamp(1.28rem, 2.1vw, 1.95rem);
+      line-height: 1.2;
+      letter-spacing: 0.1px;
+      color: #0f4f39;
     }
     .head p {
-      margin: 7px 0 0;
+      margin: 9px 0 0;
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: 0.98rem;
+      max-width: 820px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 14px;
+    }
+    .chip {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.25px;
+      text-transform: uppercase;
+      color: #0f5c42;
+      background: #e6f4ed;
+      border: 1px solid #c8e2d6;
+      padding: 6px 10px;
+      border-radius: 999px;
     }
     .controls {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 10px;
-      padding: 14px 20px 16px;
-      border-bottom: 1px solid var(--line);
-      background: #fbfdfc;
+      grid-template-columns: minmax(260px, 2fr) 1fr 1fr auto;
+      gap: 12px;
       align-items: end;
+      padding: 16px 24px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-soft);
     }
-    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
     .field label {
-      font-size: 0.8rem;
-      letter-spacing: 0.3px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      color: #526159;
-      font-weight: 700;
+      color: #54706a;
     }
     input, select, button {
       font: inherit;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      padding: 10px 12px;
-      min-height: 42px;
+      min-height: 45px;
+      border-radius: 12px;
+      border: 1px solid #cfe0d8;
       background: #ffffff;
-    }
-    input:focus, select:focus {
-      outline: 3px solid #d7efdf;
-      border-color: #91c9a8;
-      box-shadow: 0 0 0 5px var(--glow);
-    }
-    button {
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: transform 0.16s ease, opacity 0.16s ease;
-    }
-    button:hover { transform: translateY(-1px); }
-    .btn-soft { background: var(--accent-soft); color: #0f5132; border: 1px solid #b8dcc7; }
-    .summary {
-      padding: 10px 20px 12px;
-      color: #5e6f66;
-      font-size: 0.9rem;
-      font-weight: 600;
-      background: linear-gradient(180deg, #fcfefd 0%, #f7fbf9 100%);
-      border-bottom: 1px solid #ebf2ee;
-    }
-    .table-wrap { overflow: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 900px; }
-    th, td {
-      border-top: 1px solid #e3ede8;
       padding: 10px 12px;
-      font-size: 0.92rem;
-      text-align: left;
-      vertical-align: top;
     }
-    th {
+    input::placeholder { color: #849790; }
+    input:focus, select:focus {
+      outline: 2px solid #d2ede1;
+      border-color: #94c9b2;
+      box-shadow: 0 0 0 3px rgba(17, 97, 73, 0.12);
+    }
+    .btn-soft {
+      border: 1px solid #b8dbc9;
+      background: linear-gradient(180deg, #f0faf5 0%, #e5f4ec 100%);
+      color: #11563e;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-soft:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(17, 97, 73, 0.14);
+    }
+    .summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 24px;
+      font-size: 0.9rem;
+      color: #516963;
+      font-weight: 600;
+      background: #fbfefd;
+      border-bottom: 1px solid #e5efea;
+    }
+    .summary strong {
+      color: #0f513a;
+      font-weight: 800;
+    }
+    .table-wrap {
+      overflow: auto;
+      max-height: min(72vh, 900px);
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 910px;
+    }
+    thead th {
       position: sticky;
       top: 0;
+      z-index: 2;
       background: var(--table-head);
-      color: #1d3d2f;
-      font-weight: 700;
-      z-index: 1;
+      color: #19483a;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 800;
+      text-align: left;
+      padding: 12px 12px;
+      border-bottom: 1px solid #d8e8e0;
     }
-    tbody tr:nth-child(even) { background: #fcfefd; }
-    tbody tr:hover { background: #f3faf6; }
-    a { color: #166534; text-decoration: none; }
+    tbody td {
+      padding: 13px 12px;
+      border-bottom: 1px solid #e7f0ec;
+      font-size: 0.93rem;
+      color: #1f2937;
+      vertical-align: top;
+    }
+    tbody tr { transition: background-color 0.16s ease; }
+    tbody tr:nth-child(even) { background: #fbfefc; }
+    tbody tr:hover { background: #edf7f2; }
+    tbody td:first-child {
+      width: 56px;
+      font-weight: 700;
+      color: #355c4e;
+    }
+    a {
+      color: var(--accent-2);
+      font-weight: 600;
+      text-decoration: none;
+    }
     a:hover { text-decoration: underline; }
-    .empty { padding: 22px; color: #64748b; }
-    .no-results { display: none; text-align: center; color: #6b7280; padding: 16px; font-weight: 600; }
-    @media (max-width: 980px) {
+    .empty {
+      padding: 28px 24px;
+      color: #69817b;
+      font-weight: 600;
+    }
+    .no-results {
+      display: none;
+      text-align: center;
+      color: #60756f;
+      padding: 18px 16px;
+      font-weight: 700;
+      border-top: 1px solid #e5efea;
+      background: #fafdfb;
+    }
+    @media (max-width: 1024px) {
       .controls { grid-template-columns: 1fr 1fr; }
       .controls .field:first-child { grid-column: 1 / -1; }
     }
-    @media (max-width: 640px) {
+    @media (max-width: 700px) {
       body { padding: 8px; }
+      .wrap { border-radius: 14px; }
+      .head,
+      .controls,
+      .summary { padding-left: 12px; padding-right: 12px; }
       .controls { grid-template-columns: 1fr; }
-      .head, .controls, .summary { padding-left: 12px; padding-right: 12px; }
+      .summary { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .table-wrap { max-height: none; }
+      table { min-width: 760px; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="head">
-      <h1>Contact Directory of Somaliland Diaspora Community Associations</h1>
-      <p>Professional public directory view. Code values are hidden in this list.</p>
+      <h1>Association List of Somaliland Diaspora Communities</h1>
+      <p>Explore verified diaspora association contacts by country and city. Verification code values stay hidden in this public list.</p>
+      <div class="meta">
+        <span class="chip">${codes.length} Associations</span>
+        <span class="chip">${countryOptions.length} Countries</span>
+        <span class="chip">${cityOptions.length} Cities</span>
+      </div>
     </div>
     ${codes.length > 0
       ? `<div class="controls">
@@ -259,7 +345,10 @@ export async function GET() {
           </div>
           <button id="resetBtn" class="btn-soft" type="button">Reset</button>
         </div>
-        <div class="summary" id="summaryLine"></div>
+        <div class="summary">
+          <div id="summaryLine"></div>
+          <div><strong>Live Filtering Enabled</strong></div>
+        </div>
         <div class="table-wrap">
           <table id="directoryTable">
             <thead>

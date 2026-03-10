@@ -40,7 +40,7 @@ type SharedCodeOption = {
 };
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
-const SHARED_CODES_WEB_EXCEL_PATH = "/api/shared-codes-webexcel";
+const SHARED_CODES_WEB_EXCEL_PATH = "/api/association-list";
 
 function MemberRegistrationModal() {
   const router = useRouter();
