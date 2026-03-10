@@ -253,7 +253,7 @@ function Page() {
         },
         {
           title: "Contact SL Diaspora Associations & Networks",
-          desc: "Directory of contacts will be available soon",
+          desc: 'Open directory: <a href="/api/association-list" target="_blank" rel="noopener noreferrer">Click here to view Somaliland diaspora association contacts</a>',
         },
         {
           title: "Contact SL Missions Abroad",
