@@ -77,7 +77,7 @@ export async function GET() {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Association List | Somaliland Diaspora</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="icon" type="image/svg+xml" href="/assets/imgs/logo/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.png" />
   <meta name="theme-color" content="#0f766e" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
