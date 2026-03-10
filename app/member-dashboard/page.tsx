@@ -34,6 +34,7 @@ type MembersListItem = {
 };
 
 type DashboardSection = 'members' | 'profile' | 'settings';
+type SortKey = 'name' | 'country' | 'profession';
 
 const resolveAssetPath = (
   fileValue: string | { id?: string } | null | undefined
@@ -57,6 +58,9 @@ export default function MemberDashboardPage() {
   const [professionFilter, setProfessionFilter] = useState('all');
   const [countryFilter, setCountryFilter] = useState('all');
   const [interestFilter, setInterestFilter] = useState('all');
+  const [sortBy, setSortBy] = useState<SortKey>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [connectingId, setConnectingId] = useState<string>('');
   const [shareContact, setShareContact] = useState<'none' | 'email' | 'phone'>('none');
@@ -167,6 +171,82 @@ export default function MemberDashboardPage() {
         .includes(term);
     });
   }, [otherMembers, searchTerm, professionFilter, countryFilter, interestFilter]);
+
+  const sortedMembers = useMemo(() => {
+    const list = [...filteredMembers];
+    list.sort((a, b) => {
+      const aValue =
+        sortBy === 'name'
+          ? (a.full_name || '').toLowerCase()
+          : sortBy === 'country'
+            ? (a.country || '').toLowerCase()
+            : (a.profession || '').toLowerCase();
+
+      const bValue =
+        sortBy === 'name'
+          ? (b.full_name || '').toLowerCase()
+          : sortBy === 'country'
+            ? (b.country || '').toLowerCase()
+            : (b.profession || '').toLowerCase();
+
+      const order = aValue.localeCompare(bValue);
+      return sortDirection === 'asc' ? order : -order;
+    });
+    return list;
+  }, [filteredMembers, sortBy, sortDirection]);
+
+  const pageSize = 6;
+  const totalPages = Math.max(1, Math.ceil(sortedMembers.length / pageSize));
+  const paginatedMembers = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return sortedMembers.slice(start, start + pageSize);
+  }, [sortedMembers, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, professionFilter, countryFilter, interestFilter, sortBy, sortDirection]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const memberStats = useMemo(() => {
+    const countries = new Set(otherMembers.map((item) => (item.country || '').trim()).filter(Boolean));
+    const professions = new Set(otherMembers.map((item) => (item.profession || '').trim()).filter(Boolean));
+    const interests = new Set(otherMembers.flatMap((item) => extractInterests(item.areas_of_interest)));
+
+    return {
+      members: otherMembers.length,
+      countries: countries.size,
+      professions: professions.size,
+      interests: interests.size,
+    };
+  }, [otherMembers]);
+
+  const activeFilters = useMemo(() => {
+    const chips: Array<{ key: 'search' | 'profession' | 'country' | 'interest'; label: string }> = [];
+    if (searchTerm.trim()) chips.push({ key: 'search', label: `Search: ${searchTerm.trim()}` });
+    if (professionFilter !== 'all') chips.push({ key: 'profession', label: `Profession: ${professionFilter}` });
+    if (countryFilter !== 'all') chips.push({ key: 'country', label: `Country: ${countryFilter}` });
+    if (interestFilter !== 'all') chips.push({ key: 'interest', label: `Interest: ${interestFilter}` });
+    return chips;
+  }, [searchTerm, professionFilter, countryFilter, interestFilter]);
+
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setProfessionFilter('all');
+    setCountryFilter('all');
+    setInterestFilter('all');
+  };
+
+  const clearSingleFilter = (key: 'search' | 'profession' | 'country' | 'interest') => {
+    if (key === 'search') setSearchTerm('');
+    if (key === 'profession') setProfessionFilter('all');
+    if (key === 'country') setCountryFilter('all');
+    if (key === 'interest') setInterestFilter('all');
+  };
 
   const handleLogout = async () => {
     await fetch('/api/member-auth/logout', { method: 'POST' }).catch(() => null);
@@ -407,6 +487,25 @@ export default function MemberDashboardPage() {
 
               {activeSection === 'members' && (
                 <div className={styles.card}>
+                  <div className={styles.statsGrid}>
+                    <div className={styles.statCard}>
+                      <span className={styles.statLabel}>Total Members</span>
+                      <strong className={styles.statValue}>{memberStats.members}</strong>
+                    </div>
+                    <div className={styles.statCard}>
+                      <span className={styles.statLabel}>Countries</span>
+                      <strong className={styles.statValue}>{memberStats.countries}</strong>
+                    </div>
+                    <div className={styles.statCard}>
+                      <span className={styles.statLabel}>Professions</span>
+                      <strong className={styles.statValue}>{memberStats.professions}</strong>
+                    </div>
+                    <div className={styles.statCard}>
+                      <span className={styles.statLabel}>Interests</span>
+                      <strong className={styles.statValue}>{memberStats.interests}</strong>
+                    </div>
+                  </div>
+
                   <div className={styles.cardHead}>
                     <h2>Members Directory</h2>
                     <span>{filteredMembers.length} total</span>
@@ -461,12 +560,7 @@ export default function MemberDashboardPage() {
                     <button
                       type="button"
                       className={styles.filterButton}
-                      onClick={() => {
-                        setSearchTerm('');
-                        setProfessionFilter('all');
-                        setCountryFilter('all');
-                        setInterestFilter('all');
-                      }}
+                      onClick={clearAllFilters}
                     >
                       Clear filters
                     </button>
@@ -480,6 +574,43 @@ export default function MemberDashboardPage() {
                       className={styles.searchInput}
                     />
                   </div>
+
+                  <div className={styles.filterRow}>
+                    <div className={styles.filterGroup}>
+                      <label className={styles.filterLabel}>Sort by</label>
+                      <select
+                        className={styles.selectInput}
+                        value={sortBy}
+                        onChange={(event) => setSortBy(event.target.value as SortKey)}
+                      >
+                        <option value="name">Name</option>
+                        <option value="country">Country</option>
+                        <option value="profession">Profession</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.filterButton}
+                      onClick={() => setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+                    >
+                      {sortDirection === 'asc' ? 'Sort: A-Z' : 'Sort: Z-A'}
+                    </button>
+                  </div>
+
+                  {activeFilters.length > 0 && (
+                    <div className={styles.activeFiltersWrap}>
+                      {activeFilters.map((chip) => (
+                        <button
+                          key={chip.key}
+                          type="button"
+                          className={styles.filterChip}
+                          onClick={() => clearSingleFilter(chip.key)}
+                        >
+                          {chip.label} <span aria-hidden="true">×</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
                   {filteredMembers.length === 0 ? (
                     <div className={styles.emptyState}>No members found.</div>
@@ -496,7 +627,7 @@ export default function MemberDashboardPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredMembers.map((item) => (
+                          {paginatedMembers.map((item) => (
                             <tr key={item.id}>
                               <td>
                                 <div className={styles.memberCell}>
@@ -525,6 +656,28 @@ export default function MemberDashboardPage() {
                         ))}
                       </tbody>
                     </table>
+
+                    <div className={styles.paginationWrap}>
+                      <button
+                        type="button"
+                        className={styles.filterButton}
+                        onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                      <span className={styles.pageInfo}>
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        className={styles.filterButton}
+                        onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
