@@ -488,21 +488,45 @@ export default function MemberDashboardPage() {
               {activeSection === 'members' && (
                 <div className={styles.card}>
                   <div className={styles.statsGrid}>
-                    <div className={styles.statCard}>
-                      <span className={styles.statLabel}>Total Members</span>
+                    <div className={`${styles.statCard} ${styles.statCardMembers}`}>
+                      <div className={styles.statHeader}>
+                        <span className={styles.statLabel}>Total Members</span>
+                        <span className={styles.statIcon}>
+                          <i className="fa-solid fa-users"></i>
+                        </span>
+                      </div>
                       <strong className={styles.statValue}>{memberStats.members}</strong>
+                      <p className={styles.statMeta}>Directory members available for networking.</p>
                     </div>
-                    <div className={styles.statCard}>
-                      <span className={styles.statLabel}>Countries</span>
+                    <div className={`${styles.statCard} ${styles.statCardCountries}`}>
+                      <div className={styles.statHeader}>
+                        <span className={styles.statLabel}>Countries</span>
+                        <span className={styles.statIcon}>
+                          <i className="fa-solid fa-earth-africa"></i>
+                        </span>
+                      </div>
                       <strong className={styles.statValue}>{memberStats.countries}</strong>
+                      <p className={styles.statMeta}>Global representation across active regions.</p>
                     </div>
-                    <div className={styles.statCard}>
-                      <span className={styles.statLabel}>Professions</span>
+                    <div className={`${styles.statCard} ${styles.statCardProfessions}`}>
+                      <div className={styles.statHeader}>
+                        <span className={styles.statLabel}>Professions</span>
+                        <span className={styles.statIcon}>
+                          <i className="fa-solid fa-briefcase"></i>
+                        </span>
+                      </div>
                       <strong className={styles.statValue}>{memberStats.professions}</strong>
+                      <p className={styles.statMeta}>Diverse expertise for collaboration and mentorship.</p>
                     </div>
-                    <div className={styles.statCard}>
-                      <span className={styles.statLabel}>Interests</span>
+                    <div className={`${styles.statCard} ${styles.statCardInterests}`}>
+                      <div className={styles.statHeader}>
+                        <span className={styles.statLabel}>Interests</span>
+                        <span className={styles.statIcon}>
+                          <i className="fa-solid fa-lightbulb"></i>
+                        </span>
+                      </div>
                       <strong className={styles.statValue}>{memberStats.interests}</strong>
+                      <p className={styles.statMeta}>Shared initiatives and high-impact focus areas.</p>
                     </div>
                   </div>
 
