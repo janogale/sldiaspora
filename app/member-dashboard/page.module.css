@@ -1,6 +1,9 @@
 .dashboardPage {
   min-height: 100vh;
-  background: #f8faf9;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(8, 145, 178, 0.08), transparent 44%),
+    radial-gradient(circle at 88% 4%, rgba(16, 185, 129, 0.12), transparent 36%),
+    linear-gradient(180deg, #f4f8f7 0%, #eef4f2 100%);
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 1.5rem;
@@ -8,23 +11,24 @@
 
 .layoutGrid {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 0;
+  display: block;
 }
 
 .sidebar {
-  background: #0a6534;
+  background: #016d21;
   border-right: 0;
   color: #ecfdf5;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.12);
-  position: sticky;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.12), 12px 0 32px rgba(2, 27, 17, 0.2);
+  position: fixed;
   top: 0;
+  left: 0;
   height: 100vh;
+  width: 280px;
   overflow-y: auto;
+  z-index: 30;
 }
 
 .brandBlock {
@@ -37,7 +41,7 @@
 .brandLogoWrap {
   border-radius: 8px;
   background: rgb(250, 250, 250);
-  padding: 12px;
+  padding: 10px;
   display: inline-flex;
   margin-bottom: 12px;
 }
@@ -56,7 +60,7 @@
 }
 
 .brandLogo {
-  width: 122px;
+  width: 106px;
   height: auto;
 }
 
@@ -120,27 +124,33 @@
   flex-direction: column;
   gap: 20px;
   padding: 0 0 24px;
-  background: #f8faf9;
+  background: transparent;
+  margin-left: 280px;
+  min-height: 100vh;
 }
 
 .contentWrap {
-  padding: 0 24px 24px;
+  padding: 0 26px 24px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .topBar {
-  background: #0a6534;
+  background: linear-gradient(120deg, #016d21 0%, #028a2b 58%, #0a7a34 100%);
   border-bottom: 0;
   border-radius: 0;
-  padding: 2px 18px;
+  padding: 8px 16px;
   display: flex;
   justify-content: space-between;
   gap: 16px;
   align-items: center;
-  box-shadow: none;
+  box-shadow: 0 8px 24px rgba(1, 72, 24, 0.22);
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  backdrop-filter: blur(4px);
 }
 
 .topBarTitle {
@@ -150,24 +160,24 @@
 .topBar h1 {
   margin: 0;
   color: #ffffff;
-  font-size: 1.35rem;
+  font-size: 1.4rem !important;
   font-weight: 700;
 }
 
 .topBar p {
   margin: 0px 0 0;
   color: rgba(236, 253, 245, 0.85);
-  font-size: 0.9rem;
+  font-size:1.2rem !important;
 }
 
 .statusBadge {
   border-radius: 999px;
-  background: rgba(209, 250, 229, 0.9);
-  color: #065f46;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  padding: 4px 10px;
+  background: rgba(220, 252, 231, 0.22);
+  color: #f0fdf4;
+  border: 1px solid rgba(240, 253, 244, 0.34);
+  padding: 3px 9px;
   line-height: 1.1;
-  font-size: 0.66rem !important;
+  font-size: 0.6rem !important;
   font-weight: 700;
   letter-spacing: 0.2px;
   text-transform: uppercase;
@@ -176,7 +186,7 @@
 .topBarRight {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .profileMenu {
@@ -192,8 +202,8 @@
 }
 
 .profileMenuTrigger img {
-  width: 40px;
-  height: 40px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e5e7eb;
@@ -232,37 +242,90 @@
 
 .card {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border: 1px solid #dbe5df;
+  border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
 .statCard {
-  border: 1px solid #dfe9e3;
+  border: 1px solid #dce7de;
+  border-radius: 14px;
+  padding: 10px 12px;
+  color: #14532d;
+  display: grid;
+  gap: 3px;
+  min-height: 90px;
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statIcon {
+  width: 30px;
+  height: 30px;
   border-radius: 10px;
-  background: linear-gradient(160deg, #f7fcf9 0%, #ffffff 75%);
-  padding: 12px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1, 109, 33, 0.08);
+  border: 1px solid rgba(1, 109, 33, 0.18);
+  font-size: 0.86rem;
 }
 
 .statLabel {
   display: block;
-  color: #64748b;
+  color: rgba(20, 83, 45, 0.82);
   font-weight: 600;
+  font-size: 0.8rem;
 }
 
 .statValue {
   display: block;
-  margin-top: 4px;
-  color: #0a6534;
+  margin-top: 2px;
+  color: #14532d;
   font-weight: 800;
+  font-size: 1.16rem;
+}
+
+.statMeta {
+  margin: 0;
+  color: rgba(20, 83, 45, 0.62);
+  font-size: 0.68rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statCardMembers {
+  background: linear-gradient(155deg, rgba(1, 109, 33, 0.2) 0%, rgba(255, 255, 255, 0.98) 85%);
+  border-color: rgba(1, 109, 33, 0.2);
+}
+
+.statCardCountries {
+  background: linear-gradient(155deg, rgba(5, 150, 105, 0.2) 0%, rgba(255, 255, 255, 0.98) 85%);
+  border-color: rgba(4, 120, 87, 0.2);
+}
+
+.statCardProfessions {
+  background: linear-gradient(155deg, rgba(8, 145, 178, 0.2) 0%, rgba(255, 255, 255, 0.98) 85%);
+  border-color: rgba(13, 148, 136, 0.2);
+}
+
+.statCardInterests {
+  background: linear-gradient(155deg, rgba(34, 197, 94, 0.18) 0%, rgba(255, 255, 255, 0.98) 85%);
+  border-color: rgba(22, 163, 74, 0.2);
 }
 
 .cardHead {
@@ -837,15 +900,18 @@
     padding: 0;
   }
 
-  .layoutGrid {
-    grid-template-columns: 1fr;
-  }
-
   .sidebar {
     padding: 14px;
     position: static;
     height: auto;
+    width: auto;
+    left: auto;
     overflow: visible;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.14);
+  }
+
+  .mainPanel {
+    margin-left: 0;
   }
 
   .sidebarNav {
