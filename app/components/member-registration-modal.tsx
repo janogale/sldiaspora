@@ -3,18 +3,15 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type SecondaryDocumentType = "passport" | "driving_license" | "";
 type IdVerificationMethod = "national_id" | "code" | "";
 
 type RegisterFormState = {
   fullName: string;
   phone: string;
   email: string;
-  address: string;
   city: string;
   country: string;
   nationalIdCode: string;
-  secondaryDocumentType: SecondaryDocumentType;
   password: string;
   confirmPassword: string;
   additionalNotes: string;
@@ -24,11 +21,9 @@ const defaultFormState: RegisterFormState = {
   fullName: "",
   phone: "",
   email: "",
-  address: "",
   city: "",
   country: "",
   nationalIdCode: "",
-  secondaryDocumentType: "",
   password: "",
   confirmPassword: "",
   additionalNotes: "",
@@ -37,10 +32,15 @@ const defaultFormState: RegisterFormState = {
 type SharedCodeOption = {
   code: string;
   label: string;
+  country: string;
+  city: string;
+  association: string;
+  contactPerson: string;
 };
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
 const SHARED_CODES_WEB_EXCEL_PATH = "/api/association-list";
+const normalizeText = (value: string) => value.trim().toLowerCase();
 
 function MemberRegistrationModal() {
   const router = useRouter();
@@ -58,7 +58,8 @@ function MemberRegistrationModal() {
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
-  const [secondaryDocument, setSecondaryDocument] = useState<File | null>(null);
+  const [passportDocument, setPassportDocument] = useState<File | null>(null);
+  const [drivingLicenseDocument, setDrivingLicenseDocument] = useState<File | null>(null);
 
   const passwordsMatch =
     formState.password.length >= 6 && formState.password === formState.confirmPassword;
@@ -67,28 +68,59 @@ function MemberRegistrationModal() {
     formState.fullName.trim().length > 1 &&
     formState.phone.trim().length > 5 &&
     formState.email.trim().length > 3 &&
-    formState.address.trim().length > 3 &&
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
+  const associationCountryOptions = useMemo(() => {
+    return Array.from(
+      new Set(sharedCodes.map((item) => item.country.trim()).filter(Boolean))
+    ).sort((a, b) => a.localeCompare(b));
+  }, [sharedCodes]);
+
+  const associationCityOptions = useMemo(() => {
+    const selectedCountry = normalizeText(formState.country);
+    if (!selectedCountry) return [];
+
+    return Array.from(
+      new Set(
+        sharedCodes
+          .filter(
+            (item) => normalizeText(item.country) === selectedCountry
+          )
+          .map((item) => item.city.trim())
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b));
+  }, [formState.country, sharedCodes]);
+
+  const filteredCodeOptions = useMemo(() => {
+    const selectedCountry = normalizeText(formState.country);
+    const selectedCity = normalizeText(formState.city);
+
+    if (!selectedCountry || !selectedCity) return [];
+
+    return sharedCodes.filter(
+      (item) =>
+        normalizeText(item.country) === selectedCountry &&
+        normalizeText(item.city) === selectedCity
+    );
+  }, [formState.country, formState.city, sharedCodes]);
+
   const isSelectedCodeValid = useMemo(() => {
-    const value = formState.nationalIdCode.trim();
+    const value = formState.nationalIdCode.trim().toUpperCase();
     if (!value) return false;
-    return sharedCodes.some((item) => item.code === value);
-  }, [formState.nationalIdCode, sharedCodes]);
+    return filteredCodeOptions.some(
+      (item) => item.code.trim().toUpperCase() === value
+    );
+  }, [filteredCodeOptions, formState.nationalIdCode]);
 
   const hasValidIdMethod =
     (idMethod === "national_id" && !!nationalIdPhoto) ||
     (idMethod === "code" && isSelectedCodeValid);
 
-  const hasSecondaryDoc =
-    !!secondaryDocument &&
-    (formState.secondaryDocumentType === "passport" ||
-      formState.secondaryDocumentType === "driving_license");
-
   const canSubmit = useMemo(() => {
-    return hasRequiredBasics && hasValidIdMethod && hasSecondaryDoc && passwordsMatch;
-  }, [hasRequiredBasics, hasValidIdMethod, hasSecondaryDoc, passwordsMatch]);
+    return hasRequiredBasics && hasValidIdMethod && passwordsMatch;
+  }, [hasRequiredBasics, hasValidIdMethod, passwordsMatch]);
 
   const countryOptions = useMemo(
     () => [
@@ -306,7 +338,7 @@ function MemberRegistrationModal() {
         return;
       }
 
-      const items = Array.isArray(result?.data) ? result!.data : [];
+      const items = Array.isArray(result?.data) ? result.data : [];
       setSharedCodes(items);
     } catch {
       setSharedCodes([]);
@@ -392,12 +424,26 @@ function MemberRegistrationModal() {
   }, [idMethod, isOpen, sharedCodes.length, isLoadingCodes]);
 
   const handleChange = (key: keyof RegisterFormState, value: string) => {
-    setFormState((prev) => ({ ...prev, [key]: value }));
-  };
+    setFormState((prev) => {
+      if (key === "country") {
+        return {
+          ...prev,
+          country: value,
+          city: idMethod === "code" ? "" : prev.city,
+          nationalIdCode: idMethod === "code" ? "" : prev.nationalIdCode,
+        };
+      }
 
-  const setSecondaryDocumentType = (value: SecondaryDocumentType) => {
-    setSecondaryDocument(null);
-    setFormState((prev) => ({ ...prev, secondaryDocumentType: value }));
+      if (key === "city" && idMethod === "code") {
+        return {
+          ...prev,
+          city: value,
+          nationalIdCode: "",
+        };
+      }
+
+      return { ...prev, [key]: value };
+    });
   };
 
   const resetForm = () => {
@@ -406,7 +452,8 @@ function MemberRegistrationModal() {
     setCurrentStep(1);
     setProfilePicture(null);
     setNationalIdPhoto(null);
-    setSecondaryDocument(null);
+    setPassportDocument(null);
+    setDrivingLicenseDocument(null);
     setErrorMessage("");
   };
 
@@ -416,9 +463,25 @@ function MemberRegistrationModal() {
       return;
     }
 
-    if (currentStep === 2 && (!hasValidIdMethod || !hasSecondaryDoc)) {
+    if (currentStep === 2 && idMethod === "code") {
+      if (!formState.country.trim() || !formState.city.trim()) {
+        setErrorMessage(
+          "Please choose country and city from association list before entering your code."
+        );
+        return;
+      }
+
+      if (!isSelectedCodeValid) {
+        setErrorMessage(
+          "The code is incorrect. Please contact association contact person."
+        );
+        return;
+      }
+    }
+
+    if (currentStep === 2 && !hasValidIdMethod) {
       setErrorMessage(
-        "Please choose one ID method (National ID upload OR code), and upload your passport or driving licence."
+        "Please choose one ID method (National ID upload OR code)."
       );
       return;
     }
@@ -450,7 +513,6 @@ function MemberRegistrationModal() {
       payload.append("fullName", formState.fullName.trim());
       payload.append("phone", formState.phone.trim());
       payload.append("email", formState.email.trim());
-      payload.append("address", formState.address.trim());
       payload.append("city", formState.city.trim());
       payload.append("country", formState.country.trim());
       payload.append("password", formState.password);
@@ -461,7 +523,6 @@ function MemberRegistrationModal() {
 
       const finalCode = idMethod === "code" ? formState.nationalIdCode.trim() : "";
       payload.append("nationalIdCode", finalCode);
-      payload.append("secondaryDocumentType", formState.secondaryDocumentType);
       payload.append("additionalNotes", formState.additionalNotes.trim());
 
       if (profilePicture) {
@@ -472,8 +533,12 @@ function MemberRegistrationModal() {
         payload.append("nationalIdPhoto", nationalIdPhoto);
       }
 
-      if (secondaryDocument) {
-        payload.append("secondaryDocument", secondaryDocument);
+      if (passportDocument) {
+        payload.append("passportFile", passportDocument);
+      }
+
+      if (drivingLicenseDocument) {
+        payload.append("drivingLicenseFile", drivingLicenseDocument);
       }
 
       const response = await fetch("/api/member-register", {
@@ -758,10 +823,6 @@ function MemberRegistrationModal() {
                       <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Address *</label>
-                      <input className="form-control" style={inputStyle} value={formState.address} onChange={(e) => handleChange("address", e.target.value)} required />
-                    </div>
-                    <div className="col-md-6">
                       <label style={labelStyle}>City *</label>
                       <input className="form-control" style={inputStyle} value={formState.city} onChange={(e) => handleChange("city", e.target.value)} required />
                     </div>
@@ -816,6 +877,7 @@ function MemberRegistrationModal() {
                         onChange={() => {
                           setIdMethod("code");
                           setNationalIdPhoto(null);
+                          handleChange("nationalIdCode", "");
                         }}
                       />
                       Enter Code
@@ -837,41 +899,6 @@ function MemberRegistrationModal() {
                     <div className="col-md-6">
                       <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "8px" }}>
                         Enter Code *
-                        <button
-                          type="button"
-                          onClick={openCodesExcel}
-                          style={{
-                            width: "26px",
-                            height: "26px",
-                            borderRadius: "999px",
-                            border: "1px solid #006d21",
-                            background: "#ffffff",
-                            color: "#006d21",
-                            fontWeight: 800,
-                            fontSize: "1rem",
-                            lineHeight: 1,
-                            cursor: "pointer",
-                          }}
-                          aria-label="Click here to get code"
-                          title="Click here to get code"
-                        >
-                          ?
-                        </button>
-                        <button
-                          type="button"
-                          onClick={openCodesExcel}
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            color: "#006d21",
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                            fontWeight: 600,
-                            fontSize: "1.05rem",
-                          }}
-                        >
-                          Click here to get code
-                        </button>
                         <button
                           type="button"
                           onClick={() => setShowCodeHelp(true)}
@@ -898,12 +925,11 @@ function MemberRegistrationModal() {
                         value={formState.nationalIdCode}
                         disabled={idMethod !== "code"}
                         onChange={(e) => handleChange("nationalIdCode", e.target.value)}
-                        placeholder="Select code from list"
-                        readOnly={idMethod === "code"}
+                        placeholder="Enter your official code"
                       />
                       {idMethod === "code" && !isSelectedCodeValid && formState.nationalIdCode.trim() && (
                         <small style={{ color: "#b91c1c", fontSize: "1.05rem" }}>
-                          Please choose a valid code from the list.
+                          The code is incorrect. Please contact association contact person.
                         </small>
                       )}
                     </div>
@@ -919,74 +945,75 @@ function MemberRegistrationModal() {
                         marginBottom: "20px",
                       }}
                     >
-                      <label style={labelStyle}>Choose official code from list</label>
-                      <div className="row g-2">
-                        <div className="col-md-9">
+                      <div className="row g-2" style={{ marginBottom: "12px" }}>
+                        <div className="col-md-6">
+                          <label style={labelStyle}>Association Country *</label>
                           <select
                             className="form-control"
                             style={inputStyle}
-                            value={formState.nationalIdCode}
-                            onChange={(e) => handleChange("nationalIdCode", e.target.value)}
+                            value={formState.country}
+                            onChange={(e) => handleChange("country", e.target.value)}
                           >
-                            <option value="">
-                              {isLoadingCodes ? "Loading codes..." : "Select a valid code"}
-                            </option>
-                            {sharedCodes.map((item) => (
-                              <option key={item.code} value={item.code}>
-                                {item.label}
+                            <option value="">Select country from association list</option>
+                            {associationCountryOptions.map((country) => (
+                              <option key={country} value={country}>
+                                {country}
                               </option>
                             ))}
                           </select>
                         </div>
-                        <div className="col-md-3">
-                          <button
-                            type="button"
-                            onClick={loadSharedCodes}
-                            style={{
-                              width: "100%",
-                              minHeight: "64px",
-                              border: "1px solid #006d21",
-                              background: "#ffffff",
-                              color: "#006d21",
-                              borderRadius: "12px",
-                              fontWeight: 700,
-                              fontSize: "1.2rem",
-                              cursor: "pointer",
-                            }}
+                        <div className="col-md-6">
+                          <label style={labelStyle}>Association City *</label>
+                          <select
+                            className="form-control"
+                            style={inputStyle}
+                            value={formState.city}
+                            onChange={(e) => handleChange("city", e.target.value)}
+                            disabled={!formState.country}
                           >
-                            Refresh
-                          </button>
+                            <option value="">
+                              {!formState.country
+                                ? "Select country first"
+                                : "Select city from association list"}
+                            </option>
+                            {associationCityOptions.map((city) => (
+                              <option key={city} value={city}>
+                                {city}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       </div>
-                      <small style={{ color: "#475569", fontSize: "1rem", display: "block", marginTop: "8px" }}>
-                        Only official listed codes are accepted. Sample or manual codes are blocked.
-                      </small>
+
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginTop: "8px" }}>
+                        <small style={{ color: "#475569", fontSize: "1rem", display: "block" }}>
+                          Enter your code manually. It will be validated only against the selected country and city.
+                        </small>
+                        <button
+                          type="button"
+                          onClick={loadSharedCodes}
+                          style={{
+                            minHeight: "44px",
+                            border: "1px solid #006d21",
+                            background: "#ffffff",
+                            color: "#006d21",
+                            borderRadius: "10px",
+                            fontWeight: 700,
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            padding: "0 14px",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          Refresh Codes
+                        </button>
+                      </div>
                     </div>
                   )}
 
                   <label style={{ ...labelStyle, marginBottom: "12px" }}>
-                    International Document *
+                    International Documents (Optional)
                   </label>
-                  <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "16px" }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.2rem", color: "#1f2937" }}>
-                      <input
-                        type="radio"
-                        name="secondaryDocMethod"
-                        checked={formState.secondaryDocumentType === "passport"}
-                        onChange={() => setSecondaryDocumentType("passport")}
-                      />
-                      Upload Passport
-                    </label>
-                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.2rem", color: "#1f2937" }}>
-                      <input
-                        type="radio"
-                        name="secondaryDocMethod"
-                        checked={formState.secondaryDocumentType === "driving_license"}
-                        onChange={() => setSecondaryDocumentType("driving_license")}
-                      />
-                      Upload Driving Licence
-                    </label>
-                  </div>
 
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
@@ -996,11 +1023,8 @@ function MemberRegistrationModal() {
                         accept="image/*,.pdf"
                         className="form-control"
                         style={inputStyle}
-                        disabled={formState.secondaryDocumentType !== "passport"}
-                        required={formState.secondaryDocumentType === "passport"}
                         onChange={(e) => {
-                          if (formState.secondaryDocumentType !== "passport") return;
-                          setSecondaryDocument(e.target.files?.[0] || null);
+                          setPassportDocument(e.target.files?.[0] || null);
                         }}
                       />
                     </div>
@@ -1011,11 +1035,8 @@ function MemberRegistrationModal() {
                         accept="image/*,.pdf"
                         className="form-control"
                         style={inputStyle}
-                        disabled={formState.secondaryDocumentType !== "driving_license"}
-                        required={formState.secondaryDocumentType === "driving_license"}
                         onChange={(e) => {
-                          if (formState.secondaryDocumentType !== "driving_license") return;
-                          setSecondaryDocument(e.target.files?.[0] || null);
+                          setDrivingLicenseDocument(e.target.files?.[0] || null);
                         }}
                       />
                     </div>

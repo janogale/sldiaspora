@@ -257,6 +257,8 @@ export const getMemberById = async (memberId: string) => {
   return result?.data || null;
 };
 
+const normalizeValue = (value: string) => value.trim().toLowerCase();
+
 export const listApprovedMembers = async () => {
   const fields = [
     "id",
@@ -291,16 +293,26 @@ export const listApprovedMembers = async () => {
   return result?.data || [];
 };
 
-export const validateSharedCode = async (code: string) => {
-  const normalizedCode = code.trim();
-  if (!normalizedCode) return false;
+export const validateSharedCode = async (
+  code: string,
+  country: string,
+  city: string
+) => {
+  const normalizedCode = code.trim().toUpperCase();
+  const normalizedCountry = normalizeValue(country);
+  const normalizedCity = normalizeValue(city);
 
-  if (SYSTEM_SAMPLE_SHARED_CODES.some((item) => item.code === normalizedCode)) {
-    return true;
+  if (!normalizedCode || !normalizedCountry || !normalizedCity) {
+    return false;
   }
 
   const codes = await listSharedCodes();
-  return codes.some((item) => item.code === normalizedCode);
+  return codes.some(
+    (item) =>
+      item.code.trim().toUpperCase() === normalizedCode &&
+      normalizeValue(item.country) === normalizedCountry &&
+      normalizeValue(item.city) === normalizedCity
+  );
 };
 
 export type SharedCodeItem = {
