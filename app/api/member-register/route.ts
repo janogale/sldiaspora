@@ -20,7 +20,6 @@ export async function POST(request: Request) {
     const fullName = toText(form.get("fullName"));
     const phone = toText(form.get("phone"));
     const email = toText(form.get("email")).toLowerCase();
-    const address = toText(form.get("address"));
     const city = toText(form.get("city"));
     const country = toText(form.get("country"));
     const password = toText(form.get("password"));
@@ -52,11 +51,22 @@ export async function POST(request: Request) {
         ? secondaryDocumentInput
         : null;
 
+    const passportFileInput = form.get("passportFile");
+    const passportFileUpload =
+      passportFileInput instanceof File && passportFileInput.size > 0
+        ? passportFileInput
+        : null;
+
+    const drivingLicenseFileInput = form.get("drivingLicenseFile");
+    const drivingLicenseFileUpload =
+      drivingLicenseFileInput instanceof File && drivingLicenseFileInput.size > 0
+        ? drivingLicenseFileInput
+        : null;
+
     if (
       !fullName ||
       !phone ||
       !email ||
-      !address ||
       !city ||
       !country ||
       !password
@@ -64,7 +74,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           message:
-            "Full name, phone, email, address, city, country and password are required.",
+            "Full name, phone, email, city, country and password are required.",
         },
         { status: 400 }
       );
@@ -92,33 +102,20 @@ export async function POST(request: Request) {
     }
 
     if (nationalIdCode) {
-      const isValidSharedCode = await validateSharedCode(nationalIdCode);
+      const isValidSharedCode = await validateSharedCode(
+        nationalIdCode,
+        country,
+        city
+      );
       if (!isValidSharedCode) {
         return NextResponse.json(
           {
             message:
-              "Invalid shared code. Please use 'Click here to get code' and select a valid code from the official list.",
+              "The code is incorrect. Please contact association contact person.",
           },
           { status: 400 }
         );
       }
-    }
-
-    if (!secondaryDocument) {
-      return NextResponse.json(
-        { message: "Please upload one secondary document: passport or driving licence." },
-        { status: 400 }
-      );
-    }
-
-    if (
-      secondaryDocumentType !== "passport" &&
-      secondaryDocumentType !== "driving_license"
-    ) {
-      return NextResponse.json(
-        { message: "Select the secondary document category: passport or driving licence." },
-        { status: 400 }
-      );
     }
 
     const existingMember = await getMemberByEmail(email).catch(() => null);
@@ -162,7 +159,13 @@ export async function POST(request: Request) {
       );
     }
 
-    if (secondaryDocumentType === "passport") {
+    if (passportFileUpload) {
+      passportFileId = await uploadDirectusFile(
+        passportFileUpload,
+        `${fullName} Passport`,
+        "Uploaded during member registration"
+      );
+    } else if (secondaryDocument && secondaryDocumentType === "passport") {
       passportFileId = await uploadDirectusFile(
         secondaryDocument,
         `${fullName} Passport`,
@@ -170,7 +173,13 @@ export async function POST(request: Request) {
       );
     }
 
-    if (secondaryDocumentType === "driving_license") {
+    if (drivingLicenseFileUpload) {
+      drivingLicenseFileId = await uploadDirectusFile(
+        drivingLicenseFileUpload,
+        `${fullName} Driving Licence`,
+        "Uploaded during member registration"
+      );
+    } else if (secondaryDocument && secondaryDocumentType === "driving_license") {
       drivingLicenseFileId = await uploadDirectusFile(
         secondaryDocument,
         `${fullName} Driving Licence`,
@@ -178,11 +187,21 @@ export async function POST(request: Request) {
       );
     }
 
+    const resolvedSecondaryDocumentType =
+      secondaryDocumentType === "passport" || secondaryDocumentType === "driving_license"
+        ? secondaryDocumentType
+        : passportFileUpload && drivingLicenseFileUpload
+        ? "both"
+        : passportFileUpload
+        ? "passport"
+        : drivingLicenseFileUpload
+        ? "driving_license"
+        : null;
+
     const basePayload: Record<string, unknown> = {
       full_name: fullName,
       phone,
       email,
-      address,
       city,
       country,
       profession,
@@ -193,7 +212,7 @@ export async function POST(request: Request) {
       national_id_photo: nationalIdFileId,
       passport_file: passportFileId,
       driving_license_file: drivingLicenseFileId,
-      secondary_document_type: secondaryDocumentType,
+      secondary_document_type: resolvedSecondaryDocumentType,
       share_contact_preference: shareContactPreference || "none",
       password_hash: hashMemberPassword(password),
       additional_notes: additionalNotes || null,
