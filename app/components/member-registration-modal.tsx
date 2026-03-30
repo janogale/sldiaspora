@@ -39,7 +39,6 @@ type SharedCodeOption = {
 };
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
-const SHARED_CODES_WEB_EXCEL_PATH = "/api/association-list";
 const normalizeText = (value: string) => value.trim().toLowerCase();
 
 function MemberRegistrationModal() {
@@ -62,12 +61,12 @@ function MemberRegistrationModal() {
   const [drivingLicenseDocument, setDrivingLicenseDocument] = useState<File | null>(null);
 
   const passwordsMatch =
-    formState.password.length >= 6 && formState.password === formState.confirmPassword;
+    (!formState.password && !formState.confirmPassword) ||
+    (formState.password.length >= 6 && formState.password === formState.confirmPassword);
 
   const hasRequiredBasics =
     formState.fullName.trim().length > 1 &&
     formState.phone.trim().length > 5 &&
-    formState.email.trim().length > 3 &&
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
@@ -114,9 +113,12 @@ function MemberRegistrationModal() {
     );
   }, [filteredCodeOptions, formState.nationalIdCode]);
 
-  const hasValidIdMethod =
-    (idMethod === "national_id" && !!nationalIdPhoto) ||
-    (idMethod === "code" && isSelectedCodeValid);
+  const hasValidIdMethod = useMemo(() => {
+    if (idMethod === "") return true;
+    if (idMethod === "national_id") return !!nationalIdPhoto;
+    if (idMethod === "code") return isSelectedCodeValid;
+    return false;
+  }, [idMethod, isSelectedCodeValid, nationalIdPhoto]);
 
   const canSubmit = useMemo(() => {
     return hasRequiredBasics && hasValidIdMethod && passwordsMatch;
@@ -372,11 +374,6 @@ function MemberRegistrationModal() {
     router.push("/member-login");
   };
 
-  const openCodesExcel = () => {
-    if (typeof window === "undefined") return;
-    window.open(SHARED_CODES_WEB_EXCEL_PATH, "_blank", "noopener,noreferrer");
-  };
-
   useEffect(() => {
     const onOpenMemberModal = () => openModal();
 
@@ -479,10 +476,8 @@ function MemberRegistrationModal() {
       }
     }
 
-    if (currentStep === 2 && !hasValidIdMethod) {
-      setErrorMessage(
-        "Please choose one ID method (National ID upload OR code)."
-      );
+    if (currentStep === 2 && idMethod === "national_id" && !nationalIdPhoto) {
+      setErrorMessage("Please upload your National ID photo or switch method.");
       return;
     }
 
@@ -500,7 +495,7 @@ function MemberRegistrationModal() {
 
     if (!canSubmit) {
       setErrorMessage(
-        "Please complete all required fields, verification, password, and short bio before submitting."
+        "Please complete all required fields before submitting."
       );
       return;
     }
@@ -819,8 +814,8 @@ function MemberRegistrationModal() {
                       <input className="form-control" style={inputStyle} value={formState.phone} onChange={(e) => handleChange("phone", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Email *</label>
-                      <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} required />
+                      <label style={labelStyle}>Email</label>
+                      <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} />
                     </div>
                     <div className="col-md-6">
                       <label style={labelStyle}>City *</label>
@@ -855,7 +850,7 @@ function MemberRegistrationModal() {
                 <div className="member-section-card" style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Second Identification Section</div>
 
-                  <label style={{ ...labelStyle, marginBottom: "12px" }}>Choose one: Somaliland National ID or Enter Code *</label>
+                  <label style={{ ...labelStyle, marginBottom: "12px" }}>Somaliland National ID or Code (Optional)</label>
                   <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "16px" }}>
                     <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.2rem", color: "#1f2937" }}>
                       <input
@@ -898,7 +893,7 @@ function MemberRegistrationModal() {
                     </div>
                     <div className="col-md-6">
                       <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "8px" }}>
-                        Enter Code *
+                        Enter Code
                         <button
                           type="button"
                           onClick={() => setShowCodeHelp(true)}
@@ -1049,18 +1044,18 @@ function MemberRegistrationModal() {
                   <div style={stepTitleStyle}> Password & Bio</div>
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Password (System Login) *</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} required minLength={6} />
+                      <label style={labelStyle}>Password (System Login)</label>
+                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} minLength={6} />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Confirm Password *</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} required minLength={6} />
+                      <label style={labelStyle}>Confirm Password</label>
+                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} minLength={6} />
                       {formState.confirmPassword && !passwordsMatch && (
                         <small style={{ color: "#b91c1c", fontSize: "1.1rem" }}>Passwords do not match.</small>
                       )}
                     </div>
                     <div className="col-12">
-                      <label style={labelStyle}>Write a short BIO *</label>
+                      <label style={labelStyle}>Write a short BIO</label>
                       <textarea
                         className="form-control"
                         style={{ ...inputStyle, minHeight: "132px", paddingTop: "12px", paddingBottom: "12px" }}
@@ -1068,7 +1063,6 @@ function MemberRegistrationModal() {
                         value={formState.additionalNotes}
                         onChange={(e) => handleChange("additionalNotes", e.target.value)}
                         placeholder="Write a short bio..."
-                        required
                       />
                     </div>
                   </div>

@@ -63,24 +63,16 @@ export async function POST(request: Request) {
         ? drivingLicenseFileInput
         : null;
 
-    if (
-      !fullName ||
-      !phone ||
-      !email ||
-      !city ||
-      !country ||
-      !password
-    ) {
+    if (!fullName || !phone || !city || !country) {
       return NextResponse.json(
         {
-          message:
-            "Full name, phone, email, city, country and password are required.",
+          message: "Full name, phone, city and country are required.",
         },
         { status: 400 }
       );
     }
 
-    if (password.length < 6) {
+    if (password && password.length < 6) {
       return NextResponse.json(
         { message: "Password must be at least 6 characters." },
         { status: 400 }
@@ -90,13 +82,6 @@ export async function POST(request: Request) {
     if (nationalIdPhoto && nationalIdCode) {
       return NextResponse.json(
         { message: "Choose one National ID method: upload photo OR enter code." },
-        { status: 400 }
-      );
-    }
-
-    if (!nationalIdPhoto && !nationalIdCode) {
-      return NextResponse.json(
-        { message: "Please upload National ID photo or enter shared code." },
         { status: 400 }
       );
     }
@@ -118,17 +103,19 @@ export async function POST(request: Request) {
       }
     }
 
-    const existingMember = await getMemberByEmail(email).catch(() => null);
-    if (existingMember) {
-      return NextResponse.json(
-        { message: "This email is already registered." },
-        { status: 409 }
-      );
+    if (email) {
+      const existingMember = await getMemberByEmail(email).catch(() => null);
+      if (existingMember) {
+        return NextResponse.json(
+          { message: "This email is already registered." },
+          { status: 409 }
+        );
+      }
     }
 
     const allowedFields = await getMemberCollectionFields();
 
-    if (allowedFields && !allowedFields.has("password_hash")) {
+    if (password && allowedFields && !allowedFields.has("password_hash")) {
       return NextResponse.json(
         {
           message:
@@ -201,7 +188,7 @@ export async function POST(request: Request) {
     const basePayload: Record<string, unknown> = {
       full_name: fullName,
       phone,
-      email,
+      email: email || null,
       city,
       country,
       profession,
@@ -214,7 +201,7 @@ export async function POST(request: Request) {
       driving_license_file: drivingLicenseFileId,
       secondary_document_type: resolvedSecondaryDocumentType,
       share_contact_preference: shareContactPreference || "none",
-      password_hash: hashMemberPassword(password),
+      password_hash: password ? hashMemberPassword(password) : null,
       additional_notes: additionalNotes || null,
       submitted_at: new Date().toISOString(),
       status: "pending",
