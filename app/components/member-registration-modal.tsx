@@ -353,7 +353,7 @@ function MemberRegistrationModal() {
 
   const goNextStep = () => {
     if (currentStep === 1 && !hasRequiredBasics) {
-      setErrorMessage("Please complete all fields in the Information section.");
+      setErrorMessage("Please complete all required fields in the Information section.");
       return;
     }
 
@@ -692,23 +692,23 @@ function MemberRegistrationModal() {
                   <div style={stepTitleStyle}>First Information Section</div>
                   <div className="row g-3">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Full Name *</label>
+                      <label style={labelStyle}>Full Name (Required)</label>
                       <input className="form-control" style={inputStyle} value={formState.fullName} onChange={(e) => handleChange("fullName", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Phone *</label>
+                      <label style={labelStyle}>Phone (Required)</label>
                       <input className="form-control" style={inputStyle} value={formState.phone} onChange={(e) => handleChange("phone", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Email</label>
+                      <label style={labelStyle}>Email (Optional)</label>
                       <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>City *</label>
+                      <label style={labelStyle}>City (Required)</label>
                       <input className="form-control" style={inputStyle} value={formState.city} onChange={(e) => handleChange("city", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Country *</label>
+                      <label style={labelStyle}>Country (Required)</label>
                       <select
                         className="form-control"
                         style={inputStyle}
@@ -725,7 +725,7 @@ function MemberRegistrationModal() {
                       </select>
                     </div>
                     <div className="col-12">
-                      <label style={labelStyle}>Profile Picture</label>
+                      <label style={labelStyle}>Profile Picture (Optional)</label>
                       <input type="file" accept="image/*" className="form-control" style={inputStyle} onChange={(e) => setProfilePicture(e.target.files?.[0] || null)} />
                     </div>
                   </div>
@@ -767,7 +767,7 @@ function MemberRegistrationModal() {
 
                   <div className="row g-3 member-form-grid" style={{ marginBottom: "14px" }}>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Somaliland National ID Upload</label>
+                      <label style={labelStyle}>Somaliland National ID Upload (Optional)</label>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -779,7 +779,7 @@ function MemberRegistrationModal() {
                     </div>
                     <div className="col-md-6">
                       <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "8px" }}>
-                        Enter Code
+                        Enter Code (Optional)
                         <button
                           type="button"
                           onClick={() => setShowCodeHelp(true)}
@@ -817,7 +817,7 @@ function MemberRegistrationModal() {
 
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Passport Upload</label>
+                      <label style={labelStyle}>Passport Upload (Optional)</label>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -829,7 +829,7 @@ function MemberRegistrationModal() {
                       />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Driving Licence Upload</label>
+                      <label style={labelStyle}>Driving Licence Upload (Optional)</label>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -849,18 +849,18 @@ function MemberRegistrationModal() {
                   <div style={stepTitleStyle}> Password & Bio</div>
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Password (System Login)</label>
+                      <label style={labelStyle}>Password (System Login, Optional)</label>
                       <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} minLength={6} />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Confirm Password</label>
+                      <label style={labelStyle}>Confirm Password (Optional)</label>
                       <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} minLength={6} />
                       {formState.confirmPassword && !passwordsMatch && (
                         <small style={{ color: "#b91c1c", fontSize: "1.1rem" }}>Passwords do not match.</small>
                       )}
                     </div>
                     <div className="col-12">
-                      <label style={labelStyle}>Write a short BIO</label>
+                      <label style={labelStyle}>Write a short BIO (Optional)</label>
                       <textarea
                         className="form-control"
                         style={{ ...inputStyle, minHeight: "132px", paddingTop: "12px", paddingBottom: "12px" }}
