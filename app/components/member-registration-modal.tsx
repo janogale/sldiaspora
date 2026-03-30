@@ -29,17 +29,7 @@ const defaultFormState: RegisterFormState = {
   additionalNotes: "",
 };
 
-type SharedCodeOption = {
-  code: string;
-  label: string;
-  country: string;
-  city: string;
-  association: string;
-  contactPerson: string;
-};
-
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
-const normalizeText = (value: string) => value.trim().toLowerCase();
 
 function MemberRegistrationModal() {
   const router = useRouter();
@@ -52,8 +42,6 @@ function MemberRegistrationModal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
   const [idMethod, setIdMethod] = useState<IdVerificationMethod>("");
-  const [sharedCodes, setSharedCodes] = useState<SharedCodeOption[]>([]);
-  const [isLoadingCodes, setIsLoadingCodes] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
@@ -70,55 +58,14 @@ function MemberRegistrationModal() {
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
-  const associationCountryOptions = useMemo(() => {
-    return Array.from(
-      new Set(sharedCodes.map((item) => item.country.trim()).filter(Boolean))
-    ).sort((a, b) => a.localeCompare(b));
-  }, [sharedCodes]);
-
-  const associationCityOptions = useMemo(() => {
-    const selectedCountry = normalizeText(formState.country);
-    if (!selectedCountry) return [];
-
-    return Array.from(
-      new Set(
-        sharedCodes
-          .filter(
-            (item) => normalizeText(item.country) === selectedCountry
-          )
-          .map((item) => item.city.trim())
-          .filter(Boolean)
-      )
-    ).sort((a, b) => a.localeCompare(b));
-  }, [formState.country, sharedCodes]);
-
-  const filteredCodeOptions = useMemo(() => {
-    const selectedCountry = normalizeText(formState.country);
-    const selectedCity = normalizeText(formState.city);
-
-    if (!selectedCountry || !selectedCity) return [];
-
-    return sharedCodes.filter(
-      (item) =>
-        normalizeText(item.country) === selectedCountry &&
-        normalizeText(item.city) === selectedCity
-    );
-  }, [formState.country, formState.city, sharedCodes]);
-
-  const isSelectedCodeValid = useMemo(() => {
-    const value = formState.nationalIdCode.trim().toUpperCase();
-    if (!value) return false;
-    return filteredCodeOptions.some(
-      (item) => item.code.trim().toUpperCase() === value
-    );
-  }, [filteredCodeOptions, formState.nationalIdCode]);
+  const isCodeEntered = formState.nationalIdCode.trim().length > 0;
 
   const hasValidIdMethod = useMemo(() => {
     if (idMethod === "") return true;
     if (idMethod === "national_id") return !!nationalIdPhoto;
-    if (idMethod === "code") return isSelectedCodeValid;
+    if (idMethod === "code") return isCodeEntered;
     return false;
-  }, [idMethod, isSelectedCodeValid, nationalIdPhoto]);
+  }, [idMethod, isCodeEntered, nationalIdPhoto]);
 
   const canSubmit = useMemo(() => {
     return hasRequiredBasics && hasValidIdMethod && passwordsMatch;
@@ -325,31 +272,6 @@ function MemberRegistrationModal() {
     []
   );
 
-  const loadSharedCodes = async () => {
-    setIsLoadingCodes(true);
-    try {
-      const response = await fetch("/api/shared-codes", { method: "GET" });
-      const result = (await response.json().catch(() => null)) as {
-        data?: SharedCodeOption[];
-        message?: string;
-      } | null;
-
-      if (!response.ok) {
-        setSharedCodes([]);
-        if (result?.message) setErrorMessage(result.message);
-        return;
-      }
-
-      const items = Array.isArray(result?.data) ? result.data : [];
-      setSharedCodes(items);
-    } catch {
-      setSharedCodes([]);
-      setErrorMessage("Unable to load shared codes right now.");
-    } finally {
-      setIsLoadingCodes(false);
-    }
-  };
-
   const openModal = () => {
     setErrorMessage("");
     setModalView("choice");
@@ -412,33 +334,8 @@ function MemberRegistrationModal() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    if (idMethod !== "code") return;
-    if (sharedCodes.length > 0 || isLoadingCodes) return;
-
-    loadSharedCodes();
-  }, [idMethod, isOpen, sharedCodes.length, isLoadingCodes]);
-
   const handleChange = (key: keyof RegisterFormState, value: string) => {
     setFormState((prev) => {
-      if (key === "country") {
-        return {
-          ...prev,
-          country: value,
-          city: idMethod === "code" ? "" : prev.city,
-          nationalIdCode: idMethod === "code" ? "" : prev.nationalIdCode,
-        };
-      }
-
-      if (key === "city" && idMethod === "code") {
-        return {
-          ...prev,
-          city: value,
-          nationalIdCode: "",
-        };
-      }
-
       return { ...prev, [key]: value };
     });
   };
@@ -460,20 +357,9 @@ function MemberRegistrationModal() {
       return;
     }
 
-    if (currentStep === 2 && idMethod === "code") {
-      if (!formState.country.trim() || !formState.city.trim()) {
-        setErrorMessage(
-          "Please choose country and city from association list before entering your code."
-        );
-        return;
-      }
-
-      if (!isSelectedCodeValid) {
-        setErrorMessage(
-          "The code is incorrect. Please contact association contact person."
-        );
-        return;
-      }
+    if (currentStep === 2 && idMethod === "code" && !isCodeEntered) {
+      setErrorMessage("Please enter your code or switch method.");
+      return;
     }
 
     if (currentStep === 2 && idMethod === "national_id" && !nationalIdPhoto) {
@@ -922,89 +808,8 @@ function MemberRegistrationModal() {
                         onChange={(e) => handleChange("nationalIdCode", e.target.value)}
                         placeholder="Enter your official code"
                       />
-                      {idMethod === "code" && !isSelectedCodeValid && formState.nationalIdCode.trim() && (
-                        <small style={{ color: "#b91c1c", fontSize: "1.05rem" }}>
-                          The code is incorrect. Please contact association contact person.
-                        </small>
-                      )}
                     </div>
                   </div>
-
-                  {idMethod === "code" && (
-                    <div
-                      style={{
-                        border: "1px solid #d4e4da",
-                        borderRadius: "12px",
-                        background: "#ffffff",
-                        padding: "14px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <div className="row g-2" style={{ marginBottom: "12px" }}>
-                        <div className="col-md-6">
-                          <label style={labelStyle}>Association Country *</label>
-                          <select
-                            className="form-control"
-                            style={inputStyle}
-                            value={formState.country}
-                            onChange={(e) => handleChange("country", e.target.value)}
-                          >
-                            <option value="">Select country from association list</option>
-                            {associationCountryOptions.map((country) => (
-                              <option key={country} value={country}>
-                                {country}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="col-md-6">
-                          <label style={labelStyle}>Association City *</label>
-                          <select
-                            className="form-control"
-                            style={inputStyle}
-                            value={formState.city}
-                            onChange={(e) => handleChange("city", e.target.value)}
-                            disabled={!formState.country}
-                          >
-                            <option value="">
-                              {!formState.country
-                                ? "Select country first"
-                                : "Select city from association list"}
-                            </option>
-                            {associationCityOptions.map((city) => (
-                              <option key={city} value={city}>
-                                {city}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginTop: "8px" }}>
-                        <small style={{ color: "#475569", fontSize: "1rem", display: "block" }}>
-                          Enter your code manually. It will be validated only against the selected country and city.
-                        </small>
-                        <button
-                          type="button"
-                          onClick={loadSharedCodes}
-                          style={{
-                            minHeight: "44px",
-                            border: "1px solid #006d21",
-                            background: "#ffffff",
-                            color: "#006d21",
-                            borderRadius: "10px",
-                            fontWeight: 700,
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            padding: "0 14px",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          Refresh Codes
-                        </button>
-                      </div>
-                    </div>
-                  )}
 
                   <label style={{ ...labelStyle, marginBottom: "12px" }}>
                     International Documents (Optional)
