@@ -55,6 +55,7 @@ function MemberRegistrationModal() {
   const hasRequiredBasics =
     formState.fullName.trim().length > 1 &&
     formState.phone.trim().length > 5 &&
+    formState.email.trim().length > 3 &&
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
@@ -700,8 +701,8 @@ function MemberRegistrationModal() {
                       <input className="form-control" style={inputStyle} value={formState.phone} onChange={(e) => handleChange("phone", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Email (Optional)</label>
-                      <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} />
+                      <label style={labelStyle}>Email (Required)</label>
+                      <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
                       <label style={labelStyle}>City (Required)</label>

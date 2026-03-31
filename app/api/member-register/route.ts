@@ -63,10 +63,10 @@ export async function POST(request: Request) {
         ? drivingLicenseFileInput
         : null;
 
-    if (!fullName || !phone || !city || !country) {
+    if (!fullName || !phone || !email || !city || !country) {
       return NextResponse.json(
         {
-          message: "Full name, phone, city and country are required.",
+          message: "Full name, phone, email, city and country are required.",
         },
         { status: 400 }
       );
@@ -103,14 +103,12 @@ export async function POST(request: Request) {
       }
     }
 
-    if (email) {
-      const existingMember = await getMemberByEmail(email).catch(() => null);
-      if (existingMember) {
-        return NextResponse.json(
-          { message: "This email is already registered." },
-          { status: 409 }
-        );
-      }
+    const existingMember = await getMemberByEmail(email).catch(() => null);
+    if (existingMember) {
+      return NextResponse.json(
+        { message: "This email is already registered." },
+        { status: 409 }
+      );
     }
 
     const allowedFields = await getMemberCollectionFields();
@@ -188,7 +186,7 @@ export async function POST(request: Request) {
     const basePayload: Record<string, unknown> = {
       full_name: fullName,
       phone,
-      email: email || null,
+      email,
       city,
       country,
       profession,
