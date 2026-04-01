@@ -48,35 +48,28 @@ const cardBodyStyle = {
 } as const;
 
 const newsSectionStyle = {
-  paddingTop: "18px",
+  paddingTop: "0px",
+} as const;
+
+const filterSectionStyle = {
+  marginTop: "-16px",
+  marginBottom: "8px",
 } as const;
 
 const filterWrapStyle = {
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "center",
+  alignItems: "flex-end",
   flexWrap: "wrap",
-  gap: "14px",
-  marginBottom: "18px",
-} as const;
-
-const filterLabelStyle = {
-  fontSize: "0.95rem",
-  fontWeight: 700,
-  color: "#35524a",
-  marginBottom: "6px",
-  display: "block",
-} as const;
-
-const filterSelectStyle = {
-  minWidth: "220px",
-  minHeight: "44px",
-  borderRadius: "10px",
-  border: "1px solid #cfe0d6",
-  padding: "0 12px",
-  color: "#1f2937",
-  background: "#ffffff",
-  fontWeight: 600,
+  gap: "16px",
+  marginTop: "-4px",
+  marginBottom: "22px",
+  border: "1px solid #d5e6dc",
+  borderRadius: "16px",
+  background:
+    "linear-gradient(145deg, rgba(244,250,246,1) 0%, rgba(255,255,255,1) 55%)",
+  padding: "16px 18px",
+  boxShadow: "0 10px 26px rgba(12, 74, 48, 0.07)",
 } as const;
 
 function getFirstContentLink(input: string): string | null {
@@ -110,33 +103,35 @@ export default async function Page({
       <Header />
       <BreadCamp title="News" />
 
+      <section style={filterSectionStyle}>
+        <div className="container">
+          <div style={filterWrapStyle}>
+            <div>
+              <h2 style={{ margin: 0, color: "#0f3e2f", fontWeight: 800, fontSize: "1.48rem", lineHeight: 1.2 }}>
+                Latest Articles
+              </h2>
+              <p style={{ margin: "8px 0 0", color: "#5b6f66", fontSize: "0.98rem" }}>
+                {requestedCategory
+                  ? `Showing ${requestedCategory} articles`
+                  : "Showing all published articles"}
+              </p>
+            </div>
+
+            <ArticleCategoryFilter
+              requestedCategory={requestedCategory}
+              options={ARTICLE_CATEGORY_OPTIONS.map((option) => ({
+                value: option.value,
+                label: option.label,
+              }))}
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="blog__area section-space" style={newsSectionStyle}>
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div style={filterWrapStyle}>
-                <div>
-                  <h2 style={{ margin: 0, color: "#0f3e2f", fontWeight: 800, fontSize: "1.55rem" }}>
-                    Latest Articles
-                  </h2>
-                  <p style={{ margin: "6px 0 0", color: "#5b6f66" }}>
-                    {requestedCategory
-                      ? `Showing ${requestedCategory} articles`
-                      : "Showing all published articles"}
-                  </p>
-                </div>
-
-                <ArticleCategoryFilter
-                  requestedCategory={requestedCategory}
-                  options={ARTICLE_CATEGORY_OPTIONS.map((option) => ({
-                    value: option.value,
-                    label: option.label,
-                  }))}
-                  labelStyle={filterLabelStyle}
-                  selectStyle={filterSelectStyle}
-                />
-              </div>
-
               {articles.length === 0 ? (
                 <p>
                   {requestedCategory

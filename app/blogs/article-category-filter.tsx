@@ -7,22 +7,14 @@ type CategoryOption = {
   label: string;
 };
 
-type InlineStyle = {
-  [key: string]: string | number;
-};
-
 type Props = {
   requestedCategory: string;
   options: CategoryOption[];
-  labelStyle: InlineStyle;
-  selectStyle: InlineStyle;
 };
 
 export default function ArticleCategoryFilter({
   requestedCategory,
   options,
-  labelStyle,
-  selectStyle,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -42,23 +34,56 @@ export default function ArticleCategoryFilter({
   };
 
   return (
-    <div>
-      <label htmlFor="article-category" style={labelStyle}>
-        Article Category
-      </label>
-      <select
-        id="article-category"
-        name="category"
-        value={requestedCategory}
-        style={selectStyle}
-        onChange={(event) => handleChange(event.target.value)}
+    <div style={{ minWidth: "min(100%, 420px)" }}>
+      <label
+        htmlFor="article-category"
+        style={{
+          fontSize: "1.12rem",
+          fontWeight: 800,
+          color: "#36554d",
+          letterSpacing: "0.3px",
+          textTransform: "uppercase",
+          marginBottom: "12px",
+          display: "block",
+        }}
       >
-        {options.map((option) => (
-          <option key={option.value || "all"} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+        Filter by Category
+      </label>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+        }}
+      >
+        {options.map((option) => {
+          const isActive = requestedCategory === option.value;
+
+          return (
+            <button
+              key={option.value || "all-pill"}
+              type="button"
+              onClick={() => handleChange(option.value)}
+              style={{
+                border: isActive ? "1px solid #0a6d3a" : "1px solid #cadfd3",
+                background: isActive ? "#0a6d3a" : "#ffffff",
+                color: isActive ? "#ffffff" : "#26453c",
+                borderRadius: "999px",
+                padding: "11px 18px",
+                fontSize: "1.08rem",
+                fontWeight: 800,
+                minHeight: "48px",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
