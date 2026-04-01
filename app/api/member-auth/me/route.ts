@@ -3,6 +3,14 @@ import { cookies } from "next/headers";
 import { memberSessionCookie, verifyMemberSession } from "@/lib/member-auth";
 import { getMemberById, listApprovedMembers } from "@/lib/member-directus";
 
+const toFirstName = (value: unknown) => {
+  const fullName = typeof value === "string" ? value.trim() : "";
+  if (!fullName) return "Member";
+
+  const [firstName] = fullName.split(/\s+/).filter(Boolean);
+  return firstName || "Member";
+};
+
 export async function GET() {
   try {
     const cookieStore = await cookies();
@@ -46,7 +54,7 @@ export async function GET() {
         },
         members: members.map((item) => ({
           id: String(item.id || ""),
-          full_name: item.full_name || "",
+          full_name: toFirstName(item.full_name),
           city: item.city || "",
           country: item.country || "",
           profile_picture: item.profile_picture || null,
