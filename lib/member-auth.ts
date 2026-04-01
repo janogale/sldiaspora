@@ -38,6 +38,70 @@ export type MemberSession = {
   exp: number;
 };
 
+export type MemberConnectionRequestToken = {
+  requesterId: string;
+  requesterName: string;
+  requesterEmail: string;
+  requesterCity: string;
+  requesterCountry: string;
+  targetId: string;
+  targetName: string;
+  targetEmail: string;
+  message: string;
+  exp: number;
+};
+
+const signToken = <T extends { exp: number }>(payload: Omit<T, "exp">, ttlSeconds: number) => {
+  const header = { alg: "HS256", typ: "JWT" };
+  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
+  const body = { ...payload, exp } as T;
+
+  const encodedHeader = base64UrlEncode(JSON.stringify(header));
+  const encodedBody = base64UrlEncode(JSON.stringify(body));
+  const data = `${encodedHeader}.${encodedBody}`;
+
+  const signature = crypto
+    .createHmac("sha256", getSessionSecret())
+    .update(data)
+    .digest();
+
+  return `${data}.${base64UrlEncode(signature)}`;
+};
+
+const verifyToken = <T extends { exp: number }>(token: string): T | null => {
+  const [encodedHeader, encodedBody, encodedSignature] = token.split(".");
+  if (!encodedHeader || !encodedBody || !encodedSignature) return null;
+
+  const data = `${encodedHeader}.${encodedBody}`;
+
+  const expectedSignature = crypto
+    .createHmac("sha256", getSessionSecret())
+    .update(data)
+    .digest();
+
+  const providedSignature = Buffer.from(
+    encodedSignature.replace(/-/g, "+").replace(/_/g, "/"),
+    "base64"
+  );
+
+  if (
+    expectedSignature.length !== providedSignature.length ||
+    !crypto.timingSafeEqual(expectedSignature, providedSignature)
+  ) {
+    return null;
+  }
+
+  try {
+    const parsedBody = JSON.parse(base64UrlDecode(encodedBody)) as T;
+    if (!parsedBody.exp || parsedBody.exp < Math.floor(Date.now() / 1000)) {
+      return null;
+    }
+    return parsedBody;
+  } catch {
+    return null;
+  }
+};
+
 export const hashMemberPassword = (plainTextPassword: string) => {
   const salt = crypto.randomBytes(16).toString("hex");
   const digest = crypto
@@ -73,55 +137,20 @@ export const signMemberSession = (
   payload: Omit<MemberSession, "exp">,
   ttlSeconds = SESSION_TTL_SECONDS
 ) => {
-  const header = { alg: "HS256", typ: "JWT" };
-  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
-  const body: MemberSession = { ...payload, exp };
-
-  const encodedHeader = base64UrlEncode(JSON.stringify(header));
-  const encodedBody = base64UrlEncode(JSON.stringify(body));
-  const data = `${encodedHeader}.${encodedBody}`;
-
-  const signature = crypto
-    .createHmac("sha256", getSessionSecret())
-    .update(data)
-    .digest();
-
-  return `${data}.${base64UrlEncode(signature)}`;
+  return signToken<MemberSession>(payload, ttlSeconds);
 };
 
 export const verifyMemberSession = (token: string): MemberSession | null => {
-  const [encodedHeader, encodedBody, encodedSignature] = token.split(".");
-  if (!encodedHeader || !encodedBody || !encodedSignature) return null;
-
-  const data = `${encodedHeader}.${encodedBody}`;
-
-  const expectedSignature = crypto
-    .createHmac("sha256", getSessionSecret())
-    .update(data)
-    .digest();
-
-  const providedSignature = Buffer.from(
-    encodedSignature.replace(/-/g, "+").replace(/_/g, "/"),
-    "base64"
-  );
-
-  if (
-    expectedSignature.length !== providedSignature.length ||
-    !crypto.timingSafeEqual(expectedSignature, providedSignature)
-  ) {
-    return null;
-  }
-
-  try {
-    const parsedBody = JSON.parse(base64UrlDecode(encodedBody)) as MemberSession;
-    if (!parsedBody.exp || parsedBody.exp < Math.floor(Date.now() / 1000)) {
-      return null;
-    }
-    return parsedBody;
-  } catch {
-    return null;
-  }
+  return verifyToken<MemberSession>(token);
 };
+
+export const signMemberConnectionRequest = (
+  payload: Omit<MemberConnectionRequestToken, "exp">,
+  ttlSeconds = 60 * 60 * 24 * 7
+) => signToken<MemberConnectionRequestToken>(payload, ttlSeconds);
+
+export const verifyMemberConnectionRequest = (token: string) =>
+  verifyToken<MemberConnectionRequestToken>(token);
 
 export const memberSessionCookie = {
   name: SESSION_COOKIE_NAME,
