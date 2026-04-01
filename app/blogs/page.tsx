@@ -110,7 +110,7 @@ export default async function Page({
               <h2 style={{ margin: 0, color: "#0f3e2f", fontWeight: 800, fontSize: "1.48rem", lineHeight: 1.2 }}>
                 Latest Articles
               </h2>
-              <p style={{ margin: "8px 0 0", color: "#5b6f66", fontSize: "0.98rem" }}>
+              <p style={{ margin: "8px 0 0", color: "#5b6f66", fontSize: "1.1rem" }}>
                 {requestedCategory
                   ? `Showing ${requestedCategory} articles`
                   : "Showing all published articles"}
