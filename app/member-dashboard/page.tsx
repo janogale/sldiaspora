@@ -23,18 +23,13 @@ type DashboardMember = {
 type MembersListItem = {
   id: string;
   full_name: string;
-  address?: string;
-  profession?: string;
   city?: string;
   country?: string;
-  areas_of_interest?: string;
   profile_picture?: string | { id?: string } | null;
-  contact_email?: string;
-  contact_phone?: string;
 };
 
 type DashboardSection = 'members' | 'profile' | 'settings';
-type SortKey = 'name' | 'country' | 'profession';
+type SortKey = 'name' | 'country' | 'city';
 
 const resolveAssetPath = (
   fileValue: string | { id?: string } | null | undefined
@@ -55,16 +50,15 @@ export default function MemberDashboardPage() {
 
   const [activeSection, setActiveSection] = useState<DashboardSection>('members');
   const [searchTerm, setSearchTerm] = useState('');
-  const [professionFilter, setProfessionFilter] = useState('all');
   const [countryFilter, setCountryFilter] = useState('all');
-  const [interestFilter, setInterestFilter] = useState('all');
   const [sortBy, setSortBy] = useState<SortKey>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
 
   const [connectingId, setConnectingId] = useState<string>('');
-  const [shareContact, setShareContact] = useState<'none' | 'email' | 'phone'>('none');
   const [requestMessage, setRequestMessage] = useState('');
+  const [modalSuccess, setModalSuccess] = useState('');
+  const [modalError, setModalError] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MembersListItem | null>(null);
@@ -129,48 +123,32 @@ export default function MemberDashboardPage() {
     [members, member?.id]
   );
 
-  const extractInterests = (value?: string) =>
-    value ? value.split(/[,;/]/).map((item) => item.trim()).filter(Boolean) : [];
-
   const filterOptions = useMemo(() => {
     const getUnique = (items: Array<string | undefined>) =>
       Array.from(new Set(items.filter(Boolean).map((item) => item!.trim()).filter(Boolean))).sort();
 
     return {
-      professions: getUnique(otherMembers.map((item) => item.profession)),
       countries: getUnique(otherMembers.map((item) => item.country)),
-      interests: getUnique(otherMembers.flatMap((item) => extractInterests(item.areas_of_interest))),
     };
   }, [otherMembers]);
 
   const filteredMembers = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    const professionKey = professionFilter.toLowerCase();
     const countryKey = countryFilter.toLowerCase();
-    const interestKey = interestFilter.toLowerCase();
 
     return otherMembers.filter((item) => {
-      if (professionFilter !== 'all' && (item.profession || '').toLowerCase() !== professionKey) {
-        return false;
-      }
       if (countryFilter !== 'all' && (item.country || '').toLowerCase() !== countryKey) {
         return false;
       }
-      if (interestFilter !== 'all') {
-        const interests = extractInterests(item.areas_of_interest).map((value) => value.toLowerCase());
-        if (!interests.includes(interestKey)) {
-          return false;
-        }
-      }
       if (!term) return true;
 
-      return [item.full_name, item.profession, item.city, item.country, item.areas_of_interest]
+      return [item.full_name, item.city, item.country]
         .filter(Boolean)
         .join(' ')
         .toLowerCase()
         .includes(term);
     });
-  }, [otherMembers, searchTerm, professionFilter, countryFilter, interestFilter]);
+  }, [otherMembers, searchTerm, countryFilter]);
 
   const sortedMembers = useMemo(() => {
     const list = [...filteredMembers];
@@ -180,14 +158,14 @@ export default function MemberDashboardPage() {
           ? (a.full_name || '').toLowerCase()
           : sortBy === 'country'
             ? (a.country || '').toLowerCase()
-            : (a.profession || '').toLowerCase();
+            : (a.city || '').toLowerCase();
 
       const bValue =
         sortBy === 'name'
           ? (b.full_name || '').toLowerCase()
           : sortBy === 'country'
             ? (b.country || '').toLowerCase()
-            : (b.profession || '').toLowerCase();
+            : (b.city || '').toLowerCase();
 
       const order = aValue.localeCompare(bValue);
       return sortDirection === 'asc' ? order : -order;
@@ -204,7 +182,7 @@ export default function MemberDashboardPage() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, professionFilter, countryFilter, interestFilter, sortBy, sortDirection]);
+  }, [searchTerm, countryFilter, sortBy, sortDirection]);
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -214,38 +192,30 @@ export default function MemberDashboardPage() {
 
   const memberStats = useMemo(() => {
     const countries = new Set(otherMembers.map((item) => (item.country || '').trim()).filter(Boolean));
-    const professions = new Set(otherMembers.map((item) => (item.profession || '').trim()).filter(Boolean));
-    const interests = new Set(otherMembers.flatMap((item) => extractInterests(item.areas_of_interest)));
+    const cities = new Set(otherMembers.map((item) => (item.city || '').trim()).filter(Boolean));
 
     return {
       members: otherMembers.length,
       countries: countries.size,
-      professions: professions.size,
-      interests: interests.size,
+      cities: cities.size,
     };
   }, [otherMembers]);
 
   const activeFilters = useMemo(() => {
-    const chips: Array<{ key: 'search' | 'profession' | 'country' | 'interest'; label: string }> = [];
+    const chips: Array<{ key: 'search' | 'country'; label: string }> = [];
     if (searchTerm.trim()) chips.push({ key: 'search', label: `Search: ${searchTerm.trim()}` });
-    if (professionFilter !== 'all') chips.push({ key: 'profession', label: `Profession: ${professionFilter}` });
     if (countryFilter !== 'all') chips.push({ key: 'country', label: `Country: ${countryFilter}` });
-    if (interestFilter !== 'all') chips.push({ key: 'interest', label: `Interest: ${interestFilter}` });
     return chips;
-  }, [searchTerm, professionFilter, countryFilter, interestFilter]);
+  }, [searchTerm, countryFilter]);
 
   const clearAllFilters = () => {
     setSearchTerm('');
-    setProfessionFilter('all');
     setCountryFilter('all');
-    setInterestFilter('all');
   };
 
-  const clearSingleFilter = (key: 'search' | 'profession' | 'country' | 'interest') => {
+  const clearSingleFilter = (key: 'search' | 'country') => {
     if (key === 'search') setSearchTerm('');
-    if (key === 'profession') setProfessionFilter('all');
     if (key === 'country') setCountryFilter('all');
-    if (key === 'interest') setInterestFilter('all');
   };
 
   const handleLogout = async () => {
@@ -256,21 +226,27 @@ export default function MemberDashboardPage() {
   const openConnectModal = (memberItem: MembersListItem) => {
     setSelectedMember(memberItem);
     setIsModalOpen(true);
+    setRequestMessage('');
     setSuccess('');
     setError('');
+    setModalSuccess('');
+    setModalError('');
   };
 
   const closeConnectModal = () => {
     setIsModalOpen(false);
     setSelectedMember(null);
+    setRequestMessage('');
+    setModalSuccess('');
+    setModalError('');
   };
 
   const handleConnect = async () => {
     if (!selectedMember?.id) return;
 
     setConnectingId(selectedMember.id);
-    setError('');
-    setSuccess('');
+    setModalError('');
+    setModalSuccess('');
 
     try {
       const response = await fetch('/api/member-auth/request-connect', {
@@ -278,7 +254,6 @@ export default function MemberDashboardPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           targetMemberId: selectedMember.id,
-          shareContact,
           message: requestMessage,
         }),
       });
@@ -286,15 +261,23 @@ export default function MemberDashboardPage() {
       const result = await response.json().catch(() => null);
 
       if (!response.ok) {
-        setError(result?.message || 'Failed to send message.');
+        setModalError(result?.message || 'Failed to send connection request.');
         return;
       }
 
-      setSuccess('Message sent successfully.');
-      setRequestMessage('');
-      closeConnectModal();
+      setModalSuccess(
+        result?.message ||
+          'Connection request sent. If accepted, you will receive the member email.'
+      );
+      
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setSelectedMember(null);
+        setModalSuccess('');
+      }, 4000);
+      
     } catch {
-      setError('Failed to send message.');
+      setModalError('Failed to send connection request.');
     } finally {
       setConnectingId('');
     }
@@ -510,23 +493,13 @@ export default function MemberDashboardPage() {
                     </div>
                     <div className={`${styles.statCard} ${styles.statCardProfessions}`}>
                       <div className={styles.statHeader}>
-                        <span className={styles.statLabel}>Professions</span>
+                        <span className={styles.statLabel}>Cities</span>
                         <span className={styles.statIcon}>
-                          <i className="fa-solid fa-briefcase"></i>
+                          <i className="fa-solid fa-city"></i>
                         </span>
                       </div>
-                      <strong className={styles.statValue}>{memberStats.professions}</strong>
-                      <p className={styles.statMeta}>Diverse expertise for collaboration and mentorship.</p>
-                    </div>
-                    <div className={`${styles.statCard} ${styles.statCardInterests}`}>
-                      <div className={styles.statHeader}>
-                        <span className={styles.statLabel}>Interests</span>
-                        <span className={styles.statIcon}>
-                          <i className="fa-solid fa-lightbulb"></i>
-                        </span>
-                      </div>
-                      <strong className={styles.statValue}>{memberStats.interests}</strong>
-                      <p className={styles.statMeta}>Shared initiatives and high-impact focus areas.</p>
+                      <strong className={styles.statValue}>{memberStats.cities}</strong>
+                      <p className={styles.statMeta}>Cities currently represented in the directory.</p>
                     </div>
                   </div>
 
@@ -537,21 +510,6 @@ export default function MemberDashboardPage() {
 
                   <div className={styles.filterRow}>
                     <div className={styles.filterGroup}>
-                      <label className={styles.filterLabel}>Profession</label>
-                      <select
-                        className={styles.selectInput}
-                        value={professionFilter}
-                        onChange={(event) => setProfessionFilter(event.target.value)}
-                      >
-                        <option value="all">All professions</option>
-                        {filterOptions.professions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className={styles.filterGroup}>
                       <label className={styles.filterLabel}>Country</label>
                       <select
                         className={styles.selectInput}
@@ -560,21 +518,6 @@ export default function MemberDashboardPage() {
                       >
                         <option value="all">All countries</option>
                         {filterOptions.countries.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className={styles.filterGroup}>
-                      <label className={styles.filterLabel}>Interest</label>
-                      <select
-                        className={styles.selectInput}
-                        value={interestFilter}
-                        onChange={(event) => setInterestFilter(event.target.value)}
-                      >
-                        <option value="all">All interests</option>
-                        {filterOptions.interests.map((option) => (
                           <option key={option} value={option}>
                             {option}
                           </option>
@@ -594,7 +537,7 @@ export default function MemberDashboardPage() {
                     <input
                       value={searchTerm}
                       onChange={(event) => setSearchTerm(event.target.value)}
-                      placeholder="Search by name, profession, city or country"
+                      placeholder="Search by name, city or country"
                       className={styles.searchInput}
                     />
                   </div>
@@ -609,7 +552,7 @@ export default function MemberDashboardPage() {
                       >
                         <option value="name">Name</option>
                         <option value="country">Country</option>
-                        <option value="profession">Profession</option>
+                        <option value="city">City</option>
                       </select>
                     </div>
                     <button
@@ -644,9 +587,8 @@ export default function MemberDashboardPage() {
                         <thead>
                           <tr>
                             <th>Member</th>
-                            <th>Profession</th>
-                            <th>Location</th>
-                            <th>Interest</th>
+                            <th>Country</th>
+                            <th>City</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -664,16 +606,15 @@ export default function MemberDashboardPage() {
                                   />
                                   <div>
                                     <strong>{item.full_name}</strong>
-                                    <span>{item.contact_email || 'No email shared'}</span>
+                                    <span>Private contact details</span>
                                   </div>
                                 </div>
                               </td>
-                            <td>{item.profession || '-'}</td>
-                            <td>{[item.city || '', item.country || ''].filter(Boolean).join(', ') || '-'}</td>
-                            <td>{item.areas_of_interest || '-'}</td>
+                            <td>{item.country || '-'}</td>
+                            <td>{item.city || '-'}</td>
                             <td>
                               <button type="button" className={styles.actionBtn} onClick={() => openConnectModal(item)}>
-                                View & Connect
+                                Request Connection
                               </button>
                             </td>
                           </tr>
@@ -853,68 +794,94 @@ export default function MemberDashboardPage() {
             </button>
 
             <div className={styles.modalContent}>
-              <div className={styles.modalTop}>
-                <h3>Connect With Member</h3>
-                <p>Send a short professional introduction message.</p>
-              </div>
-
-              <div className={styles.modalHeader}>
-                <img
-                  src={
-                    resolveAssetPath(selectedMember.profile_picture) ||
-                    '/favicon.png'
-                  }
-                  alt={selectedMember.full_name}
-                />
-                <div className={styles.modalIdentity}>
-                  <h3>{selectedMember.full_name}</h3>
-                  <p>{selectedMember.profession || 'Profession not shared'}</p>
-                  <span className={styles.modalLocation}>
-                    {[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.modalForm}>
-                <div>
-                  <label className={styles.modalLabel}>Share contact</label>
-                  <select
-                    className={styles.selectInput}
-                    value={shareContact}
-                    onChange={(event) =>
-                      setShareContact(event.target.value as 'none' | 'email' | 'phone')
-                    }
+              {modalSuccess ? (
+                <div style={{ 
+                  textAlign: 'center', 
+                  padding: '3rem 2rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center',
+                  animation: 'fadeIn 0.3s ease-out'
+                }}>
+                  <div style={{ 
+                    width: '72px', 
+                    height: '72px', 
+                    backgroundColor: '#d1fae5', 
+                    borderRadius: '50%', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    marginBottom: '1.5rem',
+                    boxShadow: '0 4px 14px 0 rgba(16, 185, 129, 0.2)'
+                  }}>
+                    <svg style={{ width: '36px', height: '36px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Request Sent</h3>
+                  <p style={{ color: '#4b5563', fontSize: '1rem', lineHeight: '1.6', maxWidth: '350px', marginBottom: '0.5rem' }}>{modalSuccess}</p>
+                  <p style={{ color: '#9ca3af', fontSize: '0.85rem', marginBottom: '2rem' }}>This window will close automatically...</p>
+                  <button 
+                    type="button" 
+                    className={styles.primaryBtn} 
+                    onClick={closeConnectModal} 
+                    style={{ width: '100%', maxWidth: '200px' }}
                   >
-                    <option value="none">No contact details</option>
-                    <option value="email">Share my email</option>
-                    <option value="phone">Share my phone</option>
-                  </select>
+                    Close Now
+                  </button>
                 </div>
-                <div>
-                  <label className={styles.modalLabel}>Message</label>
-                  <textarea
-                    className={styles.modalTextArea}
-                    value={requestMessage}
-                    onChange={(event) => setRequestMessage(event.target.value)}
-                    placeholder="Write a short message to introduce yourself"
-                  />
-                  <p className={styles.modalHelper}>This message will be sent directly to the member by email.</p>
-                </div>
-              </div>
+              ) : (
+                <>
+                  <div className={styles.modalTop}>
+                    <h3>Request Connection</h3>
+                    <p>Only the member name, city, and country are shown here. Email stays hidden unless the member accepts.</p>
+                  </div>
 
-              <div className={styles.modalActions}>
-                <button type="button" className={styles.secondaryBtn} onClick={closeConnectModal}>
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className={styles.primaryBtn}
-                  onClick={handleConnect}
-                  disabled={connectingId === selectedMember.id}
-                >
-                  {connectingId === selectedMember.id ? 'Sending...' : 'Send Message'}
-                </button>
-              </div>
+                  <div className={styles.modalHeader}>
+                    <img
+                      src={
+                        resolveAssetPath(selectedMember.profile_picture) ||
+                        '/favicon.png'
+                      }
+                      alt={selectedMember.full_name}
+                    />
+                    <div className={styles.modalIdentity}>
+                      <h3>{selectedMember.full_name}</h3>
+                      <span className={styles.modalLocation}>
+                        {[selectedMember.city || '', selectedMember.country || ''].filter(Boolean).join(', ') || 'Location not shared'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.modalForm}>
+                    <div>
+                      <p className={styles.modalHelper}>
+                        Click &apos;Send Request&apos; to notify this member. If they accept your request, you will receive their email address so you can message them directly.
+                      </p>
+                    </div>
+                  </div>
+
+                  {modalError && (
+                    <div style={{ color: '#ef4444', backgroundColor: '#fef2f2', padding: '0.75rem', borderRadius: '0.375rem', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                      {modalError}
+                    </div>
+                  )}
+
+                  <div className={styles.modalActions}>
+                    <button type="button" className={styles.secondaryBtn} onClick={closeConnectModal}>
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.primaryBtn}
+                      onClick={handleConnect}
+                      disabled={connectingId === selectedMember.id}
+                    >
+                      {connectingId === selectedMember.id ? 'Sending...' : 'Send Request'}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

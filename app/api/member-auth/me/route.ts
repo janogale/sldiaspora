@@ -47,13 +47,9 @@ export async function GET() {
         members: members.map((item) => ({
           id: String(item.id || ""),
           full_name: item.full_name || "",
-          profession: item.profession || "",
           city: item.city || "",
           country: item.country || "",
-          areas_of_interest: item.areas_of_interest || "",
           profile_picture: item.profile_picture || null,
-          contact_email: item.email || "",
-          contact_phone: item.phone || "",
         })),
       },
       { status: 200 }

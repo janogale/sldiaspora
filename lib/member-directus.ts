@@ -10,6 +10,7 @@ const sendHtmlEmail = async (options: {
   to: string;
   subject: string;
   html: string;
+  text?: string;
 }) => {
   const smtpHost = process.env.SMTP_HOST;
   const smtpPort = Number(process.env.SMTP_PORT || 587);
@@ -60,6 +61,13 @@ const sendHtmlEmail = async (options: {
         to: options.to,
         subject: options.subject,
         html: options.html,
+        text:
+          options.text ||
+          options.html
+            .replace(/<style[\s\S]*?<\/style>/gi, "")
+            .replace(/<[^>]+>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim(),
       });
 
       return true;
@@ -80,6 +88,7 @@ const sendHtmlEmail = async (options: {
           to: options.to,
           subject: options.subject,
           html: options.html,
+          text: options.text,
         }),
       });
 
@@ -263,15 +272,10 @@ export const listApprovedMembers = async () => {
   const fields = [
     "id",
     "full_name",
-    "address",
-    "profession",
     "country",
     "city",
-    "areas_of_interest",
     "profile_picture",
     "status",
-    "email",
-    "phone",
   ].join(",");
 
   const response = await directusFetch(
@@ -540,34 +544,28 @@ export const listSharedCodes = async (): Promise<SharedCodeItem[]> => {
   );
 };
 
-export const sendConnectionEmail = async (options: {
+const buildMailtoLink = (email: string, subject: string) =>
+  `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}`;
+
+export const sendConnectionRequestEmail = async (options: {
   toEmail: string;
   toName: string;
-  fromName: string;
-  fromEmail?: string;
-  fromPhone?: string;
-  fromAddress?: string;
-  fromCity?: string;
-  fromCountry?: string;
-  shareContact: "none" | "email" | "phone";
-  sharedEmail?: string;
-  sharedPhone?: string;
+  requesterName: string;
+  requesterCity?: string;
+  requesterCountry?: string;
+  acceptUrl: string;
+  declineUrl: string;
   message?: string;
 }) => {
   const safeValue = (value?: string) => (value && value.trim() ? value : "Not provided");
 
-  const safeName = safeValue(options.fromName);
-  const safeEmail = safeValue(options.fromEmail);
+  const safeName = safeValue(options.requesterName);
   const safeMessage = options.message?.trim()
     ? escapeHtml(options.message.trim())
-    : "No additional message provided.";
-
-  const contactLine =
-    options.shareContact === "email" && options.sharedEmail
-      ? `Shared email: ${escapeHtml(options.sharedEmail)}`
-      : options.shareContact === "phone"
-      ? "Phone sharing is enabled on the platform."
-      : "No contact details shared yet. Reply through the platform.";
+    : "No introduction message was included.";
+  const location = [safeValue(options.requesterCity), safeValue(options.requesterCountry)]
+    .filter((item, index, array) => item !== "Not provided" || array.every((value) => value === "Not provided") || index === 0)
+    .join(", ");
 
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #eef7f1; padding: 20px;">
@@ -578,35 +576,34 @@ export const sendConnectionEmail = async (options: {
       </div>
 
       <div style="padding: 20px;">
-      <h2 style="color: #006d21; margin: 0 0 12px;">Message from Sldiaspora Member</h2>
+      <h2 style="color: #006d21; margin: 0 0 12px;">New Connection Request</h2>
       <p style="margin: 0 0 12px;">Hello ${escapeHtml(options.toName || "Member")},</p>
-      <p style="margin: 0 0 10px;"><strong>${escapeHtml(safeName)}</strong> sent you a connection request on the Sldiaspora Member Portal.</p>
-      <p style="margin: 0 0 14px; color: #334155;">${contactLine}</p>
+      <p style="margin: 0 0 10px;"><strong>${escapeHtml(safeName)}</strong> would like to connect with you through the Sldiaspora Member Portal.</p>
+      <p style="margin: 0 0 14px; color: #334155;">Your email address stays private unless you accept this request.</p>
 
       <table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
         <tr>
-          <td style="padding: 6px 0; font-weight: 600;">Email</td>
-          <td style="padding: 6px 0;">${escapeHtml(safeEmail)}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; font-weight: 600;">Address</td>
-          <td style="padding: 6px 0;">${escapeHtml(safeValue(options.fromAddress))}</td>
+          <td style="padding: 6px 0; font-weight: 600;">Requested by</td>
+          <td style="padding: 6px 0;">${escapeHtml(safeName)}</td>
         </tr>
         <tr>
           <td style="padding: 6px 0; font-weight: 600;">Location</td>
-          <td style="padding: 6px 0;">${escapeHtml(safeValue(options.fromCity))}${
-    options.fromCountry ? `, ${escapeHtml(safeValue(options.fromCountry))}` : ""
-  }</td>
+          <td style="padding: 6px 0;">${escapeHtml(location)}</td>
         </tr>
       </table>
 
       <div style="margin-top: 10px; border: 1px solid #dbe7e0; border-radius: 10px; background: #f8fcfa; padding: 12px 14px;">
-        <div style="font-weight: 600; margin-bottom: 6px; color: #0f172a;">Message</div>
+        <div style="font-weight: 600; margin-bottom: 6px; color: #0f172a;">Request note</div>
         <div style="white-space: pre-wrap; color: #334155;">${safeMessage}</div>
       </div>
 
+      <div style="margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px;">
+        <a href="${escapeHtml(options.acceptUrl)}" style="display: inline-block; padding: 12px 18px; border-radius: 999px; background: #0a6534; color: #ffffff; text-decoration: none; font-weight: 700;">Accept request</a>
+        <a href="${escapeHtml(options.declineUrl)}" style="display: inline-block; padding: 12px 18px; border-radius: 999px; background: #ffffff; color: #334155; text-decoration: none; font-weight: 700; border: 1px solid #d5dfd9;">Decline</a>
+      </div>
+
       <p style="margin-top: 14px; color: #4b5563; font-size: 14px;">
-        Sender location: ${escapeHtml(options.fromCity || "N/A")}, ${escapeHtml(options.fromCountry || "N/A")}
+        If you accept, Sldiaspora will email ${escapeHtml(safeName)} with your email address so you can continue the conversation directly by email.
       </p>
       </div>
       </div>
@@ -617,6 +614,70 @@ export const sendConnectionEmail = async (options: {
     to: options.toEmail,
     subject: `Sldiaspora Connection Request from ${safeName}`,
     html,
+    text: `New connection request from ${safeName}. Location: ${location}. Request note: ${options.message?.trim() || "No introduction message was included."}. Accept: ${options.acceptUrl} Decline: ${options.declineUrl}`,
+  });
+};
+
+export const sendConnectionApprovedEmail = async (options: {
+  toEmail: string;
+  toName: string;
+  acceptedByName: string;
+  acceptedByEmail: string;
+  acceptedByCity?: string;
+  acceptedByCountry?: string;
+}) => {
+  const safeValue = (value?: string) => (value && value.trim() ? value : "Not provided");
+  const safeName = safeValue(options.acceptedByName);
+  const location = [safeValue(options.acceptedByCity), safeValue(options.acceptedByCountry)]
+    .filter((item, index, array) => item !== "Not provided" || array.every((value) => value === "Not provided") || index === 0)
+    .join(", ");
+  const mailtoLink = buildMailtoLink(options.acceptedByEmail, `Hello ${safeName}`);
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #eef7f1; padding: 20px;">
+      <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #dce9e2; border-radius: 14px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #edf8f0 0%, #ffffff 100%); border-bottom: 1px solid #e5efe8; padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+          <img src="${escapeHtml(resolveAppBaseUrl())}/assets/imgs/logo/logo.png" alt="Somaliland Diaspora" width="34" height="34" style="border-radius: 6px; background: #ffffff; border: 1px solid #d8e7de;" />
+          <div style="font-size: 16px; font-weight: 700; color: #006d21;">Somaliland Diaspora Member Portal</div>
+        </div>
+
+        <div style="padding: 20px;">
+          <h2 style="color: #006d21; margin: 0 0 12px;">Your Connection Request Was Accepted</h2>
+          <p style="margin: 0 0 12px;">Hello ${escapeHtml(options.toName || "Member")},</p>
+          <p style="margin: 0 0 12px;"><strong>${escapeHtml(safeName)}</strong> accepted your connection request.</p>
+
+          <table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
+            <tr>
+              <td style="padding: 6px 0; font-weight: 600;">Member</td>
+              <td style="padding: 6px 0;">${escapeHtml(safeName)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; font-weight: 600;">Email</td>
+              <td style="padding: 6px 0;">${escapeHtml(options.acceptedByEmail)}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; font-weight: 600;">Location</td>
+              <td style="padding: 6px 0;">${escapeHtml(location)}</td>
+            </tr>
+          </table>
+
+          <div style="margin-top: 16px;">
+            <a href="${escapeHtml(mailtoLink)}" style="display: inline-block; padding: 12px 18px; border-radius: 999px; background: #0a6534; color: #ffffff; text-decoration: none; font-weight: 700;">Email ${escapeHtml(safeName)}</a>
+          </div>
+
+          <p style="margin-top: 14px; color: #4b5563; font-size: 14px;">
+            Your conversation now continues directly by email. No in-dashboard chat is used for this connection.
+          </p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return sendHtmlEmail({
+    to: options.toEmail,
+    subject: `Connection accepted by ${safeName}`,
+    html,
+    text: `${safeName} accepted your connection request. Email: ${options.acceptedByEmail}. Location: ${location}. You can now continue by email.`,
   });
 };
 
@@ -628,7 +689,7 @@ const escapeHtml = (value: string) =>
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
-const resolveAppBaseUrl = () => {
+export const resolveAppBaseUrl = () => {
   const fromEnv =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.APP_BASE_URL ||

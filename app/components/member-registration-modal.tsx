@@ -29,18 +29,7 @@ const defaultFormState: RegisterFormState = {
   additionalNotes: "",
 };
 
-type SharedCodeOption = {
-  code: string;
-  label: string;
-  country: string;
-  city: string;
-  association: string;
-  contactPerson: string;
-};
-
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
-const SHARED_CODES_WEB_EXCEL_PATH = "/api/association-list";
-const normalizeText = (value: string) => value.trim().toLowerCase();
 
 function MemberRegistrationModal() {
   const router = useRouter();
@@ -53,8 +42,6 @@ function MemberRegistrationModal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
   const [idMethod, setIdMethod] = useState<IdVerificationMethod>("");
-  const [sharedCodes, setSharedCodes] = useState<SharedCodeOption[]>([]);
-  const [isLoadingCodes, setIsLoadingCodes] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
@@ -62,7 +49,8 @@ function MemberRegistrationModal() {
   const [drivingLicenseDocument, setDrivingLicenseDocument] = useState<File | null>(null);
 
   const passwordsMatch =
-    formState.password.length >= 6 && formState.password === formState.confirmPassword;
+    (!formState.password && !formState.confirmPassword) ||
+    (formState.password.length >= 6 && formState.password === formState.confirmPassword);
 
   const hasRequiredBasics =
     formState.fullName.trim().length > 1 &&
@@ -71,52 +59,14 @@ function MemberRegistrationModal() {
     formState.city.trim().length > 1 &&
     formState.country.trim().length > 1;
 
-  const associationCountryOptions = useMemo(() => {
-    return Array.from(
-      new Set(sharedCodes.map((item) => item.country.trim()).filter(Boolean))
-    ).sort((a, b) => a.localeCompare(b));
-  }, [sharedCodes]);
+  const isCodeEntered = formState.nationalIdCode.trim().length > 0;
 
-  const associationCityOptions = useMemo(() => {
-    const selectedCountry = normalizeText(formState.country);
-    if (!selectedCountry) return [];
-
-    return Array.from(
-      new Set(
-        sharedCodes
-          .filter(
-            (item) => normalizeText(item.country) === selectedCountry
-          )
-          .map((item) => item.city.trim())
-          .filter(Boolean)
-      )
-    ).sort((a, b) => a.localeCompare(b));
-  }, [formState.country, sharedCodes]);
-
-  const filteredCodeOptions = useMemo(() => {
-    const selectedCountry = normalizeText(formState.country);
-    const selectedCity = normalizeText(formState.city);
-
-    if (!selectedCountry || !selectedCity) return [];
-
-    return sharedCodes.filter(
-      (item) =>
-        normalizeText(item.country) === selectedCountry &&
-        normalizeText(item.city) === selectedCity
-    );
-  }, [formState.country, formState.city, sharedCodes]);
-
-  const isSelectedCodeValid = useMemo(() => {
-    const value = formState.nationalIdCode.trim().toUpperCase();
-    if (!value) return false;
-    return filteredCodeOptions.some(
-      (item) => item.code.trim().toUpperCase() === value
-    );
-  }, [filteredCodeOptions, formState.nationalIdCode]);
-
-  const hasValidIdMethod =
-    (idMethod === "national_id" && !!nationalIdPhoto) ||
-    (idMethod === "code" && isSelectedCodeValid);
+  const hasValidIdMethod = useMemo(() => {
+    if (idMethod === "") return true;
+    if (idMethod === "national_id") return !!nationalIdPhoto;
+    if (idMethod === "code") return isCodeEntered;
+    return false;
+  }, [idMethod, isCodeEntered, nationalIdPhoto]);
 
   const canSubmit = useMemo(() => {
     return hasRequiredBasics && hasValidIdMethod && passwordsMatch;
@@ -323,31 +273,6 @@ function MemberRegistrationModal() {
     []
   );
 
-  const loadSharedCodes = async () => {
-    setIsLoadingCodes(true);
-    try {
-      const response = await fetch("/api/shared-codes", { method: "GET" });
-      const result = (await response.json().catch(() => null)) as {
-        data?: SharedCodeOption[];
-        message?: string;
-      } | null;
-
-      if (!response.ok) {
-        setSharedCodes([]);
-        if (result?.message) setErrorMessage(result.message);
-        return;
-      }
-
-      const items = Array.isArray(result?.data) ? result.data : [];
-      setSharedCodes(items);
-    } catch {
-      setSharedCodes([]);
-      setErrorMessage("Unable to load shared codes right now.");
-    } finally {
-      setIsLoadingCodes(false);
-    }
-  };
-
   const openModal = () => {
     setErrorMessage("");
     setModalView("choice");
@@ -370,11 +295,6 @@ function MemberRegistrationModal() {
   const goToMemberLogin = () => {
     closeModal();
     router.push("/member-login");
-  };
-
-  const openCodesExcel = () => {
-    if (typeof window === "undefined") return;
-    window.open(SHARED_CODES_WEB_EXCEL_PATH, "_blank", "noopener,noreferrer");
   };
 
   useEffect(() => {
@@ -415,33 +335,8 @@ function MemberRegistrationModal() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    if (idMethod !== "code") return;
-    if (sharedCodes.length > 0 || isLoadingCodes) return;
-
-    loadSharedCodes();
-  }, [idMethod, isOpen, sharedCodes.length, isLoadingCodes]);
-
   const handleChange = (key: keyof RegisterFormState, value: string) => {
     setFormState((prev) => {
-      if (key === "country") {
-        return {
-          ...prev,
-          country: value,
-          city: idMethod === "code" ? "" : prev.city,
-          nationalIdCode: idMethod === "code" ? "" : prev.nationalIdCode,
-        };
-      }
-
-      if (key === "city" && idMethod === "code") {
-        return {
-          ...prev,
-          city: value,
-          nationalIdCode: "",
-        };
-      }
-
       return { ...prev, [key]: value };
     });
   };
@@ -459,30 +354,17 @@ function MemberRegistrationModal() {
 
   const goNextStep = () => {
     if (currentStep === 1 && !hasRequiredBasics) {
-      setErrorMessage("Please complete all fields in the Information section.");
+      setErrorMessage("Please complete all required fields in the Information section.");
       return;
     }
 
-    if (currentStep === 2 && idMethod === "code") {
-      if (!formState.country.trim() || !formState.city.trim()) {
-        setErrorMessage(
-          "Please choose country and city from association list before entering your code."
-        );
-        return;
-      }
-
-      if (!isSelectedCodeValid) {
-        setErrorMessage(
-          "The code is incorrect. Please contact association contact person."
-        );
-        return;
-      }
+    if (currentStep === 2 && idMethod === "code" && !isCodeEntered) {
+      setErrorMessage("Please enter your code or switch method.");
+      return;
     }
 
-    if (currentStep === 2 && !hasValidIdMethod) {
-      setErrorMessage(
-        "Please choose one ID method (National ID upload OR code)."
-      );
+    if (currentStep === 2 && idMethod === "national_id" && !nationalIdPhoto) {
+      setErrorMessage("Please upload your National ID photo or switch method.");
       return;
     }
 
@@ -500,7 +382,7 @@ function MemberRegistrationModal() {
 
     if (!canSubmit) {
       setErrorMessage(
-        "Please complete all required fields, verification, password, and short bio before submitting."
+        "Please complete all required fields before submitting."
       );
       return;
     }
@@ -811,23 +693,23 @@ function MemberRegistrationModal() {
                   <div style={stepTitleStyle}>First Information Section</div>
                   <div className="row g-3">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Full Name *</label>
+                      <label style={labelStyle}>Full Name (Required)</label>
                       <input className="form-control" style={inputStyle} value={formState.fullName} onChange={(e) => handleChange("fullName", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Phone *</label>
+                      <label style={labelStyle}>Phone (Required)</label>
                       <input className="form-control" style={inputStyle} value={formState.phone} onChange={(e) => handleChange("phone", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Email *</label>
+                      <label style={labelStyle}>Email (Required)</label>
                       <input type="email" className="form-control" style={inputStyle} value={formState.email} onChange={(e) => handleChange("email", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>City *</label>
+                      <label style={labelStyle}>City (Required)</label>
                       <input className="form-control" style={inputStyle} value={formState.city} onChange={(e) => handleChange("city", e.target.value)} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Country *</label>
+                      <label style={labelStyle}>Country (Required)</label>
                       <select
                         className="form-control"
                         style={inputStyle}
@@ -844,7 +726,7 @@ function MemberRegistrationModal() {
                       </select>
                     </div>
                     <div className="col-12">
-                      <label style={labelStyle}>Profile Picture</label>
+                      <label style={labelStyle}>Profile Picture (Optional)</label>
                       <input type="file" accept="image/*" className="form-control" style={inputStyle} onChange={(e) => setProfilePicture(e.target.files?.[0] || null)} />
                     </div>
                   </div>
@@ -855,7 +737,7 @@ function MemberRegistrationModal() {
                 <div className="member-section-card" style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Second Identification Section</div>
 
-                  <label style={{ ...labelStyle, marginBottom: "12px" }}>Choose one: Somaliland National ID or Enter Code *</label>
+                  <label style={{ ...labelStyle, marginBottom: "12px" }}>Somaliland National ID or Code (Optional)</label>
                   <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "16px" }}>
                     <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.2rem", color: "#1f2937" }}>
                       <input
@@ -886,7 +768,7 @@ function MemberRegistrationModal() {
 
                   <div className="row g-3 member-form-grid" style={{ marginBottom: "14px" }}>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Somaliland National ID Upload</label>
+                      <label style={labelStyle}>Somaliland National ID Upload (Optional)</label>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -898,7 +780,7 @@ function MemberRegistrationModal() {
                     </div>
                     <div className="col-md-6">
                       <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "8px" }}>
-                        Enter Code *
+                        Enter Code (Optional)
                         <button
                           type="button"
                           onClick={() => setShowCodeHelp(true)}
@@ -927,89 +809,8 @@ function MemberRegistrationModal() {
                         onChange={(e) => handleChange("nationalIdCode", e.target.value)}
                         placeholder="Enter your official code"
                       />
-                      {idMethod === "code" && !isSelectedCodeValid && formState.nationalIdCode.trim() && (
-                        <small style={{ color: "#b91c1c", fontSize: "1.05rem" }}>
-                          The code is incorrect. Please contact association contact person.
-                        </small>
-                      )}
                     </div>
                   </div>
-
-                  {idMethod === "code" && (
-                    <div
-                      style={{
-                        border: "1px solid #d4e4da",
-                        borderRadius: "12px",
-                        background: "#ffffff",
-                        padding: "14px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <div className="row g-2" style={{ marginBottom: "12px" }}>
-                        <div className="col-md-6">
-                          <label style={labelStyle}>Association Country *</label>
-                          <select
-                            className="form-control"
-                            style={inputStyle}
-                            value={formState.country}
-                            onChange={(e) => handleChange("country", e.target.value)}
-                          >
-                            <option value="">Select country from association list</option>
-                            {associationCountryOptions.map((country) => (
-                              <option key={country} value={country}>
-                                {country}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="col-md-6">
-                          <label style={labelStyle}>Association City *</label>
-                          <select
-                            className="form-control"
-                            style={inputStyle}
-                            value={formState.city}
-                            onChange={(e) => handleChange("city", e.target.value)}
-                            disabled={!formState.country}
-                          >
-                            <option value="">
-                              {!formState.country
-                                ? "Select country first"
-                                : "Select city from association list"}
-                            </option>
-                            {associationCityOptions.map((city) => (
-                              <option key={city} value={city}>
-                                {city}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginTop: "8px" }}>
-                        <small style={{ color: "#475569", fontSize: "1rem", display: "block" }}>
-                          Enter your code manually. It will be validated only against the selected country and city.
-                        </small>
-                        <button
-                          type="button"
-                          onClick={loadSharedCodes}
-                          style={{
-                            minHeight: "44px",
-                            border: "1px solid #006d21",
-                            background: "#ffffff",
-                            color: "#006d21",
-                            borderRadius: "10px",
-                            fontWeight: 700,
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            padding: "0 14px",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          Refresh Codes
-                        </button>
-                      </div>
-                    </div>
-                  )}
 
                   <label style={{ ...labelStyle, marginBottom: "12px" }}>
                     International Documents (Optional)
@@ -1017,7 +818,7 @@ function MemberRegistrationModal() {
 
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Passport Upload</label>
+                      <label style={labelStyle}>Passport Upload (Optional)</label>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -1029,7 +830,7 @@ function MemberRegistrationModal() {
                       />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Driving Licence Upload</label>
+                      <label style={labelStyle}>Driving Licence Upload (Optional)</label>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -1049,18 +850,18 @@ function MemberRegistrationModal() {
                   <div style={stepTitleStyle}> Password & Bio</div>
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Password (System Login) *</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} required minLength={6} />
+                      <label style={labelStyle}>Password (System Login, Optional)</label>
+                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} minLength={6} />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Confirm Password *</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} required minLength={6} />
+                      <label style={labelStyle}>Confirm Password (Optional)</label>
+                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} minLength={6} />
                       {formState.confirmPassword && !passwordsMatch && (
                         <small style={{ color: "#b91c1c", fontSize: "1.1rem" }}>Passwords do not match.</small>
                       )}
                     </div>
                     <div className="col-12">
-                      <label style={labelStyle}>Write a short BIO *</label>
+                      <label style={labelStyle}>Write a short BIO (Optional)</label>
                       <textarea
                         className="form-control"
                         style={{ ...inputStyle, minHeight: "132px", paddingTop: "12px", paddingBottom: "12px" }}
@@ -1068,7 +869,6 @@ function MemberRegistrationModal() {
                         value={formState.additionalNotes}
                         onChange={(e) => handleChange("additionalNotes", e.target.value)}
                         placeholder="Write a short bio..."
-                        required
                       />
                     </div>
                   </div>

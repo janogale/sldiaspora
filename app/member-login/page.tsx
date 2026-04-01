@@ -1,18 +1,77 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function MemberLoginPage() {
+function MemberLoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+
+  useEffect(() => {
+    const status = searchParams.get("connection_status")?.trim() || "";
+    const member = searchParams.get("member")?.trim() || "the member";
+
+    if (status === "accepted") {
+      setNotice(`${member} has been notified by email and can continue the conversation directly.`);
+      return;
+    }
+    if (status === "declined") {
+      setNotice(`You declined the connection request from ${member}. Your email was not shared.`);
+      return;
+    }
+    if (status === "invalid") {
+      setNotice("This connection link is missing, expired, or invalid.");
+      return;
+    }
+    if (status === "error") {
+      setNotice("Unable to process this request right now. Please try the email link again.");
+      return;
+    }
+
+    setNotice("");
+  }, [searchParams]);
+
+  useEffect(() => {
+    const shouldProcess = searchParams.get("connect") === "1";
+    const token = searchParams.get("token")?.trim() || "";
+    const decision = searchParams.get("decision")?.trim() || "";
+
+    if (!shouldProcess || !token || (decision !== "accept" && decision !== "decline")) {
+      return;
+    }
+
+    const query = new URLSearchParams({ token, decision });
+    setNotice("Processing your response...");
+
+    const run = async () => {
+      try {
+        const response = await fetch(`/api/member-auth/request-connect?${query.toString()}`, {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        if (response.redirected && response.url) {
+          window.location.replace(response.url);
+          return;
+        }
+
+        window.location.replace("/member-login?connection_status=error");
+      } catch {
+        window.location.replace("/member-login?connection_status=error");
+      }
+    };
+
+    run();
+  }, [searchParams]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -163,6 +222,7 @@ export default function MemberLoginPage() {
                   </div>
                 </div>
 
+                {notice && <div className={styles.securityNote}>{notice}</div>}
                 {error && <div className={styles.errorBox}>{error}</div>}
 
                 <button type="submit" disabled={loading} className={styles.loginButton}>
@@ -178,5 +238,13 @@ export default function MemberLoginPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function MemberLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <MemberLoginContent />
+    </Suspense>
   );
 }
