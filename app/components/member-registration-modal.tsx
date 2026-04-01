@@ -17,6 +17,33 @@ type RegisterFormState = {
   additionalNotes: string;
 };
 
+type ModalView = "choice" | "register" | "association";
+
+type AssociationLeader = {
+  fullName: string;
+  role: string;
+  city: string;
+  phone: string;
+};
+
+type AssociationFormState = {
+  associationName: string;
+  acronym: string;
+  registrationDate: string;
+  registrationPlace: string;
+  category: string;
+  otherCategory: string;
+  district: string;
+  region: string;
+  address: string;
+  phone: string;
+  email: string;
+  website: string;
+  objectives: string;
+  hasRegistrationProof: "" | "yes" | "no";
+  leaders: AssociationLeader[];
+};
+
 const defaultFormState: RegisterFormState = {
   fullName: "",
   phone: "",
@@ -29,18 +56,55 @@ const defaultFormState: RegisterFormState = {
   additionalNotes: "",
 };
 
+const defaultAssociationFormState: AssociationFormState = {
+  associationName: "",
+  acronym: "",
+  registrationDate: "",
+  registrationPlace: "",
+  category: "",
+  otherCategory: "",
+  district: "",
+  region: "",
+  address: "",
+  phone: "",
+  email: "",
+  website: "",
+  objectives: "",
+  hasRegistrationProof: "",
+  leaders: [
+    { fullName: "", role: "", city: "", phone: "" },
+  ],
+};
+
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
+const MAX_ASSOCIATION_LEADERS = 10;
+
+const ASSOCIATION_CATEGORY_OPTIONS = [
+  "Culture",
+  "Religious",
+  "Health & Medical",
+  "Chamber of Commerce",
+  "Business",
+  "Youth",
+  "Women",
+  "Advocacy",
+  "Professionals",
+  "Research & Academic",
+  "Other type",
+] as const;
 
 function MemberRegistrationModal() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [modalView, setModalView] = useState<"choice" | "register">("choice");
+  const [modalView, setModalView] = useState<ModalView>("choice");
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [successKind, setSuccessKind] = useState<"member" | "association">("member");
   const [showCodeHelp, setShowCodeHelp] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<RegisterFormState>(defaultFormState);
+  const [associationForm, setAssociationForm] = useState<AssociationFormState>(defaultAssociationFormState);
   const [idMethod, setIdMethod] = useState<IdVerificationMethod>("");
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
@@ -71,6 +135,32 @@ function MemberRegistrationModal() {
   const canSubmit = useMemo(() => {
     return hasRequiredBasics && hasValidIdMethod && passwordsMatch;
   }, [hasRequiredBasics, hasValidIdMethod, passwordsMatch]);
+
+  const canSubmitAssociation = useMemo(() => {
+    return (
+      associationForm.associationName.trim().length > 1 &&
+      associationForm.phone.trim().length > 3 &&
+      associationForm.email.trim().includes("@") &&
+      associationForm.objectives.trim().length > 3
+    );
+  }, [associationForm]);
+
+  const associationMissingFields = useMemo(() => {
+    const missing: string[] = [];
+    if (associationForm.associationName.trim().length <= 1) {
+      missing.push("Association Name");
+    }
+    if (associationForm.phone.trim().length <= 3) {
+      missing.push("Phone");
+    }
+    if (!associationForm.email.trim().includes("@")) {
+      missing.push("Email");
+    }
+    if (associationForm.objectives.trim().length <= 3) {
+      missing.push("Objectives");
+    }
+    return missing;
+  }, [associationForm]);
 
   const countryOptions = useMemo(
     () => [
@@ -292,6 +382,11 @@ function MemberRegistrationModal() {
     setCurrentStep(1);
   };
 
+  const openAssociationFlow = () => {
+    setErrorMessage("");
+    setModalView("association");
+  };
+
   const goToMemberLogin = () => {
     closeModal();
     router.push("/member-login");
@@ -350,6 +445,10 @@ function MemberRegistrationModal() {
     setPassportDocument(null);
     setDrivingLicenseDocument(null);
     setErrorMessage("");
+  };
+
+  const resetAssociationForm = () => {
+    setAssociationForm(defaultAssociationFormState);
   };
 
   const goNextStep = () => {
@@ -436,10 +535,114 @@ function MemberRegistrationModal() {
       }
 
       closeModal();
+      setSuccessKind("member");
       setShowSuccess(true);
       resetForm();
     } catch {
       setErrorMessage("Unable to submit right now. Please try again shortly.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleAssociationChange = (
+    key: Exclude<keyof AssociationFormState, "leaders">,
+    value: string
+  ) => {
+    setAssociationForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleAssociationLeaderChange = (
+    index: number,
+    key: keyof AssociationLeader,
+    value: string
+  ) => {
+    setAssociationForm((prev) => ({
+      ...prev,
+      leaders: prev.leaders.map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [key]: value } : item
+      ),
+    }));
+  };
+
+  const addAssociationLeader = () => {
+    setAssociationForm((prev) => {
+      if (prev.leaders.length >= MAX_ASSOCIATION_LEADERS) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        leaders: [
+          ...prev.leaders,
+          { fullName: "", role: "", city: "", phone: "" },
+        ],
+      };
+    });
+  };
+
+  const removeAssociationLeader = (index: number) => {
+    setAssociationForm((prev) => {
+      if (prev.leaders.length <= 1) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        leaders: prev.leaders.filter((_, itemIndex) => itemIndex !== index),
+      };
+    });
+  };
+
+  const handleAssociationSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!canSubmitAssociation) {
+      setErrorMessage(
+        `Please complete required fields before submitting: ${associationMissingFields.join(", ")}.`
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    try {
+      const resolvedCategory =
+        associationForm.category === "Other type"
+          ? associationForm.otherCategory.trim()
+            ? `Other type: ${associationForm.otherCategory.trim()}`
+            : "Other type"
+          : associationForm.category;
+
+      const response = await fetch("/api/association-register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...associationForm,
+          category: resolvedCategory,
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        setErrorMessage(
+          result?.message || "Failed to submit association registration."
+        );
+        return;
+      }
+
+      closeModal();
+      setSuccessKind("association");
+      setShowSuccess(true);
+      resetAssociationForm();
+    } catch {
+      setErrorMessage(
+        "Unable to submit association right now. Please try again shortly."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -537,12 +740,18 @@ function MemberRegistrationModal() {
               >
                 <div>
                   <h3 className="member-register-title" style={{ margin: "0 0 8px 0", color: "#0f172a", fontWeight: 800, fontSize: "3rem", lineHeight: 1.1 }}>
-                    {modalView === "choice" ? "Welcome, Member" : "Become a Member"}
+                    {modalView === "choice"
+                      ? "Welcome, Member"
+                      : modalView === "register"
+                        ? "Become a Member"
+                        : "Register Association"}
                   </h3>
                   <p className="member-register-subtitle" style={{ margin: 0, color: "#5a6b76", fontSize: "1.3rem", lineHeight: "1.6" }}>
                     {modalView === "choice"
-                      ? "Choose how you want to continue. Sign in if you already have an account, or start your membership registration."
-                      : `Step ${currentStep} of 3. Default status is pending. Login is enabled after admin approval.`}
+                      ? "Choose how you want to continue. Sign in, register as an individual member, or register an association."
+                      : modalView === "register"
+                        ? `Step ${currentStep} of 3. Default status is pending. Login is enabled after admin approval.`
+                        : "Complete your association profile and leadership details. Submission integration will be added in the next backend step."}
                   </p>
                 </div>
                 <button
@@ -575,7 +784,7 @@ function MemberRegistrationModal() {
                   }}
                 >
                   <div className="row g-3 member-form-grid">
-                    <div className="col-lg-6">
+                    <div className="col-lg-4">
                       <div className="member-choice-card" style={choiceCardBaseStyle}>
                         <div
                           style={{
@@ -617,7 +826,7 @@ function MemberRegistrationModal() {
                         </button>
                       </div>
                     </div>
-                    <div className="col-lg-6">
+                    <div className="col-lg-4">
                       <div className="member-choice-card" style={choiceCardBaseStyle}>
                         <div
                           style={{
@@ -656,6 +865,48 @@ function MemberRegistrationModal() {
                           }}
                         >
                           Start Membership Form
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-lg-4">
+                      <div className="member-choice-card" style={choiceCardBaseStyle}>
+                        <div
+                          style={{
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "999px",
+                            background: "#e9f7ff",
+                            color: "#0c4a6e",
+                            display: "grid",
+                            placeItems: "center",
+                            fontWeight: 800,
+                            marginBottom: "12px",
+                          }}
+                        >
+                          03
+                        </div>
+                        <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "1.6rem", fontWeight: 800 }}>
+                          Register Association
+                        </h4>
+                        <p style={{ margin: "0 0 16px 0", color: "#475569", fontSize: "1.12rem", lineHeight: 1.6 }}>
+                          Register your diaspora association with official profile, contacts, and leadership structure.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={openAssociationFlow}
+                          style={{
+                            width: "100%",
+                            border: "1px solid #0c4a6e",
+                            background: "#ffffff",
+                            color: "#0c4a6e",
+                            borderRadius: "12px",
+                            minHeight: "52px",
+                            fontWeight: 700,
+                            fontSize: "1.15rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Open Association Form
                         </button>
                       </div>
                     </div>
@@ -934,6 +1185,256 @@ function MemberRegistrationModal() {
                 </div>
               </form>
             )}
+
+            {modalView === "association" && (
+              <form onSubmit={handleAssociationSubmit} className="member-register-form" style={{ padding: "28px" }}>
+                <div
+                  style={{
+                    border: "1px solid #cfe0ea",
+                    borderRadius: "14px",
+                    background: "linear-gradient(155deg, #f2f9ff 0%, #ffffff 100%)",
+                    padding: "14px 16px",
+                    color: "#0f3f5c",
+                    fontSize: "1.05rem",
+                    lineHeight: 1.6,
+                    marginBottom: "16px",
+                  }}
+                >
+                  Complete the association profile below. This form is optimized for mobile and desktop, and supports leadership details in a clean structured format.
+                </div>
+
+                <div className="member-section-card" style={sectionCardStyle}>
+                  <div style={stepTitleStyle}>Section A: Association Information</div>
+                  <div className="row g-3 member-form-grid">
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Association Name (Required)</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.associationName} onChange={(e) => handleAssociationChange("associationName", e.target.value)} required />
+                    </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Acronym / Short Name</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.acronym} onChange={(e) => handleAssociationChange("acronym", e.target.value)} />
+                    </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Date of Registration</label>
+                      <input type="date" className="form-control" style={inputStyle} value={associationForm.registrationDate} onChange={(e) => handleAssociationChange("registrationDate", e.target.value)} />
+                    </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Place of Registration</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.registrationPlace} onChange={(e) => handleAssociationChange("registrationPlace", e.target.value)} />
+                    </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Category / Type</label>
+                      <select
+                        className="form-control"
+                        style={inputStyle}
+                        value={associationForm.category}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          handleAssociationChange("category", value);
+                          if (value !== "Other type") {
+                            handleAssociationChange("otherCategory", "");
+                          }
+                        }}
+                      >
+                        <option value="">Select category</option>
+                        {ASSOCIATION_CATEGORY_OPTIONS.map((category) => (
+                          <option key={category} value={category}>
+                            {category}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {associationForm.category === "Other type" && (
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Specify Other Type</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={associationForm.otherCategory}
+                          onChange={(e) =>
+                            handleAssociationChange("otherCategory", e.target.value)
+                          }
+                          placeholder="Write the exact association type"
+                        />
+                      </div>
+                    )}
+                    <div className="col-md-3">
+                      <label style={labelStyle}>District</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.district} onChange={(e) => handleAssociationChange("district", e.target.value)} />
+                    </div>
+                    <div className="col-md-3">
+                      <label style={labelStyle}>Region</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.region} onChange={(e) => handleAssociationChange("region", e.target.value)} />
+                    </div>
+                    <div className="col-12">
+                      <label style={labelStyle}>Address</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.address} onChange={(e) => handleAssociationChange("address", e.target.value)} />
+                    </div>
+                    <div className="col-md-4">
+                      <label style={labelStyle}>Phone (Required)</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.phone} onChange={(e) => handleAssociationChange("phone", e.target.value)} required />
+                    </div>
+                    <div className="col-md-4">
+                      <label style={labelStyle}>Email (Required)</label>
+                      <input type="email" className="form-control" style={inputStyle} value={associationForm.email} onChange={(e) => handleAssociationChange("email", e.target.value)} required />
+                    </div>
+                    <div className="col-md-4">
+                      <label style={labelStyle}>Website</label>
+                      <input className="form-control" style={inputStyle} value={associationForm.website} onChange={(e) => handleAssociationChange("website", e.target.value)} placeholder="https://..." />
+                    </div>
+                    <div className="col-12">
+                      <label style={labelStyle}>Main Objectives (Required)</label>
+                      <textarea
+                        className="form-control"
+                        style={{ ...inputStyle, minHeight: "132px", paddingTop: "12px", paddingBottom: "12px" }}
+                        rows={4}
+                        value={associationForm.objectives}
+                        onChange={(e) => handleAssociationChange("objectives", e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="col-12">
+                      <label style={labelStyle}>Do you have registration proof?</label>
+                      <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.1rem" }}>
+                          <input type="radio" name="registration-proof" checked={associationForm.hasRegistrationProof === "yes"} onChange={() => handleAssociationChange("hasRegistrationProof", "yes")} />
+                          Yes
+                        </label>
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1.1rem" }}>
+                          <input type="radio" name="registration-proof" checked={associationForm.hasRegistrationProof === "no"} onChange={() => handleAssociationChange("hasRegistrationProof", "no")} />
+                          No
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="member-section-card" style={{ ...sectionCardStyle, marginTop: "16px" }}>
+                  <div style={stepTitleStyle}>Section B: Association Leadership</div>
+                  <p style={{ marginTop: "-4px", marginBottom: "12px", color: "#4b5563", fontSize: "1rem" }}>
+                    Add your leadership team details. You can add or remove rows as needed.
+                  </p>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
+                    <div style={{ color: "#334155", fontSize: "0.95rem" }}>
+                      {associationForm.leaders.length} leader{associationForm.leaders.length > 1 ? "s" : ""} added
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addAssociationLeader}
+                      disabled={associationForm.leaders.length >= MAX_ASSOCIATION_LEADERS}
+                      style={{
+                        border: "1px solid #0c4a6e",
+                        background:
+                          associationForm.leaders.length >= MAX_ASSOCIATION_LEADERS
+                            ? "#d9e7f0"
+                            : "#f1f7fc",
+                        color: "#0c4a6e",
+                        borderRadius: "10px",
+                        padding: "8px 14px",
+                        fontWeight: 700,
+                        cursor:
+                          associationForm.leaders.length >= MAX_ASSOCIATION_LEADERS
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      + Add Leader
+                    </button>
+                  </div>
+                  <div className="row g-3 member-form-grid">
+                    {associationForm.leaders.map((leader, index) => (
+                      <div
+                        key={index}
+                        className="col-12"
+                        style={{
+                          border: "1px solid #d8e6de",
+                          borderRadius: "14px",
+                          padding: "14px",
+                          background: "#ffffff",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.05)",
+                        }}
+                      >
+                        <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "10px" }}>
+                          Leader {index + 1}
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
+                          <button
+                            type="button"
+                            onClick={() => removeAssociationLeader(index)}
+                            disabled={associationForm.leaders.length <= 1}
+                            style={{
+                              border: "1px solid #dc2626",
+                              background:
+                                associationForm.leaders.length <= 1
+                                  ? "#fee2e2"
+                                  : "#fff1f2",
+                              color: "#b91c1c",
+                              borderRadius: "10px",
+                              padding: "6px 12px",
+                              fontWeight: 700,
+                              cursor:
+                                associationForm.leaders.length <= 1
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                        <div className="row g-3">
+                          <div className="col-md-4">
+                            <label style={labelStyle}>Full Name</label>
+                            <input className="form-control" style={inputStyle} value={leader.fullName} onChange={(e) => handleAssociationLeaderChange(index, "fullName", e.target.value)} />
+                          </div>
+                          <div className="col-md-3">
+                            <label style={labelStyle}>Role / Position</label>
+                            <input className="form-control" style={inputStyle} value={leader.role} onChange={(e) => handleAssociationLeaderChange(index, "role", e.target.value)} placeholder="Chairman, Secretary..." />
+                          </div>
+                          <div className="col-md-3">
+                            <label style={labelStyle}>City</label>
+                            <input className="form-control" style={inputStyle} value={leader.city} onChange={(e) => handleAssociationLeaderChange(index, "city", e.target.value)} />
+                          </div>
+                          <div className="col-md-2">
+                            <label style={labelStyle}>Phone</label>
+                            <input className="form-control" style={inputStyle} value={leader.phone} onChange={(e) => handleAssociationLeaderChange(index, "phone", e.target.value)} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="member-form-error" style={{ marginTop: "16px", borderRadius: "12px", border: "1px solid #f5d5d5", background: "#fef2f2", color: "#991b1b", padding: "12px 14px", fontSize: "1.2rem" }}>
+                    ⚠️ {errorMessage}
+                  </div>
+                )}
+
+                <div className="member-form-actions" style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={() => setModalView("choice")}
+                    style={{ border: "1.5px solid #d4e4da", background: "#ffffff", color: "#1f2937", borderRadius: "12px", padding: "12px 20px", fontWeight: 600, cursor: "pointer", fontSize: "1.2rem" }}
+                  >
+                    Back to Options
+                  </button>
+
+                    <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    style={{ border: "none", background: isSubmitting ? "#93b8cd" : "#0c4a6e", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: isSubmitting ? "not-allowed" : "pointer", fontSize: "1.2rem" }}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Association Request"}
+                  </button>
+                </div>
+
+                {!canSubmitAssociation && (
+                  <div style={{ marginTop: "10px", color: "#b45309", fontSize: "0.95rem" }}>
+                    Required fields: {associationMissingFields.join(", ")}
+                  </div>
+                )}
+              </form>
+            )}
           </div>
         </div>
       )}
@@ -1051,13 +1552,23 @@ function MemberRegistrationModal() {
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "3rem", marginBottom: "12px" }}>✓</div>
               <h3 style={{ marginBottom: "8px", color: "#006d21", fontWeight: 700, fontSize: "2rem" }}>
-                Registration Submitted
+                {successKind === "member" ? "Registration Submitted" : "Association Request Submitted"}
               </h3>
               <p style={{ marginBottom: "12px", color: "#1f2937", lineHeight: "1.6", fontSize: "1.2rem" }}>
-                Your account is now <strong>pending</strong> and awaits admin approval.
+                {successKind === "member" ? (
+                  <>
+                    Your account is now <strong>pending</strong> and awaits admin approval.
+                  </>
+                ) : (
+                  <>
+                    Your association profile is now <strong>pending</strong> and awaits admin review.
+                  </>
+                )}
               </p>
               <p style={{ marginBottom: "20px", color: "#5a6b76", fontSize: "1.15rem", lineHeight: "1.6" }}>
-                Once approved, you can login and access your member dashboard to view your profile and other members.
+                {successKind === "member"
+                  ? "Once approved, you can login and access your member dashboard to view your profile and other members."
+                  : "Once approved, your association will be available in the diaspora system and dashboard integrations."}
               </p>
               <button
                 type="button"

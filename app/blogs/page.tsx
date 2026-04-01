@@ -1,8 +1,15 @@
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import { getArticles, getAssetUrl } from "@/lib/articles";
+import ArticleCategoryFilter from "./article-category-filter";
 
 export const dynamic = "force-dynamic";
+
+const ARTICLE_CATEGORY_OPTIONS = [
+  { value: "", label: "All Articles" },
+  { value: "government", label: "Government Articles" },
+  { value: "diaspora", label: "Diaspora Articles" },
+] as const;
 
 const articleTitleStyle = {
   color: "#0a6d3a",
@@ -41,7 +48,28 @@ const cardBodyStyle = {
 } as const;
 
 const newsSectionStyle = {
-  paddingTop: "18px",
+  paddingTop: "0px",
+} as const;
+
+const filterSectionStyle = {
+  marginTop: "-16px",
+  marginBottom: "8px",
+} as const;
+
+const filterWrapStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "flex-end",
+  flexWrap: "wrap",
+  gap: "16px",
+  marginTop: "-4px",
+  marginBottom: "22px",
+  border: "1px solid #d5e6dc",
+  borderRadius: "16px",
+  background:
+    "linear-gradient(145deg, rgba(244,250,246,1) 0%, rgba(255,255,255,1) 55%)",
+  padding: "16px 18px",
+  boxShadow: "0 10px 26px rgba(12, 74, 48, 0.07)",
 } as const;
 
 function getFirstContentLink(input: string): string | null {
@@ -60,8 +88,14 @@ function getFirstContentLink(input: string): string | null {
   return null;
 }
 
-export default async function Page() {
-  const articles = await getArticles();
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string }>;
+}) {
+  const resolvedParams = (await searchParams) || {};
+  const requestedCategory = (resolvedParams.category || "").trim();
+  const articles = await getArticles(requestedCategory);
 
   return (
     <div>
@@ -69,12 +103,41 @@ export default async function Page() {
       <Header />
       <BreadCamp title="News" />
 
+      <section style={filterSectionStyle}>
+        <div className="container">
+          <div style={filterWrapStyle}>
+            <div>
+              <h2 style={{ margin: 0, color: "#0f3e2f", fontWeight: 800, fontSize: "1.48rem", lineHeight: 1.2 }}>
+                Latest Articles
+              </h2>
+              <p style={{ margin: "8px 0 0", color: "#5b6f66", fontSize: "1.1rem" }}>
+                {requestedCategory
+                  ? `Showing ${requestedCategory} articles`
+                  : "Showing all published articles"}
+              </p>
+            </div>
+
+            <ArticleCategoryFilter
+              requestedCategory={requestedCategory}
+              options={ARTICLE_CATEGORY_OPTIONS.map((option) => ({
+                value: option.value,
+                label: option.label,
+              }))}
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="blog__area section-space" style={newsSectionStyle}>
         <div className="container">
           <div className="row">
             <div className="col-12">
               {articles.length === 0 ? (
-                <p>No articles available yet.</p>
+                <p>
+                  {requestedCategory
+                    ? `No ${requestedCategory} articles available yet.`
+                    : "No articles available yet."}
+                </p>
               ) : (
                 <div className="row g-4">
                   {articles.map((article) => {
