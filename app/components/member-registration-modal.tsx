@@ -139,10 +139,27 @@ function MemberRegistrationModal() {
   const canSubmitAssociation = useMemo(() => {
     return (
       associationForm.associationName.trim().length > 1 &&
-      associationForm.phone.trim().length > 5 &&
-      associationForm.email.trim().length > 3 &&
-      associationForm.objectives.trim().length > 8
+      associationForm.phone.trim().length > 3 &&
+      associationForm.email.trim().includes("@") &&
+      associationForm.objectives.trim().length > 3
     );
+  }, [associationForm]);
+
+  const associationMissingFields = useMemo(() => {
+    const missing: string[] = [];
+    if (associationForm.associationName.trim().length <= 1) {
+      missing.push("Association Name");
+    }
+    if (associationForm.phone.trim().length <= 3) {
+      missing.push("Phone");
+    }
+    if (!associationForm.email.trim().includes("@")) {
+      missing.push("Email");
+    }
+    if (associationForm.objectives.trim().length <= 3) {
+      missing.push("Objectives");
+    }
+    return missing;
   }, [associationForm]);
 
   const countryOptions = useMemo(
@@ -582,7 +599,7 @@ function MemberRegistrationModal() {
 
     if (!canSubmitAssociation) {
       setErrorMessage(
-        "Please complete association name, contact info, and objectives before submitting."
+        `Please complete required fields before submitting: ${associationMissingFields.join(", ")}.`
       );
       return;
     }
@@ -1402,14 +1419,20 @@ function MemberRegistrationModal() {
                     Back to Options
                   </button>
 
-                  <button
+                    <button
                     type="submit"
-                    disabled={!canSubmitAssociation || isSubmitting}
-                    style={{ border: "none", background: canSubmitAssociation && !isSubmitting ? "#0c4a6e" : "#93b8cd", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: canSubmitAssociation && !isSubmitting ? "pointer" : "not-allowed", fontSize: "1.2rem" }}
+                    disabled={isSubmitting}
+                    style={{ border: "none", background: isSubmitting ? "#93b8cd" : "#0c4a6e", color: "#ffffff", borderRadius: "12px", padding: "12px 22px", fontWeight: 700, cursor: isSubmitting ? "not-allowed" : "pointer", fontSize: "1.2rem" }}
                   >
                     {isSubmitting ? "Submitting..." : "Submit Association Request"}
                   </button>
                 </div>
+
+                {!canSubmitAssociation && (
+                  <div style={{ marginTop: "10px", color: "#b45309", fontSize: "0.95rem" }}>
+                    Required fields: {associationMissingFields.join(", ")}
+                  </div>
+                )}
               </form>
             )}
           </div>
