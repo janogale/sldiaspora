@@ -1,12 +1,12 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function MemberLoginPage() {
+function MemberLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
@@ -238,5 +238,13 @@ export default function MemberLoginPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function MemberLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <MemberLoginContent />
+    </Suspense>
   );
 }
