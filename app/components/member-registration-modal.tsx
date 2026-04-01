@@ -32,6 +32,7 @@ type AssociationFormState = {
   registrationDate: string;
   registrationPlace: string;
   category: string;
+  otherCategory: string;
   district: string;
   region: string;
   address: string;
@@ -61,6 +62,7 @@ const defaultAssociationFormState: AssociationFormState = {
   registrationDate: "",
   registrationPlace: "",
   category: "",
+  otherCategory: "",
   district: "",
   region: "",
   address: "",
@@ -71,12 +73,25 @@ const defaultAssociationFormState: AssociationFormState = {
   hasRegistrationProof: "",
   leaders: [
     { fullName: "", role: "", city: "", phone: "" },
-    { fullName: "", role: "", city: "", phone: "" },
-    { fullName: "", role: "", city: "", phone: "" },
   ],
 };
 
 const DIRECTUS_REGISTER_LINK = "https://admin.sldiaspora.org/admin/register";
+const MAX_ASSOCIATION_LEADERS = 10;
+
+const ASSOCIATION_CATEGORY_OPTIONS = [
+  "Culture",
+  "Religious",
+  "Health & Medical",
+  "Chamber of Commerce",
+  "Business",
+  "Youth",
+  "Women",
+  "Advocacy",
+  "Professionals",
+  "Research & Academic",
+  "Other type",
+] as const;
 
 function MemberRegistrationModal() {
   const router = useRouter();
@@ -533,6 +548,35 @@ function MemberRegistrationModal() {
     }));
   };
 
+  const addAssociationLeader = () => {
+    setAssociationForm((prev) => {
+      if (prev.leaders.length >= MAX_ASSOCIATION_LEADERS) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        leaders: [
+          ...prev.leaders,
+          { fullName: "", role: "", city: "", phone: "" },
+        ],
+      };
+    });
+  };
+
+  const removeAssociationLeader = (index: number) => {
+    setAssociationForm((prev) => {
+      if (prev.leaders.length <= 1) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        leaders: prev.leaders.filter((_, itemIndex) => itemIndex !== index),
+      };
+    });
+  };
+
   const handleAssociationSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -547,12 +591,22 @@ function MemberRegistrationModal() {
     setErrorMessage("");
 
     try {
+      const resolvedCategory =
+        associationForm.category === "Other type"
+          ? associationForm.otherCategory.trim()
+            ? `Other type: ${associationForm.otherCategory.trim()}`
+            : "Other type"
+          : associationForm.category;
+
       const response = await fetch("/api/association-register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(associationForm),
+        body: JSON.stringify({
+          ...associationForm,
+          category: resolvedCategory,
+        }),
       });
 
       const result = await response.json().catch(() => null);
@@ -1117,6 +1171,21 @@ function MemberRegistrationModal() {
 
             {modalView === "association" && (
               <form onSubmit={handleAssociationSubmit} className="member-register-form" style={{ padding: "28px" }}>
+                <div
+                  style={{
+                    border: "1px solid #cfe0ea",
+                    borderRadius: "14px",
+                    background: "linear-gradient(155deg, #f2f9ff 0%, #ffffff 100%)",
+                    padding: "14px 16px",
+                    color: "#0f3f5c",
+                    fontSize: "1.05rem",
+                    lineHeight: 1.6,
+                    marginBottom: "16px",
+                  }}
+                >
+                  Complete the association profile below. This form is optimized for mobile and desktop, and supports leadership details in a clean structured format.
+                </div>
+
                 <div className="member-section-card" style={sectionCardStyle}>
                   <div style={stepTitleStyle}>Section A: Association Information</div>
                   <div className="row g-3 member-form-grid">
@@ -1138,8 +1207,40 @@ function MemberRegistrationModal() {
                     </div>
                     <div className="col-md-6">
                       <label style={labelStyle}>Category / Type</label>
-                      <input className="form-control" style={inputStyle} value={associationForm.category} onChange={(e) => handleAssociationChange("category", e.target.value)} placeholder="Youth, Women, Professional, Charity..." />
+                      <select
+                        className="form-control"
+                        style={inputStyle}
+                        value={associationForm.category}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          handleAssociationChange("category", value);
+                          if (value !== "Other type") {
+                            handleAssociationChange("otherCategory", "");
+                          }
+                        }}
+                      >
+                        <option value="">Select category</option>
+                        {ASSOCIATION_CATEGORY_OPTIONS.map((category) => (
+                          <option key={category} value={category}>
+                            {category}
+                          </option>
+                        ))}
+                      </select>
                     </div>
+                    {associationForm.category === "Other type" && (
+                      <div className="col-md-6">
+                        <label style={labelStyle}>Specify Other Type</label>
+                        <input
+                          className="form-control"
+                          style={inputStyle}
+                          value={associationForm.otherCategory}
+                          onChange={(e) =>
+                            handleAssociationChange("otherCategory", e.target.value)
+                          }
+                          placeholder="Write the exact association type"
+                        />
+                      </div>
+                    )}
                     <div className="col-md-3">
                       <label style={labelStyle}>District</label>
                       <input className="form-control" style={inputStyle} value={associationForm.district} onChange={(e) => handleAssociationChange("district", e.target.value)} />
@@ -1193,11 +1294,75 @@ function MemberRegistrationModal() {
 
                 <div className="member-section-card" style={{ ...sectionCardStyle, marginTop: "16px" }}>
                   <div style={stepTitleStyle}>Section B: Association Leadership</div>
+                  <p style={{ marginTop: "-4px", marginBottom: "12px", color: "#4b5563", fontSize: "1rem" }}>
+                    Add your leadership team details. You can add or remove rows as needed.
+                  </p>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
+                    <div style={{ color: "#334155", fontSize: "0.95rem" }}>
+                      {associationForm.leaders.length} leader{associationForm.leaders.length > 1 ? "s" : ""} added
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addAssociationLeader}
+                      disabled={associationForm.leaders.length >= MAX_ASSOCIATION_LEADERS}
+                      style={{
+                        border: "1px solid #0c4a6e",
+                        background:
+                          associationForm.leaders.length >= MAX_ASSOCIATION_LEADERS
+                            ? "#d9e7f0"
+                            : "#f1f7fc",
+                        color: "#0c4a6e",
+                        borderRadius: "10px",
+                        padding: "8px 14px",
+                        fontWeight: 700,
+                        cursor:
+                          associationForm.leaders.length >= MAX_ASSOCIATION_LEADERS
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      + Add Leader
+                    </button>
+                  </div>
                   <div className="row g-3 member-form-grid">
                     {associationForm.leaders.map((leader, index) => (
-                      <div key={index} className="col-12" style={{ border: "1px solid #d8e6de", borderRadius: "12px", padding: "14px" }}>
-                        <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: "10px" }}>
+                      <div
+                        key={index}
+                        className="col-12"
+                        style={{
+                          border: "1px solid #d8e6de",
+                          borderRadius: "14px",
+                          padding: "14px",
+                          background: "#ffffff",
+                          boxShadow: "0 8px 18px rgba(15, 23, 42, 0.05)",
+                        }}
+                      >
+                        <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "10px" }}>
                           Leader {index + 1}
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
+                          <button
+                            type="button"
+                            onClick={() => removeAssociationLeader(index)}
+                            disabled={associationForm.leaders.length <= 1}
+                            style={{
+                              border: "1px solid #dc2626",
+                              background:
+                                associationForm.leaders.length <= 1
+                                  ? "#fee2e2"
+                                  : "#fff1f2",
+                              color: "#b91c1c",
+                              borderRadius: "10px",
+                              padding: "6px 12px",
+                              fontWeight: 700,
+                              cursor:
+                                associationForm.leaders.length <= 1
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                          >
+                            Remove
+                          </button>
                         </div>
                         <div className="row g-3">
                           <div className="col-md-4">
