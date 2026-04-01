@@ -38,12 +38,12 @@ export default function ArticleCategoryFilter({
       <label
         htmlFor="article-category"
         style={{
-          fontSize: "1.12rem",
+          fontSize: "clamp(1.2rem, 1.8vw, 1.3rem)",
           fontWeight: 800,
           color: "#36554d",
           letterSpacing: "0.3px",
           textTransform: "uppercase",
-          marginBottom: "12px",
+          marginBottom: "14px",
           display: "block",
         }}
       >
@@ -71,10 +71,10 @@ export default function ArticleCategoryFilter({
                 background: isActive ? "#0a6d3a" : "#ffffff",
                 color: isActive ? "#ffffff" : "#26453c",
                 borderRadius: "999px",
-                padding: "11px 18px",
-                fontSize: "1.08rem",
+                padding: "12px 20px",
+                fontSize: "clamp(1.4rem, 1.5vw, 1.4rem)",
                 fontWeight: 800,
-                minHeight: "48px",
+                minHeight: "52px",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
               }}
