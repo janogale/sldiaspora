@@ -14,11 +14,61 @@ export type Article = {
   id: string;
   title: string;
   content: string;
+  category: string;
   featuredImage: string | null;
   images: string[];
   dateCreated: string | null;
   dateUpdated: string | null;
 };
+
+const categoryFieldCandidates = [
+  "category",
+  "Category",
+  "article_category",
+  "type",
+  "section",
+];
+
+const normalizeCategoryKey = (value: string) => value.trim().toLowerCase();
+
+const matchesRequestedCategory = (
+  articleCategory: string,
+  requestedCategory: string
+) => {
+  const normalizedArticleCategory = normalizeCategoryKey(articleCategory);
+  const normalizedRequestedCategory = normalizeCategoryKey(requestedCategory);
+
+  if (!normalizedRequestedCategory) return true;
+
+  if (normalizedArticleCategory === normalizedRequestedCategory) return true;
+
+  if (
+    normalizedRequestedCategory === "government" &&
+    normalizedArticleCategory.includes("government")
+  ) {
+    return true;
+  }
+
+  if (
+    normalizedRequestedCategory === "diaspora" &&
+    normalizedArticleCategory.includes("diaspora")
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
+function readCategory(article: RawArticle): string {
+  for (const fieldName of categoryFieldCandidates) {
+    const value = article[fieldName];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return "Uncategorized";
+}
 
 const imageFieldCandidates = [
   "images",
@@ -87,6 +137,7 @@ function normalizeArticle(article: RawArticle): Article {
     id: String(article.id),
     title: article.Title || "Untitled Article",
     content: article.content || "",
+    category: readCategory(article),
     featuredImage,
     images,
     dateCreated: article.date_created || null,
@@ -98,7 +149,8 @@ export function getAssetUrl(fileId: string): string {
   return `/api/directus-assets/${encodeURIComponent(fileId)}`;
 }
 
-export async function getArticles(): Promise<Article[]> {
+export async function getArticles(category?: string): Promise<Article[]> {
+  const normalizedCategory = (category || "").trim();
   const records = await directus.request(
     readItems("articles", {
       fields: ["*"],
@@ -110,7 +162,10 @@ export async function getArticles(): Promise<Article[]> {
       sort: ["-date_created", "-id"],
     })
   );
-  return (records as RawArticle[]).map(normalizeArticle);
+  const normalized = (records as RawArticle[]).map(normalizeArticle);
+  return normalized.filter((article) =>
+    matchesRequestedCategory(article.category, normalizedCategory)
+  );
 }
 
 export async function getArticleById(id: string): Promise<Article | null> {

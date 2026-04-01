@@ -4,6 +4,12 @@ import { getArticles, getAssetUrl } from "@/lib/articles";
 
 export const dynamic = "force-dynamic";
 
+const ARTICLE_CATEGORY_OPTIONS = [
+  { value: "", label: "All Articles" },
+  { value: "government", label: "Government Articles" },
+  { value: "diaspora", label: "Diaspora Articles" },
+] as const;
+
 const articleTitleStyle = {
   color: "#0a6d3a",
   fontWeight: 600,
@@ -44,6 +50,45 @@ const newsSectionStyle = {
   paddingTop: "18px",
 } as const;
 
+const filterWrapStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  flexWrap: "wrap",
+  gap: "14px",
+  marginBottom: "18px",
+} as const;
+
+const filterLabelStyle = {
+  fontSize: "0.95rem",
+  fontWeight: 700,
+  color: "#35524a",
+  marginBottom: "6px",
+  display: "block",
+} as const;
+
+const filterSelectStyle = {
+  minWidth: "220px",
+  minHeight: "44px",
+  borderRadius: "10px",
+  border: "1px solid #cfe0d6",
+  padding: "0 12px",
+  color: "#1f2937",
+  background: "#ffffff",
+  fontWeight: 600,
+} as const;
+
+const filterButtonStyle = {
+  minHeight: "44px",
+  borderRadius: "10px",
+  border: "1px solid #0a6d3a",
+  background: "#0a6d3a",
+  color: "#ffffff",
+  padding: "0 14px",
+  fontWeight: 700,
+  marginLeft: "8px",
+} as const;
+
 function getFirstContentLink(input: string): string | null {
   const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
   const href = match?.[1]?.trim();
@@ -60,8 +105,14 @@ function getFirstContentLink(input: string): string | null {
   return null;
 }
 
-export default async function Page() {
-  const articles = await getArticles();
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string }>;
+}) {
+  const resolvedParams = (await searchParams) || {};
+  const requestedCategory = (resolvedParams.category || "").trim();
+  const articles = await getArticles(requestedCategory);
 
   return (
     <div>
@@ -73,8 +124,46 @@ export default async function Page() {
         <div className="container">
           <div className="row">
             <div className="col-12">
+              <div style={filterWrapStyle}>
+                <div>
+                  <h2 style={{ margin: 0, color: "#0f3e2f", fontWeight: 800, fontSize: "1.55rem" }}>
+                    Latest Articles
+                  </h2>
+                  <p style={{ margin: "6px 0 0", color: "#5b6f66" }}>
+                    {requestedCategory
+                      ? `Showing ${requestedCategory} articles`
+                      : "Showing all published articles"}
+                  </p>
+                </div>
+
+                <form method="GET">
+                  <label htmlFor="article-category" style={filterLabelStyle}>
+                    Article Category
+                  </label>
+                  <select
+                    id="article-category"
+                    name="category"
+                    defaultValue={requestedCategory}
+                    style={filterSelectStyle}
+                  >
+                    {ARTICLE_CATEGORY_OPTIONS.map((option) => (
+                      <option key={option.value || "all"} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="submit" style={filterButtonStyle}>
+                    Apply
+                  </button>
+                </form>
+              </div>
+
               {articles.length === 0 ? (
-                <p>No articles available yet.</p>
+                <p>
+                  {requestedCategory
+                    ? `No ${requestedCategory} articles available yet.`
+                    : "No articles available yet."}
+                </p>
               ) : (
                 <div className="row g-4">
                   {articles.map((article) => {
