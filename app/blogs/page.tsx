@@ -1,6 +1,7 @@
 import BreadCamp from "../components/BreadCamp";
 import Header from "../components/header";
 import { getArticles, getAssetUrl } from "@/lib/articles";
+import ArticleCategoryFilter from "./article-category-filter";
 
 export const dynamic = "force-dynamic";
 
@@ -78,17 +79,6 @@ const filterSelectStyle = {
   fontWeight: 600,
 } as const;
 
-const filterButtonStyle = {
-  minHeight: "44px",
-  borderRadius: "10px",
-  border: "1px solid #0a6d3a",
-  background: "#0a6d3a",
-  color: "#ffffff",
-  padding: "0 14px",
-  fontWeight: 700,
-  marginLeft: "8px",
-} as const;
-
 function getFirstContentLink(input: string): string | null {
   const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
   const href = match?.[1]?.trim();
@@ -136,26 +126,15 @@ export default async function Page({
                   </p>
                 </div>
 
-                <form method="GET">
-                  <label htmlFor="article-category" style={filterLabelStyle}>
-                    Article Category
-                  </label>
-                  <select
-                    id="article-category"
-                    name="category"
-                    defaultValue={requestedCategory}
-                    style={filterSelectStyle}
-                  >
-                    {ARTICLE_CATEGORY_OPTIONS.map((option) => (
-                      <option key={option.value || "all"} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <button type="submit" style={filterButtonStyle}>
-                    Apply
-                  </button>
-                </form>
+                <ArticleCategoryFilter
+                  requestedCategory={requestedCategory}
+                  options={ARTICLE_CATEGORY_OPTIONS.map((option) => ({
+                    value: option.value,
+                    label: option.label,
+                  }))}
+                  labelStyle={filterLabelStyle}
+                  selectStyle={filterSelectStyle}
+                />
               </div>
 
               {articles.length === 0 ? (
