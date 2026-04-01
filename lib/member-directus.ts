@@ -149,6 +149,62 @@ export const getMemberCollectionFields = async () => {
   return new Set(fields);
 };
 
+export const getCollectionFields = async (collection: string) => {
+  const response = await directusFetch(`/fields/${encodeURIComponent(collection)}`);
+
+  if (!response.ok) return null;
+
+  const result = (await response.json().catch(() => null)) as DirectusResult<
+    Array<{ field: string }>
+  > | null;
+
+  const fields = result?.data?.map((item) => item.field).filter(Boolean) || [];
+  return new Set(fields);
+};
+
+export const createCollectionRecord = async (
+  collection: string,
+  payload: Record<string, unknown>
+) => {
+  const response = await directusFetch(
+    `/items/${encodeURIComponent(collection)}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  const result = (await response.json().catch(() => null)) as DirectusResult<
+    Record<string, unknown>
+  > | null;
+
+  return { response, result };
+};
+
+export const resolveAssociationCollection = async () => {
+  const fromEnv = (process.env.DIRECTUS_ASSOCIATION_COLLECTION || "").trim();
+  const candidates = [
+    fromEnv,
+    "association_registrations",
+    "association_registration",
+    "associations",
+    "association_forms",
+    "association_requests",
+  ].filter(Boolean);
+
+  for (const collection of candidates) {
+    const fields = await getCollectionFields(collection).catch(() => null);
+    if (fields && fields.size > 0) {
+      return { collection, fields };
+    }
+  }
+
+  return { collection: null, fields: null };
+};
+
 export const uploadDirectusFile = async (
   file: File,
   title: string,
