@@ -11,6 +11,9 @@ type RegisterFormState = {
   email: string;
   city: string;
   country: string;
+  profession: string;
+  skills: string;
+  areasOfInterest: string[];
   nationalIdCode: string;
   password: string;
   confirmPassword: string;
@@ -50,6 +53,9 @@ const defaultFormState: RegisterFormState = {
   email: "",
   city: "",
   country: "",
+  profession: "",
+  skills: "",
+  areasOfInterest: [],
   nationalIdCode: "",
   password: "",
   confirmPassword: "",
@@ -93,6 +99,21 @@ const ASSOCIATION_CATEGORY_OPTIONS = [
   "Other type",
 ] as const;
 
+const AREA_OF_INTEREST_OPTIONS = [
+  "Investment",
+  "Education",
+  "Health",
+  "Technology",
+  "Business",
+  "Agriculture",
+  "Environment",
+  "Culture",
+  "Youth Development",
+  "Women Empowerment",
+  "Governance",
+  "Research",
+] as const;
+
 function MemberRegistrationModal() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -114,8 +135,9 @@ function MemberRegistrationModal() {
   const [associationCertificateFile, setAssociationCertificateFile] = useState<File | null>(null);
 
   const passwordsMatch =
-    (!formState.password && !formState.confirmPassword) ||
-    (formState.password.length >= 6 && formState.password === formState.confirmPassword);
+    formState.password.length >= 6 &&
+    formState.confirmPassword.length >= 6 &&
+    formState.password === formState.confirmPassword;
 
   const hasRequiredBasics =
     formState.fullName.trim().length > 1 &&
@@ -437,6 +459,18 @@ function MemberRegistrationModal() {
     });
   };
 
+  const toggleAreaOfInterest = (interest: string) => {
+    setFormState((prev) => {
+      const isSelected = prev.areasOfInterest.includes(interest);
+      return {
+        ...prev,
+        areasOfInterest: isSelected
+          ? prev.areasOfInterest.filter((item) => item !== interest)
+          : [...prev.areasOfInterest, interest],
+      };
+    });
+  };
+
   const resetForm = () => {
     setFormState(defaultFormState);
     setIdMethod("");
@@ -499,9 +533,12 @@ function MemberRegistrationModal() {
       payload.append("city", formState.city.trim());
       payload.append("country", formState.country.trim());
       payload.append("password", formState.password);
-      payload.append("profession", "");
+      payload.append("profession", formState.profession.trim());
+      payload.append("skills", formState.skills.trim());
       payload.append("countryOfNationality", "");
-      payload.append("areasOfInterest", "");
+      formState.areasOfInterest.forEach((interest) => {
+        payload.append("areasOfInterest", interest);
+      });
       payload.append("shareContactPreference", "none");
 
       const finalCode = idMethod === "code" ? formState.nationalIdCode.trim() : "";
@@ -992,6 +1029,62 @@ function MemberRegistrationModal() {
                         ))}
                       </select>
                     </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Professional (Optional)</label>
+                      <input
+                        className="form-control"
+                        style={inputStyle}
+                        value={formState.profession}
+                        onChange={(e) => handleChange("profession", e.target.value)}
+                        placeholder="e.g. Engineer, Teacher, Entrepreneur"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Skills (Optional)</label>
+                      <input
+                        className="form-control"
+                        style={inputStyle}
+                        value={formState.skills}
+                        onChange={(e) => handleChange("skills", e.target.value)}
+                        placeholder="e.g. Project Management, UI Design"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label style={labelStyle}>Area of Interest (Optional)</label>
+                      <div
+                        style={{
+                          ...inputStyle,
+                          minHeight: "150px",
+                          paddingTop: "12px",
+                          paddingBottom: "12px",
+                          display: "grid",
+                          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                          gap: "10px 14px",
+                          alignItems: "start",
+                        }}
+                      >
+                        {AREA_OF_INTEREST_OPTIONS.map((interest) => (
+                          <label
+                            key={interest}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              color: "#1f2937",
+                              fontSize: "0.98rem",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={formState.areasOfInterest.includes(interest)}
+                              onChange={() => toggleAreaOfInterest(interest)}
+                            />
+                            {interest}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
                     <div className="col-12">
                       <label style={labelStyle}>Profile Picture (Optional)</label>
                       <input type="file" accept="image/*" className="form-control" style={inputStyle} onChange={(e) => setProfilePicture(e.target.files?.[0] || null)} />
@@ -1117,12 +1210,12 @@ function MemberRegistrationModal() {
                   <div style={stepTitleStyle}> Password & Bio</div>
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
-                      <label style={labelStyle}>Password (System Login, Optional)</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} minLength={6} />
+                      <label style={labelStyle}>Password (System Login, Required)</label>
+                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} minLength={6} required />
                     </div>
                     <div className="col-md-6">
-                      <label style={labelStyle}>Confirm Password (Optional)</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} minLength={6} />
+                      <label style={labelStyle}>Confirm Password (Required)</label>
+                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} minLength={6} required />
                       {formState.confirmPassword && !passwordsMatch && (
                         <small style={{ color: "#b91c1c", fontSize: "1.1rem" }}>Passwords do not match.</small>
                       )}

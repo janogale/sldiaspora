@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   createMemberRecord,
+  directusFetch,
   filterPayloadByFields,
   getDirectusErrorMessage,
   getMemberCollectionFields,
@@ -12,6 +13,78 @@ import { hashMemberPassword } from "@/lib/member-auth";
 
 const toText = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
+
+const normalizeChoiceKey = (value: unknown) =>
+  typeof value === "string"
+    ? value.trim().toLowerCase().replace(/\s+/g, " ")
+    : "";
+
+const resolveAreasOfInterestPayload = async (selectedAreas: string[]) => {
+  if (selectedAreas.length === 0) return null;
+
+  try {
+    const response = await directusFetch("/fields/members");
+    const result = (await response.json().catch(() => null)) as
+      | { data?: Array<Record<string, unknown>> }
+      | null;
+
+    const areaField = result?.data?.find((item) => {
+      const fieldName = typeof item?.field === "string" ? item.field : "";
+      return fieldName === "areas_of_interest" || fieldName === "area_of_interest";
+    });
+
+    const mappedSelectedAreas = (() => {
+      const meta =
+        areaField && typeof areaField.meta === "object"
+          ? (areaField.meta as Record<string, unknown>)
+          : null;
+      const options =
+        meta && typeof meta.options === "object"
+          ? (meta.options as Record<string, unknown>)
+          : null;
+      const choices = Array.isArray(options?.choices)
+        ? (options.choices as Array<Record<string, unknown>>)
+        : [];
+
+      if (choices.length === 0) {
+        return selectedAreas;
+      }
+
+      const resolved = selectedAreas.map((selected) => {
+        const normalizedSelected = normalizeChoiceKey(selected);
+        const match = choices.find((choice) => {
+          const valueKey = normalizeChoiceKey(choice.value);
+          const textKey = normalizeChoiceKey(choice.text);
+          return valueKey === normalizedSelected || textKey === normalizedSelected;
+        });
+
+        return typeof match?.value === "string" ? match.value : selected;
+      });
+
+      return Array.from(new Set(resolved));
+    })();
+
+    const schema =
+      areaField && typeof areaField.schema === "object"
+        ? (areaField.schema as Record<string, unknown>)
+        : null;
+    const dataType = typeof schema?.data_type === "string" ? schema.data_type : "";
+
+    if (dataType === "json") {
+      return mappedSelectedAreas;
+    }
+
+    if (dataType === "csv" || dataType === "string" || dataType === "text") {
+      return mappedSelectedAreas.join(",");
+    }
+
+    return mappedSelectedAreas;
+  } catch {
+    // Fallback to array payload when field metadata is unavailable.
+  }
+
+  return selectedAreas;
+};
 
 export async function POST(request: Request) {
   try {
@@ -25,8 +98,28 @@ export async function POST(request: Request) {
     const password = toText(form.get("password"));
 
     const profession = toText(form.get("profession"));
+    const skills = toText(form.get("skills"));
     const countryOfNationality = toText(form.get("countryOfNationality"));
-    const areasOfInterest = toText(form.get("areasOfInterest"));
+    const areaValuesFromForm = form
+      .getAll("areasOfInterest")
+      .filter((value): value is string => typeof value === "string")
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    const fallbackAreasText = toText(form.get("areasOfInterest"));
+    const fallbackAreaValues = fallbackAreasText
+      ? fallbackAreasText
+          .split(",")
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : [];
+
+    const areasOfInterest = Array.from(
+      new Set(
+        (areaValuesFromForm.length > 0 ? areaValuesFromForm : fallbackAreaValues)
+      )
+    );
+    const resolvedAreasOfInterest = await resolveAreasOfInterestPayload(areasOfInterest);
     const shareContactPreference = toText(form.get("shareContactPreference"));
 
     const nationalIdCode = toText(form.get("nationalIdCode"));
@@ -190,8 +283,10 @@ export async function POST(request: Request) {
       city,
       country,
       profession,
+      skills: skills || null,
       country_of_nationality: countryOfNationality || null,
-      areas_of_interest: areasOfInterest || null,
+      areas_of_interest: resolvedAreasOfInterest,
+      area_of_interest: resolvedAreasOfInterest,
       profile_picture: profilePictureId,
       national_id_code: nationalIdCode || null,
       national_id_photo: nationalIdFileId,
