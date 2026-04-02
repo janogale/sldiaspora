@@ -2,11 +2,11 @@
   --ink: #0c2f37;
   --ink-soft: #4b666d;
   --line: #d6e4e1;
-  --brand-1: #0b5b49;
-  --brand-2: #17775e;
-  --brand-3: #2a9c7c;
-  --accent: #d46c31;
-  --accent-soft: #fff2e8;
+  --brand-1: #005a1b;
+  --brand-2: #006d21;
+  --brand-3: #1f8a3b;
+  --accent: #0f6a34;
+  --accent-soft: #edf8f1;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
@@ -43,8 +43,8 @@
 .loginSection {
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
-  padding: 42px 0 56px;
+  align-items: center;
+  padding: 28px 0;
   position: relative;
   z-index: 1;
 }
@@ -96,8 +96,8 @@
 .brandPanel {
   padding: 44px 36px;
   background:
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 38%),
-    linear-gradient(150deg, #0a4e4a 0%, #136e54 52%, #1a8a65 100%);
+    radial-gradient(circle at 20% 4%, rgba(255, 255, 255, 0.14) 0%, transparent 40%),
+    linear-gradient(150deg, #005a1b 0%, #006d21 52%, #1f8a3b 100%);
   color: #eefaf3;
   display: flex;
   flex-direction: column;
@@ -156,12 +156,12 @@
   margin: 16px 0 0;
   width: fit-content;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   padding: 8px 14px;
   font-size: 1.5rem;
   font-weight: 700;
   color: #f7fffb;
-  background: rgba(0, 0, 0, 0.14);
+  background: rgba(0, 0, 0, 0.18);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -172,8 +172,8 @@
   width: 9px;
   height: 9px;
   border-radius: 999px;
-  background: #90ffd0;
-  box-shadow: 0 0 0 4px rgba(144, 255, 208, 0.2);
+  background: #8df6b2;
+  box-shadow: 0 0 0 4px rgba(141, 246, 178, 0.22);
   animation: pulse-dot 1.6s ease-in-out infinite;
 }
 
@@ -195,7 +195,7 @@
 }
 
 .brandList i {
-  color: #9ef5c2;
+  color: #a5f3bc;
   margin-top: 3px;
 }
 
@@ -239,9 +239,9 @@
   align-items: center;
   gap: 9px;
   border-radius: 999px;
-  border: 1px solid #e8dacb;
+  border: 1px solid #cce8d5;
   background: var(--accent-soft);
-  color: #8c430c;
+  color: #0f6a34;
   padding: 7px 12px;
   font-size: 1.5rem;
   font-weight: 700;
@@ -283,8 +283,8 @@
 }
 
 .input:focus {
-  border-color: #1d8f70;
-  box-shadow: 0 0 0 4px rgba(29, 143, 112, 0.16);
+  border-color: var(--brand-2);
+  box-shadow: 0 0 0 4px rgba(0, 109, 33, 0.16);
   background: #ffffff;
   transform: translateY(-1px);
 }
@@ -308,7 +308,7 @@
   transform: translateY(-50%);
   border: 0;
   background: transparent;
-  color: #116e58;
+  color: var(--brand-2);
   font-size: 1.5rem;
   font-weight: 600;
   padding: 2px 4px;
@@ -316,11 +316,11 @@
 }
 
 .togglePassword:hover {
-  background: rgba(20, 130, 103, 0.12);
+  background: rgba(0, 109, 33, 0.12);
 }
 
 .togglePassword:focus-visible {
-  outline: 2px solid rgba(20, 130, 103, 0.35);
+  outline: 2px solid rgba(0, 109, 33, 0.35);
   outline-offset: 1px;
 }
 
@@ -339,7 +339,7 @@
   border: 0;
   border-radius: 14px;
   min-height: 50px;
-  background: linear-gradient(136deg, #17775e 0%, #0d5f4b 62%, #0a4f40 100%);
+  background: linear-gradient(136deg, #1f8a3b 0%, #006d21 58%, #005a1b 100%);
   color: #ffffff;
   font-weight: 700;
   font-size: 1.5rem;
@@ -350,7 +350,7 @@
 
 .loginButton:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(11, 73, 59, 0.3);
+  box-shadow: 0 14px 28px rgba(0, 83, 27, 0.32);
   filter: saturate(1.08);
 }
 
@@ -367,7 +367,7 @@
 }
 
 .footerNote a {
-  color: #0f7158;
+  color: var(--brand-2);
   font-weight: 700;
   text-decoration: none;
 }
@@ -422,6 +422,7 @@
 @media (max-width: 767px) {
   .loginSection {
     padding: 20px 0 28px;
+    align-items: flex-start;
   }
 
   .backButtonWrap {

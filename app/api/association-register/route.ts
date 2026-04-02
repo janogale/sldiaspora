@@ -4,6 +4,7 @@ import {
   filterPayloadByFields,
   getDirectusErrorMessage,
   resolveAssociationCollection,
+  uploadDirectusFile,
 } from "@/lib/member-directus";
 
 type AssociationLeader = {
@@ -84,9 +85,59 @@ const buildLeadersText = (leaders: AssociationLeader[]) => {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json().catch(() => null)) as
-      | AssociationRegisterPayload
-      | null;
+    const contentType = request.headers.get("content-type") || "";
+    const isFormSubmission = contentType.includes("multipart/form-data");
+
+    let body: AssociationRegisterPayload | null = null;
+    let certificateFile: File | null = null;
+
+    if (isFormSubmission) {
+      const form = await request.formData();
+
+      const leadersRaw = form.get("leaders");
+      let leadersFromForm: unknown = [];
+      if (typeof leadersRaw === "string") {
+        try {
+          leadersFromForm = JSON.parse(leadersRaw || "[]");
+        } catch {
+          leadersFromForm = [];
+        }
+      }
+
+      body = {
+        associationName: toText(form.get("associationName")),
+        acronym: toText(form.get("acronym")),
+        registrationDate: toText(form.get("registrationDate")),
+        registrationPlace: toText(form.get("registrationPlace")),
+        category: toText(form.get("category")),
+        district: toText(form.get("district")),
+        region: toText(form.get("region")),
+        address: toText(form.get("address")),
+        phone: toText(form.get("phone")),
+        email: toText(form.get("email")),
+        website: toText(form.get("website")),
+        objectives: toText(form.get("objectives")),
+        hasRegistrationProof:
+          toText(form.get("hasRegistrationProof")) === "yes"
+            ? "yes"
+            : toText(form.get("hasRegistrationProof")) === "no"
+            ? "no"
+            : "",
+        leaders: Array.isArray(leadersFromForm)
+          ? (leadersFromForm as AssociationLeader[])
+          : [],
+      };
+
+      const certificateInput = form.get("registrationCertificate");
+      certificateFile =
+        certificateInput instanceof File && certificateInput.size > 0
+          ? certificateInput
+          : null;
+    } else {
+      body = (await request.json().catch(() => null)) as
+        | AssociationRegisterPayload
+        | null;
+    }
 
     const associationName = toText(body?.associationName);
     const phone = toText(body?.phone);
@@ -94,6 +145,15 @@ export async function POST(request: Request) {
     const objectives = toText(body?.objectives);
     const leaders = normalizeLeaders(body?.leaders);
     const leadersText = buildLeadersText(leaders);
+
+    let registrationCertificateId: string | null = null;
+    if (certificateFile) {
+      registrationCertificateId = await uploadDirectusFile(
+        certificateFile,
+        `${associationName || "Association"} Registration Certificate`,
+        "Uploaded during association registration"
+      );
+    }
 
     if (!associationName || !phone || !email || !objectives) {
       return NextResponse.json(
@@ -137,6 +197,11 @@ export async function POST(request: Request) {
           : toText(body?.hasRegistrationProof) === "no"
           ? false
           : null,
+      certificate: registrationCertificateId,
+      registration_certificate: registrationCertificateId,
+      registration_certificate_file: registrationCertificateId,
+      registration_proof_file: registrationCertificateId,
+      certificate_file: registrationCertificateId,
       leaders: leadersText,
       leadership: leaders,
       leadership_json: leaders.length > 0 ? JSON.stringify(leaders) : null,

@@ -11,6 +11,18 @@ const toFirstName = (value: unknown) => {
   return firstName || "Member";
 };
 
+const normalizeAreasOfInterest = (value: unknown) => {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .join(", ");
+  }
+
+  return typeof value === "string" ? value : "";
+};
+
 export async function GET() {
   try {
     const cookieStore = await cookies();
@@ -47,7 +59,7 @@ export async function GET() {
           country: member.country || "",
           country_of_nationality: member.country_of_nationality || "",
           profession: member.profession || "",
-          areas_of_interest: member.areas_of_interest || "",
+          areas_of_interest: normalizeAreasOfInterest(member.areas_of_interest),
           additional_notes: member.additional_notes || "",
           profile_picture: member.profile_picture || null,
           status: member.status || "",

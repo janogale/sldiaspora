@@ -9,6 +9,18 @@ import {
   uploadDirectusFile,
 } from "@/lib/member-directus";
 
+const normalizeAreasOfInterest = (value: unknown) => {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .join(", ");
+  }
+
+  return typeof value === "string" ? value : "";
+};
+
 export async function PATCH(request: Request) {
   try {
     const cookieStore = await cookies();
@@ -85,7 +97,7 @@ export async function PATCH(request: Request) {
           country: updatedMember?.country || "",
           country_of_nationality: updatedMember?.country_of_nationality || "",
           profession: updatedMember?.profession || "",
-          areas_of_interest: updatedMember?.areas_of_interest || "",
+          areas_of_interest: normalizeAreasOfInterest(updatedMember?.areas_of_interest),
           additional_notes: updatedMember?.additional_notes || "",
           profile_picture: updatedMember?.profile_picture || null,
           status: updatedMember?.status || "",
