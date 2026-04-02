@@ -111,6 +111,7 @@ function MemberRegistrationModal() {
   const [nationalIdPhoto, setNationalIdPhoto] = useState<File | null>(null);
   const [passportDocument, setPassportDocument] = useState<File | null>(null);
   const [drivingLicenseDocument, setDrivingLicenseDocument] = useState<File | null>(null);
+  const [associationCertificateFile, setAssociationCertificateFile] = useState<File | null>(null);
 
   const passwordsMatch =
     (!formState.password && !formState.confirmPassword) ||
@@ -449,6 +450,7 @@ function MemberRegistrationModal() {
 
   const resetAssociationForm = () => {
     setAssociationForm(defaultAssociationFormState);
+    setAssociationCertificateFile(null);
   };
 
   const goNextStep = () => {
@@ -615,15 +617,29 @@ function MemberRegistrationModal() {
             : "Other type"
           : associationForm.category;
 
+      const payload = new FormData();
+      payload.append("associationName", associationForm.associationName.trim());
+      payload.append("acronym", associationForm.acronym.trim());
+      payload.append("registrationDate", associationForm.registrationDate);
+      payload.append("registrationPlace", associationForm.registrationPlace.trim());
+      payload.append("category", resolvedCategory);
+      payload.append("district", associationForm.district.trim());
+      payload.append("region", associationForm.region.trim());
+      payload.append("address", associationForm.address.trim());
+      payload.append("phone", associationForm.phone.trim());
+      payload.append("email", associationForm.email.trim());
+      payload.append("website", associationForm.website.trim());
+      payload.append("objectives", associationForm.objectives.trim());
+      payload.append("hasRegistrationProof", associationForm.hasRegistrationProof);
+      payload.append("leaders", JSON.stringify(associationForm.leaders));
+
+      if (associationCertificateFile) {
+        payload.append("registrationCertificate", associationCertificateFile);
+      }
+
       const response = await fetch("/api/association-register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...associationForm,
-          category: resolvedCategory,
-        }),
+        body: payload,
       });
 
       const result = await response.json().catch(() => null);
@@ -1305,6 +1321,18 @@ function MemberRegistrationModal() {
                           No
                         </label>
                       </div>
+                    </div>
+                    <div className="col-12">
+                      <label style={labelStyle}>Upload Registration Certificate (Optional)</label>
+                      <input
+                        type="file"
+                        accept="image/*,.pdf"
+                        className="form-control"
+                        style={inputStyle}
+                        onChange={(e) =>
+                          setAssociationCertificateFile(e.target.files?.[0] || null)
+                        }
+                      />
                     </div>
                   </div>
                 </div>
