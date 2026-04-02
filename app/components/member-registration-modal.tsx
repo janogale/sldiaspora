@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 type IdVerificationMethod = "national_id" | "code" | "";
 
@@ -133,6 +134,8 @@ function MemberRegistrationModal() {
   const [passportDocument, setPassportDocument] = useState<File | null>(null);
   const [drivingLicenseDocument, setDrivingLicenseDocument] = useState<File | null>(null);
   const [associationCertificateFile, setAssociationCertificateFile] = useState<File | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const passwordsMatch =
     formState.password.length >= 6 &&
@@ -1211,11 +1214,75 @@ function MemberRegistrationModal() {
                   <div className="row g-3 member-form-grid">
                     <div className="col-md-6">
                       <label style={labelStyle}>Password (System Login, Required)</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.password} onChange={(e) => handleChange("password", e.target.value)} minLength={6} required />
+                      <div style={{ position: "relative" }}>
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          className="form-control"
+                          style={{ ...inputStyle, paddingRight: "46px" }}
+                          value={formState.password}
+                          onChange={(e) => handleChange("password", e.target.value)}
+                          minLength={6}
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          title={showPassword ? "Hide password" : "Show password"}
+                          style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            border: "none",
+                            background: "transparent",
+                            color: "#475569",
+                            padding: 0,
+                            cursor: "pointer",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </div>
                     <div className="col-md-6">
                       <label style={labelStyle}>Confirm Password (Required)</label>
-                      <input type="password" className="form-control" style={inputStyle} value={formState.confirmPassword} onChange={(e) => handleChange("confirmPassword", e.target.value)} minLength={6} required />
+                      <div style={{ position: "relative" }}>
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          className="form-control"
+                          style={{ ...inputStyle, paddingRight: "46px" }}
+                          value={formState.confirmPassword}
+                          onChange={(e) => handleChange("confirmPassword", e.target.value)}
+                          minLength={6}
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword((prev) => !prev)}
+                          aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                          title={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                          style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            border: "none",
+                            background: "transparent",
+                            color: "#475569",
+                            padding: 0,
+                            cursor: "pointer",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                       {formState.confirmPassword && !passwordsMatch && (
                         <small style={{ color: "#b91c1c", fontSize: "1.1rem" }}>Passwords do not match.</small>
                       )}
