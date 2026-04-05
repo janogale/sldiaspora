@@ -16,6 +16,7 @@ export type Article = {
   content: string;
   category: string;
   featuredImage: string | null;
+  pdfFile: string | null;
   images: string[];
   dateCreated: string | null;
   dateUpdated: string | null;
@@ -79,6 +80,15 @@ const imageFieldCandidates = [
   "media",
 ];
 
+const pdfFieldCandidates = [
+  "pdf",
+  "pdf_file",
+  "pdf_document",
+  "document",
+  "attachment",
+  "file",
+];
+
 function toFileId(value: unknown): string | null {
   if (!value) return null;
   if (typeof value === "string" || typeof value === "number") {
@@ -129,8 +139,19 @@ function extractImageIds(article: RawArticle): string[] {
   return [...collected];
 }
 
+function extractPdfId(article: RawArticle): string | null {
+  for (const fieldName of pdfFieldCandidates) {
+    const fieldValue = article[fieldName];
+    const fileId = toFileId(fieldValue);
+    if (fileId) return fileId;
+  }
+
+  return null;
+}
+
 function normalizeArticle(article: RawArticle): Article {
   const featuredImage = toFileId(article.featured_image);
+  const pdfFile = extractPdfId(article);
   const images = extractImageIds(article).filter((imgId) => imgId !== featuredImage);
 
   return {
@@ -139,6 +160,7 @@ function normalizeArticle(article: RawArticle): Article {
     content: article.content || "",
     category: readCategory(article),
     featuredImage,
+    pdfFile,
     images,
     dateCreated: article.date_created || null,
     dateUpdated: article.date_updated || null,

@@ -31,6 +31,8 @@ export type TArticle = {
   Title?: string;
   content?: string;
   featured_image?: string | { id?: string } | null;
+  pdf?: string | { id?: string } | null;
+  pdf_file?: string | { id?: string } | null;
   date_created?: string;
   date_updated?: string;
   [key: string]: unknown;
