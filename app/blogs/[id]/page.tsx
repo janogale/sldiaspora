@@ -29,6 +29,7 @@ export default async function Page({ params }: Props) {
   }
 
   const featuredUrl = article.featuredImage ? getAssetUrl(article.featuredImage) : null;
+  const pdfUrl = article.pdfFile ? getAssetUrl(article.pdfFile) : null;
 
   return (
     <div>
@@ -60,6 +61,22 @@ export default async function Page({ params }: Props) {
                   <h2 className="blog-details__content-text-title mb-20">{article.title}</h2>
                   <div dangerouslySetInnerHTML={{ __html: article.content }} />
                 </div>
+
+                {pdfUrl ? (
+                  <div className="mt-30">
+                    <h3 className="mb-15">PDF Document</h3>
+                    <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="rr-btn">
+                      Open PDF in New Tab
+                    </a>
+                    <div className="mt-20" style={{ border: "1px solid #d7e4dd", borderRadius: "12px", overflow: "hidden" }}>
+                      <iframe
+                        src={pdfUrl}
+                        title={`${article.title} PDF`}
+                        style={{ width: "100%", height: "780px", border: "0" }}
+                      />
+                    </div>
+                  </div>
+                ) : null}
 
                 {article.images.length > 0 ? (
                   <div className="mt-40">

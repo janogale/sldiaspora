@@ -72,21 +72,11 @@ const filterWrapStyle = {
   boxShadow: "0 10px 26px rgba(12, 74, 48, 0.07)",
 } as const;
 
-function getFirstContentLink(input: string): string | null {
-  const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
-  const href = match?.[1]?.trim();
-  if (!href) return null;
-
-  if (
-    href.startsWith("http://") ||
-    href.startsWith("https://") ||
-    href.startsWith("/")
-  ) {
-    return href;
-  }
-
-  return null;
-}
+const cardActionWrapStyle = {
+  display: "flex",
+  gap: "12px",
+  flexWrap: "wrap",
+} as const;
 
 export default async function Page({
   searchParams,
@@ -144,7 +134,8 @@ export default async function Page({
                     const imageUrl = article.featuredImage
                       ? getAssetUrl(article.featuredImage)
                       : "/assets/imgs/blog/blog-1img.png";
-                    const contentLink = getFirstContentLink(article.content);
+                    const articleLink = `/blogs/${article.id}`;
+                    const pdfLink = article.pdfFile ? getAssetUrl(article.pdfFile) : null;
 
                     return (
                       <div className="col-md-6" key={article.id}>
@@ -157,11 +148,21 @@ export default async function Page({
                             <h2 className="blog__content-text-title" style={articleTitleStyle}>
                               {article.title}
                             </h2>
-                            {contentLink ? (
-                              <a href={contentLink} className="rr-btn">
+                            <div style={cardActionWrapStyle}>
+                              <a href={articleLink} className="rr-btn">
                                 Read More
                               </a>
-                            ) : null}
+                              {pdfLink ? (
+                                <a
+                                  href={pdfLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="rr-btn"
+                                >
+                                  Read PDF
+                                </a>
+                              ) : null}
+                            </div>
                           </div>
                         </article>
                       </div>
