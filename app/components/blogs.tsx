@@ -12,20 +12,55 @@ const articleTitleStyle = {
   marginBottom: "18px",
 } as const;
 
-function getFirstContentLink(input: string): string | null {
-  const match = input.match(/href\s*=\s*["']([^"']+)["']/i);
-  const href = match?.[1]?.trim();
-  if (!href) return null;
+const metaRowStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  marginBottom: "18px",
+  flexWrap: "wrap",
+} as const;
 
-  if (
-    href.startsWith("http://") ||
-    href.startsWith("https://") ||
-    href.startsWith("/")
-  ) {
-    return href;
-  }
+const metaBadgeStyle = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "8px",
+  padding: "7px 14px",
+  borderRadius: "12px",
+  background: "linear-gradient(135deg, rgba(241, 251, 246, 0.98) 0%, rgba(219, 243, 230, 0.96) 100%)",
+  color: "#0b5a35",
+  border: "1px solid rgba(166, 213, 188, 0.95)",
+  fontSize: "1.03rem",
+  fontWeight: 800,
+  letterSpacing: "0.015em",
+  boxShadow: "0 14px 30px rgba(10, 86, 52, 0.12)",
+  backdropFilter: "blur(8px)",
+} as const;
 
-  return null;
+const metaDotStyle = {
+  width: "10px",
+  height: "10px",
+  borderRadius: "999px",
+  background: "linear-gradient(135deg, #10a15c 0%, #067647 100%)",
+  flexShrink: 0,
+  boxShadow: "0 0 0 4px rgba(16, 161, 92, 0.12)",
+} as const;
+
+const compactButtonStyle = {
+  padding: "9px 18px",
+  minHeight: "unset",
+  lineHeight: 1.1,
+} as const;
+
+function formatArticleDate(value: string | null): string {
+  if (!value) return "Date to be announced";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  return parsed.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 const Blogs = async () => {
@@ -94,6 +129,14 @@ const Blogs = async () => {
           <div className="col-xl-6">
             {lead ? (
               <>
+                {(() => {
+                  const leadLink = `/blogs/${lead.id}`;
+                  const leadDate = formatArticleDate(
+                    lead.articleDate || lead.dateCreated || lead.dateUpdated
+                  );
+
+                  return (
+                    <>
                 <div
                   className="latest-blog2__thumb wow fadeInLeft animated"
                   data-wow-delay=".2s"
@@ -107,48 +150,63 @@ const Blogs = async () => {
                   className="latest-blog2__content wow fadeInLeft animated"
                   data-wow-delay=".3s"
                 >
+                  <div style={metaRowStyle}>
+                    <span style={metaBadgeStyle}>
+                      <span style={metaDotStyle}></span>
+                      {leadDate}
+                    </span>
+                  </div>
                   <h3 className="latest-blog2__content-title mb-20" style={articleTitleStyle}>
                     {lead.title}
                   </h3>
-                  {getFirstContentLink(lead.content) ? (
-                    <a href={getFirstContentLink(lead.content)!} className="latest-blog2__content-btn">
+                    <a href={leadLink} className="latest-blog2__content-btn" style={compactButtonStyle}>
                       Read More <i className="fa-solid fa-arrow-right"></i>
                     </a>
-                  ) : null}
                 </div>
+                    </>
+                  );
+                })()}
               </>
             ) : (
               <p>No articles available yet.</p>
             )}
           </div>
           <div className="col-xl-6">
-            {side.map((article, index) => (
-              <div
-                key={article.id}
-                className={`latest-blog2__right-content ${index > 0 ? "mt-30" : ""} wow fadeInLeft animated`}
-                data-wow-delay={index === 0 ? ".4s" : ".5s"}
-              >
-                <div className="latest-blog2__right-content-img">
-                  <img
-                    src={article.featuredImage ? getAssetUrl(article.featuredImage) : "/assets/imgs/blog/blog-home-2/blog-home-2-right-img1.png"}
-                    alt={article.title}
-                  />
-                </div>
-                <div className="latest-blog2__right-content-text">
-                  <h3 className="latest-blog2__content-title mb-20" style={articleTitleStyle}>
-                    {article.title}
-                  </h3>
-                  {getFirstContentLink(article.content) ? (
-                    <a
-                      href={getFirstContentLink(article.content)!}
-                      className="latest-blog2__right-content-text-btn"
-                    >
+            {side.map((article, index) => {
+              const articleLink = `/blogs/${article.id}`;
+              const articleDate = formatArticleDate(
+                article.articleDate || article.dateCreated || article.dateUpdated
+              );
+
+              return (
+                <div
+                  key={article.id}
+                  className={`latest-blog2__right-content ${index > 0 ? "mt-30" : ""} wow fadeInLeft animated`}
+                  data-wow-delay={index === 0 ? ".4s" : ".5s"}
+                >
+                  <div className="latest-blog2__right-content-img">
+                    <img
+                      src={article.featuredImage ? getAssetUrl(article.featuredImage) : "/assets/imgs/blog/blog-home-2/blog-home-2-right-img1.png"}
+                      alt={article.title}
+                    />
+                  </div>
+                  <div className="latest-blog2__right-content-text">
+                    <div style={metaRowStyle}>
+                      <span style={metaBadgeStyle}>
+                        <span style={metaDotStyle}></span>
+                        {articleDate}
+                      </span>
+                    </div>
+                    <h3 className="latest-blog2__content-title mb-20" style={articleTitleStyle}>
+                      {article.title}
+                    </h3>
+                    <a href={articleLink} className="latest-blog2__right-content-text-btn" style={compactButtonStyle}>
                       Read More <i className="fa-solid fa-arrow-right"></i>
                     </a>
-                  ) : null}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

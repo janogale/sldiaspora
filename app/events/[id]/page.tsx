@@ -17,9 +17,6 @@ export default async function EventDetailsPage({ params }: Props) {
     notFound();
   }
 
-  const dateTimeParts = event.datetime.split(" ");
-  const timeLabel = dateTimeParts.length > 1 ? dateTimeParts.slice(1).join(" ") : "TBA";
-
   return (
     <div>
       <div style={{ margin: "2rem" }}></div>
@@ -54,9 +51,6 @@ export default async function EventDetailsPage({ params }: Props) {
                     </li>
                     <li className="mt-20">
                       Date: <span>{event.datetime}</span>
-                    </li>
-                    <li className="mt-20">
-                      Time: <span>{timeLabel}</span>
                     </li>
                   </ul>
                 </div>

@@ -47,6 +47,39 @@ const cardBodyStyle = {
   padding: "20px 20px 24px",
 } as const;
 
+const cardMetaStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  marginBottom: "16px",
+  flexWrap: "wrap",
+} as const;
+
+const dateBadgeStyle = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "8px",
+  padding: "7px 14px",
+  borderRadius: "12px",
+  background: "linear-gradient(135deg, rgba(241, 251, 246, 0.98) 0%, rgba(219, 243, 230, 0.96) 100%)",
+  color: "#0b5a35",
+  border: "1px solid rgba(166, 213, 188, 0.95)",
+  fontSize: "1.03rem",
+  fontWeight: 800,
+  letterSpacing: "0.015em",
+  boxShadow: "0 14px 30px rgba(10, 86, 52, 0.12)",
+  backdropFilter: "blur(8px)",
+} as const;
+
+const dateDotStyle = {
+  width: "10px",
+  height: "10px",
+  borderRadius: "999px",
+  background: "linear-gradient(135deg, #10a15c 0%, #067647 100%)",
+  flexShrink: 0,
+  boxShadow: "0 0 0 4px rgba(16, 161, 92, 0.12)",
+} as const;
+
 const newsSectionStyle = {
   paddingTop: "0px",
 } as const;
@@ -77,6 +110,24 @@ const cardActionWrapStyle = {
   gap: "12px",
   flexWrap: "wrap",
 } as const;
+
+const compactButtonStyle = {
+  padding: "9px 20px",
+  minHeight: "unset",
+  lineHeight: 1.1,
+} as const;
+
+function formatArticleDate(value: string | null): string {
+  if (!value) return "Date to be announced";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  return parsed.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
 export default async function Page({
   searchParams,
@@ -136,6 +187,9 @@ export default async function Page({
                       : "/assets/imgs/blog/blog-1img.png";
                     const articleLink = `/blogs/${article.id}`;
                     const pdfLink = article.pdfFile ? getAssetUrl(article.pdfFile) : null;
+                    const displayDate = formatArticleDate(
+                      article.articleDate || article.dateCreated || article.dateUpdated
+                    );
 
                     return (
                       <div className="col-md-6" key={article.id}>
@@ -145,11 +199,17 @@ export default async function Page({
                           </div>
 
                           <div style={cardBodyStyle}>
+                            <div style={cardMetaStyle}>
+                              <span style={dateBadgeStyle}>
+                                <span style={dateDotStyle}></span>
+                                {displayDate}
+                              </span>
+                            </div>
                             <h2 className="blog__content-text-title" style={articleTitleStyle}>
                               {article.title}
                             </h2>
                             <div style={cardActionWrapStyle}>
-                              <a href={articleLink} className="rr-btn">
+                              <a href={articleLink} className="rr-btn" style={compactButtonStyle}>
                                 Read More
                               </a>
                               {pdfLink ? (
@@ -158,6 +218,7 @@ export default async function Page({
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="rr-btn"
+                                  style={compactButtonStyle}
                                 >
                                   Read PDF
                                 </a>

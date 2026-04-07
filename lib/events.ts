@@ -42,6 +42,7 @@ export type EventItem = {
   description: string;
   location: string;
   datetime: string;
+  eventDate: string | null;
   mainImg: string;
   sortDate: string | null;
   dateCreated: string | null;
@@ -166,27 +167,39 @@ function formatDateTime(rawValue: string): string {
   });
 }
 
+function extractEventDate(raw: RawEvent): string | null {
+  const dateCandidates = [
+    raw.event_date,
+    raw.start_date,
+    raw.datetime,
+    raw.date,
+  ];
+
+  for (const value of dateCandidates) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
 function normalizeDateTime(raw: RawEvent): string {
-  if (typeof raw.datetime === "string" && raw.datetime.trim()) {
-    return formatDateTime(raw.datetime.trim());
-  }
-
-  if (typeof raw.start_date === "string" && raw.start_date.trim()) {
-    return formatDateTime(raw.start_date.trim());
-  }
-
   const dateValue =
     (typeof raw.event_date === "string" && raw.event_date.trim())
       ? raw.event_date.trim()
-      : (typeof raw.date === "string" && raw.date.trim())
-        ? raw.date.trim()
-        : "";
+      : (typeof raw.start_date === "string" && raw.start_date.trim())
+        ? raw.start_date.trim()
+        : (typeof raw.date === "string" && raw.date.trim())
+          ? raw.date.trim()
+          : "";
 
-  const timeValue = typeof raw.time === "string" && raw.time.trim() ? raw.time.trim() : "";
+  if (dateValue) {
+    const formatted = formatDateTime(dateValue);
+    if (formatted !== dateValue) return formatted;
+  }
 
-  if (dateValue && timeValue) return `${dateValue} ${timeValue}`;
   if (dateValue) return dateValue;
-  if (timeValue) return timeValue;
 
   return "Date to be announced";
 }
@@ -194,7 +207,6 @@ function normalizeDateTime(raw: RawEvent): string {
 function normalizeEvent(raw: RawEvent): EventItem {
   const title = pickFirstString(raw, ["title", "Title", "event_title", "event_name", "name"]);
   const description = pickFirstString(raw, ["description", "content", "details"]);
-  const explicitLocation = pickFirstString(raw, ["location", "Location", "venue", "address"]);
   const city = pickFirstString(raw, [
     "city",
     "City",
@@ -213,7 +225,7 @@ function normalizeEvent(raw: RawEvent): EventItem {
   ]);
 
   const cityCountry = [city, country].filter(Boolean).join(", ");
-  const location = cityCountry || explicitLocation;
+  const location = cityCountry;
 
   const imageFileId =
     toFileId(raw.main_image) ||
@@ -221,16 +233,8 @@ function normalizeEvent(raw: RawEvent): EventItem {
     toFileId(raw.image) ||
     toFileId(raw.mainImg);
 
-  const sortDate =
-    (typeof raw.start_date === "string" && raw.start_date.trim())
-      ? raw.start_date.trim()
-      : (typeof raw.datetime === "string" && raw.datetime.trim())
-        ? raw.datetime.trim()
-        : (typeof raw.event_date === "string" && raw.event_date.trim())
-          ? raw.event_date.trim()
-          : (typeof raw.date === "string" && raw.date.trim())
-            ? raw.date.trim()
-            : null;
+  const eventDate = extractEventDate(raw);
+  const sortDate = eventDate;
 
   return {
     id: String(raw.id),
@@ -238,6 +242,7 @@ function normalizeEvent(raw: RawEvent): EventItem {
     description: description || "No description available yet.",
     location: location || "Location to be announced",
     datetime: normalizeDateTime(raw),
+    eventDate,
     mainImg: imageFileId ? getAssetUrl(imageFileId) : FALLBACK_IMAGE,
     sortDate,
     dateCreated: typeof raw.date_created === "string" ? raw.date_created : null,
@@ -247,8 +252,8 @@ function normalizeEvent(raw: RawEvent): EventItem {
 
 function sortEvents(input: EventItem[]): EventItem[] {
   return [...input].sort((a, b) => {
-    const aTime = new Date(a.sortDate || a.dateCreated || a.dateUpdated || a.datetime).getTime();
-    const bTime = new Date(b.sortDate || b.dateCreated || b.dateUpdated || b.datetime).getTime();
+    const aTime = new Date(a.sortDate || a.eventDate || a.datetime).getTime();
+    const bTime = new Date(b.sortDate || b.eventDate || b.datetime).getTime();
 
     if (Number.isNaN(aTime) && Number.isNaN(bTime)) return 0;
     if (Number.isNaN(aTime)) return 1;
@@ -272,7 +277,7 @@ export async function getEvents(): Promise<EventItem[]> {
   for (const collection of EVENT_COLLECTIONS) {
     try {
       const response = await directusFetch(
-        `/items/${collection}?fields=*.*&sort=-date_created,-id&limit=500`
+        `/items/${collection}?fields=*.*&sort=-id&limit=500`
       );
 
       if (response.status === 404) continue;
