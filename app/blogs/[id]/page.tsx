@@ -53,7 +53,7 @@ export default async function Page({ params }: Props) {
                     <span>By Admin</span>
                   </li>
                   <li>
-                    <span>{formatDate(article.dateCreated || article.dateUpdated)}</span>
+                    <span>{formatDate(article.articleDate || article.dateCreated || article.dateUpdated)}</span>
                   </li>
                 </ul>
 

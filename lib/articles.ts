@@ -6,6 +6,7 @@ type RawArticle = Record<string, unknown> & {
   Title?: string;
   content?: string;
   featured_image?: unknown;
+  article_date?: string;
   date_created?: string;
   date_updated?: string;
 };
@@ -17,6 +18,7 @@ export type Article = {
   category: string;
   featuredImage: string | null;
   pdfFile: string | null;
+  articleDate: string | null;
   images: string[];
   dateCreated: string | null;
   dateUpdated: string | null;
@@ -89,6 +91,15 @@ const pdfFieldCandidates = [
   "file",
 ];
 
+const articleDateFieldCandidates = [
+  "article_date",
+  "articleDate",
+  "published_date",
+  "publish_date",
+  "date",
+  "news_date",
+];
+
 function toFileId(value: unknown): string | null {
   if (!value) return null;
   if (typeof value === "string" || typeof value === "number") {
@@ -149,9 +160,21 @@ function extractPdfId(article: RawArticle): string | null {
   return null;
 }
 
+function extractArticleDate(article: RawArticle): string | null {
+  for (const fieldName of articleDateFieldCandidates) {
+    const value = article[fieldName];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
 function normalizeArticle(article: RawArticle): Article {
   const featuredImage = toFileId(article.featured_image);
   const pdfFile = extractPdfId(article);
+  const articleDate = extractArticleDate(article);
   const images = extractImageIds(article).filter((imgId) => imgId !== featuredImage);
 
   return {
@@ -161,6 +184,7 @@ function normalizeArticle(article: RawArticle): Article {
     category: readCategory(article),
     featuredImage,
     pdfFile,
+    articleDate,
     images,
     dateCreated: article.date_created || null,
     dateUpdated: article.date_updated || null,
@@ -181,13 +205,25 @@ export async function getArticles(category?: string): Promise<Article[]> {
           _eq: "published",
         },
       },
-      sort: ["-date_created", "-id"],
+      sort: ["-id"],
     })
   );
   const normalized = (records as RawArticle[]).map(normalizeArticle);
-  return normalized.filter((article) =>
+  const filtered = normalized.filter((article) =>
     matchesRequestedCategory(article.category, normalizedCategory)
   );
+
+  const toTimestamp = (value: string | null): number => {
+    if (!value) return Number.NEGATIVE_INFINITY;
+    const timestamp = new Date(value).getTime();
+    return Number.isNaN(timestamp) ? Number.NEGATIVE_INFINITY : timestamp;
+  };
+
+  return filtered.sort((a, b) => {
+    const byArticleDate = toTimestamp(b.articleDate) - toTimestamp(a.articleDate);
+    if (byArticleDate !== 0) return byArticleDate;
+    return Number(b.id) - Number(a.id);
+  });
 }
 
 export async function getArticleById(id: string): Promise<Article | null> {

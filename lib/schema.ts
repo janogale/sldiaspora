@@ -33,6 +33,7 @@ export type TArticle = {
   featured_image?: string | { id?: string } | null;
   pdf?: string | { id?: string } | null;
   pdf_file?: string | { id?: string } | null;
+  article_date?: string;
   date_created?: string;
   date_updated?: string;
   [key: string]: unknown;
