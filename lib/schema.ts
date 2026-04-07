@@ -53,7 +53,9 @@ export type TEvent = {
   venue?: string;
   address?: string;
   datetime?: string;
+  start_date?: string;
   event_date?: string;
+  eventDate?: string;
   date?: string;
   time?: string;
   mainImg?: string | { id?: string } | null;
