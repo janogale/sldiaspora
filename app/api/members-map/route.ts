@@ -7,6 +7,7 @@ export async function GET() {
 
     return NextResponse.json(
       {
+        total: members.length,
         data: members.map((member) => ({
           id: String(member.id || ""),
           city: String(member.city || ""),

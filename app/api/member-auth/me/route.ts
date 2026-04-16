@@ -64,6 +64,7 @@ export async function GET() {
           profile_picture: member.profile_picture || null,
           status: member.status || "",
         },
+        total_members: members.length,
         members: members.map((item) => ({
           id: String(item.id || ""),
           full_name: toFirstName(item.full_name),
