@@ -334,23 +334,38 @@ export const listApprovedMembers = async () => {
     "status",
   ].join(",");
 
-  const response = await directusFetch(
-    `/items/members?filter[status][_in]=active,published&fields=${encodeURIComponent(
-      fields
-    )}&sort=-date_created&limit=200`
-  );
+  const pageSize = 200;
+  let offset = 0;
+  const allMembers: Array<Record<string, unknown>> = [];
 
-  const result = (await response.json().catch(() => null)) as DirectusResult<
-    Array<Record<string, unknown>>
-  > | null;
-
-  if (!response.ok) {
-    throw new Error(
-      getDirectusErrorMessage(result, "Could not fetch approved members.")
+  while (true) {
+    const response = await directusFetch(
+      `/items/members?filter[status][_in]=active,published&fields=${encodeURIComponent(
+        fields
+      )}&sort=-date_created&limit=${pageSize}&offset=${offset}`
     );
+
+    const result = (await response.json().catch(() => null)) as DirectusResult<
+      Array<Record<string, unknown>>
+    > | null;
+
+    if (!response.ok) {
+      throw new Error(
+        getDirectusErrorMessage(result, "Could not fetch approved members.")
+      );
+    }
+
+    const batch = result?.data || [];
+    allMembers.push(...batch);
+
+    if (batch.length < pageSize) {
+      break;
+    }
+
+    offset += pageSize;
   }
 
-  return result?.data || [];
+  return allMembers;
 };
 
 export const validateSharedCode = async (
