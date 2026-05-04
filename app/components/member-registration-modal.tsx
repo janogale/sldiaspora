@@ -1226,6 +1226,7 @@ function MemberRegistrationModal() {
                         />
                         <button
                           type="button"
+                          className="password-toggle-button"
                           onClick={() => setShowPassword((prev) => !prev)}
                           aria-label={showPassword ? "Hide password" : "Show password"}
                           title={showPassword ? "Hide password" : "Show password"}
@@ -1242,6 +1243,9 @@ function MemberRegistrationModal() {
                             display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            width: "auto",
+                            minWidth: "40px",
+                            zIndex: 2,
                           }}
                         >
                           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -1262,6 +1266,7 @@ function MemberRegistrationModal() {
                         />
                         <button
                           type="button"
+                          className="password-toggle-button"
                           onClick={() => setShowConfirmPassword((prev) => !prev)}
                           aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                           title={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
@@ -1278,6 +1283,9 @@ function MemberRegistrationModal() {
                             display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            width: "auto",
+                            minWidth: "40px",
+                            zIndex: 2,
                           }}
                         >
                           {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -1869,6 +1877,17 @@ function MemberRegistrationModal() {
           font-size: 1rem !important;
         }
 
+        .member-register-dialog .password-toggle-button {
+          width: auto !important;
+          min-width: 40px !important;
+          min-height: 0 !important;
+          max-width: 48px !important;
+          padding: 0 !important;
+          border: none !important;
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+
         .member-register-dialog small {
           font-size: 0.92rem !important;
         }
@@ -1942,6 +1961,17 @@ function MemberRegistrationModal() {
           .member-register-dialog button {
             width: 100%;
             min-height: 48px !important;
+          }
+
+          .member-register-dialog .password-toggle-button {
+            width: auto !important;
+            min-width: 40px !important;
+            max-width: 48px !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
           }
 
           .member-register-dialog .member-step-chip {
