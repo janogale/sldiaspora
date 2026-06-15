@@ -7,11 +7,14 @@ import {
   Building2,
   CalendarDays,
   Camera,
+  Eye,
   Handshake,
   MapPin,
+  Package,
   PartyPopper,
   Sparkles,
   Star,
+  Unlock,
   User,
 } from "lucide-react";
 import styles from "./page.module.css";
@@ -40,6 +43,61 @@ const DAY_THEMES: Record<number, string> = {
   3: "Closing Ceremony & Cultural Gala",
   4: "Family & Cultural Fun Day",
 };
+
+const EXHIBITOR_BENEFITS = [
+  {
+    icon: Eye,
+    title: "Increase Visibility",
+    description:
+      "Put your brand in front of hundreds of diaspora attendees, government representatives, and local partners.",
+  },
+  {
+    icon: Handshake,
+    title: "Build New Connections",
+    description:
+      "Meet potential investors, collaborators, and clients from Somaliland and abroad.",
+  },
+  {
+    icon: Package,
+    title: "Showcase Products & Services",
+    description:
+      "Demonstrate what you offer to an audience eager to support local and diaspora-driven initiatives.",
+  },
+  {
+    icon: Unlock,
+    title: "Unlock Opportunities",
+    description:
+      "Position your business to benefit from partnerships, sales leads, and future collaborations sparked during the event.",
+  },
+];
+
+const SAMPLE_EXHIBITOR_LOGOS = [
+  { name: "Hargeisa Trade Group", color: "#1f8a3b" },
+  { name: "Somaliland Exports Co.", color: "#f5760c" },
+  { name: "Diaspora Ventures", color: "#2563eb" },
+  { name: "Berbera Logistics", color: "#0c7a4f" },
+  { name: "Horn Tech Hub", color: "#5b2cd6" },
+  { name: "Golis Agro Foods", color: "#e11d48" },
+  { name: "SL Microfinance", color: "#0891b2" },
+  { name: "Maan Soor Foundation", color: "#ca8a04" },
+  { name: "Coastal Fisheries Ltd", color: "#0d9488" },
+  { name: "Nomad Renewables", color: "#16a34a" },
+  { name: "Hodan Textiles", color: "#9333ea" },
+  { name: "SL Youth Network", color: "#dc2626" },
+  { name: "Waaberi Health Group", color: "#0284c7" },
+  { name: "Geeska Construction", color: "#b45309" },
+  { name: "Diaspora Connect NGO", color: "#1f8a3b" },
+  { name: "Sahil Dairy Co.", color: "#f5760c" },
+  { name: "Togdheer Builders", color: "#2563eb" },
+  { name: "Awdal Education Trust", color: "#0c7a4f" },
+  { name: "Marodi Jeex Crafts", color: "#5b2cd6" },
+  { name: "Salaam Travel Group", color: "#e11d48" },
+  { name: "SL Fintech Labs", color: "#0891b2" },
+  { name: "Berbera Port Authority", color: "#ca8a04" },
+  { name: "Gabiley Agro Coop", color: "#0d9488" },
+  { name: "Hargeisa Media House", color: "#16a34a" },
+  { name: "Daallo Community Fund", color: "#9333ea" },
+];
 
 type ScheduleItem = {
   id: string;
@@ -718,37 +776,151 @@ export default function DiasporaWeekPortalPage() {
       )}
 
       {activeSection === "exhibitors" && (
-        <section className={styles.tabSection}>
-          <div className="container">
-            <span className={styles.kicker}>Showcase</span>
-            <h2 className={styles.sectionTitle}>Exhibitors</h2>
+        <>
+          {/* Hero */}
+          <section className={styles.scheduleHero}>
+            <div className={styles.scheduleHeroBg}>
+              <img
+                src="/assets/imgs/Diaspora Week 2025/hero-flags-crowd.jpg"
+                alt=""
+                className={styles.scheduleHeroBgImage}
+              />
+            </div>
+            <div className={styles.scheduleHeroOverlay}></div>
+            <div className={`container ${styles.scheduleHeroContainer}`}>
+              <span className={styles.heroBadge}>Exhibitor Showcase</span>
+              <h1 className={styles.scheduleHeroTitle}>Exhibitors</h1>
+              <p className={styles.scheduleHeroSubtitle}>
+                Present your brand, products and services to a diverse audience of diaspora
+                community members, investors, development partners and local stakeholders.
+              </p>
+            </div>
+          </section>
 
-            {content.exhibitors.length === 0 ? (
-              <p className={styles.emptyState}>Exhibitor list will be published soon.</p>
-            ) : (
-              <div className={styles.cardGrid}>
-                {content.exhibitors.map((item, index) => (
-                  <div className={styles.entityCard} key={item.id}>
-                    <img
-                      src={item.logo || DW_PHOTOS[(index + 7) % DW_PHOTOS.length]}
-                      alt={item.name}
-                      className={styles.entityLogo}
-                    />
-                    <h3>{item.name}</h3>
-                    {item.category && <span className={styles.entityTag}>{item.category}</span>}
-                    {item.boothNumber && <p className={styles.entityMeta}>Booth {item.boothNumber}</p>}
-                    {item.description && <p>{item.description}</p>}
-                    {item.website && (
-                      <a href={item.website} target="_blank" rel="noreferrer">
-                        Visit website
-                      </a>
-                    )}
+          {/* About exhibiting */}
+          <section className={styles.tabSection}>
+            <div className="container">
+              <span className={styles.kicker}>Exhibit With Us</span>
+              <h2 className={styles.sectionTitle}>Showcase Your Work at Diaspora Week 2025</h2>
+              <p className={styles.sectionLead}>
+                Diaspora Week 2025 invites businesses, NGOs, community groups, and diaspora-led
+                initiatives to showcase their work, products, and services to a diverse audience of
+                diaspora community members, investors, development partners, and local stakeholders.
+              </p>
+              <p className={styles.sectionLead}>
+                As an exhibitor, you will have the opportunity to present your brand, vision and voice
+                with potential customers and partners, and build meaningful relationships within the
+                Somaliland diaspora network. Exhibition spaces are available for the first three days
+                of the event from August 2nd to August 4th, with flexible booth options to suit your
+                needs.
+              </p>
+
+              <div className={styles.exhibitInfoStrip}>
+                <div className={styles.exhibitInfoItem}>
+                  <CalendarDays size={22} />
+                  <div>
+                    <strong>Aug 2 &ndash; 4, 2025</strong>
+                    <span>3 exhibition days</span>
                   </div>
-                ))}
+                </div>
+                <div className={styles.exhibitInfoItem}>
+                  <Building2 size={22} />
+                  <div>
+                    <strong>Flexible Booths</strong>
+                    <span>Sized to suit your needs</span>
+                  </div>
+                </div>
+                <div className={styles.exhibitInfoItem}>
+                  <Sparkles size={22} />
+                  <div>
+                    <strong>Diverse Audience</strong>
+                    <span>Diaspora, investors &amp; partners</span>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+
+          {/* Benefits for business */}
+          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
+            <div className="container">
+              <span className={styles.kicker}>Benefits for Business</span>
+              <h2 className={styles.sectionTitle}>
+                By Exhibiting at Diaspora Week 2025, Your Organization Will&hellip;
+              </h2>
+
+              <div className={styles.benefitsGrid}>
+                {EXHIBITOR_BENEFITS.map((benefit) => {
+                  const BenefitIcon = benefit.icon;
+                  return (
+                    <div className={styles.benefitCard} key={benefit.title}>
+                      <span className={styles.benefitIcon}>
+                        <BenefitIcon size={26} />
+                      </span>
+                      <h3>{benefit.title}</h3>
+                      <p>{benefit.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          {/* Participating organizations */}
+          <section className={styles.tabSection}>
+            <div className="container">
+              <span className={styles.kicker}>Confirmed Exhibitors</span>
+              <h2 className={styles.sectionTitle}>Participating Organizations</h2>
+
+              {content.exhibitors.length === 0 ? (
+                <>
+                  <p className={styles.sectionLead}>
+                    Our exhibitor list is growing every day. Here&apos;s a preview of the kinds of
+                    organizations joining the showcase floor.
+                  </p>
+                  <div className={styles.logoCloud}>
+                    {SAMPLE_EXHIBITOR_LOGOS.map((logo) => (
+                      <div className={styles.logoCloudItem} key={logo.name}>
+                        <span
+                          className={styles.logoCloudMark}
+                          style={{ background: logo.color }}
+                        >
+                          {logo.name
+                            .split(" ")
+                            .map((word) => word[0])
+                            .slice(0, 2)
+                            .join("")}
+                        </span>
+                        <span className={styles.logoCloudName}>{logo.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className={styles.cardGrid}>
+                  {content.exhibitors.map((item, index) => (
+                    <div className={styles.entityCard} key={item.id}>
+                      <img
+                        src={item.logo || DW_PHOTOS[(index + 7) % DW_PHOTOS.length]}
+                        alt={item.name}
+                        className={styles.entityLogo}
+                      />
+                      <h3>{item.name}</h3>
+                      {item.category && <span className={styles.entityTag}>{item.category}</span>}
+                      {item.boothNumber && <p className={styles.entityMeta}>Booth {item.boothNumber}</p>}
+                      {item.description && <p>{item.description}</p>}
+                      {item.website && (
+                        <a href={item.website} target="_blank" rel="noreferrer">
+                          Visit website
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </>
       )}
 
       {activeSection === "partners" && (
