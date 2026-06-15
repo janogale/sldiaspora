@@ -72,31 +72,27 @@ const EXHIBITOR_BENEFITS = [
 ];
 
 const SAMPLE_EXHIBITOR_LOGOS = [
-  { name: "Dahabshiil", domain: "dahabshiil.com" },
-  { name: "Premier Bank", domain: "premierbank.so" },
-  { name: "Telesom", domain: "telesom.net" },
-  { name: "Hormuud Telecom", domain: "hormuud.com" },
-  { name: "Somtel", domain: "somtel.net" },
-  { name: "WorldRemit", domain: "worldremit.com" },
-  { name: "Coca-Cola", domain: "coca-cola.com" },
-  { name: "DHL", domain: "dhl.com" },
-  { name: "Ethiopian Airlines", domain: "ethiopianairlines.com" },
-  { name: "Emirates", domain: "emirates.com" },
-  { name: "Visa", domain: "visa.com" },
-  { name: "Mastercard", domain: "mastercard.com" },
-  { name: "UNDP", domain: "undp.org" },
-  { name: "UNICEF", domain: "unicef.org" },
-  { name: "World Bank", domain: "worldbank.org" },
-  { name: "USAID", domain: "usaid.gov" },
-  { name: "Oxfam", domain: "oxfam.org" },
-  { name: "Save the Children", domain: "savethechildren.org" },
-  { name: "Vodafone", domain: "vodafone.com" },
-  { name: "Samsung", domain: "samsung.com" },
-  { name: "Microsoft", domain: "microsoft.com" },
-  { name: "Google", domain: "google.com" },
-  { name: "IBM", domain: "ibm.com" },
-  { name: "Amazon", domain: "amazon.com" },
-  { name: "FedEx", domain: "fedex.com" },
+  { name: "Kaaha Design", file: "kaaha-design.png" },
+  { name: "AKHRI - Mothers and Daughters Literacy", file: "akhri-mothers.png" },
+  { name: "Emaankoo Group", file: "emaankoo-group.png" },
+  { name: "Call A Doctor", file: "call-a-doctor.png" },
+  { name: "Fresh Harvest Co.", file: "fresh-harvest.png" },
+  { name: "Saver Mobile Clinic", file: "saver-mobile-clinic.png" },
+  { name: "Luxury Perfumes", file: "luxury-perfumes.png" },
+  { name: "Kaabsan Real Estate", file: "kaabsan-real-estate.png" },
+  { name: "DPD - Diaspora Property Developers", file: "dpd.png" },
+  { name: "Eureka Coffee Roasters", file: "eureka.png" },
+  { name: "WTI Somaliland & UK", file: "wti.png" },
+  { name: "Yool Training Center", file: "yool-training-center.png" },
+  { name: "Vista Real Estate", file: "vista-real-estate.png" },
+  { name: "Subeer Real Estate", file: "subeer-real-estate.png" },
+  { name: "My Land Code", file: "my-land-code.png" },
+  { name: "Diyaar Local Food Processing", file: "diyaar.png" },
+  { name: "Dhalin Jaab Initiative", file: "dhalin-jaab.png" },
+  { name: "GoodLight Energy", file: "goodlight-energy.png" },
+  { name: "Somaliland Leadership Academy", file: "somaliland-leadership-academy.png" },
+  { name: "SAAFI - Somali Advice and Forum for Information", file: "saafi.png" },
+  { name: "Riyan Organic", file: "riyan-organic.png" },
 ];
 
 type ScheduleItem = {
@@ -871,28 +867,27 @@ export default function DiasporaWeekPortalPage() {
             <div className="container">
               <span className={styles.kicker}>Confirmed Exhibitors</span>
               <h2 className={styles.sectionTitle}>Participating Organizations</h2>
+              <p className={styles.sectionLead}>
+                A growing line-up of businesses, NGOs and diaspora-led initiatives confirmed to
+                exhibit at Diaspora Week 2025.
+              </p>
 
-              {content.exhibitors.length === 0 ? (
-                <>
-                  <p className={styles.sectionLead}>
-                    Our exhibitor list is growing every day. Here&apos;s a preview of the kinds of
-                    organizations joining the showcase floor.
-                  </p>
-                  <div className={styles.logoCloud}>
-                    {SAMPLE_EXHIBITOR_LOGOS.map((logo) => (
-                      <div className={styles.logoCloudItem} key={logo.name}>
-                        <img
-                          src={`https://logo.clearbit.com/${logo.domain}`}
-                          alt={logo.name}
-                          className={styles.logoCloudMark}
-                          loading="lazy"
-                        />
-                        <span className={styles.logoCloudName}>{logo.name}</span>
-                      </div>
-                    ))}
+              <div className={styles.logoCloud}>
+                {SAMPLE_EXHIBITOR_LOGOS.map((logo) => (
+                  <div className={styles.logoCloudItem} key={logo.name}>
+                    <span className={styles.logoCloudMark}>
+                      <img
+                        src={`/assets/imgs/Diaspora Week 2025/exhibitor-logos/${logo.file}`}
+                        alt={logo.name}
+                        loading="lazy"
+                      />
+                    </span>
+                    <span className={styles.logoCloudName}>{logo.name}</span>
                   </div>
-                </>
-              ) : (
+                ))}
+              </div>
+
+              {content.exhibitors.length > 0 && (
                 <div className={styles.cardGrid}>
                   {content.exhibitors.map((item, index) => (
                     <div className={styles.entityCard} key={item.id}>
