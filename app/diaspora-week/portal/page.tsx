@@ -608,15 +608,24 @@ export default function DiasporaWeekPortalPage() {
       )}
 
       {activeSection === "schedule" && (
-        <section className={styles.tabSection}>
-          <div className="container">
-            <span className={styles.kicker}>{scheduleQuickDays.length}-Day Program</span>
-            <h2 className={styles.sectionTitle}>Event Schedule</h2>
-            <p className={styles.sectionLead}>
-              Full day-by-day program &mdash; sessions, speakers and locations for Diaspora Week
-              2025.
-            </p>
+        <>
+          <section className={styles.scheduleHero}>
+            <div className={styles.scheduleHeroBg}>
+              <img src={DW_PHOTOS[7]} alt="" className={styles.scheduleHeroBgImage} />
+            </div>
+            <div className={styles.scheduleHeroOverlay}></div>
+            <div className={`container ${styles.scheduleHeroContainer}`}>
+              <span className={styles.heroBadge}>{scheduleQuickDays.length}-Day Program</span>
+              <h1 className={styles.scheduleHeroTitle}>Event Schedule</h1>
+              <p className={styles.scheduleHeroSubtitle}>
+                Sessions, speakers and locations for every day of Diaspora Week 2025 &mdash; from
+                the opening ceremony to the closing cultural gala.
+              </p>
+            </div>
+          </section>
 
+          <section className={styles.tabSection}>
+            <div className="container">
             {sortedDays.length === 0 ? (
               <p className={styles.emptyState}>The full schedule will be published soon.</p>
             ) : (
@@ -697,8 +706,9 @@ export default function DiasporaWeekPortalPage() {
                 </div>
               </>
             )}
-          </div>
-        </section>
+            </div>
+          </section>
+        </>
       )}
 
       {activeSection === "exhibitors" && (
