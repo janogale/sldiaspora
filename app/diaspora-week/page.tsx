@@ -63,11 +63,10 @@ const EMPTY_CONTENT: PublicContent = {
 };
 
 const FALLBACK_DAYS = [
-  { dayNumber: 1, dayLabel: "Day 1", title: "Opening Ceremony & Exhibitor Showcase" },
-  { dayNumber: 2, dayLabel: "Day 2", title: "Investment & Diaspora Business Forum" },
-  { dayNumber: 3, dayLabel: "Day 3", title: "Startup Pitching Session" },
-  { dayNumber: 4, dayLabel: "Day 4", title: "Culture, Heritage & Community Day" },
-  { dayNumber: 5, dayLabel: "Day 5", title: "Partnership Signings & Closing Gala" },
+  { dayNumber: 1, dayLabel: "Day 1", title: "Opening Ceremony & Presidential Address" },
+  { dayNumber: 2, dayLabel: "Day 2", title: "New Partnership Model & Startup Pitching" },
+  { dayNumber: 3, dayLabel: "Day 3", title: "Closing Ceremony & Cultural Gala" },
+  { dayNumber: 4, dayLabel: "Day 4", title: "Family & Cultural Fun Day" },
 ];
 
 export default function DiasporaWeekPage() {
@@ -163,7 +162,7 @@ export default function DiasporaWeekPage() {
             <span className={styles.kicker}>About the Event</span>
             <h2 className={styles.sectionTitle}>What is Diaspora Week?</h2>
             <p className={styles.sectionLead}>
-              Somaliland Diaspora Week is a 5-day flagship gathering that connects diaspora
+              Somaliland Diaspora Week is a 4-day flagship gathering that connects diaspora
               members, entrepreneurs, investors, and local businesses through exhibitions,
               forums, cultural showcases, and a dedicated startup pitching session. Whether
               you&apos;re joining as an individual or representing a business, the event is
@@ -176,7 +175,7 @@ export default function DiasporaWeekPage() {
               <span className={styles.highlightIcon}>
                 <CalendarDays size={22} />
               </span>
-              <h3>5-Day Event Schedule</h3>
+              <h3>4-Day Event Schedule</h3>
               <p>A full week of forums, workshops, networking sessions and cultural programs.</p>
             </div>
             <div className={styles.highlightCard}>
@@ -208,7 +207,7 @@ export default function DiasporaWeekPage() {
       <section className={`${styles.section} ${styles.sectionAlt}`}>
         <div className="container">
           <div className={styles.sectionHead}>
-            <span className={styles.kicker}>5-Day Program</span>
+            <span className={styles.kicker}>4-Day Program</span>
             <h2 className={styles.sectionTitle}>Event Schedule Outline</h2>
             <p className={styles.sectionLead}>
               Here&apos;s a quick look at how the week unfolds. Full session details, speakers,
@@ -217,7 +216,7 @@ export default function DiasporaWeekPage() {
           </div>
 
           <div className={styles.scheduleGrid}>
-            {scheduleDays.slice(0, 5).map((day) => (
+            {scheduleDays.slice(0, 4).map((day) => (
               <div className={styles.dayCard} key={day.dayNumber}>
                 <span className={styles.dayBadge}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
                 {day.date && <span className={styles.dayDate}>{day.date}</span>}

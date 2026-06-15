@@ -308,6 +308,10 @@ export default function DiasporaWeekPortalPage() {
               <User size={14} />
               {registration.name}
             </span>
+            <Link href="/diaspora-week" className={styles.backToSiteButton}>
+              <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
+              Back to Main Website
+            </Link>
           </div>
         </div>
       </header>

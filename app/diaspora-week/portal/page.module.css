@@ -410,6 +410,27 @@
   white-space: nowrap;
 }
 
+.backToSiteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #d6e4e1;
+  background: #fff;
+  color: #0c2f37;
+  font-weight: 700;
+  font-size: 1.19rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.backToSiteButton:hover {
+  border-color: #1f8a3b;
+  color: #1f8a3b;
+}
+
 /* Hero */
 .hero {
   position: relative;
