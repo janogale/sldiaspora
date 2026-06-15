@@ -39,6 +39,10 @@ export const menuList: MenuItem[] = [
     ],
   },
   {
+    label: "Week",
+    path: "/diaspora-week",
+  },
+  {
     label: "News",
     path: "/blogs",
   },

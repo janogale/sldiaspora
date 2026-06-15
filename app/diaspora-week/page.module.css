@@ -1,0 +1,594 @@
+.page {
+  background: #f4fbf7;
+  color: #0c2f37;
+  overflow-x: hidden;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  padding: 7.5rem 0 4.5rem;
+  background: linear-gradient(135deg, #005a1b 0%, #006d21 45%, #1f8a3b 100%);
+  color: #fff;
+  overflow: hidden;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(141, 246, 178, 0.35), transparent 55%),
+    radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.08), transparent 50%);
+  pointer-events: none;
+}
+
+.heroContainer {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 1.00rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
+.heroTitle {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 800;
+  margin: 1.25rem 0 1rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.heroSubtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 640px;
+  margin: 0 auto 2.25rem;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  color: #1f8a3b;
+  font-weight: 700;
+  padding: 0.85rem 1.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.primaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  color: #005a1b;
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.85rem 1.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.secondaryCta:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
+}
+
+.heroStat strong {
+  font-size: 1.70rem;
+  font-weight: 800;
+}
+
+.heroStat span {
+  font-size: 0.93rem;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: center;
+}
+
+/* Sections */
+.section {
+  padding: 4.5rem 0;
+}
+
+.sectionAlt {
+  background: #edf8f1;
+}
+
+.sectionHead {
+  max-width: 720px;
+  margin: 0 auto 2.75rem;
+  text-align: center;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1f8a3b;
+  margin-bottom: 0.6rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  font-weight: 800;
+  color: #0c2f37;
+  margin-bottom: 0.85rem;
+}
+
+.sectionLead {
+  font-size: 1.10rem;
+  line-height: 1.75;
+  color: #4b666d;
+}
+
+/* Highlights grid */
+.highlightsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.highlightCard {
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 18px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(1, 109, 33, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.highlightCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.12);
+}
+
+.highlightIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d7f5e0, #b8eccb);
+  color: #1f8a3b;
+  margin-bottom: 1rem;
+}
+
+.highlightCard h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0c2f37;
+}
+
+.highlightCard p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #4b666d;
+  margin: 0;
+}
+
+/* Schedule */
+.scheduleGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+.dayCard {
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 16px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.05);
+}
+
+.dayBadge {
+  display: inline-block;
+  align-self: flex-start;
+  background: #1f8a3b;
+  color: #fff;
+  font-size: 0.90rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.dayDate {
+  font-size: 0.95rem;
+  color: #1f8a3b;
+  font-weight: 600;
+}
+
+.dayCard h3 {
+  font-size: 1.10rem;
+  font-weight: 700;
+  color: #0c2f37;
+  margin: 0;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.dayLockNote {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.90rem;
+  color: #6b8e85;
+  border-top: 1px dashed #d6e4e1;
+  padding-top: 0.6rem;
+}
+
+/* Logo grids (exhibitors) */
+.logoGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.25rem;
+}
+
+.logoCard {
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+}
+
+.logoCard img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.logoFallback {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d7f5e0, #b8eccb);
+  color: #1f8a3b;
+  font-weight: 800;
+  font-size: 1.20rem;
+}
+
+.logoCard strong {
+  font-size: 1.00rem;
+  color: #0c2f37;
+}
+
+.logoCard span {
+  font-size: 0.87rem;
+  color: #6b8e85;
+}
+
+/* Placeholder */
+.placeholderCard {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  background: #fff;
+  border: 1px dashed #b9e6c7;
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem;
+  color: #1f8a3b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.placeholderCard p {
+  color: #6b8e85;
+  font-size: 1.07rem;
+  margin: 0;
+}
+
+/* Startup pitching banner */
+.pitchBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 22px;
+  padding: 2.5rem;
+  max-width: 920px;
+  margin: 0 auto;
+  box-shadow: 0 16px 36px rgba(1, 109, 33, 0.08);
+}
+
+.pitchIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #1f8a3b, #028a2b);
+  color: #fff;
+}
+
+.pitchBanner .sectionHead {
+  margin: 0;
+  text-align: left;
+  max-width: none;
+}
+
+/* Gallery */
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.galleryItem {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #005a1b;
+}
+
+.galleryItem img,
+.galleryItem video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.galleryPlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font-size: 1.50rem;
+}
+
+/* Partners */
+.partnersStrip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.partnerLogo {
+  width: 140px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.partnerLogo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.partnerLogo span {
+  font-size: 1.00rem;
+  font-weight: 600;
+  color: #4b666d;
+  text-align: center;
+}
+
+/* CTA */
+.ctaSection {
+  padding: 4rem 0 5.5rem;
+  background: linear-gradient(135deg, #005a1b 0%, #006d21 60%, #1f8a3b 100%);
+  color: #fff;
+}
+
+.ctaInner {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.ctaIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.ctaText {
+  flex: 1;
+  min-width: 240px;
+}
+
+.ctaText h2 {
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.ctaText p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 560px;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff;
+  color: #1f8a3b;
+  font-weight: 700;
+  padding: 0.9rem 2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  color: #005a1b;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .highlightsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .scheduleGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .logoGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .heroStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pitchBanner {
+    flex-direction: column;
+  }
+
+  .pitchBanner .sectionHead {
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 6rem 0 3.5rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .highlightsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scheduleGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .logoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryCta,
+  .secondaryCta {
+    justify-content: center;
+  }
+
+  .ctaInner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ctaButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
