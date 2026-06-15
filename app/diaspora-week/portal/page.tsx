@@ -8,11 +8,26 @@ import {
   CalendarDays,
   Camera,
   Handshake,
-  LogOut,
   MapPin,
   User,
 } from "lucide-react";
 import styles from "./page.module.css";
+
+const DW_PHOTOS = [
+  "/assets/imgs/Diaspora Week 2025/526662922_1167327548769637_8258044179086207429_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/526843704_1167334772102248_1967425005920803411_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/527054742_1167225798779812_6423692539836071481_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/527077783_1167227228779669_8491341035157829253_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/527426570_1169233348579057_2900217355379882609_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/527691517_1167226418779750_3577322439121286715_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/528070011_1167334945435564_8790450703157594751_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/528294853_1167925655376493_3014786838341524566_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/528345424_1169233925245666_1511022412967923258_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/528393697_1169233671912358_7811958595603563909_n.jpg",
+  "/assets/imgs/Diaspora Week 2025/528603324_1169233405245718_3332848329999857221_n.jpg",
+];
+
+const SAMPLE_VIDEO_URL = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
 
 type ScheduleItem = {
   id: string;
@@ -135,22 +150,11 @@ export default function DiasporaWeekPortalPage() {
 
       setCheckingSession(true);
       await loadPortal();
+      setActiveSection("schedule");
     } catch {
       setLoginError("Unable to sign in right now. Please try again.");
     } finally {
       setLoginLoading(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/diaspora-week/portal/logout", { method: "POST" });
-    } catch {
-      // ignore
-    } finally {
-      setRegistration(null);
-      setContent(null);
-      setActiveSection("home");
     }
   };
 
@@ -304,10 +308,6 @@ export default function DiasporaWeekPortalPage() {
               <User size={14} />
               {registration.name}
             </span>
-            <button type="button" className={styles.logoutButton} onClick={handleLogout}>
-              <LogOut size={15} />
-              Log Out
-            </button>
           </div>
         </div>
       </header>
@@ -315,6 +315,9 @@ export default function DiasporaWeekPortalPage() {
       {activeSection === "home" && (
         <>
           <section className={styles.hero}>
+            <div className={styles.heroBg}>
+              <img src={DW_PHOTOS[0]} alt="" className={styles.heroBgImage} />
+            </div>
             <div className={styles.heroOverlay}></div>
             <div className={`container ${styles.heroContainer}`}>
               <span className={styles.heroBadge}>August 2 &ndash; 5, 2025 &middot; Hargeisa</span>
@@ -339,7 +342,7 @@ export default function DiasporaWeekPortalPage() {
                   <span>Partners</span>
                 </div>
                 <div className={styles.heroStat}>
-                  <strong>{content.gallery.length}</strong>
+                  <strong>{content.gallery.length || DW_PHOTOS.length + 1}</strong>
                   <span>Gallery Items</span>
                 </div>
               </div>
@@ -348,42 +351,62 @@ export default function DiasporaWeekPortalPage() {
 
           <section className={styles.aboutSection}>
             <div className="container">
-              <span className={styles.kicker}>About Diaspora Week</span>
-              <h2 className={styles.sectionTitle}>Somaliland &amp; Its Global Citizens</h2>
-              <p className={styles.sectionLead}>
-                Diaspora Week 2025 brings together government leaders, diaspora communities,
-                entrepreneurs and partners over four days of ceremonies, panels, pitching
-                sessions and cultural celebration &mdash; building a new partnership model
-                between Somaliland and its global citizens.
-              </p>
+              <div className={styles.aboutGrid}>
+                <div className={styles.aboutText}>
+                  <span className={styles.kicker}>About Diaspora Week</span>
+                  <h2 className={styles.sectionTitle}>Somaliland &amp; Its Global Citizens</h2>
+                  <p className={styles.sectionLead}>
+                    Diaspora Week 2025 brings together government leaders, diaspora communities,
+                    entrepreneurs and partners over four days of ceremonies, panels, pitching
+                    sessions and cultural celebration &mdash; building a new partnership model
+                    between Somaliland and its global citizens.
+                  </p>
+                </div>
+                <div className={styles.aboutImages}>
+                  <img src={DW_PHOTOS[1]} alt="Diaspora Week 2025" className={styles.aboutImageMain} />
+                  <img src={DW_PHOTOS[2]} alt="Diaspora Week 2025" className={styles.aboutImageSmall} />
+                </div>
+              </div>
 
               <div className={styles.quickLinks}>
                 <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("schedule")}>
-                  <CalendarDays size={22} />
-                  <div>
-                    <h3>Event Schedule</h3>
-                    <p>Browse all 4 days of sessions, panels and ceremonies.</p>
+                  <img src={DW_PHOTOS[3]} alt="" className={styles.quickLinkImage} />
+                  <div className={styles.quickLinkBody}>
+                    <CalendarDays size={20} />
+                    <div>
+                      <h3>Event Schedule</h3>
+                      <p>Browse all 4 days of sessions, panels and ceremonies.</p>
+                    </div>
                   </div>
                 </button>
                 <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("exhibitors")}>
-                  <Building2 size={22} />
-                  <div>
-                    <h3>Exhibitors</h3>
-                    <p>Discover the organizations showcasing at Diaspora Week.</p>
+                  <img src={DW_PHOTOS[4]} alt="" className={styles.quickLinkImage} />
+                  <div className={styles.quickLinkBody}>
+                    <Building2 size={20} />
+                    <div>
+                      <h3>Exhibitors</h3>
+                      <p>Discover the organizations showcasing at Diaspora Week.</p>
+                    </div>
                   </div>
                 </button>
                 <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("partners")}>
-                  <Handshake size={22} />
-                  <div>
-                    <h3>Partners</h3>
-                    <p>Meet the partners supporting Diaspora Week 2025.</p>
+                  <img src={DW_PHOTOS[5]} alt="" className={styles.quickLinkImage} />
+                  <div className={styles.quickLinkBody}>
+                    <Handshake size={20} />
+                    <div>
+                      <h3>Partners</h3>
+                      <p>Meet the partners supporting Diaspora Week 2025.</p>
+                    </div>
                   </div>
                 </button>
                 <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("gallery")}>
-                  <Camera size={22} />
-                  <div>
-                    <h3>Gallery</h3>
-                    <p>Photos and videos from across the event.</p>
+                  <img src={DW_PHOTOS[6]} alt="" className={styles.quickLinkImage} />
+                  <div className={styles.quickLinkBody}>
+                    <Camera size={20} />
+                    <div>
+                      <h3>Gallery</h3>
+                      <p>Photos and videos from across the event.</p>
+                    </div>
                   </div>
                 </button>
               </div>
@@ -492,13 +515,13 @@ export default function DiasporaWeekPortalPage() {
               <p className={styles.emptyState}>Exhibitor list will be published soon.</p>
             ) : (
               <div className={styles.cardGrid}>
-                {content.exhibitors.map((item) => (
+                {content.exhibitors.map((item, index) => (
                   <div className={styles.entityCard} key={item.id}>
-                    {item.logo ? (
-                      <img src={item.logo} alt={item.name} className={styles.entityLogo} />
-                    ) : (
-                      <span className={styles.entityFallback}>{item.name.slice(0, 2).toUpperCase()}</span>
-                    )}
+                    <img
+                      src={item.logo || DW_PHOTOS[(index + 7) % DW_PHOTOS.length]}
+                      alt={item.name}
+                      className={styles.entityLogo}
+                    />
                     <h3>{item.name}</h3>
                     {item.category && <span className={styles.entityTag}>{item.category}</span>}
                     {item.boothNumber && <p className={styles.entityMeta}>Booth {item.boothNumber}</p>}
@@ -526,13 +549,13 @@ export default function DiasporaWeekPortalPage() {
               <p className={styles.emptyState}>Partner organizations will be announced soon.</p>
             ) : (
               <div className={styles.cardGrid}>
-                {content.partners.map((item) => (
+                {content.partners.map((item, index) => (
                   <div className={styles.entityCard} key={item.id}>
-                    {item.logo ? (
-                      <img src={item.logo} alt={item.name} className={styles.entityLogo} />
-                    ) : (
-                      <span className={styles.entityFallback}>{item.name.slice(0, 2).toUpperCase()}</span>
-                    )}
+                    <img
+                      src={item.logo || DW_PHOTOS[(index + 2) % DW_PHOTOS.length]}
+                      alt={item.name}
+                      className={styles.entityLogo}
+                    />
                     <h3>{item.name}</h3>
                     {item.partnerType && <span className={styles.entityTag}>{item.partnerType}</span>}
                     {item.website && (
@@ -554,9 +577,7 @@ export default function DiasporaWeekPortalPage() {
             <span className={styles.kicker}>Memories</span>
             <h2 className={styles.sectionTitle}>Photo &amp; Video Gallery</h2>
 
-            {content.gallery.length === 0 ? (
-              <p className={styles.emptyState}>Gallery content will appear here during the event.</p>
-            ) : (
+            {content.gallery.length > 0 ? (
               <div className={styles.galleryGrid}>
                 {content.gallery.map((item) => (
                   <div className={styles.galleryItem} key={item.id}>
@@ -565,6 +586,17 @@ export default function DiasporaWeekPortalPage() {
                     ) : (
                       <img src={item.url} alt={item.title} />
                     )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.galleryGrid}>
+                <div className={styles.galleryItem}>
+                  <video src={SAMPLE_VIDEO_URL} controls />
+                </div>
+                {DW_PHOTOS.map((src) => (
+                  <div className={styles.galleryItem} key={src}>
+                    <img src={src} alt="Diaspora Week 2025" />
                   </div>
                 ))}
               </div>
