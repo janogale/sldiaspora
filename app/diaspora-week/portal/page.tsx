@@ -796,20 +796,22 @@ export default function DiasporaWeekPortalPage() {
           {/* About exhibiting */}
           <section className={styles.tabSection}>
             <div className="container">
-              <span className={styles.kicker}>Exhibit With Us</span>
-              <h2 className={styles.sectionTitle}>Showcase Your Work at Diaspora Week 2025</h2>
-              <p className={styles.sectionLead}>
-                Diaspora Week 2025 invites businesses, NGOs, community groups, and diaspora-led
-                initiatives to showcase their work, products, and services to a diverse audience of
-                diaspora community members, investors, development partners, and local stakeholders.
-              </p>
-              <p className={styles.sectionLead}>
-                As an exhibitor, you will have the opportunity to present your brand, vision and voice
-                with potential customers and partners, and build meaningful relationships within the
-                Somaliland diaspora network. Exhibition spaces are available for the first three days
-                of the event from August 2nd to August 4th, with flexible booth options to suit your
-                needs.
-              </p>
+              <div className={styles.exhibitIntro}>
+                <span className={styles.kicker}>Exhibit With Us</span>
+                <h2 className={styles.sectionTitle}>Showcase Your Work at Diaspora Week 2025</h2>
+                <p className={styles.sectionLead}>
+                  Diaspora Week 2025 invites businesses, NGOs, community groups, and diaspora-led
+                  initiatives to showcase their work, products, and services to a diverse audience of
+                  diaspora community members, investors, development partners, and local stakeholders.
+                </p>
+                <p className={styles.sectionLead}>
+                  As an exhibitor, you will have the opportunity to present your brand, vision and
+                  voice with potential customers and partners, and build meaningful relationships
+                  within the Somaliland diaspora network. Exhibition spaces are available for the
+                  first three days of the event from August 2nd to August 4th, with flexible booth
+                  options to suit your needs.
+                </p>
+              </div>
 
               <div className={styles.exhibitInfoStrip}>
                 <div className={styles.exhibitInfoItem}>
@@ -886,29 +888,6 @@ export default function DiasporaWeekPortalPage() {
                   </div>
                 ))}
               </div>
-
-              {content.exhibitors.length > 0 && (
-                <div className={styles.cardGrid}>
-                  {content.exhibitors.map((item, index) => (
-                    <div className={styles.entityCard} key={item.id}>
-                      <img
-                        src={item.logo || DW_PHOTOS[(index + 7) % DW_PHOTOS.length]}
-                        alt={item.name}
-                        className={styles.entityLogo}
-                      />
-                      <h3>{item.name}</h3>
-                      {item.category && <span className={styles.entityTag}>{item.category}</span>}
-                      {item.boothNumber && <p className={styles.entityMeta}>Booth {item.boothNumber}</p>}
-                      {item.description && <p>{item.description}</p>}
-                      {item.website && (
-                        <a href={item.website} target="_blank" rel="noreferrer">
-                          Visit website
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </section>
         </>

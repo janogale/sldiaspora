@@ -1017,10 +1017,6 @@
   gap: 1.25rem;
 }
 
-.logoCloud + .cardGrid {
-  margin-top: 2.5rem;
-}
-
 .entityCard {
   background: #fff;
   border: 1px solid #d9ece1;
@@ -1394,8 +1390,27 @@
 }
 
 /* Exhibitors */
-.sectionLead + .sectionLead {
-  margin-top: 1rem;
+.exhibitIntro {
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.exhibitIntro .kicker {
+  margin: 0 auto 14px;
+}
+
+.exhibitIntro .sectionTitle {
+  font-size: 2.6rem;
+}
+
+.exhibitIntro .sectionLead {
+  max-width: none;
+  font-size: 1.45rem;
+}
+
+.exhibitIntro .sectionLead + .sectionLead {
+  margin-top: 1.25rem;
 }
 
 .exhibitInfoStrip {
