@@ -611,7 +611,11 @@ export default function DiasporaWeekPortalPage() {
         <>
           <section className={styles.scheduleHero}>
             <div className={styles.scheduleHeroBg}>
-              <img src={DW_PHOTOS[7]} alt="" className={styles.scheduleHeroBgImage} />
+              <img
+                src="/assets/imgs/Diaspora Week 2025/hero-flags-crowd.jpg"
+                alt=""
+                className={styles.scheduleHeroBgImage}
+              />
             </div>
             <div className={styles.scheduleHeroOverlay}></div>
             <div className={`container ${styles.scheduleHeroContainer}`}>

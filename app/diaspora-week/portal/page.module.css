@@ -583,7 +583,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(150deg, rgba(0, 90, 27, 0.92) 0%, rgba(0, 109, 33, 0.86) 45%, rgba(31, 138, 59, 0.8) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0.7) 100%);
   pointer-events: none;
 }
 
