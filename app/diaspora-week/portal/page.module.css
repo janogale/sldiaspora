@@ -56,7 +56,7 @@
   color: #0c2f37;
   border-radius: 999px;
   padding: 10px 16px;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   font-weight: 600;
   text-decoration: none;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
@@ -97,7 +97,7 @@
   padding: 7px 14px;
   color: rgba(238, 250, 243, 0.92);
   background: rgba(255, 255, 255, 0.1);
-  font-size: 0.95rem;
+  font-size: 1.19rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -129,7 +129,7 @@
 
 .brandSubtitle {
   margin: 12px 0 0;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   color: rgba(238, 250, 243, 0.9);
   line-height: 1.7;
   max-width: 40ch;
@@ -147,7 +147,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 1.07rem;
+  font-size: 1.34rem;
   line-height: 1.5;
   color: rgba(238, 250, 243, 0.95);
 }
@@ -168,7 +168,7 @@
 .title {
   margin: 0;
   color: #0c2f37;
-  font-size: 1.70rem;
+  font-size: 1.87rem;
   font-weight: 800;
   line-height: 1.25;
 }
@@ -176,7 +176,7 @@
 .subtitle {
   margin: 10px 0 0;
   color: #4b666d;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   line-height: 1.6;
 }
 
@@ -203,7 +203,7 @@
   margin-bottom: 8px;
   color: #0c2f37;
   font-weight: 700;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
 }
 
 .input {
@@ -213,7 +213,7 @@
   padding: 0.78rem 1rem;
   background: #f4fbf7;
   color: #0c2f37;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   width: 100%;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
@@ -247,7 +247,7 @@
   color: #92400e;
   border-radius: 14px;
   padding: 12px 13px;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
   line-height: 1.5;
 }
 
@@ -258,7 +258,7 @@
   color: #9a2c26;
   border-radius: 14px;
   padding: 12px 13px;
-  font-size: 1.05rem;
+  font-size: 1.31rem;
 }
 
 .loginButton {
@@ -269,7 +269,7 @@
   background: linear-gradient(136deg, #028a2b 0%, #1f8a3b 58%, #005a1b 100%);
   color: #ffffff;
   font-weight: 700;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
@@ -361,7 +361,7 @@
 }
 
 .sidebarTitle {
-  font-size: 1.15rem;
+  font-size: 1.44rem;
   font-weight: 800;
   color: #eefaf3;
 }
@@ -380,7 +380,7 @@
   border: 0;
   background: transparent;
   color: rgba(238, 250, 243, 0.82);
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   font-weight: 600;
   padding: 12px 14px;
   border-radius: 12px;
@@ -407,7 +407,7 @@
 }
 
 .sidebarLink {
-  font-size: 1.00rem;
+  font-size: 1.25rem;
   color: rgba(238, 250, 243, 0.75);
   text-decoration: none;
 }
@@ -426,7 +426,7 @@
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.31rem;
   padding: 10px 14px;
   border-radius: 12px;
   transition: background-color 0.2s ease;
@@ -454,7 +454,7 @@
 }
 
 .contentHeader h1 {
-  font-size: 1.70rem;
+  font-size: 1.87rem;
   font-weight: 800;
   color: #0c2f37;
   margin: 0 0 4px;
@@ -463,7 +463,7 @@
 .contentHeader p {
   margin: 0;
   color: #4b666d;
-  font-size: 1.07rem;
+  font-size: 1.34rem;
 }
 
 .statusBadge {
@@ -476,7 +476,7 @@
   border-radius: 999px;
   padding: 8px 16px;
   font-weight: 700;
-  font-size: 1.00rem;
+  font-size: 1.25rem;
 }
 
 .sectionBody {
@@ -521,13 +521,13 @@
 }
 
 .overviewCard strong {
-  font-size: 1.50rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .overviewCard span {
-  font-size: 0.95rem;
+  font-size: 1.19rem;
   color: #6b8e85;
 }
 
@@ -555,7 +555,7 @@
 
 .profileCard h3 {
   margin: 0 0 0.75rem;
-  font-size: 1.15rem;
+  font-size: 1.44rem;
   font-weight: 800;
   color: #0c2f37;
 }
@@ -569,7 +569,7 @@
 }
 
 .profileList li {
-  font-size: 1.05rem;
+  font-size: 1.31rem;
   color: #4b666d;
 }
 
@@ -590,14 +590,14 @@
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  font-size: 1.25rem;
+  font-size: 1.56rem;
   font-weight: 800;
   color: #0c2f37;
   margin: 0 0 1rem;
 }
 
 .dayHeadingDate {
-  font-size: 1.00rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1f8a3b;
 }
@@ -620,20 +620,20 @@
   flex-shrink: 0;
   width: 110px;
   font-weight: 700;
-  font-size: 1.00rem;
+  font-size: 1.25rem;
   color: #1f8a3b;
 }
 
 .sessionBody h3 {
   margin: 0 0 0.35rem;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   font-weight: 700;
   color: #0c2f37;
 }
 
 .sessionBody p {
   margin: 0 0 0.5rem;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
   color: #4b666d;
   line-height: 1.6;
 }
@@ -642,7 +642,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
-  font-size: 0.95rem;
+  font-size: 1.19rem;
   color: #6b8e85;
 }
 
@@ -658,7 +658,7 @@
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 0.87rem;
+  font-size: 1.09rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -704,7 +704,7 @@
 
 .entityCard h3 {
   margin: 0;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   font-weight: 800;
   color: #0c2f37;
 }
@@ -717,24 +717,24 @@
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 0.87rem;
+  font-size: 1.09rem;
 }
 
 .entityMeta {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1.19rem;
   color: #6b8e85;
 }
 
 .entityCard p {
   margin: 0;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
   color: #4b666d;
   line-height: 1.6;
 }
 
 .entityCard a {
-  font-size: 1.00rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #1f8a3b;
   text-decoration: none;

@@ -66,7 +66,7 @@
   color: var(--ink);
   border-radius: 999px;
   padding: 10px 16px;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   font-weight: 600;
   text-decoration: none;
   backdrop-filter: blur(3px);
@@ -111,7 +111,7 @@
   padding: 7px 14px;
   color: rgba(238, 250, 243, 0.92);
   background: rgba(255, 255, 255, 0.1);
-  font-size: 0.95rem;
+  font-size: 1.19rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -144,7 +144,7 @@
 
 .brandSubtitle {
   margin: 12px 0 0;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   color: rgba(238, 250, 243, 0.9);
   line-height: 1.7;
   max-width: 40ch;
@@ -162,7 +162,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 1.07rem;
+  font-size: 1.34rem;
   line-height: 1.5;
   color: rgba(238, 250, 243, 0.95);
 }
@@ -183,7 +183,7 @@
   margin: 0;
   text-align: left;
   color: var(--ink);
-  font-size: 1.70rem;
+  font-size: 1.87rem;
   font-weight: 800;
   line-height: 1.25;
 }
@@ -192,7 +192,7 @@
   margin: 10px 0 0;
   text-align: left;
   color: var(--ink-soft);
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   line-height: 1.65;
   max-width: 48ch;
 }
@@ -239,21 +239,21 @@
 
 .typeCard h3 {
   margin: 0;
-  font-size: 1.20rem;
+  font-size: 1.50rem;
   font-weight: 800;
   color: var(--ink);
 }
 
 .typeCard p {
   margin: 0;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
   color: var(--ink-soft);
   line-height: 1.6;
 }
 
 .typeCta {
   margin-top: 0.5rem;
-  font-size: 1.00rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--brand-2);
 }
@@ -266,7 +266,7 @@
   background: none;
   color: var(--brand-2);
   font-weight: 700;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
   padding: 0;
   margin-bottom: 1rem;
   cursor: pointer;
@@ -296,7 +296,7 @@
   margin-bottom: 8px;
   color: var(--ink);
   font-weight: 700;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
 }
 
 .input,
@@ -308,7 +308,7 @@
   background: #f4fbf7;
   box-shadow: none;
   color: var(--ink);
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   width: 100%;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
@@ -349,7 +349,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  font-size: 1.05rem;
+  font-size: 1.31rem;
   color: var(--ink);
   cursor: pointer;
 }
@@ -376,7 +376,7 @@
 
 .fileInput {
   flex: 1;
-  font-size: 1.03rem;
+  font-size: 1.29rem;
   color: var(--ink-soft);
 }
 
@@ -387,7 +387,7 @@
   color: #9a2c26;
   border-radius: 14px;
   padding: 12px 13px;
-  font-size: 1.05rem;
+  font-size: 1.31rem;
 }
 
 .submitButton {
@@ -398,7 +398,7 @@
   background: linear-gradient(136deg, #028a2b 0%, #1f8a3b 58%, #005a1b 100%);
   color: #ffffff;
   font-weight: 700;
-  font-size: 1.10rem;
+  font-size: 1.38rem;
   letter-spacing: 0.01em;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
@@ -417,7 +417,7 @@
 .footerNote {
   margin: 16px 0 0;
   color: var(--ink-soft);
-  font-size: 1.05rem;
+  font-size: 1.31rem;
   text-align: center;
 }
 
