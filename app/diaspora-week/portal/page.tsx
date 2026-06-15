@@ -72,31 +72,31 @@ const EXHIBITOR_BENEFITS = [
 ];
 
 const SAMPLE_EXHIBITOR_LOGOS = [
-  { name: "Hargeisa Trade Group", color: "#1f8a3b" },
-  { name: "Somaliland Exports Co.", color: "#f5760c" },
-  { name: "Diaspora Ventures", color: "#2563eb" },
-  { name: "Berbera Logistics", color: "#0c7a4f" },
-  { name: "Horn Tech Hub", color: "#5b2cd6" },
-  { name: "Golis Agro Foods", color: "#e11d48" },
-  { name: "SL Microfinance", color: "#0891b2" },
-  { name: "Maan Soor Foundation", color: "#ca8a04" },
-  { name: "Coastal Fisheries Ltd", color: "#0d9488" },
-  { name: "Nomad Renewables", color: "#16a34a" },
-  { name: "Hodan Textiles", color: "#9333ea" },
-  { name: "SL Youth Network", color: "#dc2626" },
-  { name: "Waaberi Health Group", color: "#0284c7" },
-  { name: "Geeska Construction", color: "#b45309" },
-  { name: "Diaspora Connect NGO", color: "#1f8a3b" },
-  { name: "Sahil Dairy Co.", color: "#f5760c" },
-  { name: "Togdheer Builders", color: "#2563eb" },
-  { name: "Awdal Education Trust", color: "#0c7a4f" },
-  { name: "Marodi Jeex Crafts", color: "#5b2cd6" },
-  { name: "Salaam Travel Group", color: "#e11d48" },
-  { name: "SL Fintech Labs", color: "#0891b2" },
-  { name: "Berbera Port Authority", color: "#ca8a04" },
-  { name: "Gabiley Agro Coop", color: "#0d9488" },
-  { name: "Hargeisa Media House", color: "#16a34a" },
-  { name: "Daallo Community Fund", color: "#9333ea" },
+  { name: "Dahabshiil", domain: "dahabshiil.com" },
+  { name: "Premier Bank", domain: "premierbank.so" },
+  { name: "Telesom", domain: "telesom.net" },
+  { name: "Hormuud Telecom", domain: "hormuud.com" },
+  { name: "Somtel", domain: "somtel.net" },
+  { name: "WorldRemit", domain: "worldremit.com" },
+  { name: "Coca-Cola", domain: "coca-cola.com" },
+  { name: "DHL", domain: "dhl.com" },
+  { name: "Ethiopian Airlines", domain: "ethiopianairlines.com" },
+  { name: "Emirates", domain: "emirates.com" },
+  { name: "Visa", domain: "visa.com" },
+  { name: "Mastercard", domain: "mastercard.com" },
+  { name: "UNDP", domain: "undp.org" },
+  { name: "UNICEF", domain: "unicef.org" },
+  { name: "World Bank", domain: "worldbank.org" },
+  { name: "USAID", domain: "usaid.gov" },
+  { name: "Oxfam", domain: "oxfam.org" },
+  { name: "Save the Children", domain: "savethechildren.org" },
+  { name: "Vodafone", domain: "vodafone.com" },
+  { name: "Samsung", domain: "samsung.com" },
+  { name: "Microsoft", domain: "microsoft.com" },
+  { name: "Google", domain: "google.com" },
+  { name: "IBM", domain: "ibm.com" },
+  { name: "Amazon", domain: "amazon.com" },
+  { name: "FedEx", domain: "fedex.com" },
 ];
 
 type ScheduleItem = {
@@ -881,16 +881,12 @@ export default function DiasporaWeekPortalPage() {
                   <div className={styles.logoCloud}>
                     {SAMPLE_EXHIBITOR_LOGOS.map((logo) => (
                       <div className={styles.logoCloudItem} key={logo.name}>
-                        <span
+                        <img
+                          src={`https://logo.clearbit.com/${logo.domain}`}
+                          alt={logo.name}
                           className={styles.logoCloudMark}
-                          style={{ background: logo.color }}
-                        >
-                          {logo.name
-                            .split(" ")
-                            .map((word) => word[0])
-                            .slice(0, 2)
-                            .join("")}
-                        </span>
+                          loading="lazy"
+                        />
                         <span className={styles.logoCloudName}>{logo.name}</span>
                       </div>
                     ))}
