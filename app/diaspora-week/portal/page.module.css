@@ -726,20 +726,13 @@
 }
 
 .dayTabs {
+  position: relative;
+  z-index: 2;
   display: flex;
+  justify-content: center;
   gap: 0.6rem;
   flex-wrap: wrap;
-  margin-bottom: 1.75rem;
-}
-
-.dayTabs {
-  position: sticky;
-  top: 0.75rem;
-  z-index: 5;
-  background: #fff;
-  border-radius: 999px;
-  padding: 0.4rem;
-  box-shadow: 0 10px 30px rgba(1, 109, 33, 0.08);
+  margin-top: 2.25rem;
 }
 
 .dayTab {
@@ -747,41 +740,44 @@
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-  border: none;
-  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 999px;
   padding: 0.7rem 1.4rem;
   font-weight: 700;
-  font-size: 1.18rem;
-  color: #4b666d;
+  font-size: 1.12rem;
+  color: #fff;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .dayTab small {
   font-weight: 600;
-  font-size: 1.02rem;
-  color: #9bb5ad;
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .dayTab:hover {
-  background: #f0fbf4;
-  color: #1f8a3b;
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
 }
 
 .dayTabActive {
-  background: linear-gradient(135deg, #1f8a3b, #028a2b);
-  color: #fff;
-  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.28);
+  background: #fff;
+  border-color: #fff;
+  color: #1f8a3b;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .dayTabActive small {
-  color: rgba(255, 255, 255, 0.85);
+  color: #6b8e85;
 }
 
 .dayTabActive:hover {
-  background: linear-gradient(135deg, #1f8a3b, #028a2b);
-  color: #fff;
+  background: #fff;
+  color: #1f8a3b;
+  transform: translateY(-2px);
 }
 
 /* Schedule day blocks */

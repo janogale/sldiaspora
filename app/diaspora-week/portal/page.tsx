@@ -621,15 +621,8 @@ export default function DiasporaWeekPortalPage() {
                 Sessions, speakers and locations for every day of Diaspora Week 2025 &mdash; from
                 the opening ceremony to the closing cultural gala.
               </p>
-            </div>
-          </section>
 
-          <section className={styles.tabSection}>
-            <div className="container">
-            {sortedDays.length === 0 ? (
-              <p className={styles.emptyState}>The full schedule will be published soon.</p>
-            ) : (
-              <>
+              {sortedDays.length > 0 && (
                 <div className={styles.dayTabs}>
                   {sortedDays.map((dayNumber) => (
                     <a
@@ -645,7 +638,16 @@ export default function DiasporaWeekPortalPage() {
                     </a>
                   ))}
                 </div>
+              )}
+            </div>
+          </section>
 
+          <section className={styles.tabSection}>
+            <div className="container">
+            {sortedDays.length === 0 ? (
+              <p className={styles.emptyState}>The full schedule will be published soon.</p>
+            ) : (
+              <>
                 <div className={styles.scheduleDayList}>
                   {sortedDays.map((dayNumber) => {
                     const sessions = scheduleByDay[dayNumber];
