@@ -1012,40 +1012,49 @@
   background: linear-gradient(135deg, #edf8f1, #fef6e7);
 }
 
-.goalsList {
-  list-style: none;
-  margin: 1.75rem 0 0;
-  padding: 0;
+.goalsGrid {
+  margin-top: 1.75rem;
   display: grid;
-  gap: 1rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
 }
 
-.goalsList li {
+.goalCard {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.85rem;
   background: #fff;
   border: 1px solid #d9ece1;
-  border-radius: 14px;
-  padding: 1.1rem 1.4rem;
-  font-size: 1.25rem;
+  border-radius: 16px;
+  padding: 1.5rem 1.4rem;
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.goalCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.14);
+}
+
+.goalCard p {
+  margin: 0;
+  font-size: 1.18rem;
   line-height: 1.6;
-  color: #0c2f37;
-  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.05);
+  color: #4b666d;
 }
 
 .goalNumber {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  background: #1f8a3b;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1f8a3b, #028a2b);
   color: #fff;
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
+  box-shadow: 0 8px 18px rgba(1, 109, 33, 0.18);
 }
 
 /* Event Schedule quick access */
@@ -1061,21 +1070,54 @@
 }
 
 .dayButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
   border: none;
-  border-radius: 16px;
-  padding: 1.5rem;
-  font-size: 1.4rem;
-  font-weight: 800;
+  border-radius: 18px;
+  padding: 1.5rem 1.4rem;
+  text-align: left;
   color: #fff;
-  text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.08);
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.1);
 }
 
 .dayButton:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.16);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.2);
+}
+
+.dayButtonLabel {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.dayButtonDate {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dayButtonTitle {
+  margin-top: 0.35rem;
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.dayButtonCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0.9;
 }
 
 .dayButton1 {
@@ -1092,6 +1134,10 @@
 
 .dayButton4 {
   background: linear-gradient(135deg, #8a5cf6, #5b2cd6);
+}
+
+.dayButton5 {
+  background: linear-gradient(135deg, #2563eb, #0c4abf);
 }
 
 /* Exhibitors / pitching preview sections */
@@ -1169,6 +1215,10 @@
   .dayButtonGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .goalsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 991px) {
@@ -1204,6 +1254,10 @@
   .themeImage {
     height: 240px;
   }
+
+  .goalsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
@@ -1225,7 +1279,8 @@
 
   .dayButtonGrid,
   .previewImageGrid,
-  .previewSplit .previewImageGrid {
+  .previewSplit .previewImageGrid,
+  .goalsGrid {
     grid-template-columns: 1fr;
   }
 

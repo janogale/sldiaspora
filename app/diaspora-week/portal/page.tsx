@@ -267,6 +267,8 @@ export default function DiasporaWeekPortalPage() {
 
   const currentDay = activeDay && scheduleByDay[activeDay] ? activeDay : sortedDays[0] ?? null;
 
+  const scheduleQuickDays = sortedDays.length > 0 ? sortedDays : [1, 2, 3, 4];
+
   const navItems: Array<{ key: Section; label: string; icon: React.ReactNode }> = [
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
     { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
@@ -320,7 +322,7 @@ export default function DiasporaWeekPortalPage() {
         <>
           <section className={styles.hero}>
             <div className={styles.heroBg}>
-              <img src={DW_PHOTOS[0]} alt="" className={styles.heroBgImage} />
+              <img src={DW_PHOTOS[10]} alt="" className={styles.heroBgImage} />
             </div>
             <div className={styles.heroOverlay}></div>
             <div className={`container ${styles.heroContainer}`}>
@@ -402,53 +404,78 @@ export default function DiasporaWeekPortalPage() {
           <section className={styles.goalsSection}>
             <div className="container">
               <span className={styles.kicker}>Why We Gather</span>
-              <h2 className={styles.sectionTitle}>Goals</h2>
-              <ol className={styles.goalsList}>
-                <li>
-                  <span className={styles.goalNumber}>1</span>
-                  Engage the diaspora in Somaliland&apos;s socio-economic and political
-                  development.
-                </li>
-                <li>
-                  <span className={styles.goalNumber}>2</span>
-                  Provide a platform to co-create diaspora-related policies and programs.
-                </li>
-                <li>
-                  <span className={styles.goalNumber}>3</span>
-                  Facilitate investment, innovation, and knowledge exchange.
-                </li>
-                <li>
-                  <span className={styles.goalNumber}>4</span>
-                  Strengthen cultural identity and youths&apos; generational connection to
-                  Somaliland.
-                </li>
-                <li>
-                  <span className={styles.goalNumber}>5</span>
-                  Showcase diaspora achievements and provide networking opportunities.
-                </li>
-              </ol>
+              <h2 className={styles.sectionTitle}>Our Goals</h2>
+              <p className={styles.sectionLead}>
+                Five priorities guide everything we do during Diaspora Week 2025.
+              </p>
+              <div className={styles.goalsGrid}>
+                <div className={styles.goalCard}>
+                  <span className={styles.goalNumber}>01</span>
+                  <p>
+                    Engage the diaspora in Somaliland&apos;s socio-economic and political
+                    development.
+                  </p>
+                </div>
+                <div className={styles.goalCard}>
+                  <span className={styles.goalNumber}>02</span>
+                  <p>Provide a platform to co-create diaspora-related policies and programs.</p>
+                </div>
+                <div className={styles.goalCard}>
+                  <span className={styles.goalNumber}>03</span>
+                  <p>Facilitate investment, innovation, and knowledge exchange.</p>
+                </div>
+                <div className={styles.goalCard}>
+                  <span className={styles.goalNumber}>04</span>
+                  <p>
+                    Strengthen cultural identity and youths&apos; generational connection to
+                    Somaliland.
+                  </p>
+                </div>
+                <div className={styles.goalCard}>
+                  <span className={styles.goalNumber}>05</span>
+                  <p>Showcase diaspora achievements and provide networking opportunities.</p>
+                </div>
+              </div>
             </div>
           </section>
 
           {/* Event Schedule quick access */}
           <section className={styles.scheduleQuickSection}>
             <div className="container">
-              <span className={styles.kicker}>4-Day Program</span>
+              <span className={styles.kicker}>{scheduleQuickDays.length}-Day Program</span>
               <h2 className={styles.sectionTitle}>Event Schedule</h2>
+              <p className={styles.sectionLead}>
+                Tap a day to jump straight to its sessions, speakers and locations.
+              </p>
               <div className={styles.dayButtonGrid}>
-                {[1, 2, 3, 4].map((dayNumber) => (
-                  <button
-                    key={dayNumber}
-                    type="button"
-                    className={`${styles.dayButton} ${styles[`dayButton${dayNumber}`]}`}
-                    onClick={() => {
-                      setActiveDay(dayNumber);
-                      setActiveSection("schedule");
-                    }}
-                  >
-                    Day {dayNumber}
-                  </button>
-                ))}
+                {scheduleQuickDays.map((dayNumber) => {
+                  const firstSession = scheduleByDay[dayNumber]?.[0];
+                  return (
+                    <button
+                      key={dayNumber}
+                      type="button"
+                      className={`${styles.dayButton} ${styles[`dayButton${dayNumber}`] || styles.dayButton1}`}
+                      onClick={() => {
+                        setActiveDay(dayNumber);
+                        setActiveSection("schedule");
+                      }}
+                    >
+                      <span className={styles.dayButtonLabel}>
+                        {firstSession?.dayLabel || `Day ${dayNumber}`}
+                      </span>
+                      {firstSession?.date && (
+                        <span className={styles.dayButtonDate}>{firstSession.date}</span>
+                      )}
+                      <span className={styles.dayButtonTitle}>
+                        {firstSession?.title || "Sessions & Activities"}
+                      </span>
+                      <span className={styles.dayButtonCta}>
+                        View Schedule
+                        <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </section>
