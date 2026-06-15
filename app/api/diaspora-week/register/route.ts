@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import {
-  REGISTRATIONS_COLLECTION,
   createCollectionRecord,
   filterPayloadByFields,
   getCollectionFields,
   getDirectusErrorMessage,
   getRegistrationByEmail,
+  getRegistrationsCollection,
   sendDiasporaWeekRegistrationReceivedEmail,
   uploadDirectusFile,
 } from "@/lib/diaspora-week";
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
       };
     }
 
-    const existing = await getRegistrationByEmail(email).catch(() => null);
+    const existing = await getRegistrationByEmail(email, registrationType).catch(() => null);
     if (existing) {
       return NextResponse.json(
         { message: "This email is already registered for Diaspora Week." },
@@ -124,19 +124,20 @@ export async function POST(request: Request) {
       );
     }
 
-    const allowedFields = await getCollectionFields(REGISTRATIONS_COLLECTION);
+    const collection = getRegistrationsCollection(registrationType);
+    const allowedFields = await getCollectionFields(collection);
 
     if (!allowedFields) {
       return NextResponse.json(
         {
-          message: `Directus collection '${REGISTRATIONS_COLLECTION}' was not found. Please create it (see README).`,
+          message: `Directus collection '${collection}' was not found. Please create it (see README).`,
         },
         { status: 500 }
       );
     }
 
     const payload = filterPayloadByFields(basePayload, allowedFields);
-    const { response, result } = await createCollectionRecord(REGISTRATIONS_COLLECTION, payload);
+    const { response, result } = await createCollectionRecord(collection, payload);
 
     if (!response.ok) {
       const message = getDirectusErrorMessage(

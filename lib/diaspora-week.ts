@@ -3,7 +3,8 @@ import crypto from "node:crypto";
 const DIRECTUS_URL = process.env.DIRECTUS_URL || "https://admin.sldiaspora.org";
 const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
-export const REGISTRATIONS_COLLECTION = "diaspora_week_registrations";
+export const INDIVIDUAL_REGISTRATIONS_COLLECTION = "diaspora_week_registrations_individual";
+export const BUSINESS_REGISTRATIONS_COLLECTION = "diaspora_week_registrations_business";
 export const SCHEDULE_COLLECTION = "diaspora_week_schedule";
 export const EXHIBITORS_COLLECTION = "diaspora_week_exhibitors";
 export const PARTNERS_COLLECTION = "diaspora_week_partners";
@@ -144,9 +145,19 @@ export const updateCollectionRecord = async (
   return { response, result };
 };
 
-export const getRegistrationByEmail = async (email: string) => {
+export type RegistrationType = "individual" | "business";
+
+export const getRegistrationsCollection = (registrationType: RegistrationType) =>
+  registrationType === "business"
+    ? BUSINESS_REGISTRATIONS_COLLECTION
+    : INDIVIDUAL_REGISTRATIONS_COLLECTION;
+
+const fetchRegistrationByEmailFromCollection = async (
+  collection: string,
+  email: string
+) => {
   const response = await directusFetch(
-    `/items/${REGISTRATIONS_COLLECTION}?filter[email][_eq]=${encodeURIComponent(
+    `/items/${collection}?filter[email][_eq]=${encodeURIComponent(
       email.trim().toLowerCase()
     )}&limit=1&fields=*`
   );
@@ -166,9 +177,39 @@ export const getRegistrationByEmail = async (email: string) => {
   return result?.data?.[0] || null;
 };
 
-export const getRegistrationById = async (id: string | number) => {
+/**
+ * Looks up a registration by email. If `registrationType` is provided, only that
+ * collection is searched; otherwise both individual and business collections are
+ * checked (individual first).
+ */
+export const getRegistrationByEmail = async (
+  email: string,
+  registrationType?: RegistrationType
+) => {
+  if (registrationType) {
+    return fetchRegistrationByEmailFromCollection(
+      getRegistrationsCollection(registrationType),
+      email
+    );
+  }
+
+  const fromIndividual = await fetchRegistrationByEmailFromCollection(
+    INDIVIDUAL_REGISTRATIONS_COLLECTION,
+    email
+  );
+  if (fromIndividual) return fromIndividual;
+
+  return fetchRegistrationByEmailFromCollection(BUSINESS_REGISTRATIONS_COLLECTION, email);
+};
+
+export const getRegistrationById = async (
+  id: string | number,
+  registrationType: RegistrationType
+) => {
+  const collection = getRegistrationsCollection(registrationType);
+
   const response = await directusFetch(
-    `/items/${REGISTRATIONS_COLLECTION}/${encodeURIComponent(String(id))}?fields=*`
+    `/items/${collection}/${encodeURIComponent(String(id))}?fields=*`
   );
 
   if (response.status === 404) return null;

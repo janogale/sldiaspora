@@ -168,20 +168,22 @@ registration, approval, and gated event portal flow:
 
 - Public landing page: `/diaspora-week`
 - Registration: `/diaspora-week/register` (individual or business)
-- Event portal login: `/diaspora-week/portal` (email + access code)
+- Event portal: `/diaspora-week/portal` (website-style page, gated by email login)
 
 It uses the same `DIRECTUS_URL` / `DIRECTUS_ADMIN_TOKEN` and SMTP/Gmail env vars described above.
 `DIRECTUS_ADMIN_TOKEN` must also have permission to create files (`directus_files`) and create/update
 items in the collections below.
 
-### 1) `diaspora_week_registrations` (required)
+### 1) Registration collections (required)
 
-This is the only required collection — the landing page, register form, and portal will work with
-just this one (other collections degrade gracefully to empty/placeholder content if missing).
+Individual and business registrations are stored in **two separate collections**. The register
+form, portal login, and approval flow all read/write to whichever collection matches the
+registrant's type (other collections below degrade gracefully to empty/placeholder content if
+missing).
 
-Suggested fields:
+#### `diaspora_week_registrations_individual`
 
-- `registration_type` (string: `individual` or `business`)
+- `registration_type` (string — always `individual`)
 - `email` (string, required, unique)
 - `phone` (string, required)
 - `country` (string, required)
@@ -193,28 +195,40 @@ Suggested fields:
 - `additional_notes` (text, optional)
 - `access_code` (string, optional — generated automatically on approval)
 - `access_code_sent_at` (datetime, optional)
-
-Individual-specific fields:
-
 - `full_name` (string)
 - `profession` (string, optional)
 - `areas_of_interest` (string, optional)
 
-Business-specific fields:
+#### `diaspora_week_registrations_business`
 
+- `registration_type` (string — always `business`)
+- `email` (string, required, unique)
+- `phone` (string, required)
+- `country` (string, required)
+- `city` (string, required)
+- `status` (string, default `pending` — set to `approved` to grant portal access)
+- `submitted_at` (datetime)
+- `exhibitor_interest` (boolean)
+- `pitch_interest` (boolean)
+- `additional_notes` (text, optional)
+- `access_code` (string, optional — generated automatically on approval)
+- `access_code_sent_at` (datetime, optional)
 - `business_name` (string)
 - `contact_person` (string)
 - `industry` (string, optional)
 - `business_website` (string, optional)
 - `business_logo` (file, relation to Directus Files, optional)
 
-### 2) Approval flow & access code email
+### 2) Approval flow & portal access
 
 - New registrations are created with `status = "pending"`.
 - Admin reviews in Directus and changes `status` to `approved`.
-- Trigger `POST /api/diaspora-week/activation-notify` (e.g. via a Directus Flow/Webhook on
-  `diaspora_week_registrations` update where `status` becomes `approved`) to generate an access
-  code and email it to the registrant, along with the portal link (`/diaspora-week/portal`).
+- Once `status = "approved"`, the registrant can sign in to `/diaspora-week/portal` with **just
+  their email address** &mdash; no access code is required.
+- Trigger `POST /api/diaspora-week/activation-notify` (e.g. via a Directus Flow/Webhook on either
+  `diaspora_week_registrations_individual` or `diaspora_week_registrations_business` update where
+  `status` becomes `approved`) to email the registrant a confirmation with the portal link
+  (`/diaspora-week/portal`).
 
 Optional security header/env var (same pattern as the member webhook):
 
@@ -233,12 +247,13 @@ Example webhook payload:
 
 ### 3) Optional content collections
 
-These power the public schedule outline and the full gated portal content. If a collection doesn't
-exist, that section simply shows a "coming soon" placeholder.
+These power the public schedule outline and the full gated portal content (Event Schedule,
+Exhibitors, Partners, Gallery tabs). If a collection doesn't exist, that section simply shows a
+"coming soon" placeholder.
 
 `diaspora_week_schedule`:
 
-- `day_number` (integer, 1-5)
+- `day_number` (integer, 1-4)
 - `day_label` (string, e.g. "Day 1")
 - `date` (string/date)
 - `start_time` / `end_time` (string)
@@ -247,6 +262,7 @@ exist, that section simply shows a "coming soon" placeholder.
 - `speaker` (string)
 - `location` (string)
 - `session_type` (string)
+- `sort` (integer, optional)
 
 `diaspora_week_exhibitors`:
 
@@ -256,6 +272,7 @@ exist, that section simply shows a "coming soon" placeholder.
 - `booth_number` (string, optional)
 - `category` (string, optional)
 - `website` (string, optional)
+- `sort` (integer, optional)
 
 `diaspora_week_partners`:
 
@@ -263,6 +280,7 @@ exist, that section simply shows a "coming soon" placeholder.
 - `logo` (file, optional)
 - `website` (string, optional)
 - `partner_type` (string, optional)
+- `sort` (integer, optional)
 
 `diaspora_week_gallery`:
 

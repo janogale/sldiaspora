@@ -7,16 +7,13 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json().catch(() => null)) as
-      | { email?: string; accessCode?: string }
-      | null;
+    const body = (await request.json().catch(() => null)) as { email?: string } | null;
 
     const email = body?.email?.trim().toLowerCase() || "";
-    const accessCode = body?.accessCode?.trim().toUpperCase() || "";
 
-    if (!email || !accessCode) {
+    if (!email) {
       return NextResponse.json(
-        { message: "Email and access code are required." },
+        { message: "Email address is required." },
         { status: 400 }
       );
     }
@@ -36,24 +33,17 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           message:
-            "Your registration is still pending approval. You'll receive an access code by email once approved.",
+            "Your registration is still pending approval. We'll notify you by email once it's approved.",
           status: status || "pending",
         },
         { status: 403 }
       );
     }
 
-    const storedCode = String(registration.access_code || "").trim().toUpperCase();
-
-    if (!storedCode || storedCode !== accessCode) {
-      return NextResponse.json(
-        { message: "Invalid access code." },
-        { status: 401 }
-      );
-    }
-
     const registrationId = String(registration.id || "");
-    const registrationType = String(registration.registration_type || "individual");
+    const registrationType = (
+      registration.registration_type === "business" ? "business" : "individual"
+    ) as "individual" | "business";
 
     const token = signDiasporaWeekSession({
       registrationId,

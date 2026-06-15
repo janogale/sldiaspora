@@ -4,7 +4,7 @@ import {
   getCollectionFields,
   getRegistrationByEmail,
   getRegistrationById,
-  REGISTRATIONS_COLLECTION,
+  getRegistrationsCollection,
   sendDiasporaWeekApprovalEmail,
   updateCollectionRecord,
 } from "@/lib/diaspora-week";
@@ -50,7 +50,10 @@ export async function POST(request: Request) {
     let registration: Record<string, unknown> | null = null;
 
     if (registrationId) {
-      registration = await getRegistrationById(registrationId).catch(() => null);
+      registration = await getRegistrationById(registrationId, "individual").catch(() => null);
+      if (!registration) {
+        registration = await getRegistrationById(registrationId, "business").catch(() => null);
+      }
     }
 
     if (!registration && email) {
@@ -60,6 +63,8 @@ export async function POST(request: Request) {
     if (!registration) {
       return NextResponse.json({ message: "Registration not found." }, { status: 404 });
     }
+
+    const registrationType = registration.registration_type === "business" ? "business" : "individual";
 
     const status = (requestedStatus || String(registration.status || "")).trim().toLowerCase();
 
@@ -106,7 +111,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const allowedFields = await getCollectionFields(REGISTRATIONS_COLLECTION);
+    const collection = getRegistrationsCollection(registrationType);
+    const allowedFields = await getCollectionFields(collection);
     const updatePayload: Record<string, unknown> = {
       access_code: accessCode,
       access_code_sent_at: new Date().toISOString(),
@@ -117,7 +123,7 @@ export async function POST(request: Request) {
       : updatePayload;
 
     if (Object.keys(filtered).length > 0) {
-      await updateCollectionRecord(REGISTRATIONS_COLLECTION, id, filtered);
+      await updateCollectionRecord(collection, id, filtered);
     }
 
     return NextResponse.json(

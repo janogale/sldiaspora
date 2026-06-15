@@ -20,7 +20,8 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
     }
 
-    const registration = await getRegistrationById(session.registrationId);
+    const registrationType = session.registrationType === "business" ? "business" : "individual";
+    const registration = await getRegistrationById(session.registrationId, registrationType);
 
     if (!registration) {
       return NextResponse.json({ message: "Registration not found." }, { status: 404 });

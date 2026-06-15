@@ -192,6 +192,9 @@ export default function DiasporaWeekRegisterPage() {
                   </p>
 
                   <form ref={formRef} onSubmit={handleSubmit} className={styles.form} encType="multipart/form-data">
+                    <h2 className={styles.formSectionTitle}>
+                      {registrationType === "individual" ? "Your Details" : "Business Details"}
+                    </h2>
                     {registrationType === "individual" ? (
                       <>
                         <div className={styles.fieldGroup}>
@@ -317,6 +320,8 @@ export default function DiasporaWeekRegisterPage() {
                       </>
                     )}
 
+                    <h2 className={styles.formSectionTitle}>Contact Information</h2>
+
                     <div className={styles.fieldRow}>
                       <div className={styles.fieldGroup}>
                         <label htmlFor="email" className={styles.label}>
@@ -376,6 +381,8 @@ export default function DiasporaWeekRegisterPage() {
                         />
                       </div>
                     </div>
+
+                    <h2 className={styles.formSectionTitle}>Additional Information</h2>
 
                     <div className={styles.checkboxRow}>
                       <label className={styles.checkboxLabel}>
