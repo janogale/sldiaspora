@@ -353,48 +353,160 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          <section className={styles.aboutSection}>
+          {/* Recap of Opening Day */}
+          <section className={styles.recapSection}>
             <div className="container">
-              <div className={styles.aboutGrid}>
-                <div className={styles.aboutText}>
-                  <span className={styles.kicker}>About Diaspora Week</span>
-                  <h2 className={styles.sectionTitle}>Somaliland &amp; Its Global Citizens</h2>
+              <span className={styles.kicker}>Highlights</span>
+              <h2 className={styles.sectionTitle}>Recap of Opening Day</h2>
+              <p className={styles.sectionLead}>
+                Watch highlights from the opening ceremony of Somaliland Diaspora Week 2025.
+              </p>
+              <div className={styles.recapVideoWrap}>
+                <video
+                  className={styles.recapVideo}
+                  src={SAMPLE_VIDEO_URL}
+                  poster={DW_PHOTOS[1]}
+                  controls
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Theme */}
+          <section className={styles.themeSection}>
+            <div className="container">
+              <div className={styles.themeGrid}>
+                <div className={styles.themeImageWrap}>
+                  <img src={DW_PHOTOS[2]} alt="Diaspora Week 2025" className={styles.themeImage} />
+                </div>
+                <div className={styles.themeText}>
+                  <span className={styles.kicker}>Theme</span>
+                  <h2 className={styles.sectionTitle}>&ldquo;Redefining the Role of Diaspora&rdquo;</h2>
+                  <p className={styles.themeSubtitle}>From Benefactor to Strategic Partner</p>
                   <p className={styles.sectionLead}>
-                    Diaspora Week 2025 brings together government leaders, diaspora communities,
-                    entrepreneurs and partners over four days of ceremonies, panels, pitching
-                    sessions and cultural celebration &mdash; building a new partnership model
-                    between Somaliland and its global citizens.
+                    This Diaspora Week, we celebrate a powerful shift: from giving back to
+                    building forward. Redefining the Role of Diaspora &mdash; From Benefactor to
+                    Strategic Partner calls on Somalilanders around the world to stand not just
+                    as supporters, but as co-architects of our nation&apos;s future, investing
+                    ideas, skills, and resources to shape lasting progress together.
+                  </p>
+                  <p className={styles.themeVenue}>
+                    <MapPin size={16} /> Venue: Hotel Guuleed
                   </p>
                 </div>
-                <div className={styles.aboutImages}>
-                  <img src={DW_PHOTOS[1]} alt="Diaspora Week 2025" className={styles.aboutImageMain} />
-                  <img src={DW_PHOTOS[2]} alt="Diaspora Week 2025" className={styles.aboutImageSmall} />
-                </div>
               </div>
+            </div>
+          </section>
 
+          {/* Goals */}
+          <section className={styles.goalsSection}>
+            <div className="container">
+              <span className={styles.kicker}>Why We Gather</span>
+              <h2 className={styles.sectionTitle}>Goals</h2>
+              <ol className={styles.goalsList}>
+                <li>
+                  <span className={styles.goalNumber}>1</span>
+                  Engage the diaspora in Somaliland&apos;s socio-economic and political
+                  development.
+                </li>
+                <li>
+                  <span className={styles.goalNumber}>2</span>
+                  Provide a platform to co-create diaspora-related policies and programs.
+                </li>
+                <li>
+                  <span className={styles.goalNumber}>3</span>
+                  Facilitate investment, innovation, and knowledge exchange.
+                </li>
+                <li>
+                  <span className={styles.goalNumber}>4</span>
+                  Strengthen cultural identity and youths&apos; generational connection to
+                  Somaliland.
+                </li>
+                <li>
+                  <span className={styles.goalNumber}>5</span>
+                  Showcase diaspora achievements and provide networking opportunities.
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          {/* Event Schedule quick access */}
+          <section className={styles.scheduleQuickSection}>
+            <div className="container">
+              <span className={styles.kicker}>4-Day Program</span>
+              <h2 className={styles.sectionTitle}>Event Schedule</h2>
+              <div className={styles.dayButtonGrid}>
+                {[1, 2, 3, 4].map((dayNumber) => (
+                  <button
+                    key={dayNumber}
+                    type="button"
+                    className={`${styles.dayButton} ${styles[`dayButton${dayNumber}`]}`}
+                    onClick={() => {
+                      setActiveDay(dayNumber);
+                      setActiveSection("schedule");
+                    }}
+                  >
+                    Day {dayNumber}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Exhibitors preview */}
+          <section className={styles.tabSection}>
+            <div className="container">
+              <span className={styles.kicker}>Showcase</span>
+              <h2 className={styles.sectionTitle}>Exhibitors</h2>
+              <p className={styles.sectionLead}>
+                Diaspora businesses, NGOs, community groups and diaspora-led initiatives
+                showcase their work to hundreds of attendees, investors and partners during
+                Diaspora Week 2025.
+              </p>
+              <div className={styles.previewImageGrid}>
+                <img src={DW_PHOTOS[3]} alt="Exhibitors at Diaspora Week" />
+                <img src={DW_PHOTOS[4]} alt="Exhibitors at Diaspora Week" />
+                <img src={DW_PHOTOS[5]} alt="Exhibitors at Diaspora Week" />
+              </div>
+              <button type="button" className={styles.previewLinkButton} onClick={() => setActiveSection("exhibitors")}>
+                <Building2 size={18} />
+                View All Exhibitors
+              </button>
+            </div>
+          </section>
+
+          {/* Startup Pitching Sessions */}
+          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
+            <div className="container">
+              <span className={styles.kicker}>Innovation Stage</span>
+              <h2 className={styles.sectionTitle}>Startup Pitching Sessions</h2>
+              <div className={styles.previewSplit}>
+                <div className={styles.previewImageGrid}>
+                  <img src={DW_PHOTOS[6]} alt="Startup pitching session" />
+                  <img src={DW_PHOTOS[7]} alt="Startup pitching session" />
+                </div>
+                <p className={styles.sectionLead}>
+                  As part of the week&apos;s programming, a dedicated Startup Pitching Session
+                  showcases innovative ideas and high-potential startups driven by Somaliland&apos;s
+                  aspiring entrepreneurs, including returnees, diaspora members, and local
+                  founders.
+                </p>
+              </div>
+              <button type="button" className={styles.previewLinkButton} onClick={() => setActiveSection("schedule")}>
+                <CalendarDays size={18} />
+                View Pitching Schedule
+              </button>
+            </div>
+          </section>
+
+          {/* Explore more */}
+          <section className={styles.aboutSection}>
+            <div className="container">
+              <span className={styles.kicker}>Explore More</span>
+              <h2 className={styles.sectionTitle}>Partners &amp; Gallery</h2>
               <div className={styles.quickLinks}>
-                <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("schedule")}>
-                  <img src={DW_PHOTOS[3]} alt="" className={styles.quickLinkImage} />
-                  <div className={styles.quickLinkBody}>
-                    <CalendarDays size={20} />
-                    <div>
-                      <h3>Event Schedule</h3>
-                      <p>Browse all 4 days of sessions, panels and ceremonies.</p>
-                    </div>
-                  </div>
-                </button>
-                <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("exhibitors")}>
-                  <img src={DW_PHOTOS[4]} alt="" className={styles.quickLinkImage} />
-                  <div className={styles.quickLinkBody}>
-                    <Building2 size={20} />
-                    <div>
-                      <h3>Exhibitors</h3>
-                      <p>Discover the organizations showcasing at Diaspora Week.</p>
-                    </div>
-                  </div>
-                </button>
                 <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("partners")}>
-                  <img src={DW_PHOTOS[5]} alt="" className={styles.quickLinkImage} />
+                  <img src={DW_PHOTOS[8]} alt="" className={styles.quickLinkImage} />
                   <div className={styles.quickLinkBody}>
                     <Handshake size={20} />
                     <div>
@@ -404,7 +516,7 @@ export default function DiasporaWeekPortalPage() {
                   </div>
                 </button>
                 <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("gallery")}>
-                  <img src={DW_PHOTOS[6]} alt="" className={styles.quickLinkImage} />
+                  <img src={DW_PHOTOS[9]} alt="" className={styles.quickLinkImage} />
                   <div className={styles.quickLinkBody}>
                     <Camera size={20} />
                     <div>

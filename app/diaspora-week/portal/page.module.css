@@ -103,6 +103,24 @@
   text-transform: uppercase;
 }
 
+.heroContainer .kicker,
+.loginShell .kicker {
+  color: rgba(238, 250, 243, 0.92);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.aboutSection .kicker,
+.recapSection .kicker,
+.themeSection .kicker,
+.goalsSection .kicker,
+.scheduleQuickSection .kicker,
+.tabSection .kicker {
+  color: #1f8a3b;
+  border-color: #bfe6cc;
+  background: #edf8f1;
+}
+
 .logoWrap {
   display: flex;
   align-items: center;
@@ -926,6 +944,210 @@
   text-decoration: underline;
 }
 
+/* Recap of Opening Day */
+.recapSection {
+  padding: 4rem 0;
+  background: #f4faf6;
+}
+
+.recapVideoWrap {
+  margin-top: 1.75rem;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.12);
+}
+
+.recapVideo {
+  display: block;
+  width: 100%;
+  max-height: 480px;
+  background: #0c2f37;
+}
+
+/* Theme */
+.themeSection {
+  padding: 4rem 0;
+}
+
+.themeGrid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.themeImageWrap {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.12);
+}
+
+.themeImage {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+}
+
+.themeSubtitle {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f8a3b;
+}
+
+.themeVenue {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0c2f37;
+}
+
+/* Goals */
+.goalsSection {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #edf8f1, #fef6e7);
+}
+
+.goalsList {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.goalsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #0c2f37;
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.05);
+}
+
+.goalNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #1f8a3b;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+/* Event Schedule quick access */
+.scheduleQuickSection {
+  padding: 4rem 0;
+}
+
+.dayButtonGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.dayButton {
+  border: none;
+  border-radius: 16px;
+  padding: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.08);
+}
+
+.dayButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(1, 109, 33, 0.16);
+}
+
+.dayButton1 {
+  background: linear-gradient(135deg, #ff9a3d, #f5760c);
+}
+
+.dayButton2 {
+  background: linear-gradient(135deg, #1f8a3b, #028a2b);
+}
+
+.dayButton3 {
+  background: linear-gradient(135deg, #19a974, #0c7a4f);
+}
+
+.dayButton4 {
+  background: linear-gradient(135deg, #8a5cf6, #5b2cd6);
+}
+
+/* Exhibitors / pitching preview sections */
+.tabSectionAlt {
+  background: #f4faf6;
+}
+
+.previewImageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 1.75rem 0;
+}
+
+.previewImageGrid img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.08);
+}
+
+.previewSplit {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2.5rem;
+  align-items: center;
+  margin: 1.75rem 0;
+}
+
+.previewSplit .previewImageGrid {
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+}
+
+.previewLinkButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.75rem;
+  background: #1f8a3b;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.previewLinkButton:hover {
+  background: #028a2b;
+  transform: translateY(-2px);
+}
+
 /* Responsive */
 @media (max-width: 1199px) {
   .heroStats {
@@ -941,6 +1163,10 @@
   }
 
   .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dayButtonGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -969,6 +1195,15 @@
     height: 260px;
     order: -1;
   }
+
+  .themeGrid,
+  .previewSplit {
+    grid-template-columns: 1fr;
+  }
+
+  .themeImage {
+    height: 240px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -985,6 +1220,12 @@
   }
 
   .galleryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dayButtonGrid,
+  .previewImageGrid,
+  .previewSplit .previewImageGrid {
     grid-template-columns: 1fr;
   }
 
