@@ -322,7 +322,11 @@ export default function DiasporaWeekPortalPage() {
         <>
           <section className={styles.hero}>
             <div className={styles.heroBg}>
-              <img src={DW_PHOTOS[10]} alt="" className={styles.heroBgImage} />
+              <img
+                src="/assets/imgs/Diaspora Week 2025/hero-flags-crowd.jpg"
+                alt=""
+                className={styles.heroBgImage}
+              />
             </div>
             <div className={styles.heroOverlay}></div>
             <div className={`container ${styles.heroContainer}`}>
@@ -408,32 +412,47 @@ export default function DiasporaWeekPortalPage() {
               <p className={styles.sectionLead}>
                 Five priorities guide everything we do during Diaspora Week 2025.
               </p>
-              <div className={styles.goalsGrid}>
-                <div className={styles.goalCard}>
+              <div className={styles.goalsList}>
+                <div className={styles.goalRow}>
                   <span className={styles.goalNumber}>01</span>
-                  <p>
-                    Engage the diaspora in Somaliland&apos;s socio-economic and political
-                    development.
-                  </p>
+                  <div className={styles.goalRowBody}>
+                    <h3>Engage the Diaspora</h3>
+                    <p>
+                      Engage the diaspora in Somaliland&apos;s socio-economic and political
+                      development.
+                    </p>
+                  </div>
                 </div>
-                <div className={styles.goalCard}>
+                <div className={styles.goalRow}>
                   <span className={styles.goalNumber}>02</span>
-                  <p>Provide a platform to co-create diaspora-related policies and programs.</p>
+                  <div className={styles.goalRowBody}>
+                    <h3>Co-Create Policy</h3>
+                    <p>Provide a platform to co-create diaspora-related policies and programs.</p>
+                  </div>
                 </div>
-                <div className={styles.goalCard}>
+                <div className={styles.goalRow}>
                   <span className={styles.goalNumber}>03</span>
-                  <p>Facilitate investment, innovation, and knowledge exchange.</p>
+                  <div className={styles.goalRowBody}>
+                    <h3>Drive Investment</h3>
+                    <p>Facilitate investment, innovation, and knowledge exchange.</p>
+                  </div>
                 </div>
-                <div className={styles.goalCard}>
+                <div className={styles.goalRow}>
                   <span className={styles.goalNumber}>04</span>
-                  <p>
-                    Strengthen cultural identity and youths&apos; generational connection to
-                    Somaliland.
-                  </p>
+                  <div className={styles.goalRowBody}>
+                    <h3>Strengthen Identity</h3>
+                    <p>
+                      Strengthen cultural identity and youths&apos; generational connection to
+                      Somaliland.
+                    </p>
+                  </div>
                 </div>
-                <div className={styles.goalCard}>
+                <div className={styles.goalRow}>
                   <span className={styles.goalNumber}>05</span>
-                  <p>Showcase diaspora achievements and provide networking opportunities.</p>
+                  <div className={styles.goalRowBody}>
+                    <h3>Showcase &amp; Network</h3>
+                    <p>Showcase diaspora achievements and provide networking opportunities.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -460,18 +479,9 @@ export default function DiasporaWeekPortalPage() {
                         setActiveSection("schedule");
                       }}
                     >
-                      <span className={styles.dayButtonLabel}>
-                        {firstSession?.dayLabel || `Day ${dayNumber}`}
-                      </span>
-                      {firstSession?.date && (
-                        <span className={styles.dayButtonDate}>{firstSession.date}</span>
-                      )}
+                      <span className={styles.dayButtonLabel}>DAY {dayNumber}</span>
                       <span className={styles.dayButtonTitle}>
                         {firstSession?.title || "Sessions & Activities"}
-                      </span>
-                      <span className={styles.dayButtonCta}>
-                        View Schedule
-                        <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
                       </span>
                     </button>
                   );
