@@ -9,6 +9,9 @@ import {
   Camera,
   Handshake,
   MapPin,
+  PartyPopper,
+  Sparkles,
+  Star,
   User,
 } from "lucide-react";
 import styles from "./page.module.css";
@@ -28,6 +31,15 @@ const DW_PHOTOS = [
 ];
 
 const SAMPLE_VIDEO_URL = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+
+const DAY_ICONS = [Sparkles, Handshake, Star, PartyPopper, Sparkles];
+
+const DAY_THEMES: Record<number, string> = {
+  1: "Opening Ceremony & Presidential Address",
+  2: "New Partnership Model & Startup Pitching",
+  3: "Closing Ceremony & Cultural Gala",
+  4: "Family & Cultural Fun Day",
+};
 
 type ScheduleItem = {
   id: string;
@@ -598,8 +610,12 @@ export default function DiasporaWeekPortalPage() {
       {activeSection === "schedule" && (
         <section className={styles.tabSection}>
           <div className="container">
-            <span className={styles.kicker}>4-Day Program</span>
+            <span className={styles.kicker}>{scheduleQuickDays.length}-Day Program</span>
             <h2 className={styles.sectionTitle}>Event Schedule</h2>
+            <p className={styles.sectionLead}>
+              Full day-by-day program &mdash; sessions, speakers and locations for Diaspora Week
+              2025.
+            </p>
 
             {sortedDays.length === 0 ? (
               <p className={styles.emptyState}>The full schedule will be published soon.</p>
@@ -607,9 +623,9 @@ export default function DiasporaWeekPortalPage() {
               <>
                 <div className={styles.dayTabs}>
                   {sortedDays.map((dayNumber) => (
-                    <button
+                    <a
                       key={dayNumber}
-                      type="button"
+                      href={`#schedule-day-${dayNumber}`}
                       className={`${styles.dayTab} ${currentDay === dayNumber ? styles.dayTabActive : ""}`}
                       onClick={() => setActiveDay(dayNumber)}
                     >
@@ -617,41 +633,68 @@ export default function DiasporaWeekPortalPage() {
                       {scheduleByDay[dayNumber][0]?.date && (
                         <small>{scheduleByDay[dayNumber][0].date}</small>
                       )}
-                    </button>
+                    </a>
                   ))}
                 </div>
 
-                {currentDay && (
-                  <div className={styles.sessionList}>
-                    {scheduleByDay[currentDay].map((session) => (
-                      <div className={styles.sessionCard} key={session.id}>
-                        <div className={styles.sessionTime}>
-                          {session.startTime}
-                          {session.endTime ? ` - ${session.endTime}` : ""}
-                        </div>
-                        <div className={styles.sessionBody}>
-                          <h3>{session.title}</h3>
-                          {session.description && <p>{session.description}</p>}
-                          <div className={styles.sessionMeta}>
-                            {session.speaker && (
-                              <span>
-                                <User size={14} /> {session.speaker}
-                              </span>
-                            )}
-                            {session.location && (
-                              <span>
-                                <MapPin size={14} /> {session.location}
-                              </span>
-                            )}
-                            {session.sessionType && (
-                              <span className={styles.sessionTag}>{session.sessionType}</span>
+                <div className={styles.scheduleDayList}>
+                  {sortedDays.map((dayNumber) => {
+                    const sessions = scheduleByDay[dayNumber];
+                    const DayIcon = DAY_ICONS[(dayNumber - 1) % DAY_ICONS.length];
+                    return (
+                      <div
+                        key={dayNumber}
+                        id={`schedule-day-${dayNumber}`}
+                        className={`${styles.scheduleDayBlock} ${styles[`scheduleDay${dayNumber}`] || styles.scheduleDay1}`}
+                      >
+                        <div className={styles.scheduleDayIntro}>
+                          <span className={styles.scheduleDayShape} aria-hidden="true">
+                            <DayIcon size={32} />
+                          </span>
+                          <div className={styles.scheduleDayHeading}>
+                            <span className={styles.scheduleDayLabel}>
+                              {sessions[0]?.dayLabel || `Day ${dayNumber}`}
+                            </span>
+                            <h3>{DAY_THEMES[dayNumber] || sessions[0]?.title}</h3>
+                            {sessions[0]?.date && (
+                              <span className={styles.scheduleDayDate}>{sessions[0].date}</span>
                             )}
                           </div>
                         </div>
+
+                        <div className={styles.sessionList}>
+                          {sessions.map((session) => (
+                            <div className={styles.sessionCard} key={session.id}>
+                              <div className={styles.sessionTime}>
+                                {session.startTime}
+                                {session.endTime ? ` - ${session.endTime}` : ""}
+                              </div>
+                              <div className={styles.sessionBody}>
+                                <h3>{session.title}</h3>
+                                {session.description && <p>{session.description}</p>}
+                                <div className={styles.sessionMeta}>
+                                  {session.speaker && (
+                                    <span>
+                                      <User size={14} /> {session.speaker}
+                                    </span>
+                                  )}
+                                  {session.location && (
+                                    <span>
+                                      <MapPin size={14} /> {session.location}
+                                    </span>
+                                  )}
+                                  {session.sessionType && (
+                                    <span className={styles.sessionTag}>{session.sessionType}</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    );
+                  })}
+                </div>
               </>
             )}
           </div>
