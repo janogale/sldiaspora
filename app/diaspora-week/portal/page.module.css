@@ -466,6 +466,7 @@
 
 .registerHeaderButton:hover {
   background: #16722f;
+  color: #ffffff;
 }
 
 /* Participate banner */
@@ -484,15 +485,17 @@
 }
 
 .participateText h2 {
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 800;
   margin: 0 0 0.4rem;
+  color: #ffffff;
 }
 
 .participateText p {
   margin: 0;
-  opacity: 0.88;
-  font-size: 1.2rem;
+  font-size: 1.35rem;
+  color: #ffffff;
+  opacity: 1;
 }
 
 .participateActions {
