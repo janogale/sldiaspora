@@ -761,7 +761,7 @@
 
 .sectionTitle {
   margin: 0.5rem 0 1rem;
-  font-size: 2.25rem;
+  font-size: clamp(2rem, 3.5vw, 3rem);
   font-weight: 800;
   color: #0c2f37;
 }
@@ -769,8 +769,8 @@
 .sectionLead {
   margin: 0;
   max-width: 75ch;
-  font-size: 1.34rem;
-  line-height: 1.75;
+  font-size: 1.6rem;
+  line-height: 1.8;
   color: #4b666d;
 }
 
@@ -1542,12 +1542,12 @@
 }
 
 .exhibitIntro .sectionTitle {
-  font-size: 2.6rem;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
 }
 
 .exhibitIntro .sectionLead {
   max-width: none;
-  font-size: 1.45rem;
+  font-size: 1.6rem;
 }
 
 .exhibitIntro .sectionLead + .sectionLead {
@@ -1580,13 +1580,13 @@
 }
 
 .exhibitInfoItem strong {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .exhibitInfoItem span {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   color: #6b8e85;
 }
 
@@ -1639,15 +1639,15 @@
 
 .benefitCard h3 {
   margin: 0 0 0.35rem;
-  font-size: 1.45rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .benefitCard p {
   margin: 0;
-  font-size: 1.27rem;
-  line-height: 1.65;
+  font-size: 1.2rem;
+  line-height: 1.7;
   color: #4b666d;
 }
 
@@ -1905,31 +1905,33 @@
   align-items: center;
   gap: 8px;
   background: rgba(200, 87, 42, 0.9);
-  color: #fff;
-  font-size: 1.1rem;
+  color: #ffffff;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: 0.03em;
-  padding: 0.4rem 1.1rem;
+  padding: 0.5rem 1.3rem;
   border-radius: 999px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.4rem;
   border: 1px solid rgba(255,255,255,0.2);
 }
 
 .pitchHeroTitle {
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 900;
-  line-height: 1.1;
-  margin: 0 0 1rem;
+  line-height: 1.08;
+  margin: 0 0 1.2rem;
   letter-spacing: -0.02em;
+  color: #ffffff;
   text-shadow: 0 2px 20px rgba(0,0,0,0.4);
 }
 
 .pitchHeroSubtitle {
-  font-size: 1.25rem;
-  line-height: 1.65;
-  opacity: 0.92;
-  margin: 0 0 1.75rem;
-  max-width: 620px;
+  font-size: 1.55rem;
+  line-height: 1.7;
+  color: #ffffff;
+  opacity: 1;
+  margin: 0 0 2rem;
+  max-width: 680px;
 }
 
 .pitchHeroMeta {
@@ -1942,7 +1944,8 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: 1.1rem;
+  color: #ffffff;
+  font-size: 1.3rem;
   font-weight: 600;
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.22);
@@ -1995,18 +1998,19 @@
 }
 
 .pitchInfoHeading {
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 800;
   color: #0c2f37;
   line-height: 1.2;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.6rem;
 }
 
 .pitchInfoBody {
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   color: #374151;
-  line-height: 1.8;
-  margin: 0 0 1.1rem;
+  line-height: 1.85;
+  text-align: justify;
+  margin: 0 0 1.2rem;
 }
 
 .pitchInfoStats {
@@ -2031,13 +2035,13 @@
 }
 
 .pitchInfoStat strong {
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #005a1b;
 }
 
 .pitchInfoStat span {
-  font-size: 0.98rem;
+  font-size: 1.2rem;
   color: #4b7a5c;
 }
 
@@ -2360,24 +2364,24 @@
 
 .pitchPrizeNumber {
   display: block;
-  font-size: 2rem;
+  font-size: 2.6rem;
   font-weight: 900;
-  color: #C8572A;
+  color: #f5a06a;
   margin-bottom: 0.6rem;
   line-height: 1;
 }
 
 .pitchPrizeCard h3 {
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  color: #fff;
-  margin: 0 0 0.6rem;
+  color: #ffffff;
+  margin: 0 0 0.7rem;
 }
 
 .pitchPrizeCard p {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.75);
-  line-height: 1.6;
+  font-size: 1.2rem;
+  color: #ffffff;
+  line-height: 1.7;
   margin: 0;
 }
 

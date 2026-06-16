@@ -860,22 +860,12 @@ export default function DiasporaWeekPortalPage() {
                     <div className={styles.pitchCulturalGeomA} aria-hidden="true" />
                     <div className={styles.pitchCulturalGeomB} aria-hidden="true" />
                   </div>
-                  {/* Camel image — faded side decoration */}
+                  {/* Side star decorations */}
                   <div className={styles.pitchCamelWrap} aria-hidden="true">
-                    {/* Left orange star */}
                     <svg viewBox="0 0 60 60" className={styles.pitchSideStarLeft}>
                       <polygon points="30,2 36,20 55,20 40,32 46,50 30,38 14,50 20,32 5,20 24,20" fill="#C8572A" />
                       <circle cx="30" cy="30" r="7" fill="#e07340" />
                     </svg>
-
-                    {/* Camel silhouette image */}
-                    <img
-                      src="/assets/imgs/camel-silhouette.png"
-                      alt=""
-                      className={styles.pitchCamelImg}
-                    />
-
-                    {/* Right green star */}
                     <svg viewBox="0 0 60 60" className={styles.pitchSideStarRight}>
                       <polygon points="30,2 36,20 55,20 40,32 46,50 30,38 14,50 20,32 5,20 24,20" fill="#016D21" />
                       <circle cx="30" cy="30" r="7" fill="#1f8a3b" />
@@ -913,7 +903,7 @@ export default function DiasporaWeekPortalPage() {
 
                   <div className={styles.pitchDownloadButtons}>
                     <a
-                      href="/assets/docs/diaspora-week-rules.pdf"
+                      href="https://drive.google.com/file/d/1fLcAKeLjM-9zbNLlRxRIJ9HD79doEsCc/view"
                       target="_blank"
                       rel="noreferrer"
                       className={styles.pitchDownloadPrimary}
