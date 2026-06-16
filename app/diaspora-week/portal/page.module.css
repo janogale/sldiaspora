@@ -449,6 +449,144 @@
   color: #1f8a3b;
 }
 
+.registerHeaderButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1f8a3b;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.19rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.registerHeaderButton:hover {
+  background: #16722f;
+}
+
+/* Participate banner */
+.participateBanner {
+  background: linear-gradient(135deg, #005a1b 0%, #016d21 100%);
+  color: #fff;
+  padding: 2.5rem 0;
+}
+
+.participateBannerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.participateText h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin: 0 0 0.4rem;
+}
+
+.participateText p {
+  margin: 0;
+  opacity: 0.88;
+  font-size: 1.2rem;
+}
+
+.participateActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.participateCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: #005a1b;
+  font-weight: 700;
+  font-size: 1.19rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.participateCta:hover {
+  background: #edf8f1;
+}
+
+.participateCtaAlt {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.19rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  transition: background-color 0.2s ease;
+}
+
+.participateCtaAlt:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Hero CTA */
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.heroPrimaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #1f8a3b;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.heroPrimaryCta:hover {
+  background: #16722f;
+}
+
+/* Exhibitor register CTA */
+.exhibitRegisterCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1f8a3b;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.19rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none;
+  margin-top: 1.25rem;
+  transition: background-color 0.2s ease;
+}
+
+.exhibitRegisterCta:hover {
+  background: #16722f;
+}
+
 /* Hero */
 .hero {
   position: relative;

@@ -8,7 +8,6 @@ import {
   Camera,
   Handshake,
   Lightbulb,
-  Lock,
   Rocket,
   Sparkles,
   Users,
@@ -129,8 +128,8 @@ export default function DiasporaWeekPage() {
               <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </Link>
             <Link href="/diaspora-week/portal" className={styles.secondaryCta}>
-              <Lock size={16} />
-              Access Event Portal
+              <CalendarDays size={16} />
+              View Event Portal
             </Link>
           </div>
 
@@ -210,8 +209,9 @@ export default function DiasporaWeekPage() {
             <span className={styles.kicker}>4-Day Program</span>
             <h2 className={styles.sectionTitle}>Event Schedule Outline</h2>
             <p className={styles.sectionLead}>
-              Here&apos;s a quick look at how the week unfolds. Full session details, speakers,
-              and locations are available to approved participants in the Event Portal.
+              Here&apos;s a quick look at how the week unfolds. View the full session details,
+              speakers, and locations in the{" "}
+              <Link href="/diaspora-week/portal">Event Portal</Link>.
             </p>
           </div>
 
@@ -222,8 +222,8 @@ export default function DiasporaWeekPage() {
                 {day.date && <span className={styles.dayDate}>{day.date}</span>}
                 <h3>{day.title}</h3>
                 <div className={styles.dayLockNote}>
-                  <Lock size={13} />
-                  Full details after approval
+                  <CalendarDays size={13} />
+                  <Link href="/diaspora-week/portal">View full details</Link>
                 </div>
               </div>
             ))}
@@ -360,10 +360,11 @@ export default function DiasporaWeekPage() {
             <Users size={28} />
           </div>
           <div className={styles.ctaText}>
-            <h2>Ready to join Somaliland Diaspora Week?</h2>
+            <h2>Ready to participate at Somaliland Diaspora Week?</h2>
             <p>
-              Register as an individual or a business. Once your registration is approved,
-              you&apos;ll receive an access code by email to unlock the full event portal.
+              The event portal is open to everyone — explore the full schedule, exhibitors and
+              gallery. Register as an individual or a business to secure a venue hall booth or
+              startup pitching slot.
             </p>
           </div>
           <Link href="/diaspora-week/register" className={styles.ctaButton}>

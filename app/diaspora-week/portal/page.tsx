@@ -1,19 +1,19 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
   Building2,
   CalendarDays,
   Camera,
-  Eye,
   Handshake,
   MapPin,
   Package,
   PartyPopper,
   Sparkles,
   Star,
+  Eye,
   Unlock,
   User,
 } from "lucide-react";
@@ -134,17 +134,6 @@ type GalleryMediaItem = {
   type: "image" | "video";
 };
 
-type PortalRegistration = {
-  id: string;
-  registrationType: "individual" | "business";
-  name: string;
-  email: string;
-  country: string;
-  city: string;
-  exhibitorInterest: boolean;
-  pitchInterest: boolean;
-};
-
 type PortalContent = {
   schedule: ScheduleItem[];
   exhibitors: ExhibitorItem[];
@@ -155,76 +144,29 @@ type PortalContent = {
 type Section = "home" | "schedule" | "exhibitors" | "partners" | "gallery";
 
 export default function DiasporaWeekPortalPage() {
-  const [checkingSession, setCheckingSession] = useState(true);
-  const [registration, setRegistration] = useState<PortalRegistration | null>(null);
+  const [loading, setLoading] = useState(true);
   const [content, setContent] = useState<PortalContent | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [activeDay, setActiveDay] = useState<number | null>(null);
 
-  const [email, setEmail] = useState("");
-  const [loginLoading, setLoginLoading] = useState(false);
-  const [loginError, setLoginError] = useState("");
-  const [loginNotice, setLoginNotice] = useState("");
-
-  const loadPortal = async () => {
-    try {
-      const response = await fetch("/api/diaspora-week/portal/me", { cache: "no-store" });
-      const result = await response.json().catch(() => null);
-
-      if (response.ok && result?.registration && result?.content) {
-        setRegistration(result.registration);
-        setContent(result.content);
-      } else {
-        setRegistration(null);
-        setContent(null);
-      }
-    } catch {
-      setRegistration(null);
-      setContent(null);
-    } finally {
-      setCheckingSession(false);
-    }
-  };
-
   useEffect(() => {
-    loadPortal();
+    const load = async () => {
+      try {
+        const response = await fetch("/api/diaspora-week/portal/public", { cache: "no-store" });
+        const result = await response.json().catch(() => null);
+        if (response.ok && result?.data) {
+          setContent(result.data);
+        }
+      } catch {
+        // keep null — fallbacks handle empty state
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
   }, []);
 
-  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoginError("");
-    setLoginNotice("");
-    setLoginLoading(true);
-
-    try {
-      const response = await fetch("/api/diaspora-week/portal/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-
-      const result = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        if (result?.status === "pending") {
-          setLoginNotice(result?.message || "Your registration is still pending approval.");
-        } else {
-          setLoginError(result?.message || "Unable to sign in.");
-        }
-        return;
-      }
-
-      setCheckingSession(true);
-      await loadPortal();
-      setActiveSection("schedule");
-    } catch {
-      setLoginError("Unable to sign in right now. Please try again.");
-    } finally {
-      setLoginLoading(false);
-    }
-  };
-
-  if (checkingSession) {
+  if (loading) {
     return (
       <main className={styles.portalPage}>
         <div className={styles.loadingScreen}>
@@ -234,94 +176,14 @@ export default function DiasporaWeekPortalPage() {
     );
   }
 
-  if (!registration || !content) {
-    return (
-      <main className={styles.portalPage}>
-        <section className={styles.loginSection}>
-          <div className={`container ${styles.loginContainer}`}>
-            <div className={styles.backButtonWrap}>
-              <Link href="/diaspora-week" className={styles.backButton}>
-                <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
-                Back to Diaspora Week
-              </Link>
-            </div>
+  const safeContent: PortalContent = content ?? {
+    schedule: [],
+    exhibitors: [],
+    partners: [],
+    gallery: [],
+  };
 
-            <div className={styles.loginShell}>
-              <div className={styles.brandPanel}>
-                <p className={styles.kicker}>Somaliland Diaspora Week 2025</p>
-                <div className={styles.logoWrap}>
-                  <Image
-                    src="/assets/imgs/logo/logo.png"
-                    alt="Somaliland Diaspora Department"
-                    width={200}
-                    height={66}
-                    priority
-                    className={styles.logoImage}
-                  />
-                </div>
-
-                <h2 className={styles.brandTitle}>Event Portal</h2>
-                <p className={styles.brandSubtitle}>
-                  Enter the email address you registered with. Once your registration is
-                  approved, you&apos;ll get instant access &mdash; no code needed.
-                </p>
-
-                <ul className={styles.brandList}>
-                  <li>
-                    <i className="fa-regular fa-circle-check" aria-hidden="true"></i>
-                    Full 4-day event schedule
-                  </li>
-                  <li>
-                    <i className="fa-regular fa-circle-check" aria-hidden="true"></i>
-                    Exhibitors &amp; partner directory
-                  </li>
-                  <li>
-                    <i className="fa-regular fa-circle-check" aria-hidden="true"></i>
-                    Photo &amp; video gallery
-                  </li>
-                </ul>
-              </div>
-
-              <div className={styles.loginCard}>
-                <h1 className={styles.title}>Sign in to the Event Portal</h1>
-                <p className={styles.subtitle}>
-                  Not registered yet?{" "}
-                  <Link href="/diaspora-week/register">Register for Diaspora Week</Link>
-                </p>
-
-                <form onSubmit={handleLogin} className={styles.form}>
-                  <div className={styles.fieldGroup}>
-                    <label htmlFor="portal-email" className={styles.label}>
-                      Email Address
-                    </label>
-                    <input
-                      id="portal-email"
-                      type="email"
-                      className={`form-control ${styles.input}`}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoComplete="email"
-                      placeholder="you@example.com"
-                      required
-                    />
-                  </div>
-
-                  {loginNotice && <div className={styles.noticeBox}>{loginNotice}</div>}
-                  {loginError && <div className={styles.errorBox}>{loginError}</div>}
-
-                  <button type="submit" disabled={loginLoading} className={styles.loginButton}>
-                    {loginLoading ? "Signing in..." : "Enter Portal"}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  const scheduleByDay = content.schedule.reduce<Record<number, ScheduleItem[]>>((acc, item) => {
+  const scheduleByDay = safeContent.schedule.reduce<Record<number, ScheduleItem[]>>((acc, item) => {
     if (!acc[item.dayNumber]) acc[item.dayNumber] = [];
     acc[item.dayNumber].push(item);
     return acc;
@@ -372,10 +234,10 @@ export default function DiasporaWeekPortalPage() {
           </nav>
 
           <div className={styles.siteHeaderRight}>
-            <span className={styles.welcomeBadge}>
+            <Link href="/diaspora-week/register" className={styles.registerHeaderButton}>
               <User size={14} />
-              {registration.name}
-            </span>
+              Register to Participate
+            </Link>
             <Link href="/diaspora-week" className={styles.backToSiteButton}>
               <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
               Back to Main Website
@@ -399,10 +261,16 @@ export default function DiasporaWeekPortalPage() {
               <span className={styles.heroBadge}>August 2 &ndash; 5, 2025 &middot; Hargeisa</span>
               <h1 className={styles.heroTitle}>Somaliland Diaspora Week 2025</h1>
               <p className={styles.heroSubtitle}>
-                Welcome, {registration.name}. You&apos;re signed in as{" "}
-                {registration.registrationType === "business" ? "a business" : "an individual"}{" "}
-                participant. Explore the schedule, exhibitors, partners and gallery below.
+                Explore the full event schedule, exhibitors, partners and gallery.
+                Want to participate at the venue? Register as an individual or business below.
               </p>
+
+              <div className={styles.heroActions}>
+                <Link href="/diaspora-week/register" className={styles.heroPrimaryCta}>
+                  Register to Participate
+                  <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </Link>
+              </div>
 
               <div className={styles.heroStats}>
                 <div className={styles.heroStat}>
@@ -410,17 +278,40 @@ export default function DiasporaWeekPortalPage() {
                   <span>Event Days</span>
                 </div>
                 <div className={styles.heroStat}>
-                  <strong>{content.exhibitors.length}</strong>
+                  <strong>{safeContent.exhibitors.length || "—"}</strong>
                   <span>Exhibitors</span>
                 </div>
                 <div className={styles.heroStat}>
-                  <strong>{content.partners.length}</strong>
+                  <strong>{safeContent.partners.length || "—"}</strong>
                   <span>Partners</span>
                 </div>
                 <div className={styles.heroStat}>
-                  <strong>{content.gallery.length || DW_PHOTOS.length + 1}</strong>
+                  <strong>{safeContent.gallery.length || DW_PHOTOS.length + 1}</strong>
                   <span>Gallery Items</span>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Participate CTA banner */}
+          <section className={styles.participateBanner}>
+            <div className={`container ${styles.participateBannerInner}`}>
+              <div className={styles.participateText}>
+                <h2>Want to exhibit or pitch at the venue?</h2>
+                <p>
+                  Individuals and businesses can register to secure a hall booth or a startup
+                  pitching slot at Somaliland Diaspora Week 2025.
+                </p>
+              </div>
+              <div className={styles.participateActions}>
+                <Link href="/diaspora-week/register?type=individual" className={styles.participateCta}>
+                  <User size={16} />
+                  Register as Individual
+                </Link>
+                <Link href="/diaspora-week/register?type=business" className={styles.participateCtaAlt}>
+                  <Building2 size={16} />
+                  Register as Business
+                </Link>
               </div>
             </div>
           </section>
@@ -547,7 +438,7 @@ export default function DiasporaWeekPortalPage() {
                     >
                       <span className={styles.dayButtonLabel}>DAY {dayNumber}</span>
                       <span className={styles.dayButtonTitle}>
-                        {firstSession?.title || "Sessions & Activities"}
+                        {firstSession?.title || DAY_THEMES[dayNumber] || "Sessions & Activities"}
                       </span>
                     </button>
                   );
@@ -629,33 +520,6 @@ export default function DiasporaWeekPortalPage() {
                   </div>
                 </button>
               </div>
-
-              {(registration.exhibitorInterest || registration.pitchInterest) && (
-                <div className={styles.profileCard}>
-                  <span className={styles.profileIcon}>
-                    <User size={20} />
-                  </span>
-                  <div>
-                    <h3>Your Registration</h3>
-                    <ul className={styles.profileList}>
-                      <li>
-                        <strong>Type:</strong>{" "}
-                        {registration.registrationType === "business" ? "Business" : "Individual"}
-                      </li>
-                      {registration.exhibitorInterest && (
-                        <li>
-                          <strong>Exhibitor interest:</strong> Yes
-                        </li>
-                      )}
-                      {registration.pitchInterest && (
-                        <li>
-                          <strong>Startup pitching interest:</strong> Yes
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              )}
             </div>
           </section>
         </>
@@ -705,66 +569,64 @@ export default function DiasporaWeekPortalPage() {
             {sortedDays.length === 0 ? (
               <p className={styles.emptyState}>The full schedule will be published soon.</p>
             ) : (
-              <>
-                <div className={styles.scheduleDayList}>
-                  {sortedDays.map((dayNumber) => {
-                    const sessions = scheduleByDay[dayNumber];
-                    const DayIcon = DAY_ICONS[(dayNumber - 1) % DAY_ICONS.length];
-                    return (
-                      <div
-                        key={dayNumber}
-                        id={`schedule-day-${dayNumber}`}
-                        className={`${styles.scheduleDayBlock} ${styles[`scheduleDay${dayNumber}`] || styles.scheduleDay1}`}
-                      >
-                        <div className={styles.scheduleDayIntro}>
-                          <span className={styles.scheduleDayShape} aria-hidden="true">
-                            <DayIcon size={32} />
+              <div className={styles.scheduleDayList}>
+                {sortedDays.map((dayNumber) => {
+                  const sessions = scheduleByDay[dayNumber];
+                  const DayIcon = DAY_ICONS[(dayNumber - 1) % DAY_ICONS.length];
+                  return (
+                    <div
+                      key={dayNumber}
+                      id={`schedule-day-${dayNumber}`}
+                      className={`${styles.scheduleDayBlock} ${styles[`scheduleDay${dayNumber}`] || styles.scheduleDay1}`}
+                    >
+                      <div className={styles.scheduleDayIntro}>
+                        <span className={styles.scheduleDayShape} aria-hidden="true">
+                          <DayIcon size={32} />
+                        </span>
+                        <div className={styles.scheduleDayHeading}>
+                          <span className={styles.scheduleDayLabel}>
+                            {sessions[0]?.dayLabel || `Day ${dayNumber}`}
                           </span>
-                          <div className={styles.scheduleDayHeading}>
-                            <span className={styles.scheduleDayLabel}>
-                              {sessions[0]?.dayLabel || `Day ${dayNumber}`}
-                            </span>
-                            <h3>{DAY_THEMES[dayNumber] || sessions[0]?.title}</h3>
-                            {sessions[0]?.date && (
-                              <span className={styles.scheduleDayDate}>{sessions[0].date}</span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className={styles.sessionList}>
-                          {sessions.map((session) => (
-                            <div className={styles.sessionCard} key={session.id}>
-                              <div className={styles.sessionTime}>
-                                {session.startTime}
-                                {session.endTime ? ` - ${session.endTime}` : ""}
-                              </div>
-                              <div className={styles.sessionBody}>
-                                <h3>{session.title}</h3>
-                                {session.description && <p>{session.description}</p>}
-                                <div className={styles.sessionMeta}>
-                                  {session.speaker && (
-                                    <span>
-                                      <User size={14} /> {session.speaker}
-                                    </span>
-                                  )}
-                                  {session.location && (
-                                    <span>
-                                      <MapPin size={14} /> {session.location}
-                                    </span>
-                                  )}
-                                  {session.sessionType && (
-                                    <span className={styles.sessionTag}>{session.sessionType}</span>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                          <h3>{DAY_THEMES[dayNumber] || sessions[0]?.title}</h3>
+                          {sessions[0]?.date && (
+                            <span className={styles.scheduleDayDate}>{sessions[0].date}</span>
+                          )}
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </>
+
+                      <div className={styles.sessionList}>
+                        {sessions.map((session) => (
+                          <div className={styles.sessionCard} key={session.id}>
+                            <div className={styles.sessionTime}>
+                              {session.startTime}
+                              {session.endTime ? ` - ${session.endTime}` : ""}
+                            </div>
+                            <div className={styles.sessionBody}>
+                              <h3>{session.title}</h3>
+                              {session.description && <p>{session.description}</p>}
+                              <div className={styles.sessionMeta}>
+                                {session.speaker && (
+                                  <span>
+                                    <User size={14} /> {session.speaker}
+                                  </span>
+                                )}
+                                {session.location && (
+                                  <span>
+                                    <MapPin size={14} /> {session.location}
+                                  </span>
+                                )}
+                                {session.sessionType && (
+                                  <span className={styles.sessionTag}>{session.sessionType}</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             )}
             </div>
           </section>
@@ -773,7 +635,6 @@ export default function DiasporaWeekPortalPage() {
 
       {activeSection === "exhibitors" && (
         <>
-          {/* Hero */}
           <section className={styles.scheduleHero}>
             <div className={styles.scheduleHeroBg}>
               <img
@@ -793,7 +654,6 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* About exhibiting */}
           <section className={styles.tabSection}>
             <div className="container">
               <div className={styles.exhibitIntro}>
@@ -811,6 +671,10 @@ export default function DiasporaWeekPortalPage() {
                   first three days of the event from August 2nd to August 4th, with flexible booth
                   options to suit your needs.
                 </p>
+                <Link href="/diaspora-week/register?type=business" className={styles.exhibitRegisterCta}>
+                  <Building2 size={16} />
+                  Register a Business Booth
+                </Link>
               </div>
 
               <div className={styles.exhibitInfoStrip}>
@@ -839,7 +703,6 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* Benefits for business */}
           <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
             <div className="container">
               <span className={styles.kicker}>Benefits for Business</span>
@@ -864,7 +727,6 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* Participating organizations */}
           <section className={styles.tabSection}>
             <div className="container">
               <span className={styles.kicker}>Confirmed Exhibitors</span>
@@ -899,11 +761,11 @@ export default function DiasporaWeekPortalPage() {
             <span className={styles.kicker}>Collaboration</span>
             <h2 className={styles.sectionTitle}>Partners</h2>
 
-            {content.partners.length === 0 ? (
+            {safeContent.partners.length === 0 ? (
               <p className={styles.emptyState}>Partner organizations will be announced soon.</p>
             ) : (
               <div className={styles.cardGrid}>
-                {content.partners.map((item, index) => (
+                {safeContent.partners.map((item, index) => (
                   <div className={styles.entityCard} key={item.id}>
                     <img
                       src={item.logo || DW_PHOTOS[(index + 2) % DW_PHOTOS.length]}
@@ -931,9 +793,9 @@ export default function DiasporaWeekPortalPage() {
             <span className={styles.kicker}>Memories</span>
             <h2 className={styles.sectionTitle}>Photo &amp; Video Gallery</h2>
 
-            {content.gallery.length > 0 ? (
+            {safeContent.gallery.length > 0 ? (
               <div className={styles.galleryGrid}>
-                {content.gallery.map((item) => (
+                {safeContent.gallery.map((item) => (
                   <div className={styles.galleryItem} key={item.id}>
                     {item.type === "video" ? (
                       <video src={item.url} controls />
