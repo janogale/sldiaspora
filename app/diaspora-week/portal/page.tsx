@@ -47,6 +47,13 @@ const DAY_THEMES: Record<number, string> = {
   4: "Family & Cultural Fun Day",
 };
 
+const DAY_PHOTOS: Record<number, string> = {
+  1: "/assets/imgs/Diaspora Week 2025/526662922_1167327548769637_8258044179086207429_n.jpg",
+  2: "/assets/imgs/Diaspora Week 2025/527691517_1167226418779750_3577322439121286715_n.jpg",
+  3: "/assets/imgs/Diaspora Week 2025/528345424_1169233925245666_1511022412967923258_n.jpg",
+  4: "/assets/imgs/Diaspora Week 2025/528603324_1169233405245718_3332848329999857221_n.jpg",
+};
+
 const EXHIBITOR_BENEFITS = [
   {
     icon: Eye,
@@ -567,72 +574,134 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          <section className={styles.tabSection}>
-            <div className="container">
-            {sortedDays.length === 0 ? (
-              <p className={styles.emptyState}>The full schedule will be published soon.</p>
-            ) : (
-              <div className={styles.scheduleDayList}>
-                {sortedDays.map((dayNumber) => {
-                  const sessions = scheduleByDay[dayNumber];
-                  const DayIcon = DAY_ICONS[(dayNumber - 1) % DAY_ICONS.length];
-                  return (
-                    <div
-                      key={dayNumber}
-                      id={`schedule-day-${dayNumber}`}
-                      className={`${styles.scheduleDayBlock} ${styles[`scheduleDay${dayNumber}`] || styles.scheduleDay1}`}
-                    >
-                      <div className={styles.scheduleDayIntro}>
-                        <span className={styles.scheduleDayShape} aria-hidden="true">
-                          <DayIcon size={32} />
-                        </span>
-                        <div className={styles.scheduleDayHeading}>
-                          <span className={styles.scheduleDayLabel}>
-                            {sessions[0]?.dayLabel || `Day ${dayNumber}`}
-                          </span>
-                          <h3>{DAY_THEMES[dayNumber] || sessions[0]?.title}</h3>
-                          {sessions[0]?.date && (
-                            <span className={styles.scheduleDayDate}>{sessions[0].date}</span>
+          {sortedDays.length === 0 ? (
+            <section className={styles.tabSection}>
+              <div className="container">
+                <p className={styles.emptyState}>The full schedule will be published soon.</p>
+              </div>
+            </section>
+          ) : (
+            <div className={styles.scheduleModernWrapper}>
+              {sortedDays.flatMap((dayNumber, dayIndex) => {
+                const sessions = scheduleByDay[dayNumber];
+                const DayIcon = DAY_ICONS[(dayNumber - 1) % DAY_ICONS.length];
+                const dayPhoto = DAY_PHOTOS[dayNumber] ?? DW_PHOTOS[dayNumber % DW_PHOTOS.length];
+
+                const renderSessions = (list: typeof sessions) => (
+                  <div className={styles.scheduleTimeline}>
+                    {list.map((session) => (
+                      <div className={styles.scheduleTimelineItem} key={session.id}>
+                        <div className={styles.scheduleTimelineDot} />
+                        <div className={styles.scheduleTimelineCard}>
+                          {(session.startTime || session.endTime) && (
+                            <div className={styles.scheduleTimelineTime}>
+                              {session.startTime}{session.endTime ? ` – ${session.endTime}` : ""}
+                            </div>
                           )}
+                          <h3>{session.title}</h3>
+                          {session.description && <p>{session.description}</p>}
+                          <div className={styles.scheduleTimelineMeta}>
+                            {session.speaker && (
+                              <span><User size={13} />{session.speaker}</span>
+                            )}
+                            {session.location && (
+                              <span><MapPin size={13} />{session.location}</span>
+                            )}
+                            {session.sessionType && (
+                              <span className={styles.scheduleTimelineTag}>{session.sessionType}</span>
+                            )}
+                          </div>
                         </div>
                       </div>
+                    ))}
+                  </div>
+                );
 
-                      <div className={styles.sessionList}>
-                        {sessions.map((session) => (
-                          <div className={styles.sessionCard} key={session.id}>
-                            <div className={styles.sessionTime}>
-                              {session.startTime}
-                              {session.endTime ? ` - ${session.endTime}` : ""}
-                            </div>
-                            <div className={styles.sessionBody}>
-                              <h3>{session.title}</h3>
-                              {session.description && <p>{session.description}</p>}
-                              <div className={styles.sessionMeta}>
-                                {session.speaker && (
-                                  <span>
-                                    <User size={14} /> {session.speaker}
-                                  </span>
-                                )}
-                                {session.location && (
-                                  <span>
-                                    <MapPin size={14} /> {session.location}
-                                  </span>
-                                )}
-                                {session.sessionType && (
-                                  <span className={styles.sessionTag}>{session.sessionType}</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                /* helper: framed photo panel */
+                const renderImagePanel = (src: string, alt: string, icon: React.ReactNode, caption: string) => (
+                  <div className={styles.scheduleModernImageSide}>
+                    <div className={styles.scheduleModernPhotoFrame}>
+                      <img src={src} alt={alt} className={styles.scheduleModernPhoto} />
+                      <div className={styles.scheduleModernGeomA} aria-hidden="true" />
+                      <div className={styles.scheduleModernGeomB} aria-hidden="true" />
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                    <div className={styles.scheduleModernPhotoCaption}>
+                      <span className={styles.scheduleModernCaptionIcon}>{icon}</span>
+                      <span>{caption}</span>
+                    </div>
+                  </div>
+                );
+
+                /* ── Day 1: split into two halves ── */
+                if (dayNumber === 1 && sessions.length > 2) {
+                  const splitAt = Math.ceil(sessions.length / 2);
+                  const partA = sessions.slice(0, splitAt);
+                  const partB = sessions.slice(splitAt);
+                  return [
+                    <section key="1a" id="schedule-day-1" className={`${styles.scheduleModernSection} ${styles.scheduleModernDay1}`}>
+                      <div className={styles.scheduleModernBadgeRow}>
+                        <span className={styles.scheduleModernDayChip}>DAY 1 · PART I</span>
+                        <span className={styles.scheduleModernDateChip}>{sessions[0]?.date || "August 2, 2025"}</span>
+                      </div>
+                      <div className={styles.scheduleModernBody}>
+                        {renderImagePanel(DW_PHOTOS[0], "Opening Ceremony", <DayIcon size={20} />, "Opening Ceremony & Presidential Address")}
+                        <div className={styles.scheduleModernSessionsSide}>
+                          <h2 className={styles.scheduleModernDayTitle}>Morning Programme</h2>
+                          {renderSessions(partA)}
+                        </div>
+                      </div>
+                    </section>,
+
+                    <section key="1b" className={`${styles.scheduleModernSection} ${styles.scheduleModernDay1b}`}>
+                      <div className={styles.scheduleModernBadgeRow}>
+                        <span className={styles.scheduleModernDayChip}>DAY 1 · PART II</span>
+                        <span className={styles.scheduleModernDateChip}>Afternoon Sessions</span>
+                      </div>
+                      <div className={`${styles.scheduleModernBody} ${styles.scheduleModernBodyFlip}`}>
+                        <div className={styles.scheduleModernSessionsSide}>
+                          <h2 className={styles.scheduleModernDayTitle}>Afternoon Programme</h2>
+                          {renderSessions(partB)}
+                        </div>
+                        {renderImagePanel(DW_PHOTOS[1], "Day 1 Afternoon", <Sparkles size={20} />, "Networking & Evening Activities")}
+                      </div>
+                    </section>,
+                  ];
+                }
+
+                /* ── All other days ── */
+                const isFlipped = dayIndex % 2 === 1;
+                return [
+                  <section
+                    key={dayNumber}
+                    id={`schedule-day-${dayNumber}`}
+                    className={`${styles.scheduleModernSection} ${styles[`scheduleModernDay${dayNumber}`] || styles.scheduleModernDay2}`}
+                  >
+                    <div className={styles.scheduleModernBadgeRow}>
+                      <span className={styles.scheduleModernDayChip}>
+                        {sessions[0]?.dayLabel || `DAY ${dayNumber}`}
+                      </span>
+                      {sessions[0]?.date && (
+                        <span className={styles.scheduleModernDateChip}>{sessions[0].date}</span>
+                      )}
+                    </div>
+
+                    <div className={`${styles.scheduleModernBody} ${isFlipped ? styles.scheduleModernBodyFlip : ""}`}>
+                      {!isFlipped && renderImagePanel(dayPhoto, `Day ${dayNumber}`, <DayIcon size={20} />, DAY_THEMES[dayNumber] || `Day ${dayNumber}`)}
+
+                      <div className={styles.scheduleModernSessionsSide}>
+                        <h2 className={styles.scheduleModernDayTitle}>
+                          {DAY_THEMES[dayNumber] || sessions[0]?.title}
+                        </h2>
+                        {renderSessions(sessions)}
+                      </div>
+
+                      {isFlipped && renderImagePanel(dayPhoto, `Day ${dayNumber}`, <DayIcon size={20} />, DAY_THEMES[dayNumber] || `Day ${dayNumber}`)}
+                    </div>
+                  </section>,
+                ];
+              })}
             </div>
-          </section>
+          )}
         </>
       )}
 

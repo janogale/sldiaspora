@@ -2451,3 +2451,308 @@
     gap: 0.75rem;
   }
 }
+
+/* ============================================================
+   MODERN SCHEDULE LAYOUT
+   ============================================================ */
+
+.scheduleModernWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Each day section ── */
+.scheduleModernSection {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Day accent strip at top */
+.scheduleModernBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2.5rem;
+  background: var(--sms-accent, #005a1b);
+  flex-wrap: wrap;
+}
+
+.scheduleModernDayChip {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.scheduleModernDateChip {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  padding-left: 1rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ── Two-column body ── */
+.scheduleModernBody {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  min-height: 480px;
+}
+
+.scheduleModernBodyFlip {
+  grid-template-columns: 1.2fr 1fr;
+}
+
+/* ── Photo panel ── */
+.scheduleModernImageSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  gap: 1.5rem;
+  background: transparent;
+}
+
+/* Double-frame wrapper (same technique as eligibility criteria section) */
+.scheduleModernPhotoFrame {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.scheduleModernPhoto {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+  transition: transform 0.5s ease;
+}
+
+.scheduleModernSection:hover .scheduleModernPhoto {
+  transform: scale(1.02);
+}
+
+/* Orange offset frame — top-left */
+.scheduleModernGeomA {
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  right: 16px;
+  bottom: 16px;
+  border: 3px solid #C8572A;
+  border-radius: 20px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Green offset frame — bottom-right */
+.scheduleModernGeomB {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: -16px;
+  bottom: -16px;
+  border: 3px solid #016D21;
+  border-radius: 20px;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Caption below the frame */
+.scheduleModernPhotoCaption {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--sms-accent, #005a1b);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.scheduleModernCaptionIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* ── Sessions panel ── */
+.scheduleModernSessionsSide {
+  padding: 2.5rem 2.75rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.scheduleModernDayTitle {
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  font-weight: 900;
+  color: #0c2f37;
+  line-height: 1.2;
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--sms-accent, #005a1b);
+}
+
+/* ── Timeline ── */
+.scheduleTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.scheduleTimeline::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--sms-accent, #005a1b), transparent);
+  opacity: 0.25;
+}
+
+.scheduleTimelineItem {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.scheduleTimelineItem:last-child {
+  padding-bottom: 0;
+}
+
+.scheduleTimelineDot {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--sms-accent, #005a1b);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--sms-accent, #005a1b);
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.scheduleTimelineCard {
+  flex: 1;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.scheduleTimelineCard:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transform: translateX(4px);
+}
+
+.scheduleTimelineTime {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--sms-accent, #005a1b);
+  background: color-mix(in srgb, var(--sms-accent, #005a1b) 10%, transparent);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 0.55rem;
+}
+
+.scheduleTimelineCard h3 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0c2f37;
+  margin: 0 0 0.4rem;
+  line-height: 1.3;
+}
+
+.scheduleTimelineCard p {
+  font-size: 1.3rem;
+  color: #4b666d;
+  line-height: 1.65;
+  margin: 0 0 0.6rem;
+}
+
+.scheduleTimelineMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  color: #6b8e85;
+  font-weight: 600;
+}
+
+.scheduleTimelineMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.scheduleTimelineTag {
+  background: #edf8f1;
+  color: #1f8a3b;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Per-day colour themes via CSS custom property ── */
+.scheduleModernDay1  { --sms-accent: #C8572A; }
+.scheduleModernDay1b { --sms-accent: #e07340; background: #fdf6f2; }
+.scheduleModernDay1b .scheduleModernSessionsSide { background: #fdf6f2; }
+.scheduleModernDay2  { --sms-accent: #1f8a3b; }
+.scheduleModernDay3  { --sms-accent: #19a974; }
+.scheduleModernDay4  { --sms-accent: #8a5cf6; }
+.scheduleModernDay5  { --sms-accent: #2563eb; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .scheduleModernBody,
+  .scheduleModernBodyFlip {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .scheduleModernBodyFlip .scheduleModernImageSide {
+    order: -1;
+  }
+
+  .scheduleModernImageSide {
+    padding: 2rem 1.5rem 0.5rem;
+  }
+
+  .scheduleModernPhoto {
+    height: 220px;
+  }
+
+  .scheduleModernSessionsSide {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .scheduleModernBadgeRow {
+    padding: 0.85rem 1.25rem;
+  }
+}
