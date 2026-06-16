@@ -7,13 +7,16 @@ import {
   Building2,
   CalendarDays,
   Camera,
+  CheckCircle2,
+  Eye,
+  FileText,
   Handshake,
   MapPin,
   Package,
   PartyPopper,
+  Rocket,
   Sparkles,
   Star,
-  Eye,
   Unlock,
   User,
 } from "lucide-react";
@@ -141,7 +144,7 @@ type PortalContent = {
   gallery: GalleryMediaItem[];
 };
 
-type Section = "home" | "schedule" | "exhibitors" | "partners" | "gallery";
+type Section = "home" | "schedule" | "exhibitors" | "pitching" | "gallery";
 
 export default function DiasporaWeekPortalPage() {
   const [loading, setLoading] = useState(true);
@@ -201,7 +204,7 @@ export default function DiasporaWeekPortalPage() {
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
     { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
     { key: "exhibitors", label: "Exhibitors", icon: <Building2 size={16} /> },
-    { key: "partners", label: "Partners", icon: <Handshake size={16} /> },
+    { key: "pitching", label: "Startup Pitching", icon: <Rocket size={16} /> },
     { key: "gallery", label: "Gallery", icon: <Camera size={16} /> },
   ];
 
@@ -497,15 +500,15 @@ export default function DiasporaWeekPortalPage() {
           <section className={styles.aboutSection}>
             <div className="container">
               <span className={styles.kicker}>Explore More</span>
-              <h2 className={styles.sectionTitle}>Partners &amp; Gallery</h2>
+              <h2 className={styles.sectionTitle}>Startup Pitching &amp; Gallery</h2>
               <div className={styles.quickLinks}>
-                <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("partners")}>
+                <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("pitching")}>
                   <img src={DW_PHOTOS[8]} alt="" className={styles.quickLinkImage} />
                   <div className={styles.quickLinkBody}>
-                    <Handshake size={20} />
+                    <Rocket size={20} />
                     <div>
-                      <h3>Partners</h3>
-                      <p>Meet the partners supporting Diaspora Week 2025.</p>
+                      <h3>Startup Pitching</h3>
+                      <p>Apply to pitch your idea to investors and mentors.</p>
                     </div>
                   </div>
                 </button>
@@ -755,36 +758,218 @@ export default function DiasporaWeekPortalPage() {
         </>
       )}
 
-      {activeSection === "partners" && (
-        <section className={styles.tabSection}>
-          <div className="container">
-            <span className={styles.kicker}>Collaboration</span>
-            <h2 className={styles.sectionTitle}>Partners</h2>
-
-            {safeContent.partners.length === 0 ? (
-              <p className={styles.emptyState}>Partner organizations will be announced soon.</p>
-            ) : (
-              <div className={styles.cardGrid}>
-                {safeContent.partners.map((item, index) => (
-                  <div className={styles.entityCard} key={item.id}>
-                    <img
-                      src={item.logo || DW_PHOTOS[(index + 2) % DW_PHOTOS.length]}
-                      alt={item.name}
-                      className={styles.entityLogo}
-                    />
-                    <h3>{item.name}</h3>
-                    {item.partnerType && <span className={styles.entityTag}>{item.partnerType}</span>}
-                    {item.website && (
-                      <a href={item.website} target="_blank" rel="noreferrer">
-                        Visit website
-                      </a>
-                    )}
-                  </div>
-                ))}
+      {activeSection === "pitching" && (
+        <>
+          {/* ── Hero ── */}
+          <section className={styles.pitchHero}>
+            <div className={styles.pitchHeroBg}>
+              <img src={DW_PHOTOS[6]} alt="" className={styles.pitchHeroBgImage} />
+            </div>
+            <div className={styles.pitchHeroOverlay} />
+            {/* Somali star-burst shapes */}
+            <div className={styles.pitchStarA} aria-hidden="true" />
+            <div className={styles.pitchStarB} aria-hidden="true" />
+            <div className={`container ${styles.pitchHeroContainer}`}>
+              <span className={styles.pitchHeroBadge}>
+                <Rocket size={15} />
+                Innovation Stage · Diaspora Week 2025
+              </span>
+              <h1 className={styles.pitchHeroTitle}>Startup Pitching Session</h1>
+              <p className={styles.pitchHeroSubtitle}>
+                Pitch your boldest ideas to investors, accelerators and mentors — and compete for
+                seed funding, incubation opportunities and life-changing exposure.
+              </p>
+              <div className={styles.pitchHeroMeta}>
+                <span><CalendarDays size={16} /> August 2 &ndash; 5, 2025</span>
+                <span><MapPin size={16} /> Hotel Guuleed, Hargeisa</span>
               </div>
-            )}
+            </div>
+          </section>
+
+          {/* ── Somali divider ── */}
+          <div className={styles.somaliDivider} aria-hidden="true">
+            {Array.from({ length: 32 }).map((_, i) => (
+              <span key={i} className={styles.somaliDividerCell} />
+            ))}
           </div>
-        </section>
+
+          {/* ── Information ── */}
+          <section className={styles.pitchInfoSection}>
+            <div className="container">
+              <div className={styles.pitchInfoInner}>
+                <span className={styles.pitchInfoKicker}>Information</span>
+                <h2 className={styles.pitchInfoHeading}>
+                  Are you an entrepreneur with a bold idea that can make a difference for
+                  Somaliland?
+                </h2>
+                <p className={styles.pitchInfoBody}>
+                  This Diaspora Week, we&apos;re giving innovators a unique stage to pitch their
+                  startups to investors, accelerators, and mentors.
+                </p>
+                <p className={styles.pitchInfoBody}>
+                  This live pitching event is open to local and diaspora founders with early-stage
+                  ideas or growing businesses that need funding and support to scale. Finalists will
+                  pitch to a panel of judges and an engaged audience, with the chance to win seed
+                  funding, incubation opportunities, and valuable exposure.
+                </p>
+
+                <div className={styles.pitchInfoStats}>
+                  <div className={styles.pitchInfoStat}>
+                    <strong>Seed Funding</strong>
+                    <span>Cash prizes for winners</span>
+                  </div>
+                  <div className={styles.pitchInfoStatDivider} />
+                  <div className={styles.pitchInfoStat}>
+                    <strong>Incubation</strong>
+                    <span>Growth support opportunities</span>
+                  </div>
+                  <div className={styles.pitchInfoStatDivider} />
+                  <div className={styles.pitchInfoStat}>
+                    <strong>Live Audience</strong>
+                    <span>Investors, mentors &amp; diaspora</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Somali divider ── */}
+          <div className={styles.somaliDivider} aria-hidden="true">
+            {Array.from({ length: 32 }).map((_, i) => (
+              <span key={i} className={styles.somaliDividerCell} />
+            ))}
+          </div>
+
+          {/* ── Eligibility Criteria ── */}
+          <section className={styles.pitchEligibilitySection}>
+            {/* Background cultural pattern */}
+            <div className={styles.pitchEligBg} aria-hidden="true" />
+
+            <div className="container">
+              <h2 className={styles.pitchEligibilityTitle}>Eligibility Criteria</h2>
+
+              <div className={styles.pitchEligGrid}>
+                {/* Left — cultural visual panel */}
+                <div className={styles.pitchCulturalPanel}>
+                  <div className={styles.pitchCulturalFrame}>
+                    <img
+                      src={DW_PHOTOS[7]}
+                      alt="Startup pitching at Diaspora Week"
+                      className={styles.pitchCulturalPhoto}
+                    />
+                    <div className={styles.pitchCulturalGeomA} aria-hidden="true" />
+                    <div className={styles.pitchCulturalGeomB} aria-hidden="true" />
+                  </div>
+                  {/* Camel silhouette */}
+                  <div className={styles.pitchCamelWrap} aria-hidden="true">
+                    <svg viewBox="0 0 220 140" className={styles.pitchCamelSvg} fill="currentColor">
+                      <path d="M28,110 Q18,108 12,98 Q6,88 10,78 Q14,68 22,66 Q24,58 30,54 Q36,50 42,52 Q44,44 50,40 Q58,36 66,40 Q70,32 78,30 Q90,26 98,34 Q104,28 114,28 Q124,28 130,36 Q138,34 146,38 Q154,42 156,52 Q164,52 170,58 Q178,64 178,74 Q180,74 184,78 Q190,84 188,94 Q186,104 178,108 Q174,112 168,112 L160,112 Q158,120 152,124 Q146,128 140,126 Q134,128 128,124 Q122,120 120,112 L98,112 Q96,120 90,124 Q84,128 78,126 Q72,128 66,124 Q60,120 58,112 L42,112 Q36,114 30,112 Z" />
+                      {/* hump */}
+                      <path d="M98,34 Q104,22 114,20 Q120,18 126,22 Q130,16 138,16 Q148,16 152,24 Q156,18 162,20 Q168,22 168,30 Q164,28 156,28 Q150,20 140,22 Q136,16 128,18 Q120,18 116,26 Q108,22 98,34 Z" />
+                      {/* neck */}
+                      <path d="M90,56 Q88,44 94,36 Q100,28 108,30 L108,56 Z" />
+                      {/* head */}
+                      <ellipse cx="108" cy="26" rx="14" ry="10" />
+                      {/* ear */}
+                      <ellipse cx="118" cy="18" rx="4" ry="6" />
+                      {/* legs */}
+                      <rect x="44" y="110" width="10" height="26" rx="4" />
+                      <rect x="62" y="110" width="10" height="26" rx="4" />
+                      <rect x="138" y="110" width="10" height="26" rx="4" />
+                      <rect x="156" y="110" width="10" height="26" rx="4" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Right — criteria content */}
+                <div className={styles.pitchEligContent}>
+                  <div className={styles.pitchCriteriaCard}>
+                    <div className={styles.pitchCriteriaIconWrap}>
+                      <CheckCircle2 size={22} />
+                    </div>
+                    <div>
+                      <h3 className={styles.pitchCriteriaLabel}>Eligibility</h3>
+                      <p className={styles.pitchCriteriaText}>
+                        Open to early-stage startups or founders who are Somaliland nationals or
+                        diaspora members with a project directly benefiting Somaliland.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.pitchCriteriaCard}>
+                    <div className={styles.pitchCriteriaIconWrap}>
+                      <FileText size={22} />
+                    </div>
+                    <div>
+                      <h3 className={styles.pitchCriteriaLabel}>Application Requirements</h3>
+                      <p className={styles.pitchCriteriaText}>
+                        Complete the official application form before the deadline{" "}
+                        <strong>July 30, 2025.</strong>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.pitchDownloadButtons}>
+                    <a
+                      href="/assets/docs/diaspora-week-rules.pdf"
+                      download
+                      className={styles.pitchDownloadPrimary}
+                    >
+                      <FileText size={18} />
+                      Download Rules &amp; Regulations
+                    </a>
+                    <a
+                      href="/assets/docs/diaspora-week-application.pdf"
+                      download
+                      className={styles.pitchDownloadSecondary}
+                    >
+                      <FileText size={18} />
+                      Download Application Form
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Prizes & What You Win ── */}
+          <section className={styles.pitchPrizesSection}>
+            <div className={styles.pitchPrizesBg} aria-hidden="true" />
+            <div className="container">
+              <span className={styles.pitchPrizesKicker}>What You Stand to Win</span>
+              <h2 className={styles.pitchPrizesTitle}>Why You Should Apply</h2>
+              <div className={styles.pitchPrizesGrid}>
+                <div className={styles.pitchPrizeCard}>
+                  <span className={styles.pitchPrizeNumber}>01</span>
+                  <h3>Seed Funding</h3>
+                  <p>Cash prizes awarded to top-ranked pitches by the judging panel.</p>
+                </div>
+                <div className={styles.pitchPrizeCard}>
+                  <span className={styles.pitchPrizeNumber}>02</span>
+                  <h3>Incubation Support</h3>
+                  <p>Selected finalists gain access to incubation programs and mentorship networks.</p>
+                </div>
+                <div className={styles.pitchPrizeCard}>
+                  <span className={styles.pitchPrizeNumber}>03</span>
+                  <h3>Investor Connections</h3>
+                  <p>Direct introductions to diaspora investors and development finance partners.</p>
+                </div>
+                <div className={styles.pitchPrizeCard}>
+                  <span className={styles.pitchPrizeNumber}>04</span>
+                  <h3>Media Exposure</h3>
+                  <p>Coverage across diaspora media channels and the Somaliland Diaspora network.</p>
+                </div>
+              </div>
+
+              <div className={styles.pitchApplyCta}>
+                <Link href="/diaspora-week/register?pitch=1" className={styles.pitchApplyButton}>
+                  <Rocket size={18} />
+                  Apply to Pitch
+                </Link>
+              </div>
+            </div>
+          </section>
+        </>
       )}
 
       {activeSection === "gallery" && (

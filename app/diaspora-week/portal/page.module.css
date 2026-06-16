@@ -1818,3 +1818,595 @@
     text-align: center;
   }
 }
+
+/* ============================================================
+   STARTUP PITCHING SECTION
+   ============================================================ */
+
+/* ── Hero ── */
+.pitchHero {
+  position: relative;
+  min-height: 540px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+.pitchHeroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.pitchHeroBgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.pitchHeroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 30, 8, 0.88) 0%,
+    rgba(0, 60, 16, 0.75) 50%,
+    rgba(180, 70, 0, 0.55) 100%
+  );
+}
+
+/* Somali star shapes */
+.pitchStarA {
+  position: absolute;
+  z-index: 2;
+  top: -60px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(200, 87, 42, 0.35) 0%, transparent 70%);
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+  );
+  animation: pitchStarPulse 6s ease-in-out infinite;
+}
+
+.pitchStarB {
+  position: absolute;
+  z-index: 2;
+  bottom: -40px;
+  left: 5%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+  );
+  animation: pitchStarPulse 8s ease-in-out infinite reverse;
+}
+
+@keyframes pitchStarPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+  50% { transform: scale(1.08) rotate(18deg); opacity: 1; }
+}
+
+.pitchHeroContainer {
+  position: relative;
+  z-index: 3;
+  padding: 5rem 0;
+  max-width: 780px;
+}
+
+.pitchHeroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(200, 87, 42, 0.9);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.pitchHeroTitle {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+.pitchHeroSubtitle {
+  font-size: 1.25rem;
+  line-height: 1.65;
+  opacity: 0.92;
+  margin: 0 0 1.75rem;
+  max-width: 620px;
+}
+
+.pitchHeroMeta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.pitchHeroMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+}
+
+/* ── Somali Divider ── */
+.somaliDivider {
+  display: flex;
+  height: 22px;
+  overflow: hidden;
+}
+
+.somaliDividerCell {
+  flex: 1;
+  display: block;
+}
+
+.somaliDividerCell:nth-child(6n+1) { background: #C8572A; }
+.somaliDividerCell:nth-child(6n+2) { background: #016D21; }
+.somaliDividerCell:nth-child(6n+3) { background: #f5c842; }
+.somaliDividerCell:nth-child(6n+4) { background: #C8572A; }
+.somaliDividerCell:nth-child(6n+5) { background: #016D21; }
+.somaliDividerCell:nth-child(6n+6) { background: #ffffff; }
+
+/* ── Information Section ── */
+.pitchInfoSection {
+  background: #ffffff;
+  padding: 4.5rem 0;
+}
+
+.pitchInfoInner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pitchInfoKicker {
+  display: inline-block;
+  background: linear-gradient(135deg, #C8572A, #e07340);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.pitchInfoHeading {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: #0c2f37;
+  line-height: 1.25;
+  margin: 0 0 1.5rem;
+}
+
+.pitchInfoBody {
+  font-size: 1.18rem;
+  color: #374151;
+  line-height: 1.75;
+  margin: 0 0 1rem;
+}
+
+.pitchInfoStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 2.5rem;
+  background: linear-gradient(135deg, #f4fbf7, #edf8f1);
+  border: 1px solid #c8e6d3;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.pitchInfoStat {
+  flex: 1;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pitchInfoStat strong {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #005a1b;
+}
+
+.pitchInfoStat span {
+  font-size: 0.98rem;
+  color: #4b7a5c;
+}
+
+.pitchInfoStatDivider {
+  width: 1px;
+  height: 50px;
+  background: #c8e6d3;
+  flex-shrink: 0;
+}
+
+/* ── Eligibility Section ── */
+.pitchEligibilitySection {
+  position: relative;
+  padding: 5rem 0 5.5rem;
+  background: #f9fafb;
+  overflow: hidden;
+}
+
+.pitchEligBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 0% 100%, rgba(200, 87, 42, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 0%, rgba(1, 109, 33, 0.07) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.pitchEligibilityTitle {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: #016D21;
+  text-align: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 3rem;
+  position: relative;
+}
+
+.pitchEligibilityTitle::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #C8572A, #e07340);
+  border-radius: 4px;
+  margin: 0.75rem auto 0;
+}
+
+.pitchEligGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Cultural panel */
+.pitchCulturalPanel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.pitchCulturalFrame {
+  position: relative;
+  border-radius: 24px;
+  overflow: visible;
+}
+
+.pitchCulturalPhoto {
+  width: 100%;
+  border-radius: 24px;
+  display: block;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  position: relative;
+  z-index: 1;
+}
+
+.pitchCulturalGeomA {
+  position: absolute;
+  z-index: 0;
+  top: -18px;
+  left: -18px;
+  right: 18px;
+  bottom: 18px;
+  border: 3px solid #C8572A;
+  border-radius: 24px;
+  opacity: 0.5;
+}
+
+.pitchCulturalGeomB {
+  position: absolute;
+  z-index: 0;
+  top: 18px;
+  left: 18px;
+  right: -18px;
+  bottom: -18px;
+  border: 3px solid #016D21;
+  border-radius: 24px;
+  opacity: 0.4;
+}
+
+/* Camel SVG */
+.pitchCamelWrap {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.pitchCamelSvg {
+  width: 100%;
+  height: auto;
+  color: #5c2a00;
+  opacity: 0.82;
+  filter: drop-shadow(0 4px 12px rgba(92, 42, 0, 0.2));
+}
+
+/* Eligibility content */
+.pitchEligContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pitchCriteriaCard {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem 1.5rem;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.pitchCriteriaCard:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.pitchCriteriaIconWrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #C8572A, #e07340);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pitchCriteriaLabel {
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #0c2f37;
+  margin: 0 0 0.5rem;
+}
+
+.pitchCriteriaText {
+  font-size: 1.08rem;
+  color: #374151;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.pitchCriteriaText strong {
+  color: #C8572A;
+}
+
+/* Download buttons */
+.pitchDownloadButtons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.pitchDownloadPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: linear-gradient(135deg, #C8572A, #e07340);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 6px 24px rgba(200, 87, 42, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pitchDownloadPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(200, 87, 42, 0.45);
+  color: #fff;
+}
+
+.pitchDownloadSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: #ffffff;
+  color: #016D21;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 2px solid #016D21;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.pitchDownloadSecondary:hover {
+  background: #016D21;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ── Prizes / Why Apply ── */
+.pitchPrizesSection {
+  position: relative;
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #005a1b 0%, #016D21 60%, #024d16 100%);
+  color: #fff;
+  overflow: hidden;
+}
+
+.pitchPrizesBg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(200, 87, 42, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(255,255,255,0.06) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.pitchPrizesKicker {
+  display: block;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 0.6rem;
+}
+
+.pitchPrizesTitle {
+  text-align: center;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 3rem;
+}
+
+.pitchPrizesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.pitchPrizeCard {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 18px;
+  padding: 2rem 1.4rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.pitchPrizeCard:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-3px);
+}
+
+.pitchPrizeNumber {
+  display: block;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #C8572A;
+  margin-bottom: 0.6rem;
+  line-height: 1;
+}
+
+.pitchPrizeCard h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.6rem;
+}
+
+.pitchPrizeCard p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pitchApplyCta {
+  text-align: center;
+}
+
+.pitchApplyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #C8572A, #e07340);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.2rem;
+  padding: 1rem 2.2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(200, 87, 42, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pitchApplyButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 38px rgba(200, 87, 42, 0.5);
+  color: #fff;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .pitchEligGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .pitchPrizesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pitchInfoStats {
+    flex-direction: column;
+  }
+
+  .pitchInfoStatDivider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .pitchCulturalFrame {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 540px) {
+  .pitchPrizesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pitchDownloadButtons {
+    flex-direction: column;
+  }
+
+  .pitchHeroMeta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
