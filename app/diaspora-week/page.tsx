@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Building2,
   CalendarDays,
@@ -11,6 +11,12 @@ import {
   Rocket,
   Sparkles,
   Users,
+  Play,
+  Globe,
+  TrendingUp,
+  Heart,
+  ChevronRight,
+  Star,
 } from "lucide-react";
 import Header from "../components/header";
 import styles from "./page.module.css";
@@ -62,168 +68,368 @@ const EMPTY_CONTENT: PublicContent = {
 };
 
 const FALLBACK_DAYS = [
-  { dayNumber: 1, dayLabel: "Day 1", title: "Opening Ceremony & Presidential Address" },
-  { dayNumber: 2, dayLabel: "Day 2", title: "New Partnership Model & Startup Pitching" },
-  { dayNumber: 3, dayLabel: "Day 3", title: "Closing Ceremony & Cultural Gala" },
-  { dayNumber: 4, dayLabel: "Day 4", title: "Family & Cultural Fun Day" },
+  {
+    dayNumber: 1,
+    dayLabel: "Day 1",
+    title: "Opening Ceremony & Presidential Address",
+    desc: "Grand opening with keynote speeches from top government officials and diaspora leaders.",
+    icon: "🎯",
+  },
+  {
+    dayNumber: 2,
+    dayLabel: "Day 2",
+    title: "New Partnership Model & Startup Pitching",
+    desc: "Entrepreneurs pitch bold ideas to investors. Business partnerships forged for the future.",
+    icon: "🚀",
+  },
+  {
+    dayNumber: 3,
+    dayLabel: "Day 3",
+    title: "Closing Ceremony & Cultural Gala",
+    desc: "A magnificent celebration of culture, achievement, and collective Somaliland identity.",
+    icon: "🌟",
+  },
+  {
+    dayNumber: 4,
+    dayLabel: "Day 4",
+    title: "Family & Cultural Fun Day",
+    desc: "Community activities, music, art, and food — celebrating our shared heritage.",
+    icon: "🎉",
+  },
 ];
+
+function CountdownTimer({ targetDate }: { targetDate: Date }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
+
+  useEffect(() => {
+    const calc = () => {
+      const diff = targetDate.getTime() - Date.now();
+      if (diff <= 0) return;
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        mins: Math.floor((diff % 3600000) / 60000),
+        secs: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    calc();
+    const id = setInterval(calc, 1000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+
+  return (
+    <div className={styles.countdown}>
+      <span className={styles.countdownLabel}>Event Begins In</span>
+      <div className={styles.countdownGrid}>
+        {[
+          { val: timeLeft.days, unit: "Days" },
+          { val: timeLeft.hours, unit: "Hours" },
+          { val: timeLeft.mins, unit: "Minutes" },
+          { val: timeLeft.secs, unit: "Seconds" },
+        ].map(({ val, unit }) => (
+          <div key={unit} className={styles.countdownCell}>
+            <strong>{String(val).padStart(2, "0")}</strong>
+            <span>{unit}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function DiasporaWeekPage() {
   const [content, setContent] = useState<PublicContent>(EMPTY_CONTENT);
   const [loading, setLoading] = useState(true);
+  const [videoOpen, setVideoOpen] = useState(false);
+  const videoRef = useRef<HTMLDivElement>(null);
+
+  const EVENT_DATE = new Date("2026-08-01T09:00:00");
 
   useEffect(() => {
     let isMounted = true;
-
     const load = async () => {
       try {
         const response = await fetch("/api/diaspora-week/content", { method: "GET" });
         const result = (await response.json().catch(() => null)) as
           | { data?: PublicContent }
           | null;
-
         if (!isMounted) return;
-        if (response.ok && result?.data) {
-          setContent(result.data);
-        }
+        if (response.ok && result?.data) setContent(result.data);
       } catch {
         // keep defaults
       } finally {
         if (isMounted) setLoading(false);
       }
     };
-
     load();
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
+
+  useEffect(() => {
+    if (!videoOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (videoRef.current && !videoRef.current.contains(e.target as Node)) {
+        setVideoOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [videoOpen]);
 
   const scheduleDays =
     content.scheduleOutline.length > 0
-      ? content.scheduleOutline
+      ? content.scheduleOutline.map((d, i) => ({ ...d, ...FALLBACK_DAYS[i] }))
       : FALLBACK_DAYS.map((item) => ({ ...item, date: "" }));
 
   return (
     <main className={styles.page}>
       <Header />
 
-      {/* Hero */}
+      {/* ── HERO ── */}
       <section className={styles.hero}>
-        <div className={styles.heroOverlay}></div>
+        <div className={styles.heroBg} aria-hidden="true">
+          <div className={styles.orb1} />
+          <div className={styles.orb2} />
+          <div className={styles.orb3} />
+          <div className={styles.gridLines} />
+        </div>
+
         <div className={`container ${styles.heroContainer}`}>
-          <span className={styles.heroBadge}>
-            <Sparkles size={16} />
-            Annual Flagship Event
-          </span>
-          <h1 className={styles.heroTitle}>Somaliland Diaspora Week</h1>
+          <div className={styles.heroBadge}>
+            <Sparkles size={14} />
+            Annual Flagship Event · Hargeisa, Somaliland
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            <span className={styles.heroTitleLine1}>Somaliland </span>
+            <span className={styles.heroTitleLine2}>Diaspora Week</span>
+          </h1>
+
           <p className={styles.heroSubtitle}>
-            Five days of innovation, investment, culture and connection — bringing together the
-            global Somaliland diaspora, businesses, exhibitors and innovators under one roof.
+            Four transformative days uniting the global Somaliland diaspora — through investment
+            forums, startup pitching, cultural showcases, and partnerships that build our nation&apos;s future.
           </p>
 
           <div className={styles.heroActions}>
             <Link href="/diaspora-week/register" className={styles.primaryCta}>
-              Register Now
-              <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              <span>Register Now</span>
+              <span className={styles.ctaArrow}>
+                <ChevronRight size={18} />
+              </span>
             </Link>
+            <button
+              className={styles.videoBtn}
+              onClick={() => setVideoOpen(true)}
+              aria-label="Watch announcement video"
+            >
+              <span className={styles.videoBtnIcon}>
+                <Play size={16} fill="currentColor" />
+              </span>
+              Watch the Announcement
+            </button>
             <Link href="/diaspora-week/portal" className={styles.secondaryCta}>
               <CalendarDays size={16} />
-              View Event Portal
+              Event Portal
             </Link>
           </div>
 
-          <div className={styles.heroStats}>
-            <div className={styles.heroStat}>
-              <strong>5</strong>
-              <span>Days of Activities</span>
+          <CountdownTimer targetDate={EVENT_DATE} />
+
+        </div>
+      </section>
+
+      {/* ── VIDEO MODAL ── */}
+      {videoOpen && (
+        <div className={styles.videoOverlay} role="dialog" aria-modal="true">
+          <div className={styles.videoModal} ref={videoRef}>
+            <button
+              className={styles.videoClose}
+              onClick={() => setVideoOpen(false)}
+              aria-label="Close video"
+            >
+              ✕
+            </button>
+            <div className={styles.videoFrame}>
+              <video
+                src="/assets/videos/diaspora-week-hero.mp4"
+                controls
+                autoPlay
+                style={{ width: "100%", height: "100%", display: "block" }}
+              />
             </div>
-            <div className={styles.heroStat}>
-              <strong>2</strong>
-              <span>Registration Types</span>
+          </div>
+        </div>
+      )}
+
+      {/* ── VIDEO ANNOUNCEMENT SECTION ── */}
+      <section className={styles.videoSection}>
+        <div className="container">
+          <div className={styles.videoSectionInner}>
+            <div className={styles.videoSectionText}>
+              <span className={styles.kicker}>
+                <Play size={13} />
+                Official Announcement
+              </span>
+              <h2 className={styles.sectionTitle}>Watch the Official Diaspora Week Announcement</h2>
+              <p className={styles.sectionLead}>
+                Hear directly from Somaliland government officials and diaspora leaders about this
+                year&apos;s groundbreaking event. Discover why thousands of diaspora members are
+                flying in from across the globe to be part of history.
+              </p>
+              <ul className={styles.videoHighlights}>
+                <li><Globe size={15} /> Diaspora members from 40+ countries</li>
+                <li><TrendingUp size={15} /> $50M+ in investment discussions</li>
+                <li><Heart size={15} /> Cultural reconnection programs</li>
+                <li><Star size={15} /> Awards & recognition ceremony</li>
+              </ul>
+              <button className={styles.watchNowBtn} onClick={() => setVideoOpen(true)}>
+                <span className={styles.watchBtnPulse}>
+                  <Play size={18} fill="white" />
+                </span>
+                Watch Now — 3 min
+              </button>
             </div>
-            <div className={styles.heroStat}>
-              <strong>{content.exhibitorsCount || "—"}</strong>
-              <span>Exhibitors</span>
-            </div>
-            <div className={styles.heroStat}>
-              <strong>{content.partnersCount || "—"}</strong>
-              <span>Partners</span>
+
+            <div className={styles.videoThumb} onClick={() => setVideoOpen(true)} role="button" tabIndex={0} aria-label="Play announcement video" onKeyDown={e => e.key === "Enter" && setVideoOpen(true)}>
+              <div className={styles.videoThumbImg}>
+                <video
+                  src="/assets/videos/diaspora-week-hero.mp4"
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                />
+                <div className={styles.videoThumbOverlay}>
+                  <div className={styles.playBtn}>
+                    <Play size={28} fill="white" />
+                  </div>
+                  <div className={styles.videoThumbBadge}>
+                    <Sparkles size={12} />
+                    Official 2026 Announcement
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* About */}
-      <section className={styles.section}>
+      {/* ── WHY ATTEND ── */}
+      <section className={`${styles.section} ${styles.sectionAlt}`}>
         <div className="container">
           <div className={styles.sectionHead}>
-            <span className={styles.kicker}>About the Event</span>
-            <h2 className={styles.sectionTitle}>What is Diaspora Week?</h2>
+            <span className={styles.kicker}>
+              <Sparkles size={13} />
+              Why Attend
+            </span>
+            <h2 className={styles.sectionTitle}>Four Days That Will Change Your Future</h2>
             <p className={styles.sectionLead}>
-              Somaliland Diaspora Week is a 4-day flagship gathering that connects diaspora
-              members, entrepreneurs, investors, and local businesses through exhibitions,
-              forums, cultural showcases, and a dedicated startup pitching session. Whether
-              you&apos;re joining as an individual or representing a business, the event is
-              designed to build lasting partnerships across the diaspora community.
+              Somaliland Diaspora Week is more than an event — it&apos;s a movement that connects
+              hearts, builds bridges, and shapes the future of our nation together.
             </p>
           </div>
 
           <div className={styles.highlightsGrid}>
-            <div className={styles.highlightCard}>
-              <span className={styles.highlightIcon}>
-                <CalendarDays size={22} />
-              </span>
-              <h3>4-Day Event Schedule</h3>
-              <p>A full week of forums, workshops, networking sessions and cultural programs.</p>
-            </div>
-            <div className={styles.highlightCard}>
-              <span className={styles.highlightIcon}>
-                <Building2 size={22} />
-              </span>
-              <h3>Exhibitors</h3>
-              <p>Businesses and organizations showcase products, services and investment opportunities.</p>
-            </div>
-            <div className={styles.highlightCard}>
-              <span className={styles.highlightIcon}>
-                <Rocket size={22} />
-              </span>
-              <h3>Startup Pitching Session</h3>
-              <p>Diaspora-led startups pitch ideas to investors, partners and the community.</p>
-            </div>
-            <div className={styles.highlightCard}>
-              <span className={styles.highlightIcon}>
-                <Camera size={22} />
-              </span>
-              <h3>Photo &amp; Video Coverage</h3>
-              <p>Relive past events and follow live coverage through our media gallery.</p>
-            </div>
+            {[
+              {
+                icon: <CalendarDays size={24} />,
+                color: "#1f8a3b",
+                bg: "linear-gradient(135deg,#d7f5e0,#b8eccb)",
+                title: "4-Day Event Schedule",
+                desc: "A full program of forums, workshops, networking sessions, and cultural galas — something for every member of the diaspora.",
+              },
+              {
+                icon: <Building2 size={24} />,
+                color: "#0070c0",
+                bg: "linear-gradient(135deg,#daeeff,#b8dcf5)",
+                title: "Business Exhibition Hall",
+                desc: "Businesses and organizations showcase products, services and investment opportunities from across the globe.",
+              },
+              {
+                icon: <Rocket size={24} />,
+                color: "#b45309",
+                bg: "linear-gradient(135deg,#fef3c7,#fde68a)",
+                title: "Startup Pitching Stage",
+                desc: "Diaspora-led startups pitch bold ideas to a panel of investors, partners and community leaders.",
+              },
+              {
+                icon: <Camera size={24} />,
+                color: "#7c3aed",
+                bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)",
+                title: "Live Media Coverage",
+                desc: "Follow the event live, relive past highlights, and access full media archives through our portal.",
+              },
+              {
+                icon: <Globe size={24} />,
+                color: "#0f766e",
+                bg: "linear-gradient(135deg,#ccfbf1,#a7f3d0)",
+                title: "Global Networking",
+                desc: "Connect with diaspora members, investors, government officials and changemakers from 40+ countries.",
+              },
+              {
+                icon: <Heart size={24} />,
+                color: "#be123c",
+                bg: "linear-gradient(135deg,#ffe4e6,#fecdd3)",
+                title: "Cultural Reconnection",
+                desc: "Celebrate Somaliland's rich culture, history, and identity through art, music, food and storytelling.",
+              },
+            ].map((item, i) => (
+              <div className={styles.highlightCard} key={i}>
+                <span
+                  className={styles.highlightIcon}
+                  style={{ background: item.bg, color: item.color }}
+                >
+                  {item.icon}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+                <span className={styles.cardArrow} style={{ color: item.color }}>
+                  Learn more <ChevronRight size={14} />
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Schedule outline */}
-      <section className={`${styles.section} ${styles.sectionAlt}`}>
+      {/* ── SCHEDULE ── */}
+      <section className={styles.section}>
         <div className="container">
           <div className={styles.sectionHead}>
-            <span className={styles.kicker}>4-Day Program</span>
+            <span className={styles.kicker}>
+              <CalendarDays size={13} />
+              4-Day Program
+            </span>
             <h2 className={styles.sectionTitle}>Event Schedule Outline</h2>
             <p className={styles.sectionLead}>
-              Here&apos;s a quick look at how the week unfolds. View the full session details,
+              A carefully curated journey through four transformative days. Full session details,
               speakers, and locations in the{" "}
               <Link href="/diaspora-week/portal">Event Portal</Link>.
             </p>
           </div>
 
-          <div className={styles.scheduleGrid}>
-            {scheduleDays.slice(0, 4).map((day) => (
-              <div className={styles.dayCard} key={day.dayNumber}>
-                <span className={styles.dayBadge}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
-                {day.date && <span className={styles.dayDate}>{day.date}</span>}
-                <h3>{day.title}</h3>
-                <div className={styles.dayLockNote}>
-                  <CalendarDays size={13} />
-                  <Link href="/diaspora-week/portal">View full details</Link>
+          <div className={styles.scheduleTimeline}>
+            {scheduleDays.slice(0, 4).map((day, i) => (
+              <div className={styles.timelineRow} key={day.dayNumber}>
+                <div className={styles.timelineSide}>
+                  <div className={styles.timelineNum}>{day.dayNumber}</div>
+                  {i < 3 && <div className={styles.timelineLine} />}
+                </div>
+                <div className={styles.timelineCard}>
+                  <div className={styles.timelineCardTop}>
+                    <span className={styles.dayBadge}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
+                    {day.date && <span className={styles.dayDate}>{day.date}</span>}
+                    <span className={styles.timelineEmoji}>{(day as { icon?: string }).icon || "📅"}</span>
+                  </div>
+                  <h3>{day.title}</h3>
+                  {(day as { desc?: string }).desc && (
+                    <p className={styles.timelineDesc}>{(day as { desc?: string }).desc}</p>
+                  )}
+                  <Link href="/diaspora-week/portal" className={styles.dayLink}>
+                    <CalendarDays size={13} />
+                    View full schedule
+                    <ChevronRight size={13} />
+                  </Link>
                 </div>
               </div>
             ))}
@@ -231,15 +437,18 @@ export default function DiasporaWeekPage() {
         </div>
       </section>
 
-      {/* Exhibitors */}
-      <section className={styles.section}>
+      {/* ── EXHIBITORS ── */}
+      <section className={`${styles.section} ${styles.sectionAlt}`}>
         <div className="container">
           <div className={styles.sectionHead}>
-            <span className={styles.kicker}>Showcase</span>
-            <h2 className={styles.sectionTitle}>Exhibitors</h2>
+            <span className={styles.kicker}>
+              <Building2 size={13} />
+              Showcase
+            </span>
+            <h2 className={styles.sectionTitle}>Meet the Exhibitors</h2>
             <p className={styles.sectionLead}>
-              Diaspora businesses and organizations from around the world will showcase their
-              products, services and investment opportunities throughout the week.
+              Diaspora businesses and organizations from around the world will showcase
+              their products, services and investment opportunities throughout the week.
             </p>
           </div>
 
@@ -258,43 +467,90 @@ export default function DiasporaWeekPage() {
               ))}
             </div>
           ) : (
-            <div className={styles.placeholderCard}>
-              <Building2 size={28} />
-              <p>Exhibitor list will be published soon. Register as a business to apply for a booth.</p>
+            <div className={styles.comingSoonCard}>
+              <div className={styles.comingSoonIcon}>
+                <Building2 size={32} />
+              </div>
+              <h3>Exhibitors Announced Soon</h3>
+              <p>
+                Businesses from across the diaspora are applying for exhibition booths. The
+                full exhibitor list will be published here.
+              </p>
+              <Link href="/diaspora-week/register" className={styles.comingSoonCta}>
+                Apply for a Booth
+              </Link>
             </div>
           )}
         </div>
       </section>
 
-      {/* Startup Pitching */}
-      <section className={`${styles.section} ${styles.sectionAlt}`}>
+      {/* ── STARTUP PITCHING ── */}
+      <section className={styles.pitchSection}>
         <div className="container">
-          <div className={styles.pitchBanner}>
-            <div className={styles.pitchIcon}>
-              <Lightbulb size={32} />
-            </div>
-            <div>
-              <span className={styles.kicker}>Innovation Stage</span>
-              <h2 className={styles.sectionTitle}>Startup Pitching Session</h2>
-              <p className={styles.sectionLead}>
-                A dedicated session where diaspora entrepreneurs and startups pitch their ideas
-                to a panel of investors, partners and community leaders. Indicate your interest
-                during registration to apply for a pitching slot.
+          <div className={styles.pitchInner}>
+            <div className={styles.pitchLeft}>
+              <div className={styles.pitchIconWrap}>
+                <Lightbulb size={36} />
+              </div>
+              <span className={styles.kicker} style={{ color: "#fbbf24" }}>
+                Innovation Stage
+              </span>
+              <h2 className={styles.pitchTitle}>Startup Pitching Session</h2>
+              <p className={styles.pitchDesc}>
+                A dedicated stage where diaspora entrepreneurs pitch transformative ideas to a
+                panel of investors, partners and community leaders. This is your moment to turn
+                a vision into a funded reality.
               </p>
+              <div className={styles.pitchFeatures}>
+                <div className={styles.pitchFeature}>
+                  <TrendingUp size={16} /> Pitch to real investors
+                </div>
+                <div className={styles.pitchFeature}>
+                  <Users size={16} /> Live audience of 500+
+                </div>
+                <div className={styles.pitchFeature}>
+                  <Star size={16} /> Winners announced at Gala
+                </div>
+              </div>
+              <Link href="/diaspora-week/register" className={styles.pitchCta}>
+                Apply to Pitch
+                <ChevronRight size={16} />
+              </Link>
+            </div>
+            <div className={styles.pitchRight}>
+              <div className={styles.pitchStat}>
+                <strong>Day 2</strong>
+                <span>Innovation Stage</span>
+              </div>
+              <div className={styles.pitchStat}>
+                <strong>10+</strong>
+                <span>Startup Slots</span>
+              </div>
+              <div className={styles.pitchStat}>
+                <strong>$50K+</strong>
+                <span>In Potential Investment Discussions</span>
+              </div>
+              <div className={styles.pitchStat}>
+                <strong>Live</strong>
+                <span>Judging Panel</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Gallery preview */}
+      {/* ── GALLERY ── */}
       <section className={styles.section}>
         <div className="container">
           <div className={styles.sectionHead}>
-            <span className={styles.kicker}>Memories</span>
+            <span className={styles.kicker}>
+              <Camera size={13} />
+              Memories
+            </span>
             <h2 className={styles.sectionTitle}>Photo &amp; Video Gallery</h2>
             <p className={styles.sectionLead}>
-              A glimpse from previous Diaspora Week events. Approved participants get access to
-              the full media archive in the Event Portal.
+              A glimpse of past Diaspora Week moments. Full media archive available to
+              registered participants in the Event Portal.
             </p>
           </div>
 
@@ -309,27 +565,43 @@ export default function DiasporaWeekPage() {
                   )}
                   {item.type === "video" && (
                     <span className={styles.galleryPlay}>
-                      <i className="fa-solid fa-play" aria-hidden="true"></i>
+                      <Play size={20} fill="white" />
                     </span>
                   )}
                 </div>
               ))}
             </div>
           ) : (
-            <div className={styles.placeholderCard}>
-              <Camera size={28} />
-              <p>Gallery from this year&apos;s Diaspora Week will appear here.</p>
+            <div className={styles.galleryPlaceholder}>
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className={styles.galleryPlaceholderItem}>
+                  <Camera size={20} />
+                </div>
+              ))}
+              <div className={styles.galleryPlaceholderOverlay}>
+                <Camera size={32} />
+                <p>Gallery from Diaspora Week 2026 will appear here</p>
+                <Link href="/diaspora-week/portal" className={styles.galleryPortalLink}>
+                  Access Event Portal
+                </Link>
+              </div>
             </div>
           )}
         </div>
       </section>
 
-      {/* Partners */}
+      {/* ── PARTNERS ── */}
       <section className={`${styles.section} ${styles.sectionAlt}`}>
         <div className="container">
           <div className={styles.sectionHead}>
-            <span className={styles.kicker}>Collaboration</span>
+            <span className={styles.kicker}>
+              <Handshake size={13} />
+              Collaboration
+            </span>
             <h2 className={styles.sectionTitle}>Our Partners</h2>
+            <p className={styles.sectionLead}>
+              Leading organizations supporting Somaliland Diaspora Week.
+            </p>
           </div>
 
           {!loading && content.partnersPreview.length > 0 ? (
@@ -345,32 +617,64 @@ export default function DiasporaWeekPage() {
               ))}
             </div>
           ) : (
-            <div className={styles.placeholderCard}>
+            <div className={styles.partnerComingSoon}>
               <Handshake size={28} />
-              <p>Partner organizations will be announced soon.</p>
+              <p>Partner organizations will be announced soon. <Link href="/contact">Become a partner</Link></p>
             </div>
           )}
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── TESTIMONIAL QUOTE ── */}
+      <section className={styles.quoteSection}>
+        <div className="container">
+          <div className={styles.quoteInner}>
+            <div className={styles.quoteMark}>&ldquo;</div>
+            <blockquote className={styles.quoteText}>
+              Diaspora Week is not just an event — it is a declaration that wherever we are in
+              the world, our hearts, our investments, and our futures remain anchored in
+              Somaliland.
+            </blockquote>
+            <cite className={styles.quoteAuthor}>
+              <span className={styles.quoteAvatar}>SL</span>
+              <span>
+                <strong>Somaliland Diaspora Agency</strong>
+                <em>Official Statement</em>
+              </span>
+            </cite>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ── */}
       <section className={styles.ctaSection}>
+        <div className={styles.ctaBg} aria-hidden="true">
+          <div className={styles.ctaOrb1} />
+          <div className={styles.ctaOrb2} />
+        </div>
         <div className={`container ${styles.ctaInner}`}>
-          <div className={styles.ctaIcon}>
-            <Users size={28} />
-          </div>
-          <div className={styles.ctaText}>
-            <h2>Ready to participate at Somaliland Diaspora Week?</h2>
-            <p>
-              The event portal is open to everyone — explore the full schedule, exhibitors and
-              gallery. Register as an individual or a business to secure a venue hall booth or
-              startup pitching slot.
+          <div className={styles.ctaContent}>
+            <div className={styles.ctaIconWrap}>
+              <Users size={30} />
+            </div>
+            <h2 className={styles.ctaTitle}>
+              Your place at Diaspora Week is waiting
+            </h2>
+            <p className={styles.ctaDesc}>
+              Join thousands of diaspora members, entrepreneurs, investors and cultural leaders.
+              The event portal is open — explore the schedule, meet exhibitors, and register today.
             </p>
+            <div className={styles.ctaButtons}>
+              <Link href="/diaspora-week/register" className={styles.ctaButtonPrimary}>
+                Register Now — Free
+                <ChevronRight size={18} />
+              </Link>
+              <Link href="/diaspora-week/portal" className={styles.ctaButtonSecondary}>
+                <CalendarDays size={16} />
+                View Event Portal
+              </Link>
+            </div>
           </div>
-          <Link href="/diaspora-week/register" className={styles.ctaButton}>
-            Start Registration
-            <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </Link>
         </div>
       </section>
     </main>
