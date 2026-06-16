@@ -689,13 +689,13 @@
 }
 
 .heroStat strong {
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 800;
   color: #fff;
 }
 
 .heroStat span {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   color: rgba(238, 250, 243, 0.85);
 }
 
@@ -738,7 +738,7 @@
 
 .scheduleHeroTitle {
   margin: 1.25rem 0 0.85rem;
-  font-size: 2.9rem;
+  font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 900;
   letter-spacing: -0.01em;
   color: #ffffff;
@@ -749,7 +749,7 @@
   margin: 0 auto;
   max-width: 65ch;
   text-align: center;
-  font-size: 1.55rem;
+  font-size: 1.6rem;
   line-height: 1.75;
   color: rgba(255, 255, 255, 0.92);
 }
@@ -850,14 +850,14 @@
 
 .quickLinkCard h3 {
   margin: 0 0 0.35rem;
-  font-size: 1.38rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .quickLinkCard p {
   margin: 0;
-  font-size: 1.21rem;
+  font-size: 1.2rem;
   color: #4b666d;
   line-height: 1.6;
 }
@@ -887,7 +887,7 @@
   border-radius: 999px;
   padding: 0.7rem 1.4rem;
   font-weight: 700;
-  font-size: 1.12rem;
+  font-size: 1.25rem;
   color: #fff;
   text-decoration: none;
   backdrop-filter: blur(10px);
@@ -896,7 +896,7 @@
 
 .dayTab small {
   font-weight: 600;
-  font-size: 0.98rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -985,7 +985,7 @@
 }
 
 .scheduleDayLabel {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -994,7 +994,7 @@
 
 .scheduleDayHeading h3 {
   margin: 0;
-  font-size: 1.85rem;
+  font-size: 2.1rem;
   font-weight: 800;
   line-height: 1.25;
   color: #fff;
@@ -1002,7 +1002,7 @@
 }
 
 .scheduleDayDate {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.8);
 }
@@ -1065,7 +1065,7 @@
 
 .profileCard h3 {
   margin: 0 0 0.75rem;
-  font-size: 1.44rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: #0c2f37;
 }
@@ -1079,7 +1079,7 @@
 }
 
 .profileList li {
-  font-size: 1.31rem;
+  font-size: 1.4rem;
   color: #4b666d;
 }
 
@@ -1105,31 +1105,31 @@
 
 .sessionTime {
   flex-shrink: 0;
-  width: 120px;
+  width: 130px;
   font-weight: 800;
-  font-size: 1.31rem;
+  font-size: 1.45rem;
   color: #1f8a3b;
 }
 
 .sessionBody h3 {
   margin: 0 0 0.4rem;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .sessionBody p {
   margin: 0 0 0.6rem;
-  font-size: 1.31rem;
+  font-size: 1.4rem;
   color: #4b666d;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 .sessionMeta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
-  font-size: 1.21rem;
+  font-size: 1.3rem;
   color: #6b8e85;
 }
 
@@ -1146,7 +1146,7 @@
   padding: 0.2rem 0.7rem;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 1.12rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -1179,7 +1179,7 @@
 
 .entityCard h3 {
   margin: 0;
-  font-size: 1.38rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0c2f37;
 }
@@ -1192,24 +1192,24 @@
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 1.09rem;
+  font-size: 1.2rem;
 }
 
 .entityMeta {
   margin: 0;
-  font-size: 1.19rem;
+  font-size: 1.3rem;
   color: #6b8e85;
 }
 
 .entityCard p {
   margin: 0;
-  font-size: 1.29rem;
+  font-size: 1.4rem;
   color: #4b666d;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .entityCard a {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #1f8a3b;
   text-decoration: none;
@@ -1329,7 +1329,7 @@
 
 .themeSubtitle {
   margin: 0 0 1rem;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: #1f8a3b;
 }
@@ -1381,15 +1381,15 @@
 
 .goalRowBody h3 {
   margin: 0 0 0.35rem;
-  font-size: 1.45rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .goalRowBody p {
   margin: 0;
-  font-size: 1.27rem;
-  line-height: 1.65;
+  font-size: 1.4rem;
+  line-height: 1.7;
   color: #4b666d;
 }
 
@@ -1450,7 +1450,7 @@
 }
 
 .dayButtonTitle {
-  font-size: 1.18rem;
+  font-size: 1.35rem;
   font-weight: 600;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.95);
@@ -1514,6 +1514,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
+  font-size: 1.3rem;
   border: none;
   border-radius: 999px;
   padding: 0.85rem 1.75rem;
@@ -1696,7 +1697,7 @@
 }
 
 .logoCloudName {
-  font-size: 1.02rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: #0c2f37;
   line-height: 1.35;
