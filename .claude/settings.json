@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST http://localhost:3000/api/diaspora-week/activation-notify -H 'Content-Type: application/json' -H 'x-member-webhook-secret: a7f3c9d2e6d4f4a1c5d9e2f7b3a6c1d8e4f3a2c6g7d1e3f5a8c2d9e6f4b1a7c9' -d '{\"registrationId\":\"1\",\"status\":\"approved\"}')",
+      "Bash(curl -s \"https://admin.sldiaspora.org/items/diaspora_week_registrations_individual/1\" -H \"Authorization: Bearer JC8GG06MBC0RwGs1hm8PvwVYoatMw4fN\")",
+      "Bash(curl -s -c c:/tmp/cookies.txt -X POST http://localhost:3000/api/diaspora-week/portal/login -H 'Content-Type: application/json' -d '{\"email\":\"test.individual1@example.com\",\"accessCode\":\"EC7D-E749\"}')",
+      "Bash(curl -s -b c:/tmp/cookies.txt http://localhost:3000/api/diaspora-week/portal/me)"
+    ]
+  }
+}

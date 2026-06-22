@@ -11,30 +11,33 @@ interface GlobeProps {
 }
 
 const countryFlagCodeMap: Record<string, string> = {
-  "United Kingdom": "gb",
-  UK: "gb",
-  England: "gb",
-  Scotland: "gb",
-  Wales: "gb",
-  "United States": "us",
-  USA: "us",
-  Somaliland: "somaliland",
-  Somalia: "somaliland",
-  Ethiopia: "et",
-  Kenya: "ke",
-  India: "in",
-  UAE: "ae",
-  "Saudi Arabia": "sa",
-  Turkey: "tr",
-  Germany: "de",
-  France: "fr",
-  Canada: "ca",
-  Sweden: "se",
-  Norway: "no",
-  Denmark: "dk",
-  Netherlands: "nl",
-  Belgium: "be",
-  Switzerland: "ch",
+  "Afghanistan": "af", "Algeria": "dz", "Angola": "ao", "Argentina": "ar",
+  "Australia": "au", "Austria": "at", "Bahrain": "bh", "Bangladesh": "bd",
+  "Belgium": "be", "Brazil": "br", "Bulgaria": "bg", "Cameroon": "cm",
+  "Canada": "ca", "Chad": "td", "Chile": "cl", "China": "cn",
+  "Colombia": "co", "Croatia": "hr", "Cyprus": "cy", "Czech Republic": "cz",
+  "Denmark": "dk", "Djibouti": "dj", "Egypt": "eg", "England": "gb",
+  "Eritrea": "er", "Estonia": "ee", "Ethiopia": "et", "Finland": "fi",
+  "France": "fr", "Germany": "de", "Ghana": "gh", "Greece": "gr",
+  "Hungary": "hu", "Iceland": "is", "India": "in", "Indonesia": "id",
+  "Iran": "ir", "Iraq": "iq", "Ireland": "ie", "Israel": "il",
+  "Italy": "it", "Japan": "jp", "Jordan": "jo", "Kenya": "ke",
+  "Kosovo": "xk", "Kuwait": "kw", "Latvia": "lv", "Lebanon": "lb",
+  "Libya": "ly", "Lithuania": "lt", "Luxembourg": "lu", "Madagascar": "mg",
+  "Malaysia": "my", "Malta": "mt", "Mauritius": "mu", "Mexico": "mx",
+  "Morocco": "ma", "Mozambique": "mz", "Netherlands": "nl", "New Zealand": "nz",
+  "Nigeria": "ng", "Norway": "no", "Oman": "om", "Pakistan": "pk",
+  "Palestine": "ps", "Philippines": "ph", "Poland": "pl", "Portugal": "pt",
+  "Qatar": "qa", "Romania": "ro", "Russia": "ru", "Rwanda": "rw",
+  "Saudi Arabia": "sa", "Scotland": "gb", "Senegal": "sn", "Serbia": "rs",
+  "Singapore": "sg", "Somalia": "somaliland", "Somaliland": "somaliland",
+  "South Africa": "za", "South Korea": "kr", "South Sudan": "ss",
+  "Spain": "es", "Sri Lanka": "lk", "Sudan": "sd", "Sweden": "se",
+  "Switzerland": "ch", "Syria": "sy", "Tanzania": "tz", "Thailand": "th",
+  "Tunisia": "tn", "Turkey": "tr", "UAE": "ae", "Uganda": "ug",
+  "Ukraine": "ua", "United Arab Emirates": "ae", "United Kingdom": "gb",
+  "United States": "us", "US": "us", "USA": "us", "UK": "gb",
+  "Vietnam": "vn", "Wales": "gb", "Yemen": "ye", "Zimbabwe": "zw",
 };
 
 const countryCodeCache = new Map<string, string | null>();
@@ -43,6 +46,7 @@ const getKnownCountryFlagCode = (countryName: string) => {
   return countryFlagCodeMap[countryName.trim()] || null;
 };
 
+// Resolves a flag code from the hardcoded map — no external API needed
 const resolveCountryFlagCode = async (countryName: string) => {
   const normalizedName = countryName.trim();
   const cacheKey = normalizedName.toLowerCase();
@@ -54,31 +58,8 @@ const resolveCountryFlagCode = async (countryName: string) => {
   }
 
   const knownCode = getKnownCountryFlagCode(normalizedName);
-  if (knownCode) {
-    countryCodeCache.set(cacheKey, knownCode);
-    return knownCode;
-  }
-
-  const tryLookup = async (fullText: boolean) => {
-    const url = `https://restcountries.com/v3.1/name/${encodeURIComponent(
-      normalizedName
-    )}${fullText ? "?fullText=true" : ""}`;
-
-    const response = await fetch(url);
-    if (!response.ok) return null;
-
-    const payload = (await response.json().catch(() => null)) as
-      | Array<{ cca2?: string }>
-      | null;
-
-    const code = payload?.[0]?.cca2?.toLowerCase();
-    return code || null;
-  };
-
-  const resolvedCode = (await tryLookup(true)) ?? (await tryLookup(false));
-  countryCodeCache.set(cacheKey, resolvedCode);
-
-  return resolvedCode;
+  countryCodeCache.set(cacheKey, knownCode);
+  return knownCode;
 };
 
 const SOMALILAND_FLAG_SVG =
