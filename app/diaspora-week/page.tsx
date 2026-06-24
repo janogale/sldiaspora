@@ -456,7 +456,7 @@ export default function DiasporaWeekPage() {
       </section>
 
       {/* ── SCHEDULE ── */}
-      <section className={styles.section}>
+      <section className={`${styles.section} ${styles.scheduleSection}`}>
         <div className="container">
           <div className={styles.sectionHead}>
             <span className={styles.kicker}>
@@ -471,31 +471,43 @@ export default function DiasporaWeekPage() {
             </p>
           </div>
 
-          <div className={styles.scheduleTimeline}>
-            {scheduleDays.slice(0, 4).map((day, i) => (
-              <div className={styles.timelineRow} key={day.dayNumber}>
-                <div className={styles.timelineSide}>
-                  <div className={styles.timelineNum}>{day.dayNumber}</div>
-                  {i < 3 && <div className={styles.timelineLine} />}
-                </div>
-                <div className={styles.timelineCard}>
-                  <div className={styles.timelineCardTop}>
-                    <span className={styles.dayBadge}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
-                    {day.date && <span className={styles.dayDate}>{day.date}</span>}
-                    <span className={styles.timelineEmoji}>{(day as { icon?: string }).icon || "📅"}</span>
+          <div className={styles.scheduleGrid}>
+            {scheduleDays.slice(0, 4).map((day, i) => {
+              const accents = [
+                { line: "#1f8a3b", bg: "linear-gradient(135deg,#d7f5e0,#b8eccb)", num: "#1f8a3b" },
+                { line: "#0070c0", bg: "linear-gradient(135deg,#daeeff,#b8dcf5)", num: "#0070c0" },
+                { line: "#b45309", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", num: "#b45309" },
+                { line: "#7c3aed", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", num: "#7c3aed" },
+              ];
+              const a = accents[i];
+              return (
+                <div
+                  className={styles.schedCard}
+                  key={day.dayNumber}
+                  style={{ "--accent": a.line } as React.CSSProperties}
+                >
+                  <div className={styles.schedCardTop}>
+                    <span className={styles.schedDayNum} style={{ background: a.bg, color: a.num }}>
+                      {String(day.dayNumber).padStart(2, "0")}
+                    </span>
+                    <div className={styles.schedMeta}>
+                      <span className={styles.schedDayLabel}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
+                      {day.date && <span className={styles.schedDate}>{day.date}</span>}
+                    </div>
+                    <span className={styles.schedEmoji}>{(day as { icon?: string }).icon || "📅"}</span>
                   </div>
-                  <h3>{day.title}</h3>
+                  <h3 className={styles.schedTitle}>{day.title}</h3>
                   {(day as { desc?: string }).desc && (
-                    <p className={styles.timelineDesc}>{(day as { desc?: string }).desc}</p>
+                    <p className={styles.schedDesc}>{(day as { desc?: string }).desc}</p>
                   )}
-                  <Link href="/diaspora-week/portal" className={styles.dayLink}>
+                  <Link href="/diaspora-week/portal" className={styles.schedLink}>
                     <CalendarDays size={13} />
                     View full schedule
                     <ChevronRight size={13} />
                   </Link>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
