@@ -175,8 +175,23 @@
 .formCard {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 243, 0.98) 100%);
   padding: 44px 38px;
-  max-height: 92vh;
+  max-height: 88vh;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.formCard::-webkit-scrollbar {
+  width: 5px;
+}
+
+.formCard::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.formCard::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 99px;
 }
 
 .title {
@@ -278,7 +293,47 @@
 
 /* Form */
 .form {
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
+}
+
+/* Grouped block with card style */
+.formBlock {
+  border: 1.3px solid var(--line);
+  border-radius: 18px;
+  padding: 1.5rem 1.5rem 0.25rem;
+  background: #ffffff;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 10px rgba(12, 47, 55, 0.05);
+}
+
+.formBlockHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1.5px solid var(--line);
+}
+
+.formBlockBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d7f5e0, #b8eccb);
+  color: var(--brand-2);
+  font-size: 1.19rem;
+  flex-shrink: 0;
+}
+
+.formBlockLabel {
+  font-size: 1.19rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-2);
 }
 
 .formSectionTitle {
@@ -299,6 +354,12 @@
 .fieldRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.fieldRow3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
 }
 
@@ -421,6 +482,130 @@
   min-width: 180px;
   font-size: 1.19rem;
   color: var(--ink-soft);
+}
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234b666d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* ID document type selector */
+.idDocTypeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 18px;
+}
+
+.idDocTypeCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  background: #f4fbf7;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: var(--ink);
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.idDocTypeCard strong {
+  display: block;
+  font-size: 1.29rem;
+  font-weight: 700;
+  color: var(--ink);
+  transition: color 0.2s ease;
+}
+
+.idDocTypeCard small {
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+}
+
+.idDocTypeCard:hover {
+  border-color: var(--brand-2);
+  background: #fff;
+}
+
+.idDocTypeCardActive {
+  border-color: var(--brand-2);
+  background: #edf8f1;
+  box-shadow: 0 0 0 3px rgba(1, 109, 33, 0.12);
+}
+
+.idDocTypeCardActive strong {
+  color: var(--brand-2);
+}
+
+.idDocTypeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(1, 109, 33, 0.1);
+  color: var(--brand-2);
+  font-size: 1.38rem;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.idDocTypeCardActive .idDocTypeIcon {
+  background: rgba(1, 109, 33, 0.18);
+}
+
+.idDocRadio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Upload zone */
+.uploadZone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  padding: 1.75rem 1rem;
+  background: #f4fbf7;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 1.25rem;
+}
+
+.uploadZone i {
+  font-size: 2rem;
+  color: var(--brand-2);
+  margin-bottom: 0.25rem;
+}
+
+.uploadZone:hover {
+  border-color: var(--brand-2);
+  background: #edf8f1;
+}
+
+.uploadZoneInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .errorBox {
@@ -548,6 +733,74 @@
   color: var(--brand-2);
 }
 
+.fileHint {
+  margin: 6px 0 0;
+  font-size: 1.19rem;
+  color: var(--ink-soft);
+}
+
+/* Contact info box */
+.contactInfoBox {
+  background: #f4fbf7;
+  border-radius: 14px;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.contactInfoNote {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.contactInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.contactInfoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1.3px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.contactInfoItemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #d7f5e0, #b8eccb);
+  color: var(--brand-2);
+  font-size: 1.19rem;
+  flex-shrink: 0;
+}
+
+.contactInfoItemLabel {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-bottom: 2px;
+}
+
+.contactInfoItemValue {
+  display: block;
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
 @keyframes panel-enter {
   from {
     opacity: 0;
@@ -572,6 +825,7 @@
 
   .formCard {
     max-height: none;
+    overflow-y: visible;
   }
 }
 
@@ -598,6 +852,11 @@
     gap: 0;
   }
 
+  .fieldRow3 {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
   .checkboxRow {
     grid-template-columns: 1fr;
   }
@@ -605,9 +864,22 @@
   .typeGrid {
     grid-template-columns: 1fr;
   }
+
+  .contactInfoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .idDocTypeRow {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
+  .fieldRow3 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
   .logoUpload {
     flex-direction: column;
     align-items: flex-start;
