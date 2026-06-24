@@ -461,8 +461,6 @@ export default function DiasporaWeekPage() {
                   ) : (
                     <span className={styles.logoFallback}>{item.name.slice(0, 2).toUpperCase()}</span>
                   )}
-                  <strong>{item.name}</strong>
-                  {item.category && <span>{item.category}</span>}
                 </div>
               ))}
             </div>
@@ -580,7 +578,7 @@ export default function DiasporaWeekPage() {
               ))}
               <div className={styles.galleryPlaceholderOverlay}>
                 <Camera size={32} />
-                <p>Gallery from Diaspora Week 2026 will appear here</p>
+                <p>Photos &amp; videos from Diaspora Week 2026 will appear here</p>
                 <Link href="/diaspora-week/portal" className={styles.galleryPortalLink}>
                   Access Event Portal
                 </Link>
@@ -617,64 +615,52 @@ export default function DiasporaWeekPage() {
               ))}
             </div>
           ) : (
-            <div className={styles.partnerComingSoon}>
-              <Handshake size={28} />
-              <p>Partner organizations will be announced soon. <Link href="/contact">Become a partner</Link></p>
+            <div className={styles.partnersStrip}>
+              {[
+                {
+                  name: "Hargeisa Local Development Authority",
+                  abbr: "HLDA",
+                  logo: "https://hlda.so/wp-content/uploads/2021/10/HLDA-logo.png",
+                },
+                {
+                  name: "Burco Municipality",
+                  abbr: "BM",
+                  logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Burco_Logo.png/200px-Burco_Logo.png",
+                },
+                {
+                  name: "Berbera Port Authority",
+                  abbr: "BP",
+                  logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Berbera_Port_logo.png/200px-Berbera_Port_logo.png",
+                },
+                {
+                  name: "Telesom",
+                  abbr: "TL",
+                  logo: "https://telesom.so/wp-content/uploads/2021/06/telesom-logo-new.png",
+                },
+                {
+                  name: "Dahabshiil",
+                  abbr: "DS",
+                  logo: "https://upload.wikimedia.org/wikipedia/commons/4/40/Dahabshiil_logo.svg",
+                },
+              ].map((p) => (
+                <div className={styles.partnerLogo} key={p.name}>
+                  <img
+                    src={p.logo}
+                    alt={p.name}
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      img.style.display = "none";
+                      const fb = img.nextElementSibling as HTMLElement | null;
+                      if (fb) fb.style.display = "flex";
+                    }}
+                  />
+                  <span className={styles.partnerFallback} style={{ display: "none" }}>
+                    {p.abbr}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
-        </div>
-      </section>
-
-      {/* ── TESTIMONIAL QUOTE ── */}
-      <section className={styles.quoteSection}>
-        <div className="container">
-          <div className={styles.quoteInner}>
-            <div className={styles.quoteMark}>&ldquo;</div>
-            <blockquote className={styles.quoteText}>
-              Diaspora Week is not just an event — it is a declaration that wherever we are in
-              the world, our hearts, our investments, and our futures remain anchored in
-              Somaliland.
-            </blockquote>
-            <cite className={styles.quoteAuthor}>
-              <span className={styles.quoteAvatar}>SL</span>
-              <span>
-                <strong>Somaliland Diaspora Agency</strong>
-                <em>Official Statement</em>
-              </span>
-            </cite>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ── */}
-      <section className={styles.ctaSection}>
-        <div className={styles.ctaBg} aria-hidden="true">
-          <div className={styles.ctaOrb1} />
-          <div className={styles.ctaOrb2} />
-        </div>
-        <div className={`container ${styles.ctaInner}`}>
-          <div className={styles.ctaContent}>
-            <div className={styles.ctaIconWrap}>
-              <Users size={30} />
-            </div>
-            <h2 className={styles.ctaTitle}>
-              Your place at Diaspora Week is waiting
-            </h2>
-            <p className={styles.ctaDesc}>
-              Join thousands of diaspora members, entrepreneurs, investors and cultural leaders.
-              The event portal is open — explore the schedule, meet exhibitors, and register today.
-            </p>
-            <div className={styles.ctaButtons}>
-              <Link href="/diaspora-week/register" className={styles.ctaButtonPrimary}>
-                Register Now — Free
-                <ChevronRight size={18} />
-              </Link>
-              <Link href="/diaspora-week/portal" className={styles.ctaButtonSecondary}>
-                <CalendarDays size={16} />
-                View Event Portal
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
     </main>
