@@ -8,7 +8,7 @@ import GalleriesHome from "./components/galleries-home";
 import GetInvolved from "./components/get-involved";
 import Header from "./components/header";
 import HelpDesk from "./components/helpDesk";
-import HeroMap from "./components/hero2";
+import HeroMap from "./components/hero2-client";
 import InvestmentOpportunities from "./components/investment-opportunities";
 import NewsEvents from "./components/news-events";
 import ProcessSection from "./components/process-section";
