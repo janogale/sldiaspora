@@ -140,6 +140,7 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
 export default function DiasporaWeekPage() {
   const [content, setContent] = useState<PublicContent>(EMPTY_CONTENT);
   const [loading, setLoading] = useState(true);
+  const [galleryImages, setGalleryImages] = useState<{ id: string; url: string; title: string; type: "image" | "video" }[]>([]);
   const [videoOpen, setVideoOpen] = useState(false);
   const videoRef = useRef<HTMLDivElement>(null);
 
@@ -149,12 +150,30 @@ export default function DiasporaWeekPage() {
     let isMounted = true;
     const load = async () => {
       try {
-        const response = await fetch("/api/diaspora-week/content", { method: "GET" });
-        const result = (await response.json().catch(() => null)) as
-          | { data?: PublicContent }
-          | null;
+        const [weekRes, galRes] = await Promise.all([
+          fetch("/api/diaspora-week/content", { method: "GET" }),
+          fetch("/api/galleries", { method: "GET" }),
+        ]);
+        const weekResult = (await weekRes.json().catch(() => null)) as { data?: PublicContent } | null;
+        const galResult = (await galRes.json().catch(() => null)) as { data?: Array<{ id: string; title: string; images: string[] }> } | null;
         if (!isMounted) return;
-        if (response.ok && result?.data) setContent(result.data);
+        if (weekRes.ok && weekResult?.data) setContent(weekResult.data);
+
+        // Build flat image list: prefer diaspora-week gallery, fall back to general galleries
+        const weekGallery = weekResult?.data?.galleryPreview ?? [];
+        if (weekGallery.length > 0) {
+          setGalleryImages(weekGallery.slice(0, 8));
+        } else if (galResult?.data) {
+          const flat = galResult.data.flatMap((album) =>
+            (album.images ?? []).slice(0, 3).map((url, i) => ({
+              id: `${album.id}-${i}`,
+              url,
+              title: album.title,
+              type: "image" as const,
+            }))
+          ).slice(0, 8);
+          setGalleryImages(flat);
+        }
       } catch {
         // keep defaults
       } finally {
@@ -291,21 +310,28 @@ export default function DiasporaWeekPage() {
             </div>
 
             <div className={styles.videoThumb} onClick={() => setVideoOpen(true)} role="button" tabIndex={0} aria-label="Play announcement video" onKeyDown={e => e.key === "Enter" && setVideoOpen(true)}>
-              <div className={styles.videoThumbImg}>
-                <video
-                  src="/assets/videos/diaspora-week-hero.mp4"
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                />
-                <div className={styles.videoThumbOverlay}>
-                  <div className={styles.playBtn}>
-                    <Play size={28} fill="white" />
-                  </div>
-                  <div className={styles.videoThumbBadge}>
-                    <Sparkles size={12} />
-                    Official 2026 Announcement
+              {/* floating accent blobs */}
+              <div className={styles.videoAccent1} aria-hidden="true" />
+              <div className={styles.videoAccent2} aria-hidden="true" />
+
+              {/* inner frame with shadow + border-radius */}
+              <div className={styles.videoThumbInner}>
+                <div className={styles.videoThumbImg}>
+                  <video
+                    src="/assets/videos/diaspora-week-hero.mp4"
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                  />
+                  <div className={styles.videoThumbOverlay}>
+                    <div className={styles.playBtn}>
+                      <Play size={32} fill="white" />
+                    </div>
+                    <div className={styles.videoThumbBadge}>
+                      <Sparkles size={12} />
+                      Official 2026 Announcement
+                    </div>
                   </div>
                 </div>
               </div>
@@ -315,7 +341,7 @@ export default function DiasporaWeekPage() {
       </section>
 
       {/* ── WHY ATTEND ── */}
-      <section className={`${styles.section} ${styles.sectionAlt}`}>
+      <section className={`${styles.section} ${styles.whySection}`}>
         <div className="container">
           <div className={styles.sectionHead}>
             <span className={styles.kicker}>
@@ -329,63 +355,100 @@ export default function DiasporaWeekPage() {
             </p>
           </div>
 
-          <div className={styles.highlightsGrid}>
+          {/* Top row: 1 large feature + 2 stacked cards */}
+          <div className={styles.whyTopRow}>
+            {/* Feature card */}
+            <div className={`${styles.whyCard} ${styles.whyCardFeature}`}>
+              <span className={styles.whyNum}>01</span>
+              <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#d7f5e0,#b8eccb)", color: "#1f8a3b" }}>
+                <CalendarDays size={28} />
+              </span>
+              <h3 className={styles.whyTitle}>4-Day Event Schedule</h3>
+              <p className={styles.whyDesc}>
+                A carefully curated four-day journey — opening ceremonies, investment forums,
+                startup pitching, cultural galas, and networking sessions. Every moment is
+                designed to connect, inspire, and transform the diaspora experience.
+              </p>
+              <div className={styles.whyTags}>
+                <span>Forums</span>
+                <span>Workshops</span>
+                <span>Networking</span>
+                <span>Gala Night</span>
+              </div>
+            </div>
+
+            {/* 2 stacked cards */}
+            <div className={styles.whyStack}>
+              <div className={`${styles.whyCard} ${styles.whyCardSide}`}>
+                <span className={styles.whyNum}>02</span>
+                <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#daeeff,#b8dcf5)", color: "#0070c0" }}>
+                  <Building2 size={22} />
+                </span>
+                <div>
+                  <h3 className={styles.whyTitle}>Business Exhibition Hall</h3>
+                  <p className={styles.whyDesc}>
+                    Diaspora businesses showcase products, services and investment opportunities to a live audience of decision-makers.
+                  </p>
+                </div>
+              </div>
+              <div className={`${styles.whyCard} ${styles.whyCardSide}`}>
+                <span className={styles.whyNum}>03</span>
+                <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#fef3c7,#fde68a)", color: "#b45309" }}>
+                  <Rocket size={22} />
+                </span>
+                <div>
+                  <h3 className={styles.whyTitle}>Startup Pitching Stage</h3>
+                  <p className={styles.whyDesc}>
+                    Pitch bold ideas to investors and community leaders. Winners announced at the closing gala.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom row: 3 equal cards */}
+          <div className={styles.whyBottomRow}>
             {[
               {
-                icon: <CalendarDays size={24} />,
-                color: "#1f8a3b",
-                bg: "linear-gradient(135deg,#d7f5e0,#b8eccb)",
-                title: "4-Day Event Schedule",
-                desc: "A full program of forums, workshops, networking sessions, and cultural galas — something for every member of the diaspora.",
-              },
-              {
-                icon: <Building2 size={24} />,
-                color: "#0070c0",
-                bg: "linear-gradient(135deg,#daeeff,#b8dcf5)",
-                title: "Business Exhibition Hall",
-                desc: "Businesses and organizations showcase products, services and investment opportunities from across the globe.",
-              },
-              {
-                icon: <Rocket size={24} />,
-                color: "#b45309",
-                bg: "linear-gradient(135deg,#fef3c7,#fde68a)",
-                title: "Startup Pitching Stage",
-                desc: "Diaspora-led startups pitch bold ideas to a panel of investors, partners and community leaders.",
-              },
-              {
-                icon: <Camera size={24} />,
-                color: "#7c3aed",
+                num: "04",
+                icon: <Camera size={22} />,
                 bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)",
+                color: "#7c3aed",
                 title: "Live Media Coverage",
-                desc: "Follow the event live, relive past highlights, and access full media archives through our portal.",
+                desc: "Follow the event live and access full media archives through our portal.",
+                tags: ["Live Stream", "Photo Archive", "Videos"],
               },
               {
-                icon: <Globe size={24} />,
-                color: "#0f766e",
+                num: "05",
+                icon: <Globe size={22} />,
                 bg: "linear-gradient(135deg,#ccfbf1,#a7f3d0)",
+                color: "#0f766e",
                 title: "Global Networking",
-                desc: "Connect with diaspora members, investors, government officials and changemakers from 40+ countries.",
+                desc: "Connect with diaspora members, investors and changemakers from 40+ countries.",
+                tags: ["40+ Countries", "Investors", "Officials"],
               },
               {
-                icon: <Heart size={24} />,
-                color: "#be123c",
+                num: "06",
+                icon: <Heart size={22} />,
                 bg: "linear-gradient(135deg,#ffe4e6,#fecdd3)",
+                color: "#be123c",
                 title: "Cultural Reconnection",
-                desc: "Celebrate Somaliland's rich culture, history, and identity through art, music, food and storytelling.",
+                desc: "Celebrate Somaliland's rich identity through art, music, food and storytelling.",
+                tags: ["Art", "Music", "Heritage"],
               },
-            ].map((item, i) => (
-              <div className={styles.highlightCard} key={i}>
-                <span
-                  className={styles.highlightIcon}
-                  style={{ background: item.bg, color: item.color }}
-                >
-                  {item.icon}
-                </span>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-                <span className={styles.cardArrow} style={{ color: item.color }}>
-                  Learn more <ChevronRight size={14} />
-                </span>
+            ].map((item) => (
+              <div className={`${styles.whyCard} ${styles.whyCardBottom}`} key={item.num}>
+                <div className={styles.whyCardBottomTop}>
+                  <span className={styles.whyNum}>{item.num}</span>
+                  <span className={styles.whyIcon} style={{ background: item.bg, color: item.color }}>
+                    {item.icon}
+                  </span>
+                </div>
+                <h3 className={styles.whyTitle}>{item.title}</h3>
+                <p className={styles.whyDesc}>{item.desc}</p>
+                <div className={styles.whyTags}>
+                  {item.tags.map((t) => <span key={t}>{t}</span>)}
+                </div>
               </div>
             ))}
           </div>
@@ -465,18 +528,12 @@ export default function DiasporaWeekPage() {
               ))}
             </div>
           ) : (
-            <div className={styles.comingSoonCard}>
-              <div className={styles.comingSoonIcon}>
-                <Building2 size={32} />
-              </div>
-              <h3>Exhibitors Announced Soon</h3>
-              <p>
-                Businesses from across the diaspora are applying for exhibition booths. The
-                full exhibitor list will be published here.
-              </p>
-              <Link href="/diaspora-week/register" className={styles.comingSoonCta}>
-                Apply for a Booth
-              </Link>
+            <div className={styles.logoGrid}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div className={styles.logoCard} key={i}>
+                  <img src="/partners/Ministry.jpg" alt="Exhibitor" />
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -552,9 +609,9 @@ export default function DiasporaWeekPage() {
             </p>
           </div>
 
-          {!loading && content.galleryPreview.length > 0 ? (
+          {!loading && galleryImages.length > 0 ? (
             <div className={styles.galleryGrid}>
-              {content.galleryPreview.map((item) => (
+              {galleryImages.map((item) => (
                 <div className={styles.galleryItem} key={item.id}>
                   {item.type === "video" ? (
                     <video src={item.url} muted loop playsInline />
