@@ -602,45 +602,37 @@ export default function DiasporaWeekPage() {
             </p>
           </div>
 
-          {!loading && content.partnersPreview.length > 0 ? (
-            <div className={styles.partnersStrip}>
-              {content.partnersPreview.map((item) => (
-                <div className={styles.partnerLogo} key={item.id}>
-                  {item.logo ? (
-                    <img src={item.logo} alt={item.name} />
-                  ) : (
-                    <span>{item.name}</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className={styles.partnersStrip}>
+          <div className={styles.partnersStrip}>
               {[
                 {
                   name: "Hargeisa Local Development Authority",
                   abbr: "HLDA",
-                  logo: "https://hlda.so/wp-content/uploads/2021/10/HLDA-logo.png",
+                  logo: "/partners/DHH.jpg",
                 },
                 {
                   name: "Burco Municipality",
                   abbr: "BM",
-                  logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Burco_Logo.png/200px-Burco_Logo.png",
+                  logo: "/partners/DHBurco.jpg",
                 },
                 {
                   name: "Berbera Port Authority",
                   abbr: "BP",
-                  logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Berbera_Port_logo.png/200px-Berbera_Port_logo.png",
+                  logo: "/partners/DHBerbera.jpg",
+                },
+                {
+                  name: "Ministry",
+                  abbr: "MN",
+                  logo: "/partners/Ministry.jpg",
                 },
                 {
                   name: "Telesom",
                   abbr: "TL",
-                  logo: "https://telesom.so/wp-content/uploads/2021/06/telesom-logo-new.png",
+                  logo: "/partners/telesom.jpg",
                 },
                 {
                   name: "Dahabshiil",
                   abbr: "DS",
-                  logo: "https://upload.wikimedia.org/wikipedia/commons/4/40/Dahabshiil_logo.svg",
+                  logo: "/partners/dahabshiil.png",
                 },
               ].map((p) => (
                 <div className={styles.partnerLogo} key={p.name}>
@@ -660,7 +652,6 @@ export default function DiasporaWeekPage() {
                 </div>
               ))}
             </div>
-          )}
         </div>
       </section>
     </main>
