@@ -440,9 +440,16 @@ export default function DiasporaWeekRegisterPage() {
                     ) : (
                       /* ── BUSINESS FORM ─────────────────────────────────── */
                       <>
-                        <h2 className={styles.formSectionTitle}>Business Details</h2>
+                        {/* ── Business Identity ── */}
+                        <div className={styles.formBlock}>
+                          <div className={styles.formBlockHeader}>
+                            <span className={styles.formBlockBadge}>
+                              <i className="fa-regular fa-building" aria-hidden="true"></i>
+                            </span>
+                            <span className={styles.formBlockLabel}>Business Identity</span>
+                          </div>
 
-                        <div className={styles.fieldRow}>
+                          {/* Business Name — full width */}
                           <div className={styles.fieldGroup}>
                             <label htmlFor="businessName" className={styles.label}>
                               Business / Organization Name *
@@ -452,159 +459,153 @@ export default function DiasporaWeekRegisterPage() {
                               name="businessName"
                               type="text"
                               className={`form-control ${styles.input}`}
-                              placeholder="Business name"
+                              placeholder="e.g. Somali Trade Co."
                               required
                             />
                           </div>
 
-                          <div className={styles.fieldGroup}>
-                            <label htmlFor="contactPerson" className={styles.label}>
-                              Contact Person *
-                            </label>
-                            <input
-                              id="contactPerson"
-                              name="contactPerson"
-                              type="text"
-                              className={`form-control ${styles.input}`}
-                              placeholder="Primary contact name"
-                              required
-                            />
+                          {/* 3-col: Contact Person | Phone | Industry */}
+                          <div className={styles.fieldRow3}>
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="contactPerson" className={styles.label}>
+                                Contact Person / Owner *
+                              </label>
+                              <input
+                                id="contactPerson"
+                                name="contactPerson"
+                                type="text"
+                                className={`form-control ${styles.input}`}
+                                placeholder="Full name"
+                                required
+                              />
+                            </div>
+
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="phone" className={styles.label}>
+                                Phone Number *
+                              </label>
+                              <input
+                                id="phone"
+                                name="phone"
+                                type="tel"
+                                className={`form-control ${styles.input}`}
+                                placeholder="+252 ..."
+                                required
+                              />
+                            </div>
+
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="industry" className={styles.label}>
+                                Industry *
+                              </label>
+                              <input
+                                id="industry"
+                                name="industry"
+                                type="text"
+                                className={`form-control ${styles.input}`}
+                                placeholder="e.g. Finance, Technology"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          {/* 2-col: Website | Business Address */}
+                          <div className={styles.fieldRow}>
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="businessWebsite" className={styles.label}>
+                                Website URL
+                                <span className={styles.optionalBadge}>Optional</span>
+                              </label>
+                              <input
+                                id="businessWebsite"
+                                name="businessWebsite"
+                                type="url"
+                                className={`form-control ${styles.input}`}
+                                placeholder="https://yourbusiness.com"
+                              />
+                            </div>
+
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="businessAddress" className={styles.label}>
+                                Business Address / Location *
+                              </label>
+                              <input
+                                id="businessAddress"
+                                name="businessAddress"
+                                type="text"
+                                className={`form-control ${styles.input}`}
+                                placeholder="City, Country"
+                                required
+                              />
+                            </div>
                           </div>
                         </div>
 
-                        <div className={styles.fieldRow}>
-                          <div className={styles.fieldGroup}>
-                            <label htmlFor="industry" className={styles.label}>
-                              Industry
-                            </label>
-                            <input
-                              id="industry"
-                              name="industry"
-                              type="text"
-                              className={`form-control ${styles.input}`}
-                              placeholder="e.g. Finance, Technology"
-                            />
+                        {/* ── Business Logo ── */}
+                        <div className={styles.formBlock}>
+                          <div className={styles.formBlockHeader}>
+                            <span className={styles.formBlockBadge}>
+                              <i className="fa-regular fa-image" aria-hidden="true"></i>
+                            </span>
+                            <span className={styles.formBlockLabel}>Business Logo</span>
                           </div>
 
-                          <div className={styles.fieldGroup}>
-                            <label htmlFor="businessWebsite" className={styles.label}>
-                              Website
-                            </label>
-                            <input
-                              id="businessWebsite"
-                              name="businessWebsite"
-                              type="text"
-                              className={`form-control ${styles.input}`}
-                              placeholder="https://"
-                            />
-                          </div>
-                        </div>
-
-                        <div className={styles.fieldGroup}>
-                          <label htmlFor="businessLogo" className={styles.label}>
-                            Business Logo
-                          </label>
-                          <div className={styles.logoUpload}>
-                            {logoPreview && (
-                              <img src={logoPreview} alt="Logo preview" className={styles.logoPreviewImg} />
-                            )}
-                            <input
-                              id="businessLogo"
-                              name="businessLogo"
-                              type="file"
-                              accept="image/*"
-                              className={styles.fileInput}
-                              onChange={handleLogoChange}
-                            />
+                          <div className={styles.logoUploadBlock}>
+                            {logoPreview ? (
+                              <div className={styles.logoPreviewWrap}>
+                                <img
+                                  src={logoPreview}
+                                  alt="Logo preview"
+                                  className={styles.logoPreviewLg}
+                                />
+                                <div className={styles.logoPreviewMeta}>
+                                  <p className={styles.logoPreviewTitle}>Logo selected</p>
+                                  <p className={styles.logoPreviewHint}>
+                                    Click the upload area to change it
+                                  </p>
+                                </div>
+                              </div>
+                            ) : null}
+                            <div className={styles.uploadZone}>
+                              <i className="fa-regular fa-cloud-arrow-up" aria-hidden="true"></i>
+                              <span>Drag &amp; drop or click to upload your logo</span>
+                              <input
+                                id="businessLogo"
+                                name="businessLogo"
+                                type="file"
+                                accept="image/*"
+                                className={styles.uploadZoneInput}
+                                onChange={handleLogoChange}
+                              />
+                            </div>
+                            <p className={styles.fileHint}>
+                              PNG, JPG, SVG &mdash; max 5 MB. Recommended: square format.
+                            </p>
                           </div>
                         </div>
 
-                        <h2 className={styles.formSectionTitle}>Contact Information</h2>
-
-                        <div className={styles.fieldRow}>
-                          <div className={styles.fieldGroup}>
-                            <label htmlFor="email" className={styles.label}>
-                              Email Address *
-                            </label>
-                            <input
-                              id="email"
-                              name="email"
-                              type="email"
-                              className={`form-control ${styles.input}`}
-                              placeholder="you@example.com"
-                              required
-                            />
+                        {/* ── Note ── */}
+                        <div className={styles.formBlock}>
+                          <div className={styles.formBlockHeader}>
+                            <span className={styles.formBlockBadge}>
+                              <i className="fa-regular fa-note-sticky" aria-hidden="true"></i>
+                            </span>
+                            <span className={styles.formBlockLabel}>Note</span>
                           </div>
 
                           <div className={styles.fieldGroup}>
-                            <label htmlFor="phone" className={styles.label}>
-                              Phone Number *
+                            <label htmlFor="additionalNotes" className={styles.label}>
+                              Additional Notes
+                              <span className={styles.optionalBadge}>Optional</span>
                             </label>
-                            <input
-                              id="phone"
-                              name="phone"
-                              type="tel"
-                              className={`form-control ${styles.input}`}
-                              placeholder="+252 ..."
-                              required
+                            <textarea
+                              id="additionalNotes"
+                              name="additionalNotes"
+                              className={`form-control ${styles.textarea}`}
+                              placeholder="Anything you'd like us to know about your business or participation…"
+                              rows={4}
                             />
                           </div>
-                        </div>
-
-                        <div className={styles.fieldRow}>
-                          <div className={styles.fieldGroup}>
-                            <label htmlFor="country" className={styles.label}>
-                              Country *
-                            </label>
-                            <input
-                              id="country"
-                              name="country"
-                              type="text"
-                              className={`form-control ${styles.input}`}
-                              placeholder="Country of residence"
-                              required
-                            />
-                          </div>
-
-                          <div className={styles.fieldGroup}>
-                            <label htmlFor="city" className={styles.label}>
-                              City *
-                            </label>
-                            <input
-                              id="city"
-                              name="city"
-                              type="text"
-                              className={`form-control ${styles.input}`}
-                              placeholder="City"
-                              required
-                            />
-                          </div>
-                        </div>
-
-                        <h2 className={styles.formSectionTitle}>Additional Information</h2>
-
-                        <div className={styles.checkboxRow}>
-                          <label className={styles.checkboxLabel}>
-                            <input type="checkbox" name="exhibitorInterest" value="true" />
-                            I&apos;m interested in being an exhibitor
-                          </label>
-                          <label className={styles.checkboxLabel}>
-                            <input type="checkbox" name="pitchInterest" value="true" />
-                            I&apos;m interested in the startup pitching session
-                          </label>
-                        </div>
-
-                        <div className={styles.fieldGroup}>
-                          <label htmlFor="additionalNotes" className={styles.label}>
-                            Additional Notes
-                          </label>
-                          <textarea
-                            id="additionalNotes"
-                            name="additionalNotes"
-                            className={`form-control ${styles.textarea}`}
-                            placeholder="Anything else you'd like us to know"
-                            rows={3}
-                          />
                         </div>
                       </>
                     )}

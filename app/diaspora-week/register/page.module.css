@@ -304,6 +304,7 @@
   background: #ffffff;
   margin-bottom: 1.25rem;
   box-shadow: 0 2px 10px rgba(12, 47, 55, 0.05);
+  overflow: hidden;
 }
 
 .formBlockHeader {
@@ -365,14 +366,69 @@
 
 .fieldGroup {
   margin-bottom: 18px;
+  min-width: 0;
 }
 
 .label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 8px;
   color: var(--ink);
   font-weight: 700;
   font-size: 1.29rem;
+}
+
+.optionalBadge {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: #e8f0ef;
+  border-radius: 999px;
+  padding: 2px 9px;
+  letter-spacing: 0.03em;
+  margin-left: auto;
+}
+
+/* Logo upload block (business) */
+.logoUploadBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.logoPreviewWrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #edf8f1;
+  border: 1.3px solid var(--line);
+  border-radius: 14px;
+  padding: 0.85rem 1.1rem;
+}
+
+.logoPreviewLg {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.logoPreviewTitle {
+  margin: 0;
+  font-size: 1.29rem;
+  font-weight: 700;
+  color: var(--brand-2);
+}
+
+.logoPreviewHint {
+  margin: 3px 0 0;
+  font-size: 1.15rem;
+  color: var(--ink-soft);
 }
 
 .input,
@@ -386,12 +442,16 @@
   color: var(--ink);
   font-size: 1.38rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .textarea {
   min-height: auto;
   resize: vertical;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .input:hover,
