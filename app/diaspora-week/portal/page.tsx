@@ -7,14 +7,11 @@ import {
   Building2,
   CalendarDays,
   Camera,
-  CheckCircle2,
   Eye,
-  FileText,
   Handshake,
   MapPin,
   Package,
   PartyPopper,
-  Rocket,
   Sparkles,
   Star,
   Unlock,
@@ -151,7 +148,7 @@ type PortalContent = {
   gallery: GalleryMediaItem[];
 };
 
-type Section = "home" | "schedule" | "exhibitors" | "pitching" | "gallery";
+type Section = "home" | "schedule" | "exhibitors" | "gallery";
 
 export default function DiasporaWeekPortalPage() {
   const [loading, setLoading] = useState(true);
@@ -211,7 +208,6 @@ export default function DiasporaWeekPortalPage() {
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
     { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
     { key: "exhibitors", label: "Exhibitors", icon: <Building2 size={16} /> },
-    { key: "pitching", label: "Startup Pitching", icon: <Rocket size={16} /> },
     { key: "gallery", label: "Gallery", icon: <Camera size={16} /> },
   ];
 
@@ -258,198 +254,227 @@ export default function DiasporaWeekPortalPage() {
 
       {activeSection === "home" && (
         <>
-          <section className={styles.hero}>
-            <div className={styles.heroBg}>
-              <img
-                src="/assets/imgs/Diaspora Week 2025/hero-flags-crowd.jpg"
-                alt=""
-                className={styles.heroBgImage}
-              />
+          {/* ══ HERO ══ */}
+          <section className={styles.homeHero}>
+            <div className={styles.homeHeroBg}>
+              <img src="/assets/imgs/Diaspora Week 2025/hero-flags-crowd.jpg" alt="" className={styles.homeHeroBgImg} />
             </div>
-            <div className={styles.heroOverlay}></div>
-            <div className={`container ${styles.heroContainer}`}>
-              <span className={styles.heroBadge}>August 2 &ndash; 5, 2025 &middot; Hargeisa</span>
-              <h1 className={styles.heroTitle}>Somaliland Diaspora Week 2025</h1>
-              <p className={styles.heroSubtitle}>
-                Explore the full event schedule, exhibitors, partners and gallery.
-                Want to participate at the venue? Register as an individual or business below.
+            <div className={styles.homeHeroOverlay} />
+            <div className={styles.homeHeroBlob1} aria-hidden="true" />
+            <div className={styles.homeHeroBlob2} aria-hidden="true" />
+            <div className={`container ${styles.homeHeroContent}`}>
+              <span className={styles.homeHeroBadge}>
+                <CalendarDays size={14} />
+                August 2 &ndash; 5, 2025 &nbsp;&middot;&nbsp; Hargeisa, Somaliland
+              </span>
+              <h1 className={styles.homeHeroTitle}>
+                Somaliland <span className={styles.homeHeroAccent}>Diaspora</span> Week 2025
+              </h1>
+              <p className={styles.homeHeroSubtitle}>
+                Redefining the role of diaspora &mdash; from benefactor to strategic partner.
+                Join us as we build Somaliland&apos;s future together.
               </p>
-
-              <div className={styles.heroActions}>
-                <Link href="/diaspora-week/register" className={styles.heroPrimaryCta}>
+              <div className={styles.homeHeroCtas}>
+                <Link href="/diaspora-week/register" className={styles.homeHeroCtaPrimary}>
                   Register to Participate
                   <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </Link>
+                <button type="button" className={styles.homeHeroCtaSecondary} onClick={() => setActiveSection("schedule")}>
+                  <CalendarDays size={16} />
+                  View Schedule
+                </button>
               </div>
-
-              <div className={styles.heroStats}>
-                <div className={styles.heroStat}>
-                  <strong>{sortedDays.length || 4}</strong>
-                  <span>Event Days</span>
-                </div>
-                <div className={styles.heroStat}>
-                  <strong>{safeContent.exhibitors.length || "—"}</strong>
-                  <span>Exhibitors</span>
-                </div>
-                <div className={styles.heroStat}>
-                  <strong>{safeContent.partners.length || "—"}</strong>
-                  <span>Partners</span>
-                </div>
-                <div className={styles.heroStat}>
-                  <strong>{safeContent.gallery.length || DW_PHOTOS.length + 1}</strong>
-                  <span>Gallery Items</span>
+            </div>
+            <div className={styles.homeHeroStatsBar}>
+              <div className="container">
+                <div className={styles.homeHeroStatsGrid}>
+                  <div className={styles.homeHeroStat}>
+                    <strong>4</strong>
+                    <span>Event Days</span>
+                  </div>
+                  <div className={styles.homeHeroStatDiv} />
+                  <div className={styles.homeHeroStat}>
+                    <strong>21+</strong>
+                    <span>Exhibitors</span>
+                  </div>
+                  <div className={styles.homeHeroStatDiv} />
+                  <div className={styles.homeHeroStat}>
+                    <strong>100s</strong>
+                    <span>Diaspora Attendees</span>
+                  </div>
+                  <div className={styles.homeHeroStatDiv} />
+                  <div className={styles.homeHeroStat}>
+                    <strong>4</strong>
+                    <span>Host Cities</span>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Participate CTA banner */}
-          <section className={styles.participateBanner}>
-            <div className={`container ${styles.participateBannerInner}`}>
-              <div className={styles.participateText}>
-                <h2>Want to exhibit or pitch at the venue?</h2>
-                <p>
-                  Individuals and businesses can register to secure a hall booth or a startup
-                  pitching slot at Somaliland Diaspora Week 2025.
+          {/* ══ INVITE / PARTICIPATE ══ */}
+          <section className={styles.homeInviteSection}>
+            <div className="container">
+              <div className={styles.homeInviteHeader}>
+                <span className={styles.homeKicker}>Join Us</span>
+                <h2 className={styles.homeSectionTitle}>Come Be Part of History</h2>
+                <p className={styles.homeSectionLead}>
+                  Whether you&apos;re reconnecting with your homeland or showcasing your business &mdash; Diaspora Week 2025 has a place for you.
                 </p>
               </div>
-              <div className={styles.participateActions}>
-                <Link href="/diaspora-week/register?type=individual" className={styles.participateCta}>
-                  <User size={16} />
-                  Register as Individual
-                </Link>
-                <Link href="/diaspora-week/register?type=business" className={styles.participateCtaAlt}>
-                  <Building2 size={16} />
-                  Register as Business
-                </Link>
-              </div>
-            </div>
-          </section>
-
-          {/* Recap of Opening Day */}
-          <section className={styles.recapSection}>
-            <div className="container">
-              <span className={styles.kicker}>Highlights</span>
-              <h2 className={styles.sectionTitle}>Recap of Opening Day</h2>
-              <p className={styles.sectionLead}>
-                Watch highlights from the opening ceremony of Somaliland Diaspora Week 2025.
-              </p>
-              <div className={styles.recapVideoWrap}>
-                <video
-                  className={styles.recapVideo}
-                  src={SAMPLE_VIDEO_URL}
-                  poster={DW_PHOTOS[1]}
-                  controls
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Theme */}
-          <section className={styles.themeSection}>
-            <div className="container">
-              <div className={styles.themeGrid}>
-                <div className={styles.themeImageWrap}>
-                  <img src={DW_PHOTOS[2]} alt="Diaspora Week 2025" className={styles.themeImage} />
+              <div className={styles.homeInviteCards}>
+                <div className={styles.homeInviteCard}>
+                  <div className={styles.homeInviteCardBg}>
+                    <img src={DW_PHOTOS[0]} alt="" />
+                  </div>
+                  <div className={styles.homeInviteCardOverlay} />
+                  <div className={styles.homeInviteCardBody}>
+                    <span className={styles.homeInviteCardBadge}>
+                      <User size={13} /> For Individuals
+                    </span>
+                    <h3>Attend &amp; Connect</h3>
+                    <p>Register to attend sessions, panels, networking events and the cultural gala.</p>
+                    <Link href="/diaspora-week/register?type=individual" className={styles.homeInviteCardCta}>
+                      Register as Individual
+                      <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </Link>
+                  </div>
                 </div>
-                <div className={styles.themeText}>
-                  <span className={styles.kicker}>Theme</span>
-                  <h2 className={styles.sectionTitle}>&ldquo;Redefining the Role of Diaspora&rdquo;</h2>
-                  <p className={styles.themeSubtitle}>From Benefactor to Strategic Partner</p>
-                  <p className={styles.sectionLead}>
-                    This Diaspora Week, we celebrate a powerful shift: from giving back to
-                    building forward. Redefining the Role of Diaspora &mdash; From Benefactor to
-                    Strategic Partner calls on Somalilanders around the world to stand not just
-                    as supporters, but as co-architects of our nation&apos;s future, investing
-                    ideas, skills, and resources to shape lasting progress together.
+                <div className={`${styles.homeInviteCard} ${styles.homeInviteCardBiz}`}>
+                  <div className={styles.homeInviteCardBg}>
+                    <img src={DW_PHOTOS[3]} alt="" />
+                  </div>
+                  <div className={styles.homeInviteCardOverlay} />
+                  <div className={styles.homeInviteCardBody}>
+                    <span className={styles.homeInviteCardBadge}>
+                      <Building2 size={13} /> For Businesses
+                    </span>
+                    <h3>Exhibit &amp; Grow</h3>
+                    <p>Secure a hall booth, showcase your products and connect with investors and diaspora partners.</p>
+                    <Link href="/diaspora-week/register?type=business" className={styles.homeInviteCardCta}>
+                      Register as Business
+                      <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ══ THEME ══ */}
+          <section className={styles.homeThemeSection}>
+            <div className="container">
+              <div className={styles.homeThemeGrid}>
+                <div className={styles.homeThemeText}>
+                  <span className={styles.homeKicker}>2025 Theme</span>
+                  <blockquote className={styles.homeThemeQuote}>
+                    &ldquo;Redefining the Role of Diaspora&rdquo;
+                  </blockquote>
+                  <p className={styles.homeThemeTagline}>From Benefactor to Strategic Partner</p>
+                  <p className={styles.homeThemeBody}>
+                    This year we celebrate a powerful shift &mdash; Somalilanders around the world
+                    are no longer just giving back, they&apos;re building forward. As co-architects
+                    of our nation&apos;s future, the diaspora brings ideas, skills, capital and
+                    resolve to shape lasting progress for generations to come.
                   </p>
-                  <p className={styles.themeVenue}>
-                    <MapPin size={16} /> Venue: Hotel Guuleed
+                  <p className={styles.homeThemeVenue}>
+                    <MapPin size={15} /> Hotel Guuleed, Hargeisa &nbsp;&middot;&nbsp; August 2&ndash;5, 2025
                   </p>
                 </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Goals */}
-          <section className={styles.goalsSection}>
-            <div className="container">
-              <span className={styles.kicker}>Why We Gather</span>
-              <h2 className={styles.sectionTitle}>Our Goals</h2>
-              <p className={styles.sectionLead}>
-                Five priorities guide everything we do during Diaspora Week 2025.
-              </p>
-              <div className={styles.goalsList}>
-                <div className={styles.goalRow}>
-                  <span className={styles.goalNumber}>01</span>
-                  <div className={styles.goalRowBody}>
-                    <h3>Engage the Diaspora</h3>
-                    <p>
-                      Engage the diaspora in Somaliland&apos;s socio-economic and political
-                      development.
-                    </p>
+                <div className={styles.homeThemePhotos}>
+                  <div className={styles.homeThemePhotoMain}>
+                    <img src={DW_PHOTOS[2]} alt="Diaspora Week 2025" />
                   </div>
-                </div>
-                <div className={styles.goalRow}>
-                  <span className={styles.goalNumber}>02</span>
-                  <div className={styles.goalRowBody}>
-                    <h3>Co-Create Policy</h3>
-                    <p>Provide a platform to co-create diaspora-related policies and programs.</p>
-                  </div>
-                </div>
-                <div className={styles.goalRow}>
-                  <span className={styles.goalNumber}>03</span>
-                  <div className={styles.goalRowBody}>
-                    <h3>Drive Investment</h3>
-                    <p>Facilitate investment, innovation, and knowledge exchange.</p>
-                  </div>
-                </div>
-                <div className={styles.goalRow}>
-                  <span className={styles.goalNumber}>04</span>
-                  <div className={styles.goalRowBody}>
-                    <h3>Strengthen Identity</h3>
-                    <p>
-                      Strengthen cultural identity and youths&apos; generational connection to
-                      Somaliland.
-                    </p>
-                  </div>
-                </div>
-                <div className={styles.goalRow}>
-                  <span className={styles.goalNumber}>05</span>
-                  <div className={styles.goalRowBody}>
-                    <h3>Showcase &amp; Network</h3>
-                    <p>Showcase diaspora achievements and provide networking opportunities.</p>
+                  <div className={styles.homeThemePhotoStack}>
+                    <img src={DW_PHOTOS[1]} alt="Diaspora Week 2025" />
+                    <img src={DW_PHOTOS[5]} alt="Diaspora Week 2025" />
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Event Schedule quick access */}
-          <section className={styles.scheduleQuickSection}>
+          {/* ══ VIDEO ══ */}
+          <section className={styles.homeVideoSection}>
             <div className="container">
-              <span className={styles.kicker}>{scheduleQuickDays.length}-Day Program</span>
-              <h2 className={styles.sectionTitle}>Event Schedule</h2>
-              <p className={styles.sectionLead}>
-                Tap a day to jump straight to its sessions, speakers and locations.
-              </p>
-              <div className={styles.dayButtonGrid}>
+              <div className={styles.homeVideoHeader}>
+                <span className={styles.homeKicker}>Watch</span>
+                <h2 className={styles.homeSectionTitle}>Relive the Opening Day</h2>
+                <p className={styles.homeSectionLead}>Watch highlights from the opening ceremony of Somaliland Diaspora Week 2025.</p>
+              </div>
+              <div className={styles.homeVideoFrame}>
+                <video className={styles.homeVideoEl} src={SAMPLE_VIDEO_URL} poster={DW_PHOTOS[1]} controls />
+              </div>
+            </div>
+          </section>
+
+          {/* ══ GOALS ══ */}
+          <section className={styles.homeGoalsSection}>
+            <div className="container">
+              <div className={styles.homeGoalsHeader}>
+                <span className={styles.homeKicker}>Why We Gather</span>
+                <h2 className={styles.homeSectionTitle}>Our Goals for 2025</h2>
+                <p className={styles.homeSectionLead}>Five priorities drive everything we do at Diaspora Week.</p>
+              </div>
+              <div className={styles.homeGoalsGrid}>
+                {[
+                  { n: "01", icon: <User size={22} />, title: "Engage the Diaspora", desc: "Engage the diaspora in Somaliland's socio-economic and political development." },
+                  { n: "02", icon: <Sparkles size={22} />, title: "Co-Create Policy", desc: "Provide a platform to co-create diaspora-related policies and programmes." },
+                  { n: "03", icon: <Handshake size={22} />, title: "Drive Investment", desc: "Facilitate investment, innovation, and knowledge exchange." },
+                  { n: "04", icon: <Star size={22} />, title: "Strengthen Identity", desc: "Strengthen cultural identity and youth's generational connection to Somaliland." },
+                  { n: "05", icon: <Building2 size={22} />, title: "Showcase & Network", desc: "Showcase diaspora achievements and provide networking opportunities." },
+                  { n: "06", icon: <PartyPopper size={22} />, title: "Celebrate Culture", desc: "Honour Somaliland's rich heritage through arts, music and cultural programming." },
+                ].map((g) => (
+                  <div className={styles.homeGoalCard} key={g.n}>
+                    <div className={styles.homeGoalCardTop}>
+                      <span className={styles.homeGoalNum}>{g.n}</span>
+                      <span className={styles.homeGoalIcon}>{g.icon}</span>
+                    </div>
+                    <h3 className={styles.homeGoalTitle}>{g.title}</h3>
+                    <p className={styles.homeGoalDesc}>{g.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ══ SCHEDULE QUICK ACCESS ══ */}
+          <section className={styles.homeScheduleSection}>
+            <div className="container">
+              <div className={styles.homeScheduleHeader}>
+                <div>
+                  <span className={styles.homeKicker}>{scheduleQuickDays.length}-Day Programme</span>
+                  <h2 className={styles.homeSectionTitle}>Event Schedule</h2>
+                  <p className={styles.homeSectionLead}>Tap a day to explore sessions, speakers and locations.</p>
+                </div>
+                <button type="button" className={styles.homeScheduleViewAll} onClick={() => setActiveSection("schedule")}>
+                  Full Schedule
+                  <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div className={styles.homeDayGrid}>
                 {scheduleQuickDays.map((dayNumber) => {
                   const firstSession = scheduleByDay[dayNumber]?.[0];
+                  const dayPhoto = DAY_PHOTOS[dayNumber] ?? DW_PHOTOS[dayNumber % DW_PHOTOS.length];
                   return (
                     <button
                       key={dayNumber}
                       type="button"
-                      className={`${styles.dayButton} ${styles[`dayButton${dayNumber}`] || styles.dayButton1}`}
-                      onClick={() => {
-                        setActiveDay(dayNumber);
-                        setActiveSection("schedule");
-                      }}
+                      className={`${styles.homeDayCard} ${styles[`homeDayCard${dayNumber}`] || ""}`}
+                      onClick={() => { setActiveDay(dayNumber); setActiveSection("schedule"); }}
                     >
-                      <span className={styles.dayButtonLabel}>DAY {dayNumber}</span>
-                      <span className={styles.dayButtonTitle}>
-                        {firstSession?.title || DAY_THEMES[dayNumber] || "Sessions & Activities"}
-                      </span>
+                      <div className={styles.homeDayCardBg}>
+                        <img src={dayPhoto} alt="" />
+                      </div>
+                      <div className={styles.homeDayCardOverlay} />
+                      <div className={styles.homeDayCardContent}>
+                        <span className={styles.homeDayLabel}>DAY {dayNumber}</span>
+                        <h3 className={styles.homeDayTitle}>
+                          {firstSession?.title || DAY_THEMES[dayNumber] || "Sessions & Activities"}
+                        </h3>
+                        {firstSession?.date && <span className={styles.homeDayDate}>{firstSession.date}</span>}
+                      </div>
+                      <span className={styles.homeDayArrow} aria-hidden="true">&#8594;</span>
                     </button>
                   );
                 })}
@@ -457,78 +482,55 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* Exhibitors preview */}
-          <section className={styles.tabSection}>
+          {/* ══ EXHIBITORS PREVIEW ══ */}
+          <section className={styles.homeExhibitorSection}>
             <div className="container">
-              <span className={styles.kicker}>Showcase</span>
-              <h2 className={styles.sectionTitle}>Exhibitors</h2>
-              <p className={styles.sectionLead}>
-                Diaspora businesses, NGOs, community groups and diaspora-led initiatives
-                showcase their work to hundreds of attendees, investors and partners during
-                Diaspora Week 2025.
-              </p>
-              <div className={styles.previewImageGrid}>
-                <img src={DW_PHOTOS[3]} alt="Exhibitors at Diaspora Week" />
-                <img src={DW_PHOTOS[4]} alt="Exhibitors at Diaspora Week" />
-                <img src={DW_PHOTOS[5]} alt="Exhibitors at Diaspora Week" />
-              </div>
-              <button type="button" className={styles.previewLinkButton} onClick={() => setActiveSection("exhibitors")}>
-                <Building2 size={18} />
-                View All Exhibitors
-              </button>
-            </div>
-          </section>
-
-          {/* Startup Pitching Sessions */}
-          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
-            <div className="container">
-              <span className={styles.kicker}>Innovation Stage</span>
-              <h2 className={styles.sectionTitle}>Startup Pitching Sessions</h2>
-              <div className={styles.previewSplit}>
-                <div className={styles.previewImageGrid}>
-                  <img src={DW_PHOTOS[6]} alt="Startup pitching session" />
-                  <img src={DW_PHOTOS[7]} alt="Startup pitching session" />
+              <div className={styles.homeExhibitorInner}>
+                <div className={styles.homeExhibitorText}>
+                  <span className={styles.homeKicker}>Exhibitor Showcase</span>
+                  <h2 className={styles.homeSectionTitle}>Meet Our Exhibitors</h2>
+                  <p className={styles.homeSectionLead}>
+                    21+ businesses, NGOs and diaspora-led initiatives are confirmed to showcase their work. Come discover, connect and invest.
+                  </p>
+                  <button type="button" className={styles.homeExhibitorCta} onClick={() => setActiveSection("exhibitors")}>
+                    <Building2 size={16} />
+                    View All Exhibitors
+                  </button>
                 </div>
-                <p className={styles.sectionLead}>
-                  As part of the week&apos;s programming, a dedicated Startup Pitching Session
-                  showcases innovative ideas and high-potential startups driven by Somaliland&apos;s
-                  aspiring entrepreneurs, including returnees, diaspora members, and local
-                  founders.
-                </p>
+                <div className={styles.homeExhibitorLogos}>
+                  {SAMPLE_EXHIBITOR_LOGOS.slice(0, 9).map((logo) => (
+                    <div className={styles.homeExhibitorLogo} key={logo.name} title={logo.name}>
+                      <img
+                        src={`/assets/imgs/Diaspora Week 2025/exhibitor-logos/${logo.file}`}
+                        alt={logo.name}
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <button type="button" className={styles.previewLinkButton} onClick={() => setActiveSection("schedule")}>
-                <CalendarDays size={18} />
-                View Pitching Schedule
-              </button>
             </div>
           </section>
 
-          {/* Explore more */}
-          <section className={styles.aboutSection}>
+          {/* ══ GALLERY MOSAIC ══ */}
+          <section className={styles.homeGallerySection}>
             <div className="container">
-              <span className={styles.kicker}>Explore More</span>
-              <h2 className={styles.sectionTitle}>Startup Pitching &amp; Gallery</h2>
-              <div className={styles.quickLinks}>
-                <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("pitching")}>
-                  <img src={DW_PHOTOS[8]} alt="" className={styles.quickLinkImage} />
-                  <div className={styles.quickLinkBody}>
-                    <Rocket size={20} />
-                    <div>
-                      <h3>Startup Pitching</h3>
-                      <p>Apply to pitch your idea to investors and mentors.</p>
-                    </div>
-                  </div>
+              <div className={styles.homeGalleryHeader}>
+                <div>
+                  <span className={styles.homeKicker}>Memories</span>
+                  <h2 className={styles.homeSectionTitle}>Diaspora Week in Photos</h2>
+                </div>
+                <button type="button" className={styles.homeGalleryCta} onClick={() => setActiveSection("gallery")}>
+                  <Camera size={16} />
+                  View Full Gallery
                 </button>
-                <button type="button" className={styles.quickLinkCard} onClick={() => setActiveSection("gallery")}>
-                  <img src={DW_PHOTOS[9]} alt="" className={styles.quickLinkImage} />
-                  <div className={styles.quickLinkBody}>
-                    <Camera size={20} />
-                    <div>
-                      <h3>Gallery</h3>
-                      <p>Photos and videos from across the event.</p>
-                    </div>
+              </div>
+              <div className={styles.homeGalleryMosaic}>
+                {DW_PHOTOS.slice(0, 7).map((src, i) => (
+                  <div key={src} className={`${styles.homeGalleryItem} ${styles[`homeGalleryItem${i + 1}`] || ""}`}>
+                    <img src={src} alt={`Diaspora Week 2025 — photo ${i + 1}`} loading="lazy" />
                   </div>
-                </button>
+                ))}
               </div>
             </div>
           </section>
@@ -821,214 +823,6 @@ export default function DiasporaWeekPortalPage() {
                     <span className={styles.logoCloudName}>{logo.name}</span>
                   </div>
                 ))}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {activeSection === "pitching" && (
-        <>
-          {/* ── Hero ── */}
-          <section className={styles.pitchHero}>
-            <div className={styles.pitchHeroBg}>
-              <img src={DW_PHOTOS[6]} alt="" className={styles.pitchHeroBgImage} />
-            </div>
-            <div className={styles.pitchHeroOverlay} />
-            {/* Somali star-burst shapes */}
-            <div className={styles.pitchStarA} aria-hidden="true" />
-            <div className={styles.pitchStarB} aria-hidden="true" />
-            <div className={`container ${styles.pitchHeroContainer}`}>
-              <span className={styles.pitchHeroBadge}>
-                <Rocket size={15} />
-                Innovation Stage · Diaspora Week 2025
-              </span>
-              <h1 className={styles.pitchHeroTitle}>Startup Pitching Session</h1>
-              <p className={styles.pitchHeroSubtitle}>
-                Pitch your boldest ideas to investors, accelerators and mentors — and compete for
-                seed funding, incubation opportunities and life-changing exposure.
-              </p>
-              <div className={styles.pitchHeroMeta}>
-                <span><CalendarDays size={16} /> August 2 &ndash; 5, 2025</span>
-                <span><MapPin size={16} /> Hotel Guuleed, Hargeisa</span>
-              </div>
-            </div>
-          </section>
-
-          {/* ── Somali divider ── */}
-          <div className={styles.somaliDivider} aria-hidden="true">
-            {Array.from({ length: 32 }).map((_, i) => (
-              <span key={i} className={styles.somaliDividerCell} />
-            ))}
-          </div>
-
-          {/* ── Information ── */}
-          <section className={styles.pitchInfoSection}>
-            <div className="container">
-              <div className={styles.pitchInfoInner}>
-                <span className={styles.pitchInfoKicker}>Information</span>
-                <h2 className={styles.pitchInfoHeading}>
-                  Are you an entrepreneur with a bold idea that can make a difference for
-                  Somaliland?
-                </h2>
-                <p className={styles.pitchInfoBody}>
-                  This Diaspora Week, we&apos;re giving innovators a unique stage to pitch their
-                  startups to investors, accelerators, and mentors.
-                </p>
-                <p className={styles.pitchInfoBody}>
-                  This live pitching event is open to local and diaspora founders with early-stage
-                  ideas or growing businesses that need funding and support to scale. Finalists will
-                  pitch to a panel of judges and an engaged audience, with the chance to win seed
-                  funding, incubation opportunities, and valuable exposure.
-                </p>
-
-                <div className={styles.pitchInfoStats}>
-                  <div className={styles.pitchInfoStat}>
-                    <strong>Seed Funding</strong>
-                    <span>Cash prizes for winners</span>
-                  </div>
-                  <div className={styles.pitchInfoStatDivider} />
-                  <div className={styles.pitchInfoStat}>
-                    <strong>Incubation</strong>
-                    <span>Growth support opportunities</span>
-                  </div>
-                  <div className={styles.pitchInfoStatDivider} />
-                  <div className={styles.pitchInfoStat}>
-                    <strong>Live Audience</strong>
-                    <span>Investors, mentors &amp; diaspora</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── Somali divider ── */}
-          <div className={styles.somaliDivider} aria-hidden="true">
-            {Array.from({ length: 32 }).map((_, i) => (
-              <span key={i} className={styles.somaliDividerCell} />
-            ))}
-          </div>
-
-          {/* ── Eligibility Criteria ── */}
-          <section className={styles.pitchEligibilitySection}>
-            {/* Background cultural pattern */}
-            <div className={styles.pitchEligBg} aria-hidden="true" />
-
-            <div className="container">
-              <h2 className={styles.pitchEligibilityTitle}>Eligibility Criteria</h2>
-
-              <div className={styles.pitchEligGrid}>
-                {/* Left — cultural visual panel */}
-                <div className={styles.pitchCulturalPanel}>
-                  <div className={styles.pitchCulturalFrame}>
-                    <img
-                      src={DW_PHOTOS[7]}
-                      alt="Startup pitching at Diaspora Week"
-                      className={styles.pitchCulturalPhoto}
-                    />
-                    <div className={styles.pitchCulturalGeomA} aria-hidden="true" />
-                    <div className={styles.pitchCulturalGeomB} aria-hidden="true" />
-                  </div>
-                  {/* Side star decorations */}
-                  <div className={styles.pitchCamelWrap} aria-hidden="true">
-                    <svg viewBox="0 0 60 60" className={styles.pitchSideStarLeft}>
-                      <polygon points="30,2 36,20 55,20 40,32 46,50 30,38 14,50 20,32 5,20 24,20" fill="#C8572A" />
-                      <circle cx="30" cy="30" r="7" fill="#e07340" />
-                    </svg>
-                    <svg viewBox="0 0 60 60" className={styles.pitchSideStarRight}>
-                      <polygon points="30,2 36,20 55,20 40,32 46,50 30,38 14,50 20,32 5,20 24,20" fill="#016D21" />
-                      <circle cx="30" cy="30" r="7" fill="#1f8a3b" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Right — criteria content */}
-                <div className={styles.pitchEligContent}>
-                  <div className={styles.pitchCriteriaCard}>
-                    <div className={styles.pitchCriteriaIconWrap}>
-                      <CheckCircle2 size={22} />
-                    </div>
-                    <div>
-                      <h3 className={styles.pitchCriteriaLabel}>Eligibility</h3>
-                      <p className={styles.pitchCriteriaText}>
-                        Open to early-stage startups or founders who are Somaliland nationals or
-                        diaspora members with a project directly benefiting Somaliland.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles.pitchCriteriaCard}>
-                    <div className={styles.pitchCriteriaIconWrap}>
-                      <FileText size={22} />
-                    </div>
-                    <div>
-                      <h3 className={styles.pitchCriteriaLabel}>Application Requirements</h3>
-                      <p className={styles.pitchCriteriaText}>
-                        Complete the official application form before the deadline{" "}
-                        <strong>July 30, 2025.</strong>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles.pitchDownloadButtons}>
-                    <a
-                      href="https://drive.google.com/file/d/1fLcAKeLjM-9zbNLlRxRIJ9HD79doEsCc/view"
-                      target="_blank"
-                      rel="noreferrer"
-                      className={styles.pitchDownloadPrimary}
-                    >
-                      <FileText size={18} />
-                      Rules &amp; Regulations
-                    </a>
-                    <a
-                      href="/assets/docs/diaspora-week-application.pdf"
-                      target="_blank"
-                      rel="noreferrer"
-                      className={styles.pitchDownloadSecondary}
-                    >
-                      <FileText size={18} />
-                      Application Form
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── Prizes & What You Win ── */}
-          <section className={styles.pitchPrizesSection}>
-            <div className={styles.pitchPrizesBg} aria-hidden="true" />
-            <div className="container">
-              <span className={styles.pitchPrizesKicker}>What You Stand to Win</span>
-              <h2 className={styles.pitchPrizesTitle}>Why You Should Apply</h2>
-              <div className={styles.pitchPrizesGrid}>
-                <div className={styles.pitchPrizeCard}>
-                  <span className={styles.pitchPrizeNumber}>01</span>
-                  <h3>Seed Funding</h3>
-                  <p>Cash prizes awarded to top-ranked pitches by the judging panel.</p>
-                </div>
-                <div className={styles.pitchPrizeCard}>
-                  <span className={styles.pitchPrizeNumber}>02</span>
-                  <h3>Incubation Support</h3>
-                  <p>Selected finalists gain access to incubation programs and mentorship networks.</p>
-                </div>
-                <div className={styles.pitchPrizeCard}>
-                  <span className={styles.pitchPrizeNumber}>03</span>
-                  <h3>Investor Connections</h3>
-                  <p>Direct introductions to diaspora investors and development finance partners.</p>
-                </div>
-                <div className={styles.pitchPrizeCard}>
-                  <span className={styles.pitchPrizeNumber}>04</span>
-                  <h3>Media Exposure</h3>
-                  <p>Coverage across diaspora media channels and the Somaliland Diaspora network.</p>
-                </div>
-              </div>
-
-              <div className={styles.pitchApplyCta}>
-                <Link href="/diaspora-week/register?pitch=1" className={styles.pitchApplyButton}>
-                  <Rocket size={18} />
-                  Apply to Pitch
-                </Link>
               </div>
             </div>
           </section>
