@@ -1635,6 +1635,28 @@
   .pitchRight { grid-template-columns: repeat(2, 1fr); }
   .pitchCta { align-self: center; }
   .section { padding: 64px 0; }
+
+  .videoSection { padding: 56px 0 64px; }
+  .videoSectionInner { gap: 32px; }
+  .videoThumb::before,
+  .videoThumb::after { display: none; }
+  .videoThumbImg { min-height: 0; aspect-ratio: 16 / 10; }
+  .videoThumb .videoAccent1,
+  .videoThumb .videoAccent2 { display: none; }
+  .playBtn { width: 60px; height: 60px; }
+
+  .partnersStrip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 12px;
+  }
+  .partnerLogo {
+    width: 100%;
+    height: 92px;
+    padding: 12px 16px;
+  }
 }
 
 @media (max-width: 640px) {
