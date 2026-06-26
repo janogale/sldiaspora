@@ -1933,7 +1933,7 @@
 /* ── Hero ── */
 .homeHero {
   position: relative;
-  min-height: 100vh;
+  min-height: 78vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
