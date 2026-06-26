@@ -283,6 +283,10 @@ export default function DiasporaWeekPortalPage() {
                   <CalendarDays size={16} />
                   View Schedule
                 </button>
+                <Link href="/diaspora-week/register" className={styles.homeHeroCtaHighlight}>
+                  Register for Diaspora Week
+                  <i className="fa-solid fa-arrow-right animate-arrow" aria-hidden="true"></i>
+                </Link>
               </div>
             </div>
             <div className={styles.homeHeroStatsBar}>
@@ -310,10 +314,17 @@ export default function DiasporaWeekPortalPage() {
                 </div>
               </div>
             </div>
+            {/* small next button below hero/map — scrolls to invite section */}
+            <div className={styles.homeHeroNextWrap}>
+              <a href="#invite" className={styles.homeHeroNextButton} aria-label="Next section">
+                <span>Next</span>
+                <i className="fa-solid fa-arrow-down" aria-hidden="true"></i>
+              </a>
+            </div>
           </section>
 
           {/* ══ INVITE / PARTICIPATE ══ */}
-          <section className={styles.homeInviteSection}>
+          <section id="invite" className={styles.homeInviteSection}>
             <div className="container">
               <div className={styles.homeInviteHeader}>
                 <span className={styles.homeKicker}>Join Us</span>

@@ -584,6 +584,58 @@
   background: #16722f;
 }
 
+/* Highlight CTA inside hero */
+.homeHeroCtaHighlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(90deg,#ff6a00 0%,#ff3d81 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(255,61,129,0.12);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.homeHeroCtaHighlight:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 44px rgba(255,61,129,0.18);
+}
+
+/* Bottom CTA placed below the hero/map to draw attention */
+/* Small next button under hero (anchors to invite section) */
+.homeHeroNextWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  z-index: 3;
+}
+
+.homeHeroNextButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 120px;
+  height: 44px;
+  justify-content: center;
+  background: linear-gradient(90deg,#ff6a00 0%,#ff3d81 100%);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 12px 32px rgba(255,61,129,0.12);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.homeHeroNextButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 48px rgba(255,61,129,0.18);
+}
+
 /* Exhibitor register CTA */
 .exhibitRegisterCta {
   display: inline-flex;

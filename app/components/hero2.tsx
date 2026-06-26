@@ -53,6 +53,7 @@ const MapSection = () => {
                     nation-building.
                   </h1>
                   <div className="d-flex justify-content-center align-items-center my-4 h-25 hero-cta-wrap">
+                  <div className="me-2 d-flex justify-content-center mt-4">
                     <Link
                       href="https://admin.sldiaspora.org/admin/register"
                       className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg h-25"
@@ -63,6 +64,18 @@ const MapSection = () => {
                       <i className="fa-solid fa-arrow-right animate-arrow"></i>
                     </Link>
                   </div>
+                  <div className="d-flex justify-content-center mt-4">
+                <Link
+                  href="/diaspora-week/register"
+                   className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg h-25"
+                    >
+                      <span className="fw-bold text-uppercase text-xl hero-cta-label">
+                        Register for Diaspora Week
+                      </span>
+                      <i className="fa-solid fa-arrow-right animate-arrow"></i>
+                </Link>
+              </div>
+              </div>
                 </div>
               </div>
 

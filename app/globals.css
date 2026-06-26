@@ -128,6 +128,38 @@ body {
   transform: translateY(0) scale(1);
 }
 
+/* ===== Week register CTA (attention-grabbing) ===== */
+/* removed week-register CTA styles (cleaned up) */
+
+/* Hero: Register for Diaspora Week button */
+.hero-week-register {
+	background: linear-gradient(90deg,#ff6a00 0%,#ff3d81 100%);
+	color: #fff !important;
+	/* match the primary CTA sizing */
+	min-width: 320px !important;
+	padding: 20px 32px !important;
+	font-size: 1.35rem !important;
+	font-weight: 700 !important;
+	border-radius: 50px !important;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	box-shadow: 0 12px 36px rgba(255,61,129,0.12);
+	transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+	animation: hero-cta-glow 2.6s ease-in-out infinite;
+}
+
+.hero-week-register:hover {
+	transform: translateY(-2px) scale(1.02);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes hero-cta-glow {
+	0% { box-shadow: 0 10px 28px rgba(255,61,129,0.08); }
+	50% { box-shadow: 0 26px 56px rgba(255,61,129,0.14); transform: translateY(-1px); }
+	100% { box-shadow: 0 10px 28px rgba(255,61,129,0.08); }
+}
+
 /* keep this because you already use it in JSX */
 .ls-1 {
   letter-spacing: 0.5px;
@@ -161,6 +193,15 @@ body {
 	}
 
 	.cta-register-btn {
+		min-width: 0 !important;
+		width: 100% !important;
+		max-width: 330px;
+		padding: 12px 16px !important;
+		border-radius: 16px !important;
+		font-size: 1rem !important;
+	}
+
+	.hero-week-register {
 		min-width: 0 !important;
 		width: 100% !important;
 		max-width: 330px;
