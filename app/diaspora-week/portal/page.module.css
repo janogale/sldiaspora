@@ -1638,6 +1638,13 @@
 }
 
 /* Exhibitors */
+.exhibitSplit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
 .exhibitIntro {
   max-width: 880px;
   margin: 0 auto;
@@ -1659,6 +1666,90 @@
 
 .exhibitIntro .sectionLead + .sectionLead {
   margin-top: 1.25rem;
+}
+
+.exhibitSplit .exhibitIntro {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.exhibitSplit .exhibitIntro .kicker {
+  margin: 0 0 14px;
+}
+
+.exhibitSplit .whoListWrap {
+  margin-top: 0;
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 24px rgba(1, 109, 33, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.whoListWrap {
+  margin-top: 1.75rem;
+  text-align: left;
+}
+
+.whoListTitle {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  color: #0c2f37;
+  margin-bottom: 1.25rem;
+  line-height: 1.2;
+}
+
+.checkList {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  text-align: left;
+  max-width: 75ch;
+}
+
+.checkList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #4b666d;
+}
+
+.checkList li svg {
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+  color: #1f8a3b;
+}
+
+.contactRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+}
+
+.contactItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1f8a3b;
+  text-decoration: none;
+}
+
+.contactItem:hover {
+  text-decoration: underline;
 }
 
 .exhibitInfoStrip {
@@ -1745,16 +1836,16 @@
 }
 
 .benefitCard h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: #0c2f37;
 }
 
 .benefitCard p {
   margin: 0;
-  font-size: 1.2rem;
-  line-height: 1.7;
+  font-size: 1.6rem;
+  line-height: 1.8;
   color: #4b666d;
 }
 
@@ -1914,6 +2005,19 @@
   .benefitCard {
     flex-direction: column;
     text-align: center;
+  }
+
+  .exhibitSplit {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .exhibitSplit .exhibitIntro {
+    text-align: center;
+  }
+
+  .exhibitSplit .exhibitIntro .kicker {
+    margin: 0 auto 14px;
   }
 
   .logoCloud {

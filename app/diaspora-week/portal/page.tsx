@@ -7,11 +7,15 @@ import {
   Building2,
   CalendarDays,
   Camera,
+  CheckCircle2,
   Eye,
   Handshake,
+  Mail,
   MapPin,
+  Megaphone,
   Package,
   PartyPopper,
+  Phone,
   Sparkles,
   Star,
   Unlock,
@@ -56,26 +60,40 @@ const EXHIBITOR_BENEFITS = [
     icon: Eye,
     title: "Increase Visibility",
     description:
-      "Put your brand in front of hundreds of diaspora attendees, government representatives, and local partners.",
+      "Put your brand in front of hundreds of diaspora attendees, government representatives, investors, and development partners from across Somaliland's regions.",
   },
   {
     icon: Handshake,
     title: "Build New Connections",
     description:
-      "Meet potential investors, collaborators, and clients from Somaliland and abroad.",
+      "Meet potential investors, collaborators, and clients from Somaliland and abroad who share a commitment to national development.",
   },
   {
     icon: Package,
-    title: "Showcase Products & Services",
+    title: "Showcase Your Impact",
     description:
-      "Demonstrate what you offer to an audience eager to support local and diaspora-driven initiatives.",
+      "Demonstrate your products, services, or community development work to an audience eager to support diaspora-driven initiatives that are making a tangible difference.",
   },
   {
     icon: Unlock,
-    title: "Unlock Opportunities",
+    title: "Unlock New Opportunities",
     description:
-      "Position your business to benefit from partnerships, sales leads, and future collaborations sparked during the event.",
+      "Position your business or organization to benefit from partnerships, investment leads, and future collaborations sparked during the event.",
   },
+  {
+    icon: Megaphone,
+    title: "Contribute to the Narrative",
+    description:
+      "Be part of a movement that shows the world that Somaliland's diaspora is not just an observer, it is the architect of the modern state.",
+  },
+];
+
+const EXHIBITOR_CATEGORIES = [
+  "Diaspora-founded businesses operating in Somaliland across all sectors, including agriculture, livestock, fishery, mining, manufacturing, real estate, fintech, tourism, energy, healthcare, education, technology, and other professional service sectors.",
+  "Diaspora philanthropists and individual changemakers who have invested in community development.",
+  "Diaspora-led development organizations and NGOs that have implemented impactful programs in Somaliland.",
+  "Community groups and cooperatives that are driving local economic development.",
+  "Diaspora professionals with ventures or initiatives contributing to Somaliland's growth.",
 ];
 
 const SAMPLE_EXHIBITOR_LOGOS = [
@@ -722,48 +740,69 @@ export default function DiasporaWeekPortalPage() {
               <span className={styles.heroBadge}>Exhibitor Showcase</span>
               <h1 className={styles.scheduleHeroTitle}>Exhibitors</h1>
               <p className={styles.scheduleHeroSubtitle}>
-                Present your brand, products and services to a diverse audience of diaspora
-                community members, investors, development partners and local stakeholders.
+                Showcase your brand, services, or initiative at any of our city hubs. As an exhibitor,
+                you&apos;ll gain visibility among hundreds of attendees, government representatives, and
+                international guests.
               </p>
             </div>
           </section>
 
           <section className={styles.tabSection}>
             <div className="container">
-              <div className={styles.exhibitIntro}>
-                <span className={styles.kicker}>Exhibit With Us</span>
-                <h2 className={styles.sectionTitle}>Showcase Your Work at Diaspora Week 2025</h2>
-                <p className={styles.sectionLead}>
-                  Diaspora Week 2025 invites businesses, NGOs, community groups, and diaspora-led
-                  initiatives to showcase their work, products, and services to a diverse audience of
-                  diaspora community members, investors, development partners, and local stakeholders.
-                </p>
-                <p className={styles.sectionLead}>
-                  As an exhibitor, you will have the opportunity to present your brand, vision and
-                  voice with potential customers and partners, and build meaningful relationships
-                  within the Somaliland diaspora network. Exhibition spaces are available for the
-                  first three days of the event from August 2nd to August 4th, with flexible booth
-                  options to suit your needs.
-                </p>
-                <Link href="/diaspora-week/register?type=business" className={styles.exhibitRegisterCta}>
-                  <Building2 size={16} />
-                  Register a Business Booth
-                </Link>
+              <div className={styles.exhibitSplit}>
+                <div className={styles.exhibitIntro}>
+                  <span className={styles.kicker}>Exhibit With Us</span>
+                  <h2 className={styles.sectionTitle}>Showcase Your Work at Diaspora Week 2026</h2>
+                  <p className={styles.sectionLead}>
+                    Diaspora Week 2026 invites diaspora-founded businesses operating in Somaliland,
+                    diaspora philanthropists, and development organizations that have contributed to
+                    community development and nation-building to showcase their work, products, and
+                    services to a diverse audience of diaspora community members, investors,
+                    development partners, government officials, and local stakeholders.
+                  </p>
+                  <p className={styles.sectionLead}>
+                    This is a unique opportunity to celebrate and amplify the impact of diaspora-driven
+                    initiatives that are transforming Somaliland&apos;s economic landscape &ndash; from
+                    innovative start-ups and agribusinesses to infrastructure projects, educational
+                    institutions, health facilities, and community development programs.
+                  </p>
+                </div>
+
+                <div className={styles.whoListWrap}>
+                  <h3 className={styles.whoListTitle}>As an exhibitor, you will have the opportunity to:</h3>
+                  <ul className={styles.checkList}>
+                    <li>
+                      <CheckCircle2 size={20} />
+                      <span>Present your brand, vision, and voice to potential customers, investors, and partners.</span>
+                    </li>
+                    <li>
+                      <CheckCircle2 size={20} />
+                      <span>Build meaningful relationships within the Somaliland diaspora network and beyond.</span>
+                    </li>
+                    <li>
+                      <CheckCircle2 size={20} />
+                      <span>
+                        Inspire others by showcasing how diaspora capital, expertise, and passion are
+                        driving sustainable development across the nation.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
               <div className={styles.exhibitInfoStrip}>
                 <div className={styles.exhibitInfoItem}>
                   <CalendarDays size={22} />
                   <div>
-                    <strong>Aug 2 &ndash; 4, 2025</strong>
-                    <span>3 exhibition days</span>
+                    <strong>July 20, 2026</strong>
+                    <span>Application deadline</span>
                   </div>
                 </div>
                 <div className={styles.exhibitInfoItem}>
                   <Building2 size={22} />
                   <div>
                     <strong>Flexible Booths</strong>
-                    <span>Sized to suit your needs</span>
+                    <span>One city hub or all three</span>
                   </div>
                 </div>
                 <div className={styles.exhibitInfoItem}>
@@ -779,9 +818,9 @@ export default function DiasporaWeekPortalPage() {
 
           <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
             <div className="container">
-              <span className={styles.kicker}>Benefits for Business</span>
+              <span className={styles.kicker}>Benefits for Exhibitors</span>
               <h2 className={styles.sectionTitle}>
-                By Exhibiting at Diaspora Week 2025, Your Organization Will&hellip;
+                By Exhibiting at Diaspora Week 2026, Your Organization Will&hellip;
               </h2>
 
               <div className={styles.benefitsGrid}>
@@ -803,11 +842,57 @@ export default function DiasporaWeekPortalPage() {
 
           <section className={styles.tabSection}>
             <div className="container">
+              <span className={styles.kicker}>Who Should Exhibit?</span>
+              <h2 className={styles.sectionTitle}>We Welcome Applications From</h2>
+              <p className={styles.sectionLead}>
+                Diaspora Week 2026 is open to a wide range of diaspora-driven businesses, organizations
+                and changemakers.
+              </p>
+
+              <ul className={styles.checkList}>
+                {EXHIBITOR_CATEGORIES.map((category) => (
+                  <li key={category}>
+                    <CheckCircle2 size={20} />
+                    <span>{category}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
+            <div className="container">
+              <div className={styles.exhibitIntro}>
+                <span className={styles.kicker}>Application Deadline &amp; Selection Process</span>
+                <h2 className={styles.sectionTitle}>Apply by July 20th, 2026</h2>
+                <p className={styles.sectionLead}>
+                  Please submit your application by July 20th, 2026. To ensure optimal use of the venue
+                  space, the Diaspora Department will review all submissions after this date. Accepted
+                  businesses and organizations will be required to pay an affordable exhibition fee to
+                  secure their space. Registration will be finalized only upon payment confirmation.
+                </p>
+
+                <div className={styles.contactRow}>
+                  <a href="mailto:info@sldiaspora.org" className={styles.contactItem}>
+                    <Mail size={18} />
+                    info@sldiaspora.org
+                  </a>
+                  <a href="tel:+252634696895" className={styles.contactItem}>
+                    <Phone size={18} />
+                    +252-63-4696895
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className={styles.tabSection}>
+            <div className="container">
               <span className={styles.kicker}>Confirmed Exhibitors</span>
               <h2 className={styles.sectionTitle}>Participating Organizations</h2>
               <p className={styles.sectionLead}>
                 A growing line-up of businesses, NGOs and diaspora-led initiatives confirmed to
-                exhibit at Diaspora Week 2025.
+                exhibit at Diaspora Week 2026.
               </p>
 
               <div className={styles.logoCloud}>
