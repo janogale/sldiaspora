@@ -752,6 +752,7 @@ export default function DiasporaWeekPortalPage() {
 
                 const isFlipped = dayIndex % 2 === 1;
                 const dayTitle = DAY_THEMES[dayNumber] || sessions[0]?.title;
+                const panelPhoto = DW_PHOTOS[(dayNumber + 4) % DW_PHOTOS.length];
 
                 return (
                   <section
@@ -806,22 +807,31 @@ export default function DiasporaWeekPortalPage() {
                       {isFlipped && renderImagePanel(dayPhoto, `Day ${dayNumber}`, <DayIcon size={20} />, dayTitle)}
                     </div>
 
-                    {(panels.length > 0 || culture.length > 0 || awards) && (
-                      <div className={styles.scheduleDayExtra}>
-                        {panels.length > 0 && (
-                          <div>
-                            <span className={styles.scheduleSubheading}><Handshake size={16} /> Featured Panel Discussions</span>
-                            <div className={styles.scheduleTimeline} style={{ marginTop: "1rem" }}>
-                              {panels.map((panel) => (
-                                <div className={styles.scheduleTimelineItem} key={panel.id}>
-                                  <div className={styles.scheduleTimelineDot} />
-                                  {renderPanel(panel)}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                    {panels.length > 0 && (
+                      <div
+                        className={`${styles.scheduleModernBody} ${!isFlipped ? styles.scheduleModernBodyFlip : ""}`}
+                        style={{ minHeight: "auto" }}
+                      >
+                        {isFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
 
+                        <div className={styles.scheduleModernSessionsSide} style={{ overflowY: "visible" }}>
+                          <span className={styles.scheduleSubheading}><Handshake size={16} /> Featured Panel Discussions</span>
+                          <div className={styles.scheduleTimeline} style={{ marginTop: "1rem" }}>
+                            {panels.map((panel) => (
+                              <div className={styles.scheduleTimelineItem} key={panel.id}>
+                                <div className={styles.scheduleTimelineDot} />
+                                {renderPanel(panel)}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {!isFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
+                      </div>
+                    )}
+
+                    {(culture.length > 0 || awards) && (
+                      <div className={styles.scheduleDayExtra}>
                         {culture.length > 0 && (
                           <div>
                             <span className={styles.scheduleSubheading}><PartyPopper size={16} /> Cultural Integration</span>
