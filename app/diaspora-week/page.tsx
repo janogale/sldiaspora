@@ -319,12 +319,6 @@ export default function DiasporaWeekPage() {
                 <li><Heart size={15} /> Cultural reconnection programs</li>
                 <li><Star size={15} /> Awards & recognition ceremony</li>
               </ul>
-              <button className={styles.watchNowBtn} onClick={() => setVideoOpen(true)}>
-                <span className={styles.watchBtnPulse}>
-                  <Play size={18} fill="white" />
-                </span>
-                Watch Now — 3 min
-              </button>
             </div>
 
             <div className={styles.videoThumb} onClick={() => setVideoOpen(true)} role="button" tabIndex={0} aria-label="Play announcement video" onKeyDown={e => e.key === "Enter" && setVideoOpen(true)}>
@@ -571,7 +565,7 @@ export default function DiasporaWeekPage() {
       </section>
 
       {/* ── STARTUP PITCHING ── */}
-      <section className={styles.pitchSection}>
+      {/* <section className={styles.pitchSection}>
         <div className="container">
           <div className={styles.pitchInner}>
             <div className={styles.pitchLeft}>
@@ -623,7 +617,7 @@ export default function DiasporaWeekPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── GALLERY ── */}
       <section className={styles.section}>
