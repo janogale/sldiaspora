@@ -103,17 +103,17 @@
 
 .heroTitleLine1 {
   display: inline;
-  font-size: clamp(36px, 5.5vw, 68px);
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(26px, 3.6vw, 44px);
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.78);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
 }
 
 .heroTitleLine2 {
   display: inline;
-  font-size: clamp(36px, 5.5vw, 68px);
-  font-weight: 900;
+  font-size: clamp(26px, 3.6vw, 44px);
+  font-weight: 800;
   background: linear-gradient(90deg, #8df6b2 0%, #ffffff 60%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -121,11 +121,26 @@
 }
 
 .heroSubtitle {
-  font-size: 18px;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 650px;
+  position: relative;
+  font-size: 17px;
+  line-height: 1.8;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 620px;
   margin: 0 auto 36px;
+  padding-top: 18px;
+}
+
+.heroSubtitle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8df6b2, #ffffff);
 }
 
 /* ── HERO ACTIONS ── */

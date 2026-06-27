@@ -220,13 +220,13 @@ export default function DiasporaWeekPage() {
         <div className={`container ${styles.heroContainer}`}>
           <div className={styles.heroBadge}>
             <Sparkles size={14} />
-            A multi-City Roadshow: Connecting Local Roots to Global Recognition
+            Somaliland Diaspora Week 2026
           </div>
 
-          <h1 className={styles.heroTitle}>
+          {/* <h1 className={styles.heroTitle}>
             <span className={styles.heroTitleLine1}>Somaliland </span>
             <span className={styles.heroTitleLine2}>Diaspora Week 2026</span>
-          </h1>
+          </h1> */}
 
           <p className={styles.heroSubtitle}>
             August 1–6, 2026 in Hargeisa, Borama and Burao — uniting the global Somaliland
