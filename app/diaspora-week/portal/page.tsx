@@ -445,21 +445,26 @@ export default function DiasporaWeekPortalPage() {
                     <CalendarDays size={15} /> August 1&ndash;6, 2026
                   </span>
                   <div className={styles.homeThemeVenueGrid}>
-                    <div className={styles.homeThemeVenueRow}>
-                      <span className={styles.homeThemeVenueCity}><MapPin size={13} /> Hargeisa</span>
-                      <span className={styles.homeThemeVenueDivider} />
-                      <span className={styles.homeThemeVenueName}>Serene Seravoir Hotel</span>
-                    </div>
-                    <div className={styles.homeThemeVenueRow}>
-                      <span className={styles.homeThemeVenueCity}><MapPin size={13} /> Borama</span>
-                      <span className={styles.homeThemeVenueDivider} />
-                      <span className={styles.homeThemeVenueName}>Safari Hotel</span>
-                    </div>
-                    <div className={styles.homeThemeVenueRow}>
-                      <span className={styles.homeThemeVenueCity}><MapPin size={13} /> Burao</span>
-                      <span className={styles.homeThemeVenueDivider} />
-                      <span className={styles.homeThemeVenueName}>Plaza Hotel</span>
-                    </div>
+                    {[
+                      { city: "Hargeisa", venue: "Serene Seravoir Hotel", day: "Day 1–2", accent: "#1f8a3b", soft: "#e3f5e9" },
+                      { city: "Borama", venue: "Safari Hotel", day: "Day 3", accent: "#0070c0", soft: "#e1eefb" },
+                      { city: "Burao", venue: "Plaza Hotel", day: "Day 4", accent: "#b45309", soft: "#fdf0e1" },
+                    ].map((v) => (
+                      <div
+                        className={styles.homeThemeVenueRow}
+                        key={v.city}
+                        style={{ "--venue-accent": v.accent, "--venue-accent-soft": v.soft } as React.CSSProperties}
+                      >
+                        <span className={styles.homeThemeVenueDot}>
+                          <MapPin size={20} />
+                        </span>
+                        <span className={styles.homeThemeVenueText}>
+                          <span className={styles.homeThemeVenueCity}>{v.city}:</span>
+                          <span className={styles.homeThemeVenueName}>{v.venue}</span>
+                        </span>
+                        <span className={styles.homeThemeVenueDay}>{v.day}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className={styles.homeThemePhotos}>
