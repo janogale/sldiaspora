@@ -42,10 +42,11 @@ const SAMPLE_VIDEO_URL = "https://interactive-examples.mdn.mozilla.net/media/cc0
 const DAY_ICONS = [Sparkles, Handshake, Star, PartyPopper, Sparkles];
 
 const DAY_THEMES: Record<number, string> = {
-  1: "Opening Ceremony & Presidential Address",
-  2: "New Partnership Model & Startup Pitching",
-  3: "Closing Ceremony & Cultural Gala",
-  4: "Family & Cultural Fun Day",
+  1: "Hargeisa — Governance, Finance & Innovation and National Investment",
+  2: "Hargeisa — Governance, Finance & Innovation and National Investment (Day 2)",
+  3: "Borama — Knowledge, Agriculture, Mining, Cross-Border Trade & Tourism",
+  4: "Burao — Livestock, Industry & Productive Economy",
+  5: "Hargeisa — Grand Finale: Closing Gala & Diaspora Recognition Awards",
 };
 
 const DAY_PHOTOS: Record<number, string> = {
@@ -53,7 +54,51 @@ const DAY_PHOTOS: Record<number, string> = {
   2: "/assets/imgs/Diaspora Week 2025/527691517_1167226418779750_3577322439121286715_n.jpg",
   3: "/assets/imgs/Diaspora Week 2025/528345424_1169233925245666_1511022412967923258_n.jpg",
   4: "/assets/imgs/Diaspora Week 2025/528603324_1169233405245718_3332848329999857221_n.jpg",
+  5: "/assets/imgs/Diaspora Week 2025/527426570_1169233348579057_2900217355379882609_n.jpg",
 };
+
+const FALLBACK_SCHEDULE: ScheduleItem[] = [
+  // DAY 1 — Hargeisa, Saturday August 1
+  { id: "d1-1", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Official Opening Ceremony with Presidential Address", description: "Opening address by H.E. Abdirahman Mohamed Abdilahi, President of the Republic of Somaliland.", speaker: "H.E. Abdirahman Mohamed Abdilahi", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Opening Ceremony" },
+  { id: "d1-2", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Ministerial Investment Portfolio Launch", description: "Launch of the national investment portfolio by the Ministry of Foreign Affairs & International Cooperation.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Launch" },
+  { id: "d1-3", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Diaspora Investment Marketplace", description: "A marketplace connecting diaspora investors with bankable projects across Somaliland's regions.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Marketplace" },
+  { id: "d1-4", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Panel: A New Era of Partnership — From Remittances to Institutional Investment and the Diaspora Trust Fund", description: "Exploring the Somaliland Diaspora Trust Fund, regulated diaspora investment vehicles, public-private partnerships, and the shift from remittance dependency to structured capital mobilization.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  { id: "d1-5", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Panel: Beyond Recognition — Diaspora Advocacy, Diplomacy, and Somaliland's Rising Global Profile", description: "Examining how the diaspora can leverage growing international recognition to advance advocacy, diplomacy, and Somaliland's standing as a reliable global partner.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+
+  // DAY 2 — Hargeisa, Sunday August 2
+  { id: "d2-1", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Strategic Trade & Logistics Summit", description: "Examining Somaliland's role as a strategic maritime and logistics gateway along the Gulf of Aden.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Summit" },
+  { id: "d2-2", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Infrastructure Investment Dialogue", description: "Dialogue on port development, logistics, free zone investment and infrastructure priorities.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Dialogue" },
+  { id: "d2-3", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Horn of Africa Regional Integration Panel", description: "Positioning Somaliland within Horn of Africa regional trade and integration frameworks.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  { id: "d2-4", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Blue Economy & Maritime Investment Showcase", description: "Showcasing fisheries, aquaculture and maritime service investment opportunities.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Showcase" },
+  { id: "d2-5", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Panel: Building Somaliland's Future — Diaspora Skills, Innovation, and Investment in Human Capital", description: "Harnessing diaspora expertise in healthcare, education, technology, engineering and governance through knowledge transfer, mentorship and the Diaspora Trust Fund.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  { id: "d2-6", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Panel: Diaspora Women in Leadership — Architects of Influence, Investment & Recognition", description: "Reframing diaspora women as economic decision-makers, policy influencers, and intergenerational bridge-builders.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+
+  // DAY 3 — Borama, Monday August 3
+  { id: "d3-1", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Agro-Investment Presentation", description: "Presenting agro-processing and value-addition investment opportunities across Awdal.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Presentation" },
+  { id: "d3-2", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Incentivizing Diaspora Investment & Community Development Presentation", description: "Borama Local Government presents incentives for diaspora investment and community development.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Presentation" },
+  { id: "d3-3", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "University–Diaspora Research & Innovation Forum", description: "Forum on research and innovation partnerships between Amoud University and the diaspora.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Forum" },
+  { id: "d3-4", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Field Visits to Newly Installed Monuments & Tourism Sites", description: "Visits to the Ahmed Guray Statue and other newly installed monuments and tourism sites.", speaker: "", location: "Borama", sessionType: "Field Visit" },
+  { id: "d3-5", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "SME Financing Workshop", description: "SME financing workshop held in collaboration with IOM Somaliland.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Workshop" },
+  { id: "d3-6", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Diaspora Recognition Awards — Borama", description: "Awards jointly presented by Borama Local Government and the Diaspora Department.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Awards" },
+  { id: "d3-7", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Panel: Roots and Riches — Diaspora Investment in Agriculture, Mining, and Knowledge-Based Development in Awdal", description: "Unlocking diaspora capital, expertise and research partnerships in agro-processing, mining and cross-border trade.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Panel" },
+  { id: "d3-8", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Panel: Tourism Hub — Diaspora Investment in Trade, Tourism, and Urban Transformation", description: "Exploring Borama's urban transformation, the Djibouti-Borama road corridor, and education & tourism partnerships.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Panel" },
+
+  // DAY 4 — Burao, Wednesday August 5
+  { id: "d4-1", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Livestock Export Strategy & Welfare Dialogue", description: "Dialogue on livestock export strategy, standards and animal welfare.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Dialogue" },
+  { id: "d4-2", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Livestock & Trade History Showcase", description: "Showcasing Burao's livestock trade history and economic legacy.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Showcase" },
+  { id: "d4-3", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Manufacturing & Processing Investment Dialogue", description: "Dialogue on meat processing, leather & hides manufacturing investment opportunities.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Dialogue" },
+  { id: "d4-4", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Youth Skills & Industry Partnership Session", description: "Session on youth vocational training and industrial zone partnerships.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Session" },
+  { id: "d4-5", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Bridging Home and Diaspora: Local Initiatives and Incentives Presentation", description: "Local initiatives and incentives for diaspora investment and retention in Burao.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Presentation" },
+  { id: "d4-6", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Diaspora Recognition Awards — Burao", description: "Awards jointly presented by Burao Local Government and the Diaspora Department.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Awards" },
+  { id: "d4-7", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Panel: Building the Midland — Diaspora-Led Investment in Livestock, Industry, and Burao's Productive Economy", description: "Transforming Burao's livestock economy into a modern industrial sector through diaspora investment, industrial zones and youth vocational training.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Panel" },
+  { id: "d4-8", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "High-Profile Diaspora Night Event — \"Honoring the Backbone of the Nation\"", description: "An evening of cultural performances, nomadic heritage exhibitions, live music and oral poetry honoring the diaspora and connecting pastoral roots to modern industry.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Cultural Evening" },
+
+  // DAY 5 — Hargeisa, Thursday August 6 (Grand Finale)
+  { id: "d5-1", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Closing Gala Dinner", description: "A celebratory conclusion to the roadshow, bringing all delegates back to Hargeisa.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Gala" },
+  { id: "d5-2", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Diaspora Recognition Awards Ceremony", description: "Categories include Investment & Enterprise Leadership, International Advocacy & Diplomacy, Youth Innovation & Entrepreneurship, Cultural Preservation & Creative Industries, and Women in Leadership & Community Impact.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Awards" },
+  { id: "d5-3", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Hargeisa Local Government Presentation on Diaspora Incentives", description: "Presentation on diaspora incentives for investment and engagement in Hargeisa.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Presentation" },
+  { id: "d5-4", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Cultural Showcase", description: "Performances from traditional teams, national poetry recitals, and music ensembles celebrating Somaliland's culture and heritage.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Cultural Showcase" },
+];
 
 const EXHIBITOR_BENEFITS = [
   {
@@ -201,11 +246,11 @@ export default function DiasporaWeekPortalPage() {
     );
   }
 
-  const safeContent: PortalContent = content ?? {
-    schedule: [],
-    exhibitors: [],
-    partners: [],
-    gallery: [],
+  const safeContent: PortalContent = {
+    schedule: content?.schedule && content.schedule.length > 0 ? content.schedule : FALLBACK_SCHEDULE,
+    exhibitors: content?.exhibitors ?? [],
+    partners: content?.partners ?? [],
+    gallery: content?.gallery ?? [],
   };
 
   const scheduleByDay = safeContent.schedule.reduce<Record<number, ScheduleItem[]>>((acc, item) => {
@@ -220,7 +265,7 @@ export default function DiasporaWeekPortalPage() {
 
   const currentDay = activeDay && scheduleByDay[activeDay] ? activeDay : sortedDays[0] ?? null;
 
-  const scheduleQuickDays = sortedDays.length > 0 ? sortedDays : [1, 2, 3, 4];
+  const scheduleQuickDays = sortedDays.length > 0 ? sortedDays : [1, 2, 3, 4, 5];
 
   const navItems: Array<{ key: Section; label: string; icon: React.ReactNode }> = [
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
@@ -283,14 +328,14 @@ export default function DiasporaWeekPortalPage() {
             <div className={`container ${styles.homeHeroContent}`}>
               <span className={styles.homeHeroBadge}>
                 <CalendarDays size={14} />
-                August 2 &ndash; 5, 2025 &nbsp;&middot;&nbsp; Hargeisa, Somaliland
+                August 1 &ndash; 6, 2026 &nbsp;&middot;&nbsp; Hargeisa, Borama &amp; Burao
               </span>
               <h1 className={styles.homeHeroTitle}>
-                Somaliland <span className={styles.homeHeroAccent}>Diaspora</span> Week 2025
+                Somaliland <span className={styles.homeHeroAccent}>Diaspora</span> Week 2026
               </h1>
               <p className={styles.homeHeroSubtitle}>
-                Redefining the role of diaspora &mdash; from benefactor to strategic partner.
-                Join us as we build Somaliland&apos;s future together.
+                A multi-city roadshow connecting local roots to global recognition. Join us as
+                we build Somaliland&apos;s future together.
               </p>
               <div className={styles.homeHeroCtas}>
                 <Link href="/diaspora-week/register" className={styles.homeHeroCtaPrimary}>
@@ -307,7 +352,7 @@ export default function DiasporaWeekPortalPage() {
               <div className="container">
                 <div className={styles.homeHeroStatsGrid}>
                   <div className={styles.homeHeroStat}>
-                    <strong>4</strong>
+                    <strong>5</strong>
                     <span>Event Days</span>
                   </div>
                   <div className={styles.homeHeroStatDiv} />
@@ -322,7 +367,7 @@ export default function DiasporaWeekPortalPage() {
                   </div>
                   <div className={styles.homeHeroStatDiv} />
                   <div className={styles.homeHeroStat}>
-                    <strong>4</strong>
+                    <strong>3</strong>
                     <span>Host Cities</span>
                   </div>
                 </div>
@@ -337,7 +382,7 @@ export default function DiasporaWeekPortalPage() {
                 <span className={styles.homeKicker}>Join Us</span>
                 <h2 className={styles.homeSectionTitle}>Come Be Part of History</h2>
                 <p className={styles.homeSectionLead}>
-                  Whether you&apos;re reconnecting with your homeland or showcasing your business &mdash; Diaspora Week 2025 has a place for you.
+                  Whether you&apos;re reconnecting with your homeland or showcasing your business &mdash; Diaspora Week 2026 has a place for you.
                 </p>
               </div>
               <div className={styles.homeInviteCards}>
@@ -384,20 +429,38 @@ export default function DiasporaWeekPortalPage() {
             <div className="container">
               <div className={styles.homeThemeGrid}>
                 <div className={styles.homeThemeText}>
-                  <span className={styles.homeKicker}>2025 Theme</span>
+                  <span className={styles.homeKicker}>2026 Theme</span>
                   <blockquote className={styles.homeThemeQuote}>
-                    &ldquo;Redefining the Role of Diaspora&rdquo;
+                    &ldquo;A Multi-City Roadshow: Connecting Local Roots to Global Recognition&rdquo;
                   </blockquote>
-                  <p className={styles.homeThemeTagline}>From Benefactor to Strategic Partner</p>
+                  <p className={styles.homeThemeTagline}>From Local Roots to Global Recognition</p>
                   <p className={styles.homeThemeBody}>
-                    This year we celebrate a powerful shift &mdash; Somalilanders around the world
-                    are no longer just giving back, they&apos;re building forward. As co-architects
-                    of our nation&apos;s future, the diaspora brings ideas, skills, capital and
-                    resolve to shape lasting progress for generations to come.
+                    Our diaspora is not an external supporter &mdash; they are the architects of the
+                    modern Somaliland state. For over three decades the diaspora has financed
+                    businesses, built institutions, and connected Somaliland to the world. This year,
+                    the roadshow moves beyond a single venue to Hargeisa, Borama and Burao, proving
+                    that development is national, not centralized.
                   </p>
-                  <p className={styles.homeThemeVenue}>
-                    <MapPin size={15} /> Hotel Guuleed, Hargeisa &nbsp;&middot;&nbsp; August 2&ndash;5, 2025
-                  </p>
+                  <span className={styles.homeThemeVenueDate}>
+                    <CalendarDays size={15} /> August 1&ndash;6, 2026
+                  </span>
+                  <div className={styles.homeThemeVenueGrid}>
+                    <div className={styles.homeThemeVenueRow}>
+                      <span className={styles.homeThemeVenueCity}><MapPin size={13} /> Hargeisa</span>
+                      <span className={styles.homeThemeVenueDivider} />
+                      <span className={styles.homeThemeVenueName}>Serene Seravoir Hotel</span>
+                    </div>
+                    <div className={styles.homeThemeVenueRow}>
+                      <span className={styles.homeThemeVenueCity}><MapPin size={13} /> Borama</span>
+                      <span className={styles.homeThemeVenueDivider} />
+                      <span className={styles.homeThemeVenueName}>Safari Hotel</span>
+                    </div>
+                    <div className={styles.homeThemeVenueRow}>
+                      <span className={styles.homeThemeVenueCity}><MapPin size={13} /> Burao</span>
+                      <span className={styles.homeThemeVenueDivider} />
+                      <span className={styles.homeThemeVenueName}>Plaza Hotel</span>
+                    </div>
+                  </div>
                 </div>
                 <div className={styles.homeThemePhotos}>
                   <div className={styles.homeThemePhotoMain}>
@@ -418,7 +481,7 @@ export default function DiasporaWeekPortalPage() {
               <div className={styles.homeVideoHeader}>
                 <span className={styles.homeKicker}>Watch</span>
                 <h2 className={styles.homeSectionTitle}>Relive the Opening Day</h2>
-                <p className={styles.homeSectionLead}>Watch highlights from the opening ceremony of Somaliland Diaspora Week 2025.</p>
+                <p className={styles.homeSectionLead}>Watch highlights from the opening ceremony of Somaliland Diaspora Week 2026.</p>
               </div>
               <div className={styles.homeVideoFrame}>
                 <video className={styles.homeVideoEl} src={SAMPLE_VIDEO_URL} poster={DW_PHOTOS[1]} controls />
@@ -431,17 +494,17 @@ export default function DiasporaWeekPortalPage() {
             <div className="container">
               <div className={styles.homeGoalsHeader}>
                 <span className={styles.homeKicker}>Why We Gather</span>
-                <h2 className={styles.homeSectionTitle}>Our Goals for 2025</h2>
-                <p className={styles.homeSectionLead}>Five priorities drive everything we do at Diaspora Week.</p>
+                <h2 className={styles.homeSectionTitle}>Strategic Objectives & Goals</h2>
+                <p className={styles.homeSectionLead}>Diaspora Week 2026 is committed to these priorities.</p>
               </div>
               <div className={styles.homeGoalsGrid}>
                 {[
-                  { n: "01", icon: <User size={22} />, title: "Engage the Diaspora", desc: "Engage the diaspora in Somaliland's socio-economic and political development." },
-                  { n: "02", icon: <Sparkles size={22} />, title: "Co-Create Policy", desc: "Provide a platform to co-create diaspora-related policies and programmes." },
-                  { n: "03", icon: <Handshake size={22} />, title: "Drive Investment", desc: "Facilitate investment, innovation, and knowledge exchange." },
-                  { n: "04", icon: <Star size={22} />, title: "Strengthen Identity", desc: "Strengthen cultural identity and youth's generational connection to Somaliland." },
-                  { n: "05", icon: <Building2 size={22} />, title: "Showcase & Network", desc: "Showcase diaspora achievements and provide networking opportunities." },
-                  { n: "06", icon: <PartyPopper size={22} />, title: "Celebrate Culture", desc: "Honour Somaliland's rich heritage through arts, music and cultural programming." },
+                  { n: "01", icon: <User size={22} />, title: "Engage the Diaspora", desc: "Engage the Somaliland diaspora in the country's socio-economic, cultural, and political development." },
+                  { n: "02", icon: <Handshake size={22} />, title: "Facilitate Investment", desc: "Facilitate investment, innovation, entrepreneurship, and knowledge exchange between diaspora professionals, businesses, government and development partners." },
+                  { n: "03", icon: <Building2 size={22} />, title: "Showcase Opportunities", desc: "Showcase city-level and regional investment opportunities, sector strengths, and development priorities across Somaliland." },
+                  { n: "04", icon: <Sparkles size={22} />, title: "Promote Partnerships", desc: "Promote structured diaspora investment and partnership opportunities through B2B and B2G matchmaking and collaboration frameworks." },
+                  { n: "05", icon: <Star size={22} />, title: "Strengthen Identity", desc: "Strengthen cultural identity, national cohesion, and intergenerational engagement between second-generation diaspora and Somaliland's heritage." },
+                  { n: "06", icon: <PartyPopper size={22} />, title: "Co-Create Policy", desc: "Provide a platform for dialogue and co-creation of diaspora-related policies, programs, and institutional partnerships." },
                 ].map((g) => (
                   <div className={styles.homeGoalCard} key={g.n}>
                     <div className={styles.homeGoalCardTop}>
@@ -461,9 +524,9 @@ export default function DiasporaWeekPortalPage() {
             <div className="container">
               <div className={styles.homeScheduleHeader}>
                 <div>
-                  <span className={styles.homeKicker}>{scheduleQuickDays.length}-Day Programme</span>
+                  <span className={styles.homeKicker}>{scheduleQuickDays.length}-Day Roadshow</span>
                   <h2 className={styles.homeSectionTitle}>Event Schedule</h2>
-                  <p className={styles.homeSectionLead}>Tap a day to explore sessions, speakers and locations.</p>
+                  <p className={styles.homeSectionLead}>Tap a day to explore sessions, panels and locations across Hargeisa, Borama and Burao.</p>
                 </div>
                 <button type="button" className={styles.homeScheduleViewAll} onClick={() => setActiveSection("schedule")}>
                   Full Schedule
@@ -508,7 +571,8 @@ export default function DiasporaWeekPortalPage() {
                   <span className={styles.homeKicker}>Exhibitor Showcase</span>
                   <h2 className={styles.homeSectionTitle}>Meet Our Exhibitors</h2>
                   <p className={styles.homeSectionLead}>
-                    21+ businesses, NGOs and diaspora-led initiatives are confirmed to showcase their work. Come discover, connect and invest.
+                    21+ diaspora-founded businesses, NGOs and changemakers are confirmed to showcase
+                    their work across Hargeisa, Borama and Burao. Come discover, connect and invest.
                   </p>
                   <button type="button" className={styles.homeExhibitorCta} onClick={() => setActiveSection("exhibitors")}>
                     <Building2 size={16} />
@@ -537,6 +601,7 @@ export default function DiasporaWeekPortalPage() {
                 <div>
                   <span className={styles.homeKicker}>Memories</span>
                   <h2 className={styles.homeSectionTitle}>Diaspora Week in Photos</h2>
+                  <p className={styles.homeSectionLead}>Moments from across Hargeisa, Borama and Burao.</p>
                 </div>
                 <button type="button" className={styles.homeGalleryCta} onClick={() => setActiveSection("gallery")}>
                   <Camera size={16} />
@@ -567,11 +632,11 @@ export default function DiasporaWeekPortalPage() {
             </div>
             <div className={styles.scheduleHeroOverlay}></div>
             <div className={`container ${styles.scheduleHeroContainer}`}>
-              <span className={styles.heroBadge}>{scheduleQuickDays.length}-Day Program</span>
+              <span className={styles.heroBadge}>{scheduleQuickDays.length}-Day Roadshow</span>
               <h1 className={styles.scheduleHeroTitle}>Event Schedule</h1>
               <p className={styles.scheduleHeroSubtitle}>
-                Sessions, speakers and locations for every day of Diaspora Week 2025 &mdash; from
-                the opening ceremony to the closing cultural gala.
+                Sessions, panels and locations across Hargeisa, Borama and Burao &mdash; from the
+                opening ceremony in the capital to the closing gala and Diaspora Recognition Awards.
               </p>
 
               {sortedDays.length > 0 && (
@@ -661,10 +726,10 @@ export default function DiasporaWeekPortalPage() {
                     <section key="1a" id="schedule-day-1" className={`${styles.scheduleModernSection} ${styles.scheduleModernDay1}`}>
                       <div className={styles.scheduleModernBadgeRow}>
                         <span className={styles.scheduleModernDayChip}>DAY 1 · PART I</span>
-                        <span className={styles.scheduleModernDateChip}>{sessions[0]?.date || "August 2, 2025"}</span>
+                        <span className={styles.scheduleModernDateChip}>{sessions[0]?.date || "August 1, 2026"}</span>
                       </div>
                       <div className={styles.scheduleModernBody}>
-                        {renderImagePanel(DW_PHOTOS[0], "Opening Ceremony", <DayIcon size={20} />, "Opening Ceremony & Presidential Address")}
+                        {renderImagePanel(DW_PHOTOS[0], "Opening Ceremony", <DayIcon size={20} />, "Opening Ceremony & Presidential Address — Hargeisa")}
                         <div className={styles.scheduleModernSessionsSide}>
                           <h2 className={styles.scheduleModernDayTitle}>Morning Programme</h2>
                           {renderSessions(partA)}
@@ -682,7 +747,7 @@ export default function DiasporaWeekPortalPage() {
                           <h2 className={styles.scheduleModernDayTitle}>Afternoon Programme</h2>
                           {renderSessions(partB)}
                         </div>
-                        {renderImagePanel(DW_PHOTOS[1], "Day 1 Afternoon", <Sparkles size={20} />, "Networking & Evening Activities")}
+                        {renderImagePanel(DW_PHOTOS[1], "Day 1 Afternoon", <Sparkles size={20} />, "Investment Panels & Diaspora Marketplace")}
                       </div>
                     </section>,
                   ];

@@ -2469,18 +2469,83 @@
   color: #4b666d;
 }
 
-.homeThemeVenue {
+.homeThemeVenueDate {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
+  gap: 0.4rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: #0c2f37;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #1f8a3b;
+  margin-bottom: 0.9rem;
+}
+
+.homeThemeVenueGrid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   background: #fff;
   border: 1px solid #d9ece1;
-  border-radius: 999px;
-  padding: 0.55rem 1.1rem;
-  width: fit-content;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.homeThemeVenueRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.2rem;
+}
+
+.homeThemeVenueRow + .homeThemeVenueRow {
+  border-top: 1px solid #eaf3ed;
+}
+
+.homeThemeVenueRow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #1f8a3b, #8df6b2);
+}
+
+.homeThemeVenueCity {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 130px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1f8a3b;
+}
+
+.homeThemeVenueDivider {
+  width: 1px;
+  height: 18px;
+  background: #d9ece1;
+}
+
+.homeThemeVenueName {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #0c2f37;
+  line-height: 1.3;
+}
+
+@media (max-width: 560px) {
+  .homeThemeVenueRow {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .homeThemeVenueDivider {
+    display: none;
+  }
 }
 
 .homeThemePhotos {
