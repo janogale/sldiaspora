@@ -741,7 +741,6 @@ export default function DiasporaWeekPortalPage() {
                     <div className={styles.scheduleModernPhotoFrame}>
                       <img src={src} alt={alt} className={styles.scheduleModernPhoto} />
                       <div className={styles.scheduleModernGeomA} aria-hidden="true" />
-                      <div className={styles.scheduleModernGeomB} aria-hidden="true" />
                     </div>
                     <div className={styles.scheduleModernPhotoCaption}>
                       <span className={styles.scheduleModernCaptionIcon}>{icon}</span>
@@ -751,6 +750,7 @@ export default function DiasporaWeekPortalPage() {
                 );
 
                 const isFlipped = dayIndex % 2 === 1;
+                const panelsFlipped = isFlipped;
                 const dayTitle = DAY_THEMES[dayNumber] || sessions[0]?.title;
                 const panelPhoto = DW_PHOTOS[(dayNumber + 4) % DW_PHOTOS.length];
 
@@ -809,10 +809,10 @@ export default function DiasporaWeekPortalPage() {
 
                     {panels.length > 0 && (
                       <div
-                        className={`${styles.scheduleModernBody} ${!isFlipped ? styles.scheduleModernBodyFlip : ""}`}
+                        className={`${styles.scheduleModernBody} ${panelsFlipped ? styles.scheduleModernBodyFlip : ""}`}
                         style={{ minHeight: "auto" }}
                       >
-                        {isFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
+                        {panelsFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
 
                         <div className={styles.scheduleModernSessionsSide} style={{ overflowY: "visible" }}>
                           <span className={styles.scheduleSubheading}><Handshake size={16} /> Featured Panel Discussions</span>
@@ -826,7 +826,7 @@ export default function DiasporaWeekPortalPage() {
                           </div>
                         </div>
 
-                        {!isFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
+                        {!panelsFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
                       </div>
                     )}
 
