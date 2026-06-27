@@ -307,17 +307,18 @@ export default function DiasporaWeekPage() {
                 <Play size={13} />
                 Official Announcement
               </span>
-              <h2 className={styles.sectionTitle}>Watch the Official Diaspora Week Announcement</h2>
+              <h2 className={styles.sectionTitle}>Watch the Official Diaspora Week 2026 Announcement</h2>
               <p className={styles.sectionLead}>
-                Hear directly from Somaliland government officials and diaspora leaders about this
-                year&apos;s groundbreaking event. Discover why thousands of diaspora members are
-                flying in from across the globe to be part of history.
+                Hear directly from the Ministry of Foreign Affairs &amp; International Cooperation
+                on why 2026 marks a new era for Somaliland. With renewed international attention
+                and growing recognition on the world stage, this multi-city roadshow invites our
+                vast global diaspora to move from dialogue to action.
               </p>
               <ul className={styles.videoHighlights}>
-                <li><Globe size={15} /> Diaspora members from 40+ countries</li>
-                <li><TrendingUp size={15} /> $50M+ in investment discussions</li>
-                <li><Heart size={15} /> Cultural reconnection programs</li>
-                <li><Star size={15} /> Awards & recognition ceremony</li>
+                <li><Globe size={15} /> A vast diaspora across Europe, North America, the Middle East, East Africa &amp; Australia</li>
+                <li><TrendingUp size={15} /> National investment &amp; innovation showcase across 3 cities</li>
+                <li><Heart size={15} /> Cultural reaffirmation of Somaliland&apos;s identity &amp; resilience</li>
+                <li><Star size={15} /> Closing Gala &amp; Diaspora Recognition Awards</li>
               </ul>
             </div>
 
