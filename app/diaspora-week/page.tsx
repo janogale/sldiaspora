@@ -228,12 +228,24 @@ export default function DiasporaWeekPage() {
             <span className={styles.heroTitleLine2}>Diaspora Week 2026</span>
           </h1> */}
 
-          <p className={styles.heroSubtitle}>
-            August 1–6, 2026 in Hargeisa, Borama and Burao — uniting the global Somaliland
-            diaspora through investment forums, knowledge exchange, cultural showcases, and
-            partnerships in partnership with Dahabshiil, Telesom, IOM Somaliland and the
-            Municipalities of Hargeisa, Borama &amp; Burao.
-          </p>
+          <div className={styles.heroDescCard}>
+            <div className={styles.heroMetaRow}>
+              <span className={styles.heroMetaPill}>
+                <CalendarDays size={14} />
+                August 1–6, 2026
+              </span>
+              <span className={styles.heroMetaPill}>
+                <Globe size={14} />
+                Hargeisa · Borama · Burao
+              </span>
+            </div>
+            <p className={styles.heroSubtitle}>
+              Uniting the <span className={styles.heroSubtitleHighlight}>global Somaliland diaspora</span>{" "}
+              through investment forums, knowledge exchange, and cultural showcases in partnership
+              with Dahabshiil, Telesom, IOM Somaliland and the Municipalities of Hargeisa, Borama
+              &amp; Burao.
+            </p>
+          </div>
 
           <div className={styles.heroActions}>
             <Link href="/diaspora-week/register" className={styles.primaryCta}>
