@@ -3209,6 +3209,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  max-width: 1290px;
+  margin: 0 auto;
   padding: 1rem 2.5rem;
   background: var(--sms-accent, #005a1b);
   flex-wrap: wrap;
@@ -3236,6 +3238,8 @@
   grid-template-columns: 1fr 1.2fr;
   align-items: center;
   min-height: 480px;
+  max-width: 1290px;
+  margin: 0 auto;
 }
 
 .scheduleModernBodyFlip {
@@ -3310,7 +3314,7 @@
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--sms-accent, #005a1b);
   text-align: center;
@@ -3416,7 +3420,7 @@
 }
 
 .scheduleTimelineCard h3 {
-  font-size: 1.55rem;
+  font-size: 1.7rem;
   font-weight: 800;
   color: #0c2f37;
   margin: 0 0 0.4rem;
@@ -3424,9 +3428,9 @@
 }
 
 .scheduleTimelineCard p {
-  font-size: 1.3rem;
+  font-size: 1.42rem;
   color: #4b666d;
-  line-height: 1.65;
+  line-height: 1.7;
   margin: 0 0 0.6rem;
 }
 
@@ -3461,7 +3465,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -3474,8 +3478,8 @@
 }
 
 .scheduleAnchorText {
-  font-size: 1.25rem;
-  line-height: 1.65;
+  font-size: 1.42rem;
+  line-height: 1.7;
   color: #4b666d;
   margin: 0.5rem 0 0;
 }
@@ -3493,8 +3497,8 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  font-size: 1.2rem;
-  line-height: 1.5;
+  font-size: 1.35rem;
+  line-height: 1.55;
   color: #4b666d;
 }
 
@@ -3512,7 +3516,7 @@
 
 .schedulePanelFocus span {
   display: block;
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--sms-accent, #005a1b);
   margin-bottom: 0.4rem;
@@ -3520,6 +3524,8 @@
 
 /* Full-width section below the hero, for content that doesn't fit two columns */
 .scheduleDayExtra {
+  max-width: 1290px;
+  margin: 0 auto;
   padding: 2.5rem 2.75rem 3rem;
   background: #fff;
   display: flex;
