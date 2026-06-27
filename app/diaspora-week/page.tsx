@@ -70,31 +70,35 @@ const EMPTY_CONTENT: PublicContent = {
 const FALLBACK_DAYS = [
   {
     dayNumber: 1,
-    dayLabel: "Day 1",
-    title: "Opening Ceremony & Presidential Address",
-    desc: "Grand opening with keynote speeches from top government officials and diaspora leaders.",
+    dayLabel: "Hargeisa",
+    date: "August 1–2",
+    title: "Governance, Finance, Innovation & National Investment",
+    desc: "The capital hosts the national investment forum, government dialogue, and innovation showcase.",
     icon: "🎯",
   },
   {
     dayNumber: 2,
-    dayLabel: "Day 2",
-    title: "New Partnership Model & Startup Pitching",
-    desc: "Entrepreneurs pitch bold ideas to investors. Business partnerships forged for the future.",
-    icon: "🚀",
+    dayLabel: "Borama",
+    date: "August 3",
+    title: "Knowledge, Agriculture, Mining, Tourism & Cross-Border Trade Hub",
+    desc: "Borama showcases its strengths in education, agriculture, mining, tourism and cross-border trade.",
+    icon: "🌾",
   },
   {
     dayNumber: 3,
-    dayLabel: "Day 3",
-    title: "Closing Ceremony & Cultural Gala",
-    desc: "A magnificent celebration of culture, achievement, and collective Somaliland identity.",
-    icon: "🌟",
+    dayLabel: "Burao",
+    date: "August 5",
+    title: "Livestock, Industry & Productive Economy",
+    desc: "Burao highlights livestock, industry and the productive economy driving national growth.",
+    icon: "🏭",
   },
   {
     dayNumber: 4,
-    dayLabel: "Day 4",
-    title: "Family & Cultural Fun Day",
-    desc: "Community activities, music, art, and food — celebrating our shared heritage.",
-    icon: "🎉",
+    dayLabel: "Hargeisa",
+    date: "August 6",
+    title: "Grand Finale: Closing Gala & Diaspora Recognition Awards",
+    desc: "The roadshow concludes in Hargeisa with the closing gala and Diaspora Recognition Awards.",
+    icon: "🌟",
   },
 ];
 
@@ -198,7 +202,7 @@ export default function DiasporaWeekPage() {
   const scheduleDays =
     content.scheduleOutline.length > 0
       ? content.scheduleOutline.map((d, i) => ({ ...d, ...FALLBACK_DAYS[i] }))
-      : FALLBACK_DAYS.map((item) => ({ ...item, date: "" }));
+      : FALLBACK_DAYS;
 
   return (
     <main className={styles.page}>
@@ -216,17 +220,19 @@ export default function DiasporaWeekPage() {
         <div className={`container ${styles.heroContainer}`}>
           <div className={styles.heroBadge}>
             <Sparkles size={14} />
-            Annual Flagship Event · Hargeisa, Somaliland
+            A multi-City Roadshow: Connecting Local Roots to Global Recognition
           </div>
 
           <h1 className={styles.heroTitle}>
             <span className={styles.heroTitleLine1}>Somaliland </span>
-            <span className={styles.heroTitleLine2}>Diaspora Week</span>
+            <span className={styles.heroTitleLine2}>Diaspora Week 2026</span>
           </h1>
 
           <p className={styles.heroSubtitle}>
-            Four transformative days uniting the global Somaliland diaspora — through investment
-            forums, startup pitching, cultural showcases, and partnerships that build our nation&apos;s future.
+            August 1–6, 2026 in Hargeisa, Borama and Burao — uniting the global Somaliland
+            diaspora through investment forums, knowledge exchange, cultural showcases, and
+            partnerships in partnership with Dahabshiil, Telesom, IOM Somaliland and the
+            Municipalities of Hargeisa, Borama &amp; Burao.
           </p>
 
           <div className={styles.heroActions}>
@@ -348,7 +354,7 @@ export default function DiasporaWeekPage() {
               <Sparkles size={13} />
               Why Attend
             </span>
-            <h2 className={styles.sectionTitle}>Four Days That Will Change Your Future</h2>
+            <h2 className={styles.sectionTitle}>Why Attend Diaspora Week 2026?</h2>
             <p className={styles.sectionLead}>
               Somaliland Diaspora Week is more than an event — it&apos;s a movement that connects
               hearts, builds bridges, and shapes the future of our nation together.
@@ -363,17 +369,15 @@ export default function DiasporaWeekPage() {
               <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#d7f5e0,#b8eccb)", color: "#1f8a3b" }}>
                 <CalendarDays size={28} />
               </span>
-              <h3 className={styles.whyTitle}>4-Day Event Schedule</h3>
+              <h3 className={styles.whyTitle}>Invest</h3>
               <p className={styles.whyDesc}>
-                A carefully curated four-day journey — opening ceremonies, investment forums,
-                startup pitching, cultural galas, and networking sessions. Every moment is
-                designed to connect, inspire, and transform the diaspora experience.
+                Discover bankable projects, emerging industries, and investment opportunities
+                across Somaliland&apos;s major regions.
               </p>
               <div className={styles.whyTags}>
-                <span>Forums</span>
-                <span>Workshops</span>
-                <span>Networking</span>
-                <span>Gala Night</span>
+                <span>Bankable Projects</span>
+                <span>Emerging Industries</span>
+                <span>Regional Opportunities</span>
               </div>
             </div>
 
@@ -385,9 +389,10 @@ export default function DiasporaWeekPage() {
                   <Building2 size={22} />
                 </span>
                 <div>
-                  <h3 className={styles.whyTitle}>Business Exhibition Hall</h3>
+                  <h3 className={styles.whyTitle}>Connect</h3>
                   <p className={styles.whyDesc}>
-                    Diaspora businesses showcase products, services and investment opportunities to a live audience of decision-makers.
+                    Meet government leaders, business executives, entrepreneurs, development
+                    partners, academics, and diaspora professionals from around the world.
                   </p>
                 </div>
               </div>
@@ -397,9 +402,10 @@ export default function DiasporaWeekPage() {
                   <Rocket size={22} />
                 </span>
                 <div>
-                  <h3 className={styles.whyTitle}>Startup Pitching Stage</h3>
+                  <h3 className={styles.whyTitle}>Innovate</h3>
                   <p className={styles.whyDesc}>
-                    Pitch bold ideas to investors and community leaders. Winners announced at the closing gala.
+                    Share ideas, expertise, technology, and solutions that contribute to
+                    sustainable growth and economic transformation.
                   </p>
                 </div>
               </div>
@@ -414,27 +420,27 @@ export default function DiasporaWeekPage() {
                 icon: <Camera size={22} />,
                 bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)",
                 color: "#7c3aed",
-                title: "Live Media Coverage",
-                desc: "Follow the event live and access full media archives through our portal.",
-                tags: ["Live Stream", "Photo Archive", "Videos"],
+                title: "Celebrate",
+                desc: "Experience Somaliland's rich culture, heritage, traditions, creativity, and resilience through exhibitions, performances, and community events.",
+                tags: ["Exhibitions", "Performances", "Heritage"],
               },
               {
                 num: "05",
-                icon: <Globe size={22} />,
-                bg: "linear-gradient(135deg,#ccfbf1,#a7f3d0)",
-                color: "#0f766e",
-                title: "Global Networking",
-                desc: "Connect with diaspora members, investors and changemakers from 40+ countries.",
-                tags: ["40+ Countries", "Investors", "Officials"],
-              },
-              {
-                num: "06",
                 icon: <Heart size={22} />,
                 bg: "linear-gradient(135deg,#ffe4e6,#fecdd3)",
                 color: "#be123c",
-                title: "Cultural Reconnection",
-                desc: "Celebrate Somaliland's rich identity through art, music, food and storytelling.",
-                tags: ["Art", "Music", "Heritage"],
+                title: "Inspire",
+                desc: "Strengthen the connection between generations and encourage young Somalilanders abroad to engage with their heritage and future opportunities.",
+                tags: ["Second Generation", "Heritage", "Opportunity"],
+              },
+              {
+                num: "06",
+                icon: <Globe size={22} />,
+                bg: "linear-gradient(135deg,#ccfbf1,#a7f3d0)",
+                color: "#0f766e",
+                title: "Engage Local Governments",
+                desc: "Dialogue with Municipal Councils across Hargeisa, Borama and Burao to shape incentives, service delivery, and investment facilitation.",
+                tags: ["Hargeisa", "Borama", "Burao"],
               },
             ].map((item) => (
               <div className={`${styles.whyCard} ${styles.whyCardBottom}`} key={item.num}>
@@ -461,12 +467,13 @@ export default function DiasporaWeekPage() {
           <div className={styles.sectionHead}>
             <span className={styles.kicker}>
               <CalendarDays size={13} />
-              4-Day Program
+              Multi-City Roadshow
             </span>
-            <h2 className={styles.sectionTitle}>Event Schedule Outline</h2>
+            <h2 className={styles.sectionTitle}>The 2026 Roadshow at a Glance</h2>
             <p className={styles.sectionLead}>
-              A carefully curated journey through four transformative days. Full session details,
-              speakers, and locations in the{" "}
+              Hargeisa, Borama and Burao — each city representing a distinct pillar of
+              Somaliland&apos;s economic and cultural strength. Full session details, speakers,
+              and locations in the{" "}
               <Link href="/diaspora-week/portal">Event Portal</Link>.
             </p>
           </div>
