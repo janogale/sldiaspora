@@ -3456,6 +3456,77 @@
   text-transform: uppercase;
 }
 
+/* ── Subsection labels (Focus Areas / Program Highlights / Panels / etc.) ── */
+.scheduleSubheading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--sms-accent, #005a1b);
+  margin: 0.5rem 0 0;
+}
+
+.scheduleSubheading svg {
+  flex-shrink: 0;
+}
+
+.scheduleAnchorText {
+  font-size: 1.25rem;
+  line-height: 1.65;
+  color: #4b666d;
+  margin: 0.5rem 0 0;
+}
+
+.scheduleFocusList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scheduleFocusList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #4b666d;
+}
+
+.scheduleFocusList li svg {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+  color: var(--sms-accent, #005a1b);
+}
+
+.schedulePanelFocus {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.schedulePanelFocus span {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--sms-accent, #005a1b);
+  margin-bottom: 0.4rem;
+}
+
+/* Full-width section below the hero, for content that doesn't fit two columns */
+.scheduleDayExtra {
+  padding: 2.5rem 2.75rem 3rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
 /* ── Per-day colour themes via CSS custom property ── */
 .scheduleModernDay1  { --sms-accent: #C8572A; }
 .scheduleModernDay1b { --sms-accent: #e07340; background: #fdf6f2; }
@@ -3491,5 +3562,13 @@
 
   .scheduleModernBadgeRow {
     padding: 0.85rem 1.25rem;
+  }
+
+  .scheduleFocusList {
+    grid-template-columns: 1fr;
+  }
+
+  .scheduleDayExtra {
+    padding: 2rem 1.25rem 2.5rem;
   }
 }
