@@ -102,6 +102,10 @@ export async function POST(request: Request) {
       toEmail,
       name,
       accessCode,
+      registrationType,
+      country: String(registration.country || ""),
+      city: String(registration.city || ""),
+      profession: String(registration.profession || ""),
     });
 
     if (!emailSent) {

@@ -15,6 +15,9 @@ export default function DiasporaWeekRegisterPage() {
   const [submitted, setSubmitted] = useState(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [idDocType, setIdDocType] = useState<"passport" | "licence" | null>(null);
+  const [idDocPreview, setIdDocPreview] = useState<string | null>(null);
+  const [idDocFileName, setIdDocFileName] = useState<string | null>(null);
+  const [idDocIsImage, setIdDocIsImage] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +27,18 @@ export default function DiasporaWeekRegisterPage() {
       return;
     }
     setLogoPreview(URL.createObjectURL(file));
+  };
+
+  const handleIdDocChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setIdDocPreview(null);
+      setIdDocFileName(null);
+      return;
+    }
+    setIdDocFileName(file.name);
+    setIdDocIsImage(file.type.startsWith("image/"));
+    setIdDocPreview(file.type.startsWith("image/") ? URL.createObjectURL(file) : null);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -321,7 +336,11 @@ export default function DiasporaWeekRegisterPage() {
                                 name="idDocumentType"
                                 value="passport"
                                 checked={idDocType === "passport"}
-                                onChange={() => setIdDocType("passport")}
+                                onChange={() => {
+                                  setIdDocType("passport");
+                                  setIdDocPreview(null);
+                                  setIdDocFileName(null);
+                                }}
                                 className={styles.idDocRadio}
                               />
                               <span className={styles.idDocTypeIcon}>
@@ -344,7 +363,11 @@ export default function DiasporaWeekRegisterPage() {
                                 name="idDocumentType"
                                 value="licence"
                                 checked={idDocType === "licence"}
-                                onChange={() => setIdDocType("licence")}
+                                onChange={() => {
+                                  setIdDocType("licence");
+                                  setIdDocPreview(null);
+                                  setIdDocFileName(null);
+                                }}
                                 className={styles.idDocRadio}
                               />
                               <span className={styles.idDocTypeIcon}>
@@ -363,6 +386,29 @@ export default function DiasporaWeekRegisterPage() {
                               <label htmlFor="idDocFile" className={styles.label}>
                                 Upload {idDocType === "passport" ? "Passport" : "Driving Licence"} *
                               </label>
+
+                              {idDocFileName ? (
+                                <div className={styles.logoPreviewWrap}>
+                                  {idDocIsImage && idDocPreview ? (
+                                    <img
+                                      src={idDocPreview}
+                                      alt="Document preview"
+                                      className={styles.logoPreviewLg}
+                                    />
+                                  ) : (
+                                    <span className={styles.idDocTypeIcon}>
+                                      <i className="fa-regular fa-file-pdf" aria-hidden="true"></i>
+                                    </span>
+                                  )}
+                                  <div className={styles.logoPreviewMeta}>
+                                    <p className={styles.logoPreviewTitle}>{idDocFileName}</p>
+                                    <p className={styles.logoPreviewHint}>
+                                      Click the upload area to change it
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+
                               <div className={styles.uploadZone}>
                                 <i className="fa-regular fa-cloud-arrow-up" aria-hidden="true"></i>
                                 <span>Drag &amp; drop or click to browse</span>
@@ -372,6 +418,7 @@ export default function DiasporaWeekRegisterPage() {
                                   type="file"
                                   accept="image/*,.pdf"
                                   className={styles.uploadZoneInput}
+                                  onChange={handleIdDocChange}
                                   required
                                 />
                               </div>
