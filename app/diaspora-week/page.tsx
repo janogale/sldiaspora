@@ -353,7 +353,8 @@ export default function DiasporaWeekPage() {
         </div>
       </section>
 
-      {/* ── WHY ATTEND ── */}
+      {/* ── WHY ATTEND (hidden) ── */}
+      {false && (
       <section className={`${styles.section} ${styles.whySection}`}>
         <div className="container">
           <div className={styles.sectionHead}>
@@ -467,6 +468,7 @@ export default function DiasporaWeekPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── SCHEDULE ── */}
       <section className={`${styles.section} ${styles.scheduleSection}`}>
