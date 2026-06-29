@@ -308,23 +308,23 @@ export default function DiasporaWeekPage() {
                 Official Announcement
               </span>
               <h2 className={styles.sectionTitle}>Welcome to the Somaliland Diaspora Week 2026</h2>
-              <p className={styles.sectionLead}>
-                The Somaliland 2nd Diaspora Week 2026 moves beyond a single venue or centralized format to a national, 
-                multi-city roadshow hosted across Hargeisa, Borama, and Burao, reinforcing that development is national, 
-                not centralized, with each region representing a distinct pillar of Somaliland&amp;s economic and cultural 
+              <p className={styles.announcementText}>
+                The Somaliland 2nd Diaspora Week 2026 moves beyond a single venue or centralized format to a national,
+                multi-city roadshow hosted across Hargeisa, Borama, and Burao, reinforcing that development is national,
+                not centralized, with each region representing a distinct pillar of Somaliland&apos;s economic and cultural
                 strength, and offering unique opportunities for diaspora investment, engagement, and partnership.
-                
               </p>
-              <p className={styles.sectionLead}>
-                 It will bring together Somalilanders from around the world, government officials, entrepreneurs and 
-                 innovators to explore opportunities, strengthen partnerships, celebrate identity, and contribute to a 
-                 shared vision for the future. This is more than a conference, it is a national platform for engagement, 
-                 a marketplace for ideas and investment, a celebration of culture and identity, and a journey across 
-                 Somaliland&amp;s past, present, and future.
-
-                  This is the moment to move from dialogue to action, from commitment to tangible impact. 
-                  Together, we can build a nation where every Somalilander, at home and abroad, has a stake in our shared 
-                  future.
+              <p className={styles.announcementText}>
+                It will bring together Somalilanders from around the world, government officials, entrepreneurs and
+                innovators to explore opportunities, strengthen partnerships, celebrate identity, and contribute to a
+                shared vision for the future. This is more than a conference, it is a national platform for engagement,
+                a marketplace for ideas and investment, a celebration of culture and identity, and a journey across
+                Somaliland&apos;s past, present, and future.
+              </p>
+              <p className={styles.announcementText}>
+                This is the moment to move from dialogue to action, from commitment to tangible impact.
+                Together, we can build a nation where every Somalilander, at home and abroad, has a stake in our shared
+                future.
               </p>
             </div>
 
@@ -726,7 +726,7 @@ export default function DiasporaWeekPage() {
                     logo: "/partners/DHBerbera.jpg",
                   },
                 ].map((p) => (
-                  <div className={styles.partnerLogo} key={p.name}>
+                  <div className={`${styles.partnerLogo} ${styles.partnerLogoZoomSm}`} key={p.name}>
                     <img
                       src={p.logo}
                       alt={p.name}
