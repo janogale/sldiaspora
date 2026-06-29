@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, type CSSProperties } from "react";
 import {
   Building2,
   CalendarDays,
@@ -307,19 +307,25 @@ export default function DiasporaWeekPage() {
                 <Play size={13} />
                 Official Announcement
               </span>
-              <h2 className={styles.sectionTitle}>Watch the Official Diaspora Week 2026 Announcement</h2>
+              <h2 className={styles.sectionTitle}>Welcome to the Somaliland Diaspora Week 2026</h2>
               <p className={styles.sectionLead}>
-                Hear directly from the Ministry of Foreign Affairs &amp; International Cooperation
-                on why 2026 marks a new era for Somaliland. With renewed international attention
-                and growing recognition on the world stage, this multi-city roadshow invites our
-                vast global diaspora to move from dialogue to action.
+                The Somaliland 2nd Diaspora Week 2026 moves beyond a single venue or centralized format to a national, 
+                multi-city roadshow hosted across Hargeisa, Borama, and Burao, reinforcing that development is national, 
+                not centralized, with each region representing a distinct pillar of Somaliland&amp;s economic and cultural 
+                strength, and offering unique opportunities for diaspora investment, engagement, and partnership.
+                
               </p>
-              <ul className={styles.videoHighlights}>
-                <li><Globe size={15} /> A vast diaspora across Europe, North America, the Middle East, East Africa &amp; Australia</li>
-                <li><TrendingUp size={15} /> National investment &amp; innovation showcase across 3 cities</li>
-                <li><Heart size={15} /> Cultural reaffirmation of Somaliland&apos;s identity &amp; resilience</li>
-                <li><Star size={15} /> Closing Gala &amp; Diaspora Recognition Awards</li>
-              </ul>
+              <p className={styles.sectionLead}>
+                 It will bring together Somalilanders from around the world, government officials, entrepreneurs and 
+                 innovators to explore opportunities, strengthen partnerships, celebrate identity, and contribute to a 
+                 shared vision for the future. This is more than a conference, it is a national platform for engagement, 
+                 a marketplace for ideas and investment, a celebration of culture and identity, and a journey across 
+                 Somaliland&amp;s past, present, and future.
+
+                  This is the moment to move from dialogue to action, from commitment to tangible impact. 
+                  Together, we can build a nation where every Somalilander, at home and abroad, has a stake in our shared 
+                  future.
+              </p>
             </div>
 
             <div className={styles.videoThumb} onClick={() => setVideoOpen(true)} role="button" tabIndex={0} aria-label="Play announcement video" onKeyDown={e => e.key === "Enter" && setVideoOpen(true)}>
@@ -673,7 +679,7 @@ export default function DiasporaWeekPage() {
         </div>
       </section>
 
-      {/* ── PARTNERS ── */}
+      {/* ── ORGANIZERS & PARTNERS ── */}
       <section className={`${styles.section} ${styles.sectionAlt}`}>
         <div className="container">
           <div className={styles.sectionHead}>
@@ -681,62 +687,126 @@ export default function DiasporaWeekPage() {
               <Handshake size={13} />
               Collaboration
             </span>
-            <h2 className={styles.sectionTitle}>Our Partners</h2>
+            <h2 className={styles.sectionTitle}>Organizers &amp; Partners</h2>
             <p className={styles.sectionLead}>
-              Leading organizations supporting Somaliland Diaspora Week.
+              Local government bodies and partner organizations supporting Somaliland Diaspora
+              Week.
             </p>
           </div>
 
-          <div className={styles.partnersStrip}>
-              {[
+          <div className={styles.partnerGroups}>
+            <div
+              className={styles.partnerGroup}
+              style={
                 {
-                  name: "Hargeisa Local Development Authority",
-                  abbr: "HLDA",
-                  logo: "/partners/DHH.jpg",
-                },
-                {
-                  name: "Burco Municipality",
-                  abbr: "BM",
-                  logo: "/partners/DHBurco.jpg",
-                },
-                {
-                  name: "Berbera Port Authority",
-                  abbr: "BP",
-                  logo: "/partners/DHBerbera.jpg",
-                },
-                {
-                  name: "Ministry",
-                  abbr: "MN",
-                  logo: "/partners/Ministry.jpg",
-                },
-                {
-                  name: "Telesom",
-                  abbr: "TL",
-                  logo: "/partners/telesom.jpg",
-                },
-                {
-                  name: "Dahabshiil",
-                  abbr: "DS",
-                  logo: "/partners/dahabshiil.png",
-                },
-              ].map((p) => (
-                <div className={styles.partnerLogo} key={p.name}>
-                  <img
-                    src={p.logo}
-                    alt={p.name}
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      img.style.display = "none";
-                      const fb = img.nextElementSibling as HTMLElement | null;
-                      if (fb) fb.style.display = "flex";
-                    }}
-                  />
-                  <span className={styles.partnerFallback} style={{ display: "none" }}>
-                    {p.abbr}
-                  </span>
-                </div>
-              ))}
+                  "--partner-accent": "linear-gradient(90deg,#1f8a3b,#6fcf8d)",
+                  "--partner-accent-soft": "#e8f7ec",
+                } as CSSProperties
+              }
+            >
+              <h3 className={styles.partnerGroupLabel} style={{ color: "#1f8a3b" }}>
+                <Building2 size={16} />
+                Local Government
+              </h3>
+              <div className={styles.partnersStrip}>
+                {[
+                  {
+                    name: "Hargeisa Local Government",
+                    abbr: "DHH",
+                    logo: "/partners/DHH.jpg",
+                  },
+                  {
+                    name: "Burco Local Government",
+                    abbr: "DHB",
+                    logo: "/partners/DHBurco.jpg",
+                  },
+                  {
+                    name: "Berbera Maritime Authority",
+                    abbr: "BMA",
+                    logo: "/partners/DHBerbera.jpg",
+                  },
+                ].map((p) => (
+                  <div className={styles.partnerLogo} key={p.name}>
+                    <img
+                      src={p.logo}
+                      alt={p.name}
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        img.style.display = "none";
+                        const fb = img.nextElementSibling as HTMLElement | null;
+                        if (fb) fb.style.display = "flex";
+                      }}
+                    />
+                    <span className={styles.partnerFallback} style={{ display: "none" }}>
+                      {p.abbr}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            <div
+              className={styles.partnerGroup}
+              style={
+                {
+                  "--partner-accent": "linear-gradient(90deg,#b45309,#f4a637)",
+                  "--partner-accent-soft": "#fdf0dc",
+                } as CSSProperties
+              }
+            >
+              <h3 className={styles.partnerGroupLabel} style={{ color: "#b45309" }}>
+                <Handshake size={16} />
+                Partners
+              </h3>
+              <div className={styles.partnersStrip}>
+                {[
+                  {
+                    name: "Dahabshiil",
+                    abbr: "DS",
+                    logo: "/partners/dahabshiil-clear.png",
+                    bg: "linear-gradient(135deg,#4caf50,#3d8b40)",
+                  },
+                  {
+                    name: "Telesom",
+                    abbr: "TL",
+                    logo: "/partners/telesom.png",
+                    bg: "linear-gradient(135deg,#9ccc3c,#7cb030)",
+                  },
+                  {
+                    name: "IOM",
+                    abbr: "IOM",
+                    logo: "/partners/IOM-clear.png",
+                    bg: "linear-gradient(135deg,#1f3fa0,#142a73)",
+                  },
+                ].map((p) => (
+                  <div
+                    className={`${styles.partnerLogo} ${p.bg ? styles.partnerLogoZoom : ""}`}
+                    key={p.name}
+                    style={p.bg ? { background: p.bg, border: "none" } : undefined}
+                  >
+                    {p.logo && (
+                      <img
+                        src={p.logo}
+                        alt={p.name}
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          img.style.display = "none";
+                          const fb = img.nextElementSibling as HTMLElement | null;
+                          if (fb) fb.style.display = "flex";
+                        }}
+                      />
+                    )}
+                    <span
+                      className={styles.partnerFallback}
+                      style={{ display: p.logo ? "none" : "flex" }}
+                    >
+                      {p.abbr}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>

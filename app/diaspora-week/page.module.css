@@ -1423,36 +1423,82 @@
 }
 
 /* ── PARTNERS ── */
+.partnerGroups {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.partnerGroup {
+  text-align: center;
+  background: #fff;
+  border-radius: 28px;
+  padding: 40px 28px 36px;
+  box-shadow: 0 10px 34px rgba(1, 60, 33, 0.08);
+  border: 1px solid #eef3f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.partnerGroup::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--partner-accent, linear-gradient(90deg, #1f8a3b, #6fcf8d));
+}
+
+.partnerGroupLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 28px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--partner-accent-soft, #e8f7ec);
+}
+
 .partnersStrip {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 16px;
-  overflow-x: auto;
+  gap: 18px;
   padding-bottom: 4px;
 }
 
 .partnerLogo {
-  width: 175px;
-  height: 108px;
+  width: 168px;
+  height: 116px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
-  border: 1px solid #d9ece1;
+  border: 1px solid #e8eef0;
   border-radius: 18px;
-  padding: 18px 22px;
-  box-shadow: 0 4px 16px rgba(1, 109, 33, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 18px 20px;
+  box-shadow: 0 6px 16px rgba(1, 109, 33, 0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
   overflow: hidden;
 }
 
+.partnerLogoZoom {
+  padding: 8px 10px;
+}
+
 .partnerLogo:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(1, 109, 33, 0.14);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 32px rgba(1, 109, 33, 0.18);
 }
 
 .partnerLogo img {
@@ -1468,7 +1514,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   color: #1f8a3b;
   background: linear-gradient(135deg, #d7f5e0, #b8eccb);
@@ -1705,17 +1751,23 @@
   .videoThumb .videoAccent2 { display: none; }
   .playBtn { width: 60px; height: 60px; }
 
+  .partnerGroups {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .partnerGroup {
+    padding: 32px 20px 28px;
+  }
   .partnersStrip {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    flex-wrap: wrap;
-    overflow-x: visible;
     gap: 12px;
   }
   .partnerLogo {
-    width: 100%;
+    width: calc(50% - 6px);
     height: 92px;
     padding: 12px 16px;
+  }
+  .partnerLogoZoom {
+    padding: 6px 8px;
   }
 }
 
