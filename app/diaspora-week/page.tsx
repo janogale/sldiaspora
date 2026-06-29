@@ -218,32 +218,35 @@ export default function DiasporaWeekPage() {
         </div>
 
         <div className={`container ${styles.heroContainer}`}>
-          <div className={styles.heroBadge}>
+          {/* <div className={styles.heroBadge}>
             <Sparkles size={14} />
-            Somaliland Diaspora Week 2026
-          </div>
+            Official Roadshow Announcement
+          </div> */}
 
-          {/* <h1 className={styles.heroTitle}>
+          <h1 className={styles.heroTitle}>
             <span className={styles.heroTitleLine1}>Somaliland </span>
             <span className={styles.heroTitleLine2}>Diaspora Week 2026</span>
-          </h1> */}
+          </h1>
+
+          <p className={styles.heroTagline}>
+            &ldquo;A Multi-City Roadshow: <span>Connecting Local Roots to Global Recognition</span>&rdquo;
+          </p>
 
           <div className={styles.heroDescCard}>
             <div className={styles.heroMetaRow}>
-              <span className={styles.heroMetaPill}>
+              <span className={`${styles.heroMetaPill} ${styles.heroMetaPillAccent}`}>
                 <CalendarDays size={14} />
                 August 1–6, 2026
               </span>
               <span className={styles.heroMetaPill}>
                 <Globe size={14} />
-                Hargeisa · Borama · Burao
+                Hargeisa · Borama · Burao, Republic of Somaliland
               </span>
             </div>
             <p className={styles.heroSubtitle}>
-              Uniting the <span className={styles.heroSubtitleHighlight}>global Somaliland diaspora</span>{" "}
-              through investment forums, knowledge exchange, and cultural showcases in partnership
-              with Dahabshiil, Telesom, IOM Somaliland and the Municipalities of Hargeisa, Borama
-              &amp; Burao.
+              Join us for a transformative multi-city roadshow. This is a national platform to{" "}
+              connect local roots with <span className={styles.heroSubtitleHighlight}>global recognition</span>,{" "}
+              celebrating the diaspora as the architects of modern Somaliland.
             </p>
           </div>
 

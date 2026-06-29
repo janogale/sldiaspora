@@ -85,14 +85,33 @@
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.22);
   padding: 8px 18px;
-  border-radius: 999px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 24px;
+  margin-bottom: 18px;
+}
+
+.heroTagline {
+  max-width: 640px;
+  margin: 0 auto 28px;
+  font-size: clamp(17px, 2vw, 22px);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #fff;
+  position: relative;
+  padding: 0 8px;
+}
+
+.heroTagline span {
+  background: linear-gradient(90deg, #ffd24d 0%, #fff6d9 60%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .heroTitle {
@@ -124,8 +143,10 @@
   position: relative;
   max-width: 740px;
   margin: 0 auto 36px;
-  padding: 36px 40px;
-  border-radius: 24px;
+  padding: 38px 42px;
+  clip-path: polygon(
+    24px 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%, 0 24px
+  );
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 24px 60px rgba(0, 20, 6, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -135,14 +156,12 @@
 .heroDescCard::before {
   content: "";
   position: absolute;
-  top: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 72px;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 4px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #8df6b2, #ffffff);
-  box-shadow: 0 0 18px rgba(141, 246, 178, 0.7);
+  background: linear-gradient(90deg, #ffd24d 0%, #8df6b2 50%, #ffffff 100%);
+  box-shadow: 0 0 18px rgba(141, 246, 178, 0.5);
 }
 
 .heroMetaRow {
@@ -164,11 +183,22 @@
   background: rgba(141, 246, 178, 0.12);
   border: 1px solid rgba(141, 246, 178, 0.35);
   padding: 7px 14px;
-  border-radius: 999px;
+  border-radius: 6px;
 }
 
 .heroMetaPill svg {
   color: #8df6b2;
+}
+
+.heroMetaPillAccent {
+  color: #2b1c00;
+  background: linear-gradient(135deg, #ffe08a 0%, #ffc933 100%);
+  border: 1px solid #ffd24d;
+  box-shadow: 0 4px 14px rgba(255, 201, 51, 0.35);
+}
+
+.heroMetaPillAccent svg {
+  color: #2b1c00;
 }
 
 .heroSubtitle {
