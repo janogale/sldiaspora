@@ -17,6 +17,8 @@ import {
   Heart,
   ChevronRight,
   Star,
+  Mail,
+  Phone,
 } from "lucide-react";
 import Header from "../components/header";
 import styles from "./page.module.css";
@@ -566,9 +568,29 @@ export default function DiasporaWeekPage() {
             </div>
           ) : (
             <div className={styles.logoGrid}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div className={styles.logoCard} key={i}>
-                  <img src="/partners/Ministry.jpg" alt="Exhibitor" />
+              {[
+                { logo: "/partners/DHH.jpg" },
+                { logo: "/partners/DHBurco.jpg" },
+                { logo: "/partners/DHBerbera.jpg" },
+                {
+                  logo: "/partners/dahabshiil-clear.png",
+                  bg: "linear-gradient(135deg,#4caf50,#3d8b40)",
+                },
+                {
+                  logo: "/partners/telesom.png",
+                  bg: "linear-gradient(135deg,#9ccc3c,#7cb030)",
+                },
+                {
+                  logo: "/partners/IOM-clear.png",
+                  bg: "linear-gradient(135deg,#1f3fa0,#142a73)",
+                },
+              ].map((item, i) => (
+                <div
+                  className={styles.logoCard}
+                  key={i}
+                  style={item.bg ? { background: item.bg, border: "none", padding: "12px 14px" } : undefined}
+                >
+                  <img src={item.logo} alt="Exhibitor" />
                 </div>
               ))}
             </div>
@@ -695,6 +717,23 @@ export default function DiasporaWeekPage() {
               Local government bodies and partner organizations supporting Somaliland Diaspora
               Week.
             </p>
+
+            <div className={styles.partnerContactCallout}>
+              <p className={styles.partnerContactText}>
+                We thank our current partners and invite new sponsors to join us for a successful
+                Diaspora Week.
+              </p>
+              <div className={styles.partnerContactLinks}>
+                <a href="mailto:info@sldiaspora.org" className={styles.partnerContactLink}>
+                  <Mail size={15} />
+                  info@sldiaspora.org
+                </a>
+                <a href="tel:+252638880240" className={styles.partnerContactLink}>
+                  <Phone size={15} />
+                  +252 63 8880240
+                </a>
+              </div>
+            </div>
           </div>
 
           <div className={styles.partnerGroups}>

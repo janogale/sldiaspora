@@ -1466,6 +1466,51 @@
 }
 
 /* ── PARTNERS ── */
+.partnerContactCallout {
+  max-width: 640px;
+  margin: 28px auto 0;
+  padding: 22px 28px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0faf3, #e3f5ea);
+  border: 1px solid #cfe9d8;
+  text-align: center;
+}
+
+.partnerContactText {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1f3a2c;
+  margin: 0 0 14px;
+}
+
+.partnerContactLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.partnerContactLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f8a3b;
+  background: #fff;
+  border: 1px solid #cfe9d8;
+  padding: 9px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.partnerContactLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(1, 109, 33, 0.14);
+  color: #15602a;
+}
+
 .partnerGroups {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
