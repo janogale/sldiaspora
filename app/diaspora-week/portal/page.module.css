@@ -3605,7 +3605,7 @@
   letter-spacing: 0.04em;
   padding: 0.75rem 1.75rem;
   border-radius: 999px;
-  margin-bottom: 1.75rem;
+  margin-bottom: 0.9rem;
   animation: portalPulse 2.5s ease-in-out infinite;
 }
 
@@ -3626,7 +3626,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  display: block;
+  display: inline;
 }
 
 .exHeroSub {
@@ -3841,24 +3841,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px; height: 56px;
-  border-radius: 16px;
+  width: 46px; height: 46px;
+  border-radius: 13px;
   background: var(--opp-color, #1f8a3b);
   color: #fff;
   flex-shrink: 0;
 }
 
 .exOppTitle {
-  font-size: 1.8rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: #0c2f37;
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.2rem;
 }
 
 .exOppDesc {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #4b666d;
-  line-height: 1.65;
+  line-height: 1.6;
   margin: 0;
 }
 

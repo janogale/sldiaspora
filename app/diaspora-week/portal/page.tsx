@@ -895,8 +895,7 @@ export default function DiasporaWeekPortalPage() {
               </div>
 
               <h1 className={styles.exHeroTitle}>
-                Exhibit at<br />
-                <span className={styles.exHeroAccent}>Diaspora Week 2026</span>
+                Exhibit at <span className={styles.exHeroAccent}>Diaspora Week 2026</span>
               </h1>
 
               <p className={styles.exHeroSub}>
