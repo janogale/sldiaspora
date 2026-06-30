@@ -327,24 +327,74 @@ export const sendHtmlEmail = async (options: {
   return false;
 };
 
-const emailShell = (title: string, bodyHtml: string) => `
-  <div style="font-family: Arial, sans-serif; background: #f4f7f5; padding: 24px; color: #1f2937;">
-    <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #d8e6dc; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);">
-      <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%); padding: 20px 24px; border-bottom: 1px solid #f1e4d2;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <img src="${escapeHtml(resolveAppBaseUrl())}/assets/imgs/logo/logo.png" alt="Sldiaspora" width="42" height="42" style="border-radius: 8px; object-fit: contain; background: #ffffff; border: 1px solid #f1e4d2;" />
-          <div>
-            <div style="font-size: 20px; font-weight: 700; color: #b45309; margin-bottom: 2px;">${escapeHtml(title)}</div>
-            <div style="font-size: 13px; color: #64748b;">Somaliland Diaspora Week</div>
-          </div>
-        </div>
-      </div>
-      <div style="padding: 22px 24px 24px; line-height: 1.6;">
-        ${bodyHtml}
-      </div>
+// ---------------------------------------------------------------------------
+// Shared email primitives
+// ---------------------------------------------------------------------------
+
+const EMAIL_BG = "#0d2e1f";
+const emailWrapper = (innerHtml: string) => `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /></head>
+<body style="margin:0;padding:0;background:${EMAIL_BG};">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:${EMAIL_BG};padding:32px 16px;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+      ${innerHtml}
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`;
+
+// Top logo bar shared by both emails
+const emailLogoBar = (baseUrl: string) => `
+<tr>
+  <td style="text-align:center;padding-bottom:16px;">
+    <img src="${escapeHtml(baseUrl)}/assets/imgs/logo/logo.png" alt="Somaliland Diaspora" width="48" height="48"
+      style="border-radius:12px;background:#ffffff;padding:5px;border:1px solid rgba(255,255,255,0.15);" />
+    <div style="margin-top:6px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;
+      text-transform:uppercase;color:rgba(255,255,255,0.55);">Somaliland Diaspora Week</div>
+  </td>
+</tr>`;
+
+// Hero banner row
+const emailHeroBanner = (subtitle: string) => `
+<tr>
+  <td style="background:linear-gradient(135deg,#005a1b 0%,#007a26 50%,#1a5c0a 100%);
+    border-radius:18px 18px 0 0;padding:30px 28px;text-align:center;">
+    <div style="display:inline-block;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);
+      border-radius:999px;padding:4px 14px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;
+      text-transform:uppercase;color:#fde68a;margin-bottom:12px;">${subtitle}</div>
+    <div style="font-family:Arial,sans-serif;font-size:28px;font-weight:900;color:#ffffff;
+      line-height:1.2;margin-bottom:8px;">Somaliland Diaspora Week 2026</div>
+    <div style="font-family:Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.85);">
+      August&nbsp;1–6,&nbsp;2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
     </div>
-  </div>
-`;
+  </td>
+</tr>`;
+
+// White card body wrapper
+const emailCardOpen = () =>
+  `<tr><td style="background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;
+    box-shadow:0 20px 48px rgba(0,0,0,0.35);">`;
+const emailCardClose = () => `</td></tr>`;
+
+// Footer row
+const emailFooter = () => `
+<tr>
+  <td style="padding:20px 0 0;text-align:center;">
+    <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.45);line-height:1.8;">
+      Somaliland Diaspora Week 2026 &middot; Hargeisa, Somaliland<br/>
+      Questions? <a href="mailto:info@sldiaspora.org" style="color:rgba(255,255,255,0.65);text-decoration:none;">info@sldiaspora.org</a>
+      &nbsp;&middot;&nbsp; <a href="tel:+252638880240" style="color:rgba(255,255,255,0.65);text-decoration:none;">+252 63 8880240</a>
+    </div>
+  </td>
+</tr>`;
+
+// ---------------------------------------------------------------------------
+// Email 1 — Registration Received (pending confirmation)
+// ---------------------------------------------------------------------------
 
 export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
   toEmail: string;
@@ -352,33 +402,164 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
   registrationType: "individual" | "business";
 }) => {
   const safeName = escapeHtml(options.name || "there");
-  const typeLabel = options.registrationType === "business" ? "Business" : "Individual";
+  const baseUrl = resolveAppBaseUrl();
+  const isBusiness = options.registrationType === "business";
+  const typeLabel = isBusiness ? "Business Exhibitor" : "Individual Delegate";
+  const typeColor = isBusiness ? "#0055b3" : "#005a1b";
+  const typeBg   = isBusiness ? "#daeeff"  : "#d7f5e0";
 
-  const html = emailShell(
-    "Registration Received",
-    `
-      <p style="margin: 0 0 12px;">Hello <strong>${safeName}</strong>,</p>
-      <p style="margin: 0 0 12px;">
-        Thank you for registering for <strong>Somaliland Diaspora Week</strong> as a
-        <strong>${escapeHtml(typeLabel)}</strong> participant.
+  const html = emailWrapper(`
+    ${emailLogoBar(baseUrl)}
+    ${emailHeroBanner("Registration Received")}
+    ${emailCardOpen()}
+
+    <!-- greeting -->
+    <div style="padding:28px 28px 0;">
+      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;
+        border-radius:999px;padding:5px 14px;font-family:Arial,sans-serif;font-size:12px;
+        font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:16px;">
+        &#10003;&nbsp; Registration Received
+      </div>
+      <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:16px;color:#0c2f37;">
+        Dear <strong>${safeName}</strong>,
       </p>
-      <p style="margin: 0 0 12px;">
-        Your registration is currently <strong>pending review</strong>. Once approved by our team,
-        you will receive an email with your unique access code to unlock the full event portal,
-        including the 5-day schedule, sessions, exhibitors, partners, and the startup pitching agenda.
+      <p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:14px;color:#334155;line-height:1.75;">
+        Thank you for registering for <strong>Somaliland Diaspora Week 2026</strong> as a
+        <strong>${escapeHtml(typeLabel)}</strong>. We have successfully received your application
+        and our team is currently reviewing it.
       </p>
-      <p style="margin: 0; color: #64748b; font-size: 13px;">
-        This usually takes 2-3 business days. No action is needed from you right now.
+    </div>
+
+    <!-- submitted details box -->
+    <div style="margin:0 28px 24px;background:#f4fbf7;border:1.5px solid #d6e4e1;
+      border-radius:14px;overflow:hidden;">
+      <div style="padding:12px 20px;border-bottom:1px solid #d6e4e1;">
+        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;
+          text-transform:uppercase;color:#4b666d;margin-bottom:4px;">Submitted Details</div>
+      </div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:14px;">
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;width:40%;border-bottom:1px solid #eef3f1;">Name</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${safeName}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Registration Type</td>
+          <td style="padding:10px 20px;border-bottom:1px solid #eef3f1;">
+            <span style="display:inline-block;background:${typeBg};color:${typeColor};
+              border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;">
+              ${escapeHtml(typeLabel)}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Email</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.toEmail)}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;">Status</td>
+          <td style="padding:10px 20px;">
+            <span style="display:inline-block;background:#fff7ed;color:#92400e;
+              border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;">
+              &#9679;&nbsp; Pending Review
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- what happens next -->
+    <div style="margin:0 28px 24px;">
+      <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:0.5px;
+        text-transform:uppercase;color:#0c2f37;margin-bottom:14px;">What Happens Next</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="36" valign="top" style="padding-right:12px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#005a1b,#1f8a3b);
+              color:#fff;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
+              text-align:center;line-height:28px;">1</div>
+          </td>
+          <td style="padding-bottom:14px;">
+            <div style="font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#0c2f37;">Application Review</div>
+            <div style="font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.6;">
+              Our team reviews your details within <strong>2–3 business days</strong>. No action needed from you.
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="36" valign="top" style="padding-right:12px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#005a1b,#1f8a3b);
+              color:#fff;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
+              text-align:center;line-height:28px;">2</div>
+          </td>
+          <td style="padding-bottom:14px;">
+            <div style="font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#0c2f37;">Approval &amp; Access Code</div>
+            <div style="font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.6;">
+              Once approved you'll receive a <strong>unique access code</strong> by email — your digital pass to the event portal.
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="36" valign="top" style="padding-right:12px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#005a1b,#1f8a3b);
+              color:#fff;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
+              text-align:center;line-height:28px;">3</div>
+          </td>
+          <td style="padding-bottom:4px;">
+            <div style="font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#0c2f37;">Attend &amp; Connect</div>
+            <div style="font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.6;">
+              Join 500+ diaspora members, investors, and entrepreneurs across Hargeisa, Borama &amp; Burao.
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- event highlights strip -->
+    <div style="margin:0 28px 28px;background:linear-gradient(135deg,#005a1b 0%,#007a26 100%);
+      border-radius:12px;padding:16px 20px;">
+      <div style="font-family:Arial,sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;
+        color:rgba(255,255,255,0.7);margin-bottom:10px;">Event Highlights</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="33%" style="text-align:center;padding:6px 4px;">
+            <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#fde68a;">5</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8);">Day Programme</div>
+          </td>
+          <td width="33%" style="text-align:center;padding:6px 4px;border-left:1px solid rgba(255,255,255,0.2);border-right:1px solid rgba(255,255,255,0.2);">
+            <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#fde68a;">3</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8);">Cities (Roadshow)</div>
+          </td>
+          <td width="33%" style="text-align:center;padding:6px 4px;">
+            <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#fde68a;">500+</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8);">Delegates</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- contact note -->
+    <div style="padding:0 28px 28px;">
+      <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.7;">
+        Questions? Reach us at
+        <a href="mailto:info@sldiaspora.org" style="color:#005a1b;font-weight:700;text-decoration:none;">info@sldiaspora.org</a>
+        or call <a href="tel:+252638880240" style="color:#005a1b;font-weight:700;text-decoration:none;">+252 63 8880240</a>.
       </p>
-    `
-  );
+    </div>
+
+    ${emailCardClose()}
+    ${emailFooter()}
+  `);
 
   return sendHtmlEmail({
     to: options.toEmail,
-    subject: "Somaliland Diaspora Week — Registration Received",
+    subject: "Somaliland Diaspora Week 2026 — Registration Received ✓",
     html,
   });
 };
+
+// ---------------------------------------------------------------------------
+// Email 2 — Approval / Official Invitation (with access code)
+// ---------------------------------------------------------------------------
 
 export const sendDiasporaWeekApprovalEmail = async (options: {
   toEmail: string;
@@ -388,107 +569,253 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
   country?: string;
   city?: string;
   profession?: string;
+  // business-specific
+  businessName?: string;
+  contactPerson?: string;
+  industry?: string;
+  website?: string;
 }) => {
   const safeName = escapeHtml(options.name || "there");
   const baseUrl = resolveAppBaseUrl();
   const portalUrl = `${baseUrl}/diaspora-week/portal`;
-  const logoUrl = `${baseUrl}/assets/imgs/logo/logo.png`;
 
-  const typeLabel = options.registrationType === "business" ? "Business Delegate" : "Individual Delegate";
+  const isBusiness = options.registrationType === "business";
+  const typeLabel  = isBusiness ? "Business Exhibitor" : "Individual Delegate";
+  const typeColor  = isBusiness ? "#0055b3" : "#005a1b";
+  const typeBg     = isBusiness ? "#daeeff"  : "#d7f5e0";
+
   const locationLine = [options.city, options.country]
-    .filter((value): value is string => Boolean(value))
+    .filter((v): v is string => Boolean(v))
     .map(escapeHtml)
     .join(", ");
 
-  const html = `
-  <div style="font-family: Arial, sans-serif; background: #0c2f37; padding: 32px 16px; color: #1f2937;">
-    <div style="max-width: 600px; margin: 0 auto;">
+  // Build optional detail rows
+  const detailRows = [
+    options.profession && !isBusiness
+      ? `<tr>
+          <td style="padding:10px 20px;color:#4b666d;width:38%;border-bottom:1px solid #eef3f1;">Profession</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.profession)}</td>
+        </tr>`
+      : "",
+    isBusiness && options.contactPerson
+      ? `<tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Contact Person</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.contactPerson)}</td>
+        </tr>`
+      : "",
+    isBusiness && options.industry
+      ? `<tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Industry</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.industry)}</td>
+        </tr>`
+      : "",
+    isBusiness && options.website
+      ? `<tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Website</td>
+          <td style="padding:10px 20px;font-weight:600;border-bottom:1px solid #eef3f1;">
+            <a href="${escapeHtml(options.website)}" style="color:#0055b3;text-decoration:none;">${escapeHtml(options.website)}</a>
+          </td>
+        </tr>`
+      : "",
+    locationLine
+      ? `<tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Location</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${locationLine}</td>
+        </tr>`
+      : "",
+  ].join("");
 
-      <div style="text-align: center; margin-bottom: 18px;">
-        <img src="${escapeHtml(logoUrl)}" alt="Sldiaspora" width="46" height="46" style="border-radius: 10px; background: #ffffff; padding: 4px;" />
+  const businessWelcome = isBusiness
+    ? `<p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:14px;color:#334155;line-height:1.75;">
+        Your business will be showcased in the official <strong>Exhibition Zone</strong> across
+        Hargeisa, Borama, and Burao. Our team will contact you separately with your booth assignment
+        and exhibitor briefing pack. Please arrive <strong>60 minutes before the opening</strong>
+        for exhibitor check-in and setup.
+      </p>`
+    : "";
+
+  const practicalRows = isBusiness
+    ? [
+        ["Exhibitor Check-in", "60 minutes before the opening ceremony, at your designated venue"],
+        ["What to Bring", "This email (printed or digital), company ID, and exhibition materials"],
+        ["Booth Setup", "Setup period begins the evening before your city date — details to follow"],
+        ["Event Support", "WhatsApp group link will be shared before the event"],
+      ]
+    : [
+        ["Check-in", "30 minutes before the first session at the venue entrance"],
+        ["What to Bring", "This email (printed or digital) and a valid photo ID"],
+        ["Dress Code", "Smart casual or traditional attire — both warmly welcomed"],
+        ["Event Support", "WhatsApp group link will be shared before the event"],
+      ];
+
+  const html = emailWrapper(`
+    ${emailLogoBar(baseUrl)}
+    ${emailHeroBanner("Official Delegate Invitation")}
+    ${emailCardOpen()}
+
+    <!-- approval badge + greeting -->
+    <div style="padding:28px 28px 0;">
+      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;
+        border-radius:999px;padding:5px 14px;font-family:Arial,sans-serif;font-size:12px;
+        font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:16px;">
+        &#10003;&nbsp; Registration Approved
       </div>
+      <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:17px;color:#0c2f37;">
+        Congratulations, <strong>${safeName}</strong>!
+      </p>
+      <p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:14px;color:#334155;line-height:1.75;">
+        We are delighted to confirm your place at <strong>Somaliland Diaspora Week 2026</strong>.
+        Below you will find your official access code and everything you need to prepare for an
+        unforgettable week of connection, investment, and culture.
+      </p>
+      ${businessWelcome}
+    </div>
 
-      <div style="background: linear-gradient(135deg, #005a1b 0%, #006d21 55%, #b45309 100%); border-radius: 18px 18px 0 0; padding: 26px 28px; text-align: center;">
-        <div style="font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.8); margin-bottom: 8px;">Official Invitation</div>
-        <div style="font-size: 26px; font-weight: 800; color: #ffffff; margin-bottom: 6px;">Somaliland Diaspora Week 2026</div>
-        <div style="font-size: 14px; color: rgba(255,255,255,0.9);">August 1–6, 2026 &middot; Hargeisa &middot; Borama &middot; Burao</div>
+    <!-- delegate details card -->
+    <div style="margin:4px 28px 20px;border:1.5px solid #d6e4e1;border-radius:14px;overflow:hidden;">
+      <div style="background:#f4fbf7;padding:13px 20px;border-bottom:1px solid #d6e4e1;">
+        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;
+          text-transform:uppercase;color:#4b666d;margin-bottom:4px;">Delegate Details</div>
+        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#0c2f37;">${safeName}</div>
       </div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:14px;">
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;width:38%;border-bottom:1px solid #eef3f1;">Registration Type</td>
+          <td style="padding:10px 20px;border-bottom:1px solid #eef3f1;">
+            <span style="display:inline-block;background:${typeBg};color:${typeColor};
+              border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;">
+              ${escapeHtml(typeLabel)}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Email</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.toEmail)}</td>
+        </tr>
+        ${detailRows}
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Event Dates</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">August 1–6, 2026</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;">Cities</td>
+          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;">Hargeisa &middot; Borama &middot; Burao</td>
+        </tr>
+      </table>
+    </div>
 
-      <div style="background: #ffffff; border-radius: 0 0 18px 18px; padding: 0; box-shadow: 0 18px 40px rgba(0,0,0,0.25); overflow: hidden;">
-
-        <div style="padding: 28px 28px 8px;">
-          <div style="display: inline-block; padding: 5px 12px; border-radius: 999px; background: #edf8f1; color: #005a1b; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px;">&#10003; Registration Approved</div>
-          <p style="margin: 0 0 14px; font-size: 16px;">Dear <strong>${safeName}</strong>,</p>
-          <p style="margin: 0 0 18px; color: #334155; font-size: 14px; line-height: 1.7;">
-            We are delighted to confirm your place at <strong>Somaliland Diaspora Week 2026</strong>.
-            This invitation card carries your access details — please keep it for check-in and to sign
-            in to the event portal.
-          </p>
+    <!-- ACCESS CODE — ticket style -->
+    <div style="margin:0 28px 24px;background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#78350f 100%);
+      border-radius:14px;padding:0;overflow:hidden;">
+      <div style="background:rgba(0,0,0,0.12);padding:14px 22px;border-bottom:1px dashed rgba(255,255,255,0.25);">
+        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+          color:rgba(255,255,255,0.7);">Your Exclusive Access Code</div>
+      </div>
+      <div style="padding:20px 22px;text-align:center;">
+        <div style="display:inline-block;background:#ffffff;border-radius:10px;
+          padding:12px 28px;margin-bottom:10px;">
+          <span style="font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:900;
+            letter-spacing:5px;color:#78350f;">${escapeHtml(options.accessCode)}</span>
         </div>
-
-        <div style="margin: 0 28px 24px; border: 2px dashed #d6e4e1; border-radius: 14px; padding: 0; overflow: hidden;">
-          <div style="background: #f4fbf7; padding: 16px 20px; border-bottom: 2px dashed #d6e4e1;">
-            <div style="font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #4b666d; margin-bottom: 4px;">Delegate</div>
-            <div style="font-size: 19px; font-weight: 700; color: #0c2f37;">${safeName}</div>
-          </div>
-
-          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-            <tr>
-              <td style="padding: 12px 20px; color: #4b666d; width: 38%; border-bottom: 1px solid #eef3f1;">Delegate Type</td>
-              <td style="padding: 12px 20px; color: #0c2f37; font-weight: 600; border-bottom: 1px solid #eef3f1;">${escapeHtml(typeLabel)}</td>
-            </tr>
-            <tr>
-              <td style="padding: 12px 20px; color: #4b666d; border-bottom: 1px solid #eef3f1;">Email</td>
-              <td style="padding: 12px 20px; color: #0c2f37; font-weight: 600; border-bottom: 1px solid #eef3f1;">${escapeHtml(options.toEmail)}</td>
-            </tr>
-            ${
-              locationLine
-                ? `<tr>
-              <td style="padding: 12px 20px; color: #4b666d; border-bottom: 1px solid #eef3f1;">Location</td>
-              <td style="padding: 12px 20px; color: #0c2f37; font-weight: 600; border-bottom: 1px solid #eef3f1;">${locationLine}</td>
-            </tr>`
-                : ""
-            }
-            ${
-              options.profession
-                ? `<tr>
-              <td style="padding: 12px 20px; color: #4b666d; border-bottom: 1px solid #eef3f1;">Profession</td>
-              <td style="padding: 12px 20px; color: #0c2f37; font-weight: 600; border-bottom: 1px solid #eef3f1;">${escapeHtml(options.profession)}</td>
-            </tr>`
-                : ""
-            }
-            <tr>
-              <td style="padding: 12px 20px; color: #4b666d;">Event Dates</td>
-              <td style="padding: 12px 20px; color: #0c2f37; font-weight: 600;">Aug 1–6, 2026</td>
-            </tr>
-          </table>
-
-          <div style="background: #fff7ed; padding: 18px 20px; text-align: center; border-top: 2px dashed #d6e4e1;">
-            <div style="font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #92400e; margin-bottom: 8px;">Your Access Code</div>
-            <span style="display: inline-block; padding: 10px 22px; border-radius: 8px; background: #ffffff; border: 1px solid #f59e0b; font-size: 22px; font-weight: 800; letter-spacing: 4px; color: #b45309;">${escapeHtml(options.accessCode)}</span>
-            <div style="font-size: 12px; color: #92400e; margin-top: 8px;">Use this code with your email to sign in to the portal</div>
-          </div>
-        </div>
-
-        <div style="padding: 0 28px 28px; text-align: center;">
-          <a href="${escapeHtml(portalUrl)}" style="display: inline-block; background: #005a1b; color: #ffffff; text-decoration: none; padding: 13px 26px; border-radius: 999px; font-weight: 700; font-size: 14px;">Open Event Portal &rarr;</a>
-          <p style="margin: 16px 0 0; color: #64748b; font-size: 12px; line-height: 1.6;">
-            Trouble with the button? Use this link:<br />
-            <a href="${escapeHtml(portalUrl)}" style="color: #b45309; text-decoration: none;">${escapeHtml(portalUrl)}</a>
-          </p>
+        <div style="font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.8);margin-top:4px;">
+          Use this code together with your email address to sign in to the event portal
         </div>
       </div>
+    </div>
 
-      <p style="text-align: center; color: rgba(255,255,255,0.65); font-size: 12px; margin: 18px 0 0;">
-        Somaliland Diaspora Week 2026 &middot; Hargeisa &middot; Borama &middot; Burao
+    <!-- what's included -->
+    <div style="margin:0 28px 22px;">
+      <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:0.5px;
+        text-transform:uppercase;color:#0c2f37;margin-bottom:14px;">What's Included</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="33%" style="text-align:center;padding:12px 8px;background:#f4fbf7;
+            border-radius:10px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;margin-bottom:6px;">&#128197;</div>
+            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#005a1b;">5-Day Programme</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:#64748b;margin-top:4px;">
+              Opening ceremony, panels &amp; closing gala
+            </div>
+          </td>
+          <td width="4%" />
+          <td width="33%" style="text-align:center;padding:12px 8px;background:#f4fbf7;
+            border-radius:10px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;margin-bottom:6px;">&#127970;</div>
+            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#005a1b;">Exhibition Zone</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:#64748b;margin-top:4px;">
+              Business showcases, networking &amp; pitching
+            </div>
+          </td>
+          <td width="4%" />
+          <td width="33%" style="text-align:center;padding:12px 8px;background:#f4fbf7;
+            border-radius:10px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;margin-bottom:6px;">&#127919;</div>
+            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#005a1b;">Startup Pitching</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:#64748b;margin-top:4px;">
+              Live pitch competitions &amp; investor meets
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- practical info -->
+    <div style="margin:0 28px 24px;border:1.5px solid #d6e4e1;border-radius:14px;overflow:hidden;">
+      <div style="background:#f4fbf7;padding:12px 20px;border-bottom:1px solid #d6e4e1;">
+        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;
+          text-transform:uppercase;color:#4b666d;">Practical Information</div>
+      </div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:13px;">
+        ${practicalRows
+          .map(
+            ([label, value], i) => `
+        <tr>
+          <td style="padding:10px 20px;color:#4b666d;width:38%;font-weight:600;
+            ${i < practicalRows.length - 1 ? "border-bottom:1px solid #eef3f1;" : ""}">
+            ${escapeHtml(label)}
+          </td>
+          <td style="padding:10px 20px;color:#334155;line-height:1.6;
+            ${i < practicalRows.length - 1 ? "border-bottom:1px solid #eef3f1;" : ""}">
+            ${escapeHtml(value)}
+          </td>
+        </tr>`
+          )
+          .join("")}
+      </table>
+    </div>
+
+    <!-- CTA -->
+    <div style="padding:0 28px 28px;text-align:center;">
+      <a href="${escapeHtml(portalUrl)}"
+        style="display:inline-block;background:linear-gradient(135deg,#005a1b 0%,#1f8a3b 100%);
+          color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:999px;
+          font-family:Arial,sans-serif;font-weight:800;font-size:15px;
+          box-shadow:0 8px 24px rgba(0,90,27,0.4);">
+        Open Event Portal &rarr;
+      </a>
+      <p style="margin:14px 0 0;font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;line-height:1.6;">
+        Can't click the button? Copy this link:<br />
+        <a href="${escapeHtml(portalUrl)}" style="color:#92400e;text-decoration:none;word-break:break-all;">${escapeHtml(portalUrl)}</a>
       </p>
     </div>
-  </div>
-  `;
+
+    <!-- social -->
+    <div style="padding:0 28px 28px;text-align:center;border-top:1px solid #f1f5f9;padding-top:20px;">
+      <div style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;margin-bottom:6px;">
+        Share your excitement &mdash; use our official hashtag
+      </div>
+      <div style="font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#005a1b;">
+        #SomalilandDiasporaWeek2026
+      </div>
+    </div>
+
+    ${emailCardClose()}
+    ${emailFooter()}
+  `);
 
   return sendHtmlEmail({
     to: options.toEmail,
-    subject: "Your Invitation — Somaliland Diaspora Week 2026 (Access Code Inside)",
+    subject: "Your Official Invitation — Somaliland Diaspora Week 2026 (Access Code Inside)",
     html,
   });
 };

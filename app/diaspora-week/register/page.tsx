@@ -293,7 +293,7 @@ export default function DiasporaWeekRegisterPage() {
                           <div className={styles.indivContactNote}>
                             <i className="fa-regular fa-circle-info" aria-hidden="true"></i>
                             Need help? <a href="mailto:info@sldiaspora.org">info@sldiaspora.org</a>
-                            &nbsp;·&nbsp;<a href="tel:+252634696895">+252-63-4696895</a>
+                            &nbsp;·&nbsp;<a href="tel:+252638880240">+252 63 8880240</a>
                           </div>
                         </div>
                       </div>
@@ -420,7 +420,7 @@ export default function DiasporaWeekRegisterPage() {
                           <div className={styles.indivContactNote}>
                             <i className="fa-regular fa-circle-info" aria-hidden="true"></i>
                             Need help? <a href="mailto:info@sldiaspora.org">info@sldiaspora.org</a>
-                            &nbsp;·&nbsp;<a href="tel:+252634696895">+252-63-4696895</a>
+                            &nbsp;·&nbsp;<a href="tel:+252638880240">+252 63 8880240</a>
                           </div>
                         </div>
 

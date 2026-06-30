@@ -932,9 +932,9 @@ export default function DiasporaWeekPortalPage() {
                     info@sldiaspora.org
                   </a>
                   <span className={styles.exHeroContactDiv} />
-                  <a href="tel:+252634696895" className={styles.exHeroContact}>
+                  <a href="tel:+252638880240" className={styles.exHeroContact}>
                     <Phone size={15} />
-                    +252-63-4696895
+                    +252 63 8880240
                   </a>
                 </div>
               </div>

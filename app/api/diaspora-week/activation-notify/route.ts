@@ -103,9 +103,14 @@ export async function POST(request: Request) {
       name,
       accessCode,
       registrationType,
-      country: String(registration.country || ""),
-      city: String(registration.city || ""),
-      profession: String(registration.profession || ""),
+      country:       String(registration.country        || ""),
+      city:          String(registration.city           || ""),
+      profession:    String(registration.profession     || ""),
+      // business-specific extras
+      businessName:  String(registration.business_name  || ""),
+      contactPerson: String(registration.contact_person || ""),
+      industry:      String(registration.industry       || ""),
+      website:       String(registration.business_website || ""),
     });
 
     if (!emailSent) {
