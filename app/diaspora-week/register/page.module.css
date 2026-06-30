@@ -97,7 +97,6 @@
   position: relative;
   overflow: hidden;
   min-height: 480px;
-  border-right: 1px solid rgba(12, 47, 55, 0.12);
 }
 
 /* slight zoom in */
@@ -1110,13 +1109,31 @@
   }
 }
 
+/* ── Tablet (≤1024px) — image zooms out ── */
+@media (max-width: 1024px) {
+  .brandPanelImg {
+    background-size: 90% !important;
+  }
+}
+
+/* ── Tablet portrait (≤900px) — stack layout ── */
 @media (max-width: 900px) {
   .registerShell {
     grid-template-columns: 1fr;
     border-radius: 24px;
+    border-right: none;
   }
 
-  .brandPanel { min-height: 200px; }
+  .brandPanel {
+    min-height: 240px;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(12, 47, 55, 0.08);
+  }
+
+  /* zoom out further on stacked layout so full image shows */
+  .brandPanelImg {
+    background-size: 55% !important;
+  }
 
   .formCard {
     max-height: none;
@@ -1125,6 +1142,7 @@
   }
 
   .indivGrid { grid-template-columns: 1fr; gap: 1rem; }
+  .cityChecklist { flex-wrap: wrap; }
 }
 
 @media (max-width: 767px) {
@@ -1133,43 +1151,32 @@
     align-items: flex-start;
   }
 
-  .backButtonWrap {
-    margin-bottom: 10px;
+  .backButtonWrap { margin-bottom: 10px; }
+
+  .formCard { padding: 20px 16px; }
+
+  .registerShell { border-radius: 18px; }
+
+  .brandPanel {
+    min-height: 200px;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(12, 47, 55, 0.06);
   }
 
-  .formCard {
-    padding: 26px 18px;
+  .brandPanelImg {
+    background-size: 70% !important;
   }
 
-  .registerShell {
-    border-radius: 18px;
-  }
+  .fieldRow    { grid-template-columns: 1fr; gap: 0; }
+  .fieldRow3   { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .checkboxRow { grid-template-columns: 1fr; }
+  .typeGrid    { grid-template-columns: 1fr; }
+  .contactInfoGrid { grid-template-columns: 1fr; }
+  .idDocTypeRow    { grid-template-columns: 1fr; }
 
-  .fieldRow {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .fieldRow3 {
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .checkboxRow {
-    grid-template-columns: 1fr;
-  }
-
-  .typeGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .contactInfoGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .idDocTypeRow {
-    grid-template-columns: 1fr;
-  }
+  .formHeader { flex-direction: column; gap: 0.5rem; }
+  .cityChecklist { flex-direction: column; }
+  .cityCheckItem { width: 100%; }
 }
 
 @media (max-width: 480px) {
