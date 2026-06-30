@@ -3766,10 +3766,10 @@
   color: #1f8a3b;
   border: 1px solid #bfe6cc;
   border-radius: 999px;
-  padding: 9px 20px;
-  font-size: 1.3rem;
+  padding: 9px 22px;
+  font-size: 1.5rem;
   font-weight: 800;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   margin-bottom: 1.1rem;
   width: fit-content;
@@ -3882,34 +3882,45 @@
 .exBenCard {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 2rem;
   background: #fff;
-  border: 1px solid #d9ece1;
+  border: 1px solid #e3eee8;
+  border-left: 5px solid var(--ben-color, #1f8a3b);
   border-radius: 20px;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 4px 18px rgba(1,109,33,0.07);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  padding: 1.75rem 2.25rem;
+  box-shadow: 0 4px 18px rgba(1,109,33,0.06);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
 .exBenCard:hover {
-  transform: translateX(6px);
-  box-shadow: 0 12px 36px rgba(1,109,33,0.13);
+  transform: translateX(8px);
+  box-shadow: 0 14px 40px rgba(1,109,33,0.13);
 }
 
 .exBenIconWrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px; height: 64px;
-  border-radius: 18px;
+  width: 70px; height: 70px;
+  border-radius: 20px;
   flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* text wrapper: title + desc stacked */
+.exBenText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
 }
 
 .exBenTitle {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #0c2f37;
-  margin: 0 0 0.3rem;
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: var(--ben-color, #0c2f37);
+  margin: 0;
+  line-height: 1.25;
 }
 
 .exBenDesc {

@@ -998,12 +998,14 @@ export default function DiasporaWeekPortalPage() {
                   const COLORS = ["#d4600a","#1f8a3b","#0070c0","#7c3aed","#b45309"];
                   const col = COLORS[i % COLORS.length];
                   return (
-                    <div className={styles.exBenCard} key={b.title}>
+                    <div className={styles.exBenCard} key={b.title} style={{ "--ben-color": col } as React.CSSProperties}>
                       <div className={styles.exBenIconWrap} style={{ background: col + "18", color: col }}>
-                        <BIcon size={28} />
+                        <BIcon size={30} />
                       </div>
-                      <h3 className={styles.exBenTitle}>{b.title}</h3>
-                      <p className={styles.exBenDesc}>{b.description}</p>
+                      <div className={styles.exBenText}>
+                        <h3 className={styles.exBenTitle}>{b.title}</h3>
+                        <p className={styles.exBenDesc}>{b.description}</p>
+                      </div>
                     </div>
                   );
                 })}
