@@ -332,14 +332,14 @@ export const sendHtmlEmail = async (options: {
 // ---------------------------------------------------------------------------
 
 const EMAIL_BG = "#0d2e1f";
-const emailWrapper = (innerHtml: string) => `
-<!DOCTYPE html>
+
+const emailWrapper = (innerHtml: string) => `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /></head>
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
 <body style="margin:0;padding:0;background:${EMAIL_BG};">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:${EMAIL_BG};padding:32px 16px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:${EMAIL_BG};padding:28px 16px;">
   <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+    <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
       ${innerHtml}
     </table>
   </td></tr>
@@ -347,53 +347,58 @@ const emailWrapper = (innerHtml: string) => `
 </body>
 </html>`;
 
-// Top logo bar shared by both emails
-const emailLogoBar = (baseUrl: string) => `
+// Text-only logo bar — no image dependency, always renders in all email clients
+const emailLogoBar = () => `
 <tr>
-  <td style="text-align:center;padding-bottom:16px;">
-    <img src="${escapeHtml(baseUrl)}/assets/imgs/logo/logo.png" alt="Somaliland Diaspora" width="48" height="48"
-      style="border-radius:12px;background:#ffffff;padding:5px;border:1px solid rgba(255,255,255,0.15);" />
-    <div style="margin-top:6px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;
-      text-transform:uppercase;color:rgba(255,255,255,0.55);">Somaliland Diaspora Week</div>
+  <td style="text-align:center;padding-bottom:14px;">
+    <div style="display:inline-block;background:linear-gradient(135deg,#005a1b,#1f8a3b);
+      color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:900;
+      border-radius:10px;padding:7px 18px;letter-spacing:1px;">SLDD</div>
+    <div style="margin-top:6px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:2px;
+      text-transform:uppercase;color:rgba(255,255,255,0.45);">Somaliland Diaspora Week</div>
   </td>
 </tr>`;
 
-// Hero banner row
-const emailHeroBanner = (subtitle: string) => `
+// Hero banner
+const emailHeroBanner = (label: string) => `
 <tr>
-  <td style="background:linear-gradient(135deg,#005a1b 0%,#007a26 50%,#1a5c0a 100%);
-    border-radius:18px 18px 0 0;padding:30px 28px;text-align:center;">
+  <td style="background:linear-gradient(135deg,#005a1b 0%,#007a26 55%,#1a5c0a 100%);
+    border-radius:16px 16px 0 0;padding:26px 24px;text-align:center;">
     <div style="display:inline-block;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);
-      border-radius:999px;padding:4px 14px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;
-      text-transform:uppercase;color:#fde68a;margin-bottom:12px;">${subtitle}</div>
-    <div style="font-family:Arial,sans-serif;font-size:28px;font-weight:900;color:#ffffff;
-      line-height:1.2;margin-bottom:8px;">Somaliland Diaspora Week 2026</div>
-    <div style="font-family:Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.85);">
-      August&nbsp;1–6,&nbsp;2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
+      border-radius:999px;padding:3px 12px;font-family:Arial,sans-serif;font-size:10px;
+      letter-spacing:2px;text-transform:uppercase;color:#fde68a;margin-bottom:10px;">${label}</div>
+    <div style="font-family:Arial,sans-serif;font-size:24px;font-weight:900;color:#ffffff;
+      line-height:1.2;margin-bottom:6px;">Somaliland Diaspora Week 2026</div>
+    <div style="font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.8);">
+      Aug 1–6, 2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
     </div>
   </td>
 </tr>`;
 
-// White card body wrapper
-const emailCardOpen = () =>
-  `<tr><td style="background:#ffffff;border-radius:0 0 18px 18px;overflow:hidden;
-    box-shadow:0 20px 48px rgba(0,0,0,0.35);">`;
+const emailCardOpen  = () => `<tr><td style="background:#ffffff;border-radius:0 0 16px 16px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,0.3);">`;
 const emailCardClose = () => `</td></tr>`;
 
-// Footer row
 const emailFooter = () => `
 <tr>
-  <td style="padding:20px 0 0;text-align:center;">
-    <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.45);line-height:1.8;">
+  <td style="padding:16px 0 0;text-align:center;">
+    <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.8;">
       Somaliland Diaspora Week 2026 &middot; Hargeisa, Somaliland<br/>
-      Questions? <a href="mailto:info@sldiaspora.org" style="color:rgba(255,255,255,0.65);text-decoration:none;">info@sldiaspora.org</a>
-      &nbsp;&middot;&nbsp; <a href="tel:+252638880240" style="color:rgba(255,255,255,0.65);text-decoration:none;">+252 63 8880240</a>
+      <a href="mailto:info@sldiaspora.org" style="color:rgba(255,255,255,0.6);text-decoration:none;">info@sldiaspora.org</a>
+      &nbsp;&middot;&nbsp;
+      <a href="tel:+252638880240" style="color:rgba(255,255,255,0.6);text-decoration:none;">+252 63 8880240</a>
     </div>
   </td>
 </tr>`;
 
+// Reusable detail row
+const dRow = (label: string, value: string, last = false) =>
+  `<tr>
+    <td style="padding:9px 18px;color:#64748b;width:36%;font-size:13px;${last ? "" : "border-bottom:1px solid #f1f5f9;"}">${label}</td>
+    <td style="padding:9px 18px;color:#0c2f37;font-weight:600;font-size:13px;${last ? "" : "border-bottom:1px solid #f1f5f9;"}">${value}</td>
+  </tr>`;
+
 // ---------------------------------------------------------------------------
-// Email 1 — Registration Received (pending confirmation)
+// Email 1 — Registration Received
 // ---------------------------------------------------------------------------
 
 export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
@@ -401,149 +406,71 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
   name: string;
   registrationType: "individual" | "business";
 }) => {
-  const safeName = escapeHtml(options.name || "there");
-  const baseUrl = resolveAppBaseUrl();
+  const safeName   = escapeHtml(options.name || "there");
   const isBusiness = options.registrationType === "business";
-  const typeLabel = isBusiness ? "Business Exhibitor" : "Individual Delegate";
-  const typeColor = isBusiness ? "#0055b3" : "#005a1b";
-  const typeBg   = isBusiness ? "#daeeff"  : "#d7f5e0";
+  const typeLabel  = isBusiness ? "Business Exhibitor" : "Individual Delegate";
+  const typeColor  = isBusiness ? "#0055b3" : "#005a1b";
+  const typeBg     = isBusiness ? "#daeeff"  : "#d7f5e0";
 
   const html = emailWrapper(`
-    ${emailLogoBar(baseUrl)}
+    ${emailLogoBar()}
     ${emailHeroBanner("Registration Received")}
     ${emailCardOpen()}
 
-    <!-- greeting -->
-    <div style="padding:28px 28px 0;">
-      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;
-        border-radius:999px;padding:5px 14px;font-family:Arial,sans-serif;font-size:12px;
-        font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:16px;">
-        &#10003;&nbsp; Registration Received
-      </div>
-      <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:16px;color:#0c2f37;">
+    <div style="padding:22px 22px 8px;">
+      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;border-radius:999px;
+        padding:4px 12px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;
+        letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">&#10003; Received</div>
+      <p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:15px;color:#0c2f37;">
         Dear <strong>${safeName}</strong>,
       </p>
-      <p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:14px;color:#334155;line-height:1.75;">
+      <p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:13px;color:#475569;line-height:1.7;">
         Thank you for registering for <strong>Somaliland Diaspora Week 2026</strong> as a
-        <strong>${escapeHtml(typeLabel)}</strong>. We have successfully received your application
-        and our team is currently reviewing it.
+        <strong>${escapeHtml(typeLabel)}</strong>. We have received your application and will be in
+        touch within <strong>2–3 business days</strong> once it is reviewed.
       </p>
     </div>
 
-    <!-- submitted details box -->
-    <div style="margin:0 28px 24px;background:#f4fbf7;border:1.5px solid #d6e4e1;
-      border-radius:14px;overflow:hidden;">
-      <div style="padding:12px 20px;border-bottom:1px solid #d6e4e1;">
-        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;
-          text-transform:uppercase;color:#4b666d;margin-bottom:4px;">Submitted Details</div>
-      </div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:14px;">
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;width:40%;border-bottom:1px solid #eef3f1;">Name</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${safeName}</td>
-        </tr>
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Registration Type</td>
-          <td style="padding:10px 20px;border-bottom:1px solid #eef3f1;">
-            <span style="display:inline-block;background:${typeBg};color:${typeColor};
-              border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;">
-              ${escapeHtml(typeLabel)}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Email</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.toEmail)}</td>
-        </tr>
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;">Status</td>
-          <td style="padding:10px 20px;">
-            <span style="display:inline-block;background:#fff7ed;color:#92400e;
-              border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;">
-              &#9679;&nbsp; Pending Review
-            </span>
-          </td>
-        </tr>
+    <!-- details -->
+    <div style="margin:0 22px 18px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${dRow("Name", safeName)}
+        ${dRow("Type", `<span style="background:${typeBg};color:${typeColor};border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">${escapeHtml(typeLabel)}</span>`)}
+        ${dRow("Email", escapeHtml(options.toEmail), true)}
       </table>
     </div>
 
-    <!-- what happens next -->
-    <div style="margin:0 28px 24px;">
-      <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:0.5px;
-        text-transform:uppercase;color:#0c2f37;margin-bottom:14px;">What Happens Next</div>
+    <!-- next steps — compact 3-col -->
+    <div style="margin:0 22px 18px;background:#f8fafc;border-radius:12px;padding:14px 16px;">
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
-          <td width="36" valign="top" style="padding-right:12px;">
-            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#005a1b,#1f8a3b);
-              color:#fff;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
-              text-align:center;line-height:28px;">1</div>
+          <td width="32%" style="text-align:center;padding:4px 6px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;">&#128338;</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#0c2f37;margin-top:3px;">Under Review</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:2px;">2–3 business days</div>
           </td>
-          <td style="padding-bottom:14px;">
-            <div style="font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#0c2f37;">Application Review</div>
-            <div style="font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.6;">
-              Our team reviews your details within <strong>2–3 business days</strong>. No action needed from you.
-            </div>
+          <td width="4%" style="text-align:center;color:#d1d5db;font-size:16px;">›</td>
+          <td width="32%" style="text-align:center;padding:4px 6px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;">&#128231;</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#0c2f37;margin-top:3px;">Decision Email</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:2px;">Sent to your inbox</div>
           </td>
-        </tr>
-        <tr>
-          <td width="36" valign="top" style="padding-right:12px;">
-            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#005a1b,#1f8a3b);
-              color:#fff;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
-              text-align:center;line-height:28px;">2</div>
-          </td>
-          <td style="padding-bottom:14px;">
-            <div style="font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#0c2f37;">Approval &amp; Access Code</div>
-            <div style="font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.6;">
-              Once approved you'll receive a <strong>unique access code</strong> by email — your digital pass to the event portal.
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td width="36" valign="top" style="padding-right:12px;">
-            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#005a1b,#1f8a3b);
-              color:#fff;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
-              text-align:center;line-height:28px;">3</div>
-          </td>
-          <td style="padding-bottom:4px;">
-            <div style="font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#0c2f37;">Attend &amp; Connect</div>
-            <div style="font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.6;">
-              Join 500+ diaspora members, investors, and entrepreneurs across Hargeisa, Borama &amp; Burao.
-            </div>
+          <td width="4%" style="text-align:center;color:#d1d5db;font-size:16px;">›</td>
+          <td width="32%" style="text-align:center;padding:4px 6px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;">&#127882;</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#0c2f37;margin-top:3px;">Attend &amp; Connect</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:2px;">Aug 1–6, 2026</div>
           </td>
         </tr>
       </table>
     </div>
 
-    <!-- event highlights strip -->
-    <div style="margin:0 28px 28px;background:linear-gradient(135deg,#005a1b 0%,#007a26 100%);
-      border-radius:12px;padding:16px 20px;">
-      <div style="font-family:Arial,sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;
-        color:rgba(255,255,255,0.7);margin-bottom:10px;">Event Highlights</div>
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td width="33%" style="text-align:center;padding:6px 4px;">
-            <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#fde68a;">5</div>
-            <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8);">Day Programme</div>
-          </td>
-          <td width="33%" style="text-align:center;padding:6px 4px;border-left:1px solid rgba(255,255,255,0.2);border-right:1px solid rgba(255,255,255,0.2);">
-            <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#fde68a;">3</div>
-            <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8);">Cities (Roadshow)</div>
-          </td>
-          <td width="33%" style="text-align:center;padding:6px 4px;">
-            <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#fde68a;">500+</div>
-            <div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8);">Delegates</div>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- contact note -->
-    <div style="padding:0 28px 28px;">
-      <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.7;">
-        Questions? Reach us at
-        <a href="mailto:info@sldiaspora.org" style="color:#005a1b;font-weight:700;text-decoration:none;">info@sldiaspora.org</a>
-        or call <a href="tel:+252638880240" style="color:#005a1b;font-weight:700;text-decoration:none;">+252 63 8880240</a>.
-      </p>
+    <!-- contact -->
+    <div style="padding:0 22px 22px;font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;text-align:center;">
+      Questions? &nbsp;
+      <a href="mailto:info@sldiaspora.org" style="color:#005a1b;font-weight:700;text-decoration:none;">info@sldiaspora.org</a>
+      &nbsp;&middot;&nbsp;
+      <a href="tel:+252638880240" style="color:#005a1b;font-weight:700;text-decoration:none;">+252 63 8880240</a>
     </div>
 
     ${emailCardClose()}
@@ -552,14 +479,28 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
 
   return sendHtmlEmail({
     to: options.toEmail,
-    subject: "Somaliland Diaspora Week 2026 — Registration Received ✓",
+    subject: "Somaliland Diaspora Week 2026 — Registration Received",
     html,
   });
 };
 
 // ---------------------------------------------------------------------------
-// Email 2 — Approval / Official Invitation (with access code)
+// Email 2 — Approval / Official Invitation
 // ---------------------------------------------------------------------------
+
+// Maps the registered city name to venue + event date
+const CITY_VENUE: Record<string, { hotel: string; dates: string; displayCity: string }> = {
+  hargeisa: { displayCity: "Hargeisa",  hotel: "Serene Seravoir Hotel", dates: "August 1–3, 2026" },
+  borama:   { displayCity: "Borama",    hotel: "Safari Hotel",           dates: "August 4, 2026"   },
+  boorama:  { displayCity: "Borama",    hotel: "Safari Hotel",           dates: "August 4, 2026"   },
+  burao:    { displayCity: "Burao",     hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
+  burco:    { displayCity: "Burao",     hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
+};
+
+const resolveCityVenue = (cityRaw: string) => {
+  const key = cityRaw.toLowerCase().trim().split(",")[0].trim();
+  return CITY_VENUE[key] ?? { displayCity: escapeHtml(cityRaw) || "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 1–6, 2026" };
+};
 
 export const sendDiasporaWeekApprovalEmail = async (options: {
   toEmail: string;
@@ -569,14 +510,13 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
   country?: string;
   city?: string;
   profession?: string;
-  // business-specific
   businessName?: string;
   contactPerson?: string;
   industry?: string;
   website?: string;
 }) => {
-  const safeName = escapeHtml(options.name || "there");
-  const baseUrl = resolveAppBaseUrl();
+  const safeName  = escapeHtml(options.name || "there");
+  const baseUrl   = resolveAppBaseUrl();
   const portalUrl = `${baseUrl}/diaspora-week/portal`;
 
   const isBusiness = options.registrationType === "business";
@@ -584,229 +524,115 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
   const typeColor  = isBusiness ? "#0055b3" : "#005a1b";
   const typeBg     = isBusiness ? "#daeeff"  : "#d7f5e0";
 
-  const locationLine = [options.city, options.country]
-    .filter((v): v is string => Boolean(v))
-    .map(escapeHtml)
-    .join(", ");
+  const venue = resolveCityVenue(options.city || "hargeisa");
 
-  // Build optional detail rows
-  const detailRows = [
-    options.profession && !isBusiness
-      ? `<tr>
-          <td style="padding:10px 20px;color:#4b666d;width:38%;border-bottom:1px solid #eef3f1;">Profession</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.profession)}</td>
-        </tr>`
-      : "",
-    isBusiness && options.contactPerson
-      ? `<tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Contact Person</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.contactPerson)}</td>
-        </tr>`
-      : "",
-    isBusiness && options.industry
-      ? `<tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Industry</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.industry)}</td>
-        </tr>`
-      : "",
-    isBusiness && options.website
-      ? `<tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Website</td>
-          <td style="padding:10px 20px;font-weight:600;border-bottom:1px solid #eef3f1;">
-            <a href="${escapeHtml(options.website)}" style="color:#0055b3;text-decoration:none;">${escapeHtml(options.website)}</a>
-          </td>
-        </tr>`
-      : "",
-    locationLine
-      ? `<tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Location</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${locationLine}</td>
-        </tr>`
-      : "",
-  ].join("");
-
-  const businessWelcome = isBusiness
-    ? `<p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:14px;color:#334155;line-height:1.75;">
-        Your business will be showcased in the official <strong>Exhibition Zone</strong> across
-        Hargeisa, Borama, and Burao. Our team will contact you separately with your booth assignment
-        and exhibitor briefing pack. Please arrive <strong>60 minutes before the opening</strong>
-        for exhibitor check-in and setup.
-      </p>`
-    : "";
+  // Optional extra rows for business
+  const extraRows = isBusiness
+    ? [
+        options.industry     ? `<tr><td style="padding:9px 20px;color:#4b666d;width:38%;border-bottom:1px solid #eef3f1;">Industry</td><td style="padding:9px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.industry)}</td></tr>` : "",
+        options.contactPerson ? `<tr><td style="padding:9px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Contact Person</td><td style="padding:9px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.contactPerson)}</td></tr>` : "",
+      ].join("")
+    : options.profession
+      ? `<tr><td style="padding:9px 20px;color:#4b666d;width:38%;border-bottom:1px solid #eef3f1;">Profession</td><td style="padding:9px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.profession)}</td></tr>`
+      : "";
 
   const practicalRows = isBusiness
     ? [
-        ["Exhibitor Check-in", "60 minutes before the opening ceremony, at your designated venue"],
-        ["What to Bring", "This email (printed or digital), company ID, and exhibition materials"],
-        ["Booth Setup", "Setup period begins the evening before your city date — details to follow"],
-        ["Event Support", "WhatsApp group link will be shared before the event"],
+        ["Exhibitor Check-in", `60 min before opening at ${venue.hotel}`],
+        ["What to Bring",      "This email (printed or digital), company ID & exhibition materials"],
+        ["Booth Setup",        "Setup window opens the evening before — briefing pack to follow"],
+        ["Support",            "Email: info@sldiaspora.org · Phone: +252 63 8880240"],
       ]
     : [
-        ["Check-in", "30 minutes before the first session at the venue entrance"],
+        ["Check-in",      `30 min before first session at ${venue.hotel}`],
         ["What to Bring", "This email (printed or digital) and a valid photo ID"],
-        ["Dress Code", "Smart casual or traditional attire — both warmly welcomed"],
-        ["Event Support", "WhatsApp group link will be shared before the event"],
+        ["Dress Code",    "Smart casual or traditional attire — both warmly welcomed"],
+        ["Support",       "Email: info@sldiaspora.org · Phone: +252 63 8880240"],
       ];
 
   const html = emailWrapper(`
-    ${emailLogoBar(baseUrl)}
+    ${emailLogoBar()}
     ${emailHeroBanner("Official Delegate Invitation")}
     ${emailCardOpen()}
 
-    <!-- approval badge + greeting -->
-    <div style="padding:28px 28px 0;">
-      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;
-        border-radius:999px;padding:5px 14px;font-family:Arial,sans-serif;font-size:12px;
-        font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:16px;">
-        &#10003;&nbsp; Registration Approved
-      </div>
-      <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:17px;color:#0c2f37;">
+    <!-- approved badge + greeting -->
+    <div style="padding:22px 22px 10px;">
+      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;border-radius:999px;
+        padding:4px 12px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;
+        letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">&#10003; Approved</div>
+      <p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:16px;color:#0c2f37;">
         Congratulations, <strong>${safeName}</strong>!
       </p>
-      <p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:14px;color:#334155;line-height:1.75;">
-        We are delighted to confirm your place at <strong>Somaliland Diaspora Week 2026</strong>.
-        Below you will find your official access code and everything you need to prepare for an
-        unforgettable week of connection, investment, and culture.
+      <p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:13px;color:#475569;line-height:1.7;">
+        Your place at <strong>Somaliland Diaspora Week 2026</strong> is confirmed.
+        ${isBusiness
+          ? "Your business will be featured in the Exhibition Zone — booth details to follow."
+          : "We look forward to welcoming you in " + escapeHtml(venue.displayCity) + "."}
       </p>
-      ${businessWelcome}
     </div>
 
     <!-- delegate details card -->
-    <div style="margin:4px 28px 20px;border:1.5px solid #d6e4e1;border-radius:14px;overflow:hidden;">
-      <div style="background:#f4fbf7;padding:13px 20px;border-bottom:1px solid #d6e4e1;">
-        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;
-          text-transform:uppercase;color:#4b666d;margin-bottom:4px;">Delegate Details</div>
-        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#0c2f37;">${safeName}</div>
+    <div style="margin:0 22px 16px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+      <div style="background:#f4fbf7;padding:10px 18px;border-bottom:1px solid #e2e8f0;">
+        <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+          color:#64748b;margin-bottom:2px;">Registration Details</div>
+        <div style="font-family:Arial,sans-serif;font-size:16px;font-weight:700;color:#0c2f37;">${safeName}</div>
       </div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:14px;">
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;width:38%;border-bottom:1px solid #eef3f1;">Registration Type</td>
-          <td style="padding:10px 20px;border-bottom:1px solid #eef3f1;">
-            <span style="display:inline-block;background:${typeBg};color:${typeColor};
-              border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;">
-              ${escapeHtml(typeLabel)}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Email</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">${escapeHtml(options.toEmail)}</td>
-        </tr>
-        ${detailRows}
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;border-bottom:1px solid #eef3f1;">Event Dates</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;border-bottom:1px solid #eef3f1;">August 1–6, 2026</td>
-        </tr>
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;">Cities</td>
-          <td style="padding:10px 20px;color:#0c2f37;font-weight:600;">Hargeisa &middot; Borama &middot; Burao</td>
-        </tr>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${dRow("Status", `<span style="background:#d7f5e0;color:#005a1b;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">&#10003; Approved</span>`)}
+        ${dRow("Type",   `<span style="background:${typeBg};color:${typeColor};border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">${escapeHtml(typeLabel)}</span>`)}
+        ${dRow("Email",  escapeHtml(options.toEmail))}
+        ${extraRows}
+        ${dRow("City",   escapeHtml(venue.displayCity))}
+        ${dRow("Venue",  escapeHtml(venue.hotel))}
+        ${dRow("Date",   escapeHtml(venue.dates), true)}
       </table>
     </div>
 
-    <!-- ACCESS CODE — ticket style -->
-    <div style="margin:0 28px 24px;background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#78350f 100%);
-      border-radius:14px;padding:0;overflow:hidden;">
-      <div style="background:rgba(0,0,0,0.12);padding:14px 22px;border-bottom:1px dashed rgba(255,255,255,0.25);">
-        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;
-          color:rgba(255,255,255,0.7);">Your Exclusive Access Code</div>
-      </div>
-      <div style="padding:20px 22px;text-align:center;">
-        <div style="display:inline-block;background:#ffffff;border-radius:10px;
-          padding:12px 28px;margin-bottom:10px;">
-          <span style="font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:900;
-            letter-spacing:5px;color:#78350f;">${escapeHtml(options.accessCode)}</span>
-        </div>
-        <div style="font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.8);margin-top:4px;">
-          Use this code together with your email address to sign in to the event portal
-        </div>
-      </div>
-    </div>
-
-    <!-- what's included -->
-    <div style="margin:0 28px 22px;">
-      <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:0.5px;
-        text-transform:uppercase;color:#0c2f37;margin-bottom:14px;">What's Included</div>
+    <!-- highlights — compact 3 col -->
+    <div style="margin:0 22px 16px;background:#f8fafc;border-radius:12px;padding:12px 10px;">
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
-          <td width="33%" style="text-align:center;padding:12px 8px;background:#f4fbf7;
-            border-radius:10px;vertical-align:top;">
-            <div style="font-family:Arial,sans-serif;font-size:18px;margin-bottom:6px;">&#128197;</div>
-            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#005a1b;">5-Day Programme</div>
-            <div style="font-family:Arial,sans-serif;font-size:11px;color:#64748b;margin-top:4px;">
-              Opening ceremony, panels &amp; closing gala
-            </div>
+          <td width="32%" style="text-align:center;padding:6px 4px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;">&#128197;</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#005a1b;margin-top:3px;">5-Day Programme</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:1px;">Ceremony &amp; gala</div>
           </td>
-          <td width="4%" />
-          <td width="33%" style="text-align:center;padding:12px 8px;background:#f4fbf7;
-            border-radius:10px;vertical-align:top;">
-            <div style="font-family:Arial,sans-serif;font-size:18px;margin-bottom:6px;">&#127970;</div>
-            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#005a1b;">Exhibition Zone</div>
-            <div style="font-family:Arial,sans-serif;font-size:11px;color:#64748b;margin-top:4px;">
-              Business showcases, networking &amp; pitching
-            </div>
+          <td width="4%" style="text-align:center;color:#d1d5db;font-size:14px;">›</td>
+          <td width="32%" style="text-align:center;padding:6px 4px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;">&#127970;</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#005a1b;margin-top:3px;">Exhibition Zone</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:1px;">Business &amp; networking</div>
           </td>
-          <td width="4%" />
-          <td width="33%" style="text-align:center;padding:12px 8px;background:#f4fbf7;
-            border-radius:10px;vertical-align:top;">
-            <div style="font-family:Arial,sans-serif;font-size:18px;margin-bottom:6px;">&#127919;</div>
-            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#005a1b;">Startup Pitching</div>
-            <div style="font-family:Arial,sans-serif;font-size:11px;color:#64748b;margin-top:4px;">
-              Live pitch competitions &amp; investor meets
-            </div>
+          <td width="4%" style="text-align:center;color:#d1d5db;font-size:14px;">›</td>
+          <td width="32%" style="text-align:center;padding:6px 4px;vertical-align:top;">
+            <div style="font-family:Arial,sans-serif;font-size:18px;">&#127919;</div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#005a1b;margin-top:3px;">Startup Pitching</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:1px;">Pitch &amp; investors</div>
           </td>
         </tr>
       </table>
     </div>
 
-    <!-- practical info -->
-    <div style="margin:0 28px 24px;border:1.5px solid #d6e4e1;border-radius:14px;overflow:hidden;">
-      <div style="background:#f4fbf7;padding:12px 20px;border-bottom:1px solid #d6e4e1;">
-        <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;
-          text-transform:uppercase;color:#4b666d;">Practical Information</div>
-      </div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:13px;">
-        ${practicalRows
-          .map(
-            ([label, value], i) => `
-        <tr>
-          <td style="padding:10px 20px;color:#4b666d;width:38%;font-weight:600;
-            ${i < practicalRows.length - 1 ? "border-bottom:1px solid #eef3f1;" : ""}">
-            ${escapeHtml(label)}
-          </td>
-          <td style="padding:10px 20px;color:#334155;line-height:1.6;
-            ${i < practicalRows.length - 1 ? "border-bottom:1px solid #eef3f1;" : ""}">
-            ${escapeHtml(value)}
-          </td>
-        </tr>`
-          )
-          .join("")}
+    <!-- practical — compact table -->
+    <div style="margin:0 22px 16px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${practicalRows.map(([label, value], i) => dRow(label, escapeHtml(value), i === practicalRows.length - 1)).join("")}
       </table>
     </div>
 
     <!-- CTA -->
-    <div style="padding:0 28px 28px;text-align:center;">
+    <div style="padding:4px 22px 22px;text-align:center;">
       <a href="${escapeHtml(portalUrl)}"
         style="display:inline-block;background:linear-gradient(135deg,#005a1b 0%,#1f8a3b 100%);
-          color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:999px;
-          font-family:Arial,sans-serif;font-weight:800;font-size:15px;
-          box-shadow:0 8px 24px rgba(0,90,27,0.4);">
+          color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:999px;
+          font-family:Arial,sans-serif;font-weight:800;font-size:14px;
+          box-shadow:0 6px 20px rgba(0,90,27,0.38);">
         Open Event Portal &rarr;
       </a>
-      <p style="margin:14px 0 0;font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;line-height:1.6;">
-        Can't click the button? Copy this link:<br />
+      <p style="margin:10px 0 0;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8;">
         <a href="${escapeHtml(portalUrl)}" style="color:#92400e;text-decoration:none;word-break:break-all;">${escapeHtml(portalUrl)}</a>
       </p>
-    </div>
-
-    <!-- social -->
-    <div style="padding:0 28px 28px;text-align:center;border-top:1px solid #f1f5f9;padding-top:20px;">
-      <div style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;margin-bottom:6px;">
-        Share your excitement &mdash; use our official hashtag
-      </div>
-      <div style="font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#005a1b;">
-        #SomalilandDiasporaWeek2026
-      </div>
     </div>
 
     ${emailCardClose()}
@@ -815,7 +641,7 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
 
   return sendHtmlEmail({
     to: options.toEmail,
-    subject: "Your Official Invitation — Somaliland Diaspora Week 2026 (Access Code Inside)",
+    subject: "You're Approved — Somaliland Diaspora Week 2026",
     html,
   });
 };
