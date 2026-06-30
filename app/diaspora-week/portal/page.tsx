@@ -492,7 +492,7 @@ export default function DiasporaWeekPortalPage() {
                 <p className={styles.homeSectionLead}>Watch highlights from the opening ceremony of Somaliland Diaspora Week 2026.</p>
               </div>
               <div className={styles.homeVideoFrame}>
-                <video className={styles.homeVideoEl} src={SAMPLE_VIDEO_URL} poster={DW_PHOTOS[1]} controls />
+                <video className={styles.homeVideoEl} src={SAMPLE_VIDEO_URL} poster={DW_PHOTOS[1]} controls autoPlay muted playsInline loop />
               </div>
             </div>
           </section>

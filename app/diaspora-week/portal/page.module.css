@@ -2948,44 +2948,98 @@
 
 /* ── Video Section ── */
 .homeVideoSection {
-  padding: 5rem 0;
-  background: #0c2f37;
+  position: relative;
+  padding: 6rem 0 6.5rem;
+  background: #ffffff;
+  overflow: hidden;
   scroll-margin-top: 80px;
 }
 
-.homeVideoSection .homeKicker {
-  background: rgba(255, 255, 255, 0.1);
-  color: #a5f3bc;
-  border-color: rgba(165, 243, 188, 0.3);
-}
-
-.homeVideoSection .homeSectionTitle {
-  color: #fff;
-}
-
-.homeVideoSection .homeSectionLead {
-  color: rgba(255, 255, 255, 0.75);
+/* subtle green dot grid */
+.homeVideoSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(31,138,59,0.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
 }
 
 .homeVideoHeader {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 }
 
-.homeVideoFrame {
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
-  max-width: 900px;
+.homeVideoHeader .homeKicker {
+  background: #edf8f1;
+  color: #1f8a3b;
+  border: 1px solid #bfe6cc;
+}
+
+.homeVideoHeader .homeSectionTitle {
+  color: #0c2f37;
+}
+
+.homeVideoHeader .homeSectionLead {
+  color: #4b666d;
   margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 60ch;
+}
+
+/* outer glow wrapper */
+.homeVideoFrame {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  border-radius: 28px;
+  /* green-tinted shadow */
+  box-shadow:
+    0 0 0 1px rgba(31,138,59,0.12),
+    0 8px 0 rgba(31,138,59,0.06),
+    0 32px 80px rgba(12,47,55,0.18);
+  background: #0c2f37;
+}
+
+/* top accent bar */
+.homeVideoFrame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1f8a3b 0%, #8df6b2 50%, #fbbf24 100%);
+  border-radius: 28px 28px 0 0;
+  z-index: 2;
+}
+
+/* chrome bar above video */
+.homeVideoFrame::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: #1a2e1e;
+  border-radius: 0;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .homeVideoEl {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
+  aspect-ratio: 16 / 9;
   max-height: 520px;
   background: #000;
+  border-radius: 0 0 28px 28px;
+  margin-top: 42px;
 }
 
 /* ── Goals Section ── */
