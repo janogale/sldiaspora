@@ -83,7 +83,7 @@
 
 .registerShell {
   display: grid;
-  grid-template-columns: 1fr 1.25fr;
+  grid-template-columns: 0.7fr 1.3fr;
   border: 1px solid rgba(12, 47, 55, 0.1);
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.94);
@@ -92,84 +92,44 @@
   box-shadow: 0 32px 80px rgba(12, 47, 55, 0.14);
 }
 
+/* ── Left panel — image only ── */
 .brandPanel {
-  padding: 44px 36px;
-  background:
-    radial-gradient(circle at 20% 4%, rgba(255, 255, 255, 0.12) 0%, transparent 40%),
-    linear-gradient(150deg, #005a1b 0%, #006d21 45%, #1f8a3b 100%);
-  color: #eefaf3;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 480px;
+  border-right: 1px solid rgba(12, 47, 55, 0.12);
 }
 
-.kicker {
-  margin: 0 0 14px;
-  width: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  padding: 7px 14px;
-  color: rgba(238, 250, 243, 0.92);
-  background: rgba(255, 255, 255, 0.1);
-  font-size: 1.19rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.brandPanelImg {
+  position: absolute;
+  inset: 0;
+  background: url('/diaspora-img.png') center top / cover no-repeat;
 }
 
-.logoWrap {
+/* stub out unused classes */
+.brandPanelOverlay  { display: none; }
+.brandPanelContent  { display: none; }
+.brandTitle         { display: none; }
+.brandSubtitle      { display: none; }
+.brandList          { display: none; }
+.brandStep          { display: none; }
+.brandStats         { display: none; }
+.brandStat          { display: none; }
+.kicker             { display: none; }
+
+/* ── Logo in form card ── */
+.formLogo {
   display: flex;
   align-items: center;
-  width: fit-content;
-  background: #ffffff;
-  border: 1px solid #d6e4e1;
-  border-radius: 16px;
-  padding: 11px 15px;
-  margin-bottom: 20px;
+  margin-bottom: 1.75rem;
 }
+
+.logoWrap { display: none; }
 
 .logoImage {
   width: auto;
-  max-width: 100%;
+  max-width: 160px;
   height: auto;
-}
-
-.brandTitle {
-  margin: 0;
-  font-size: 1.95rem;
-  line-height: 1.2;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.brandSubtitle {
-  margin: 12px 0 0;
-  font-size: 1.38rem;
-  color: rgba(238, 250, 243, 0.9);
-  line-height: 1.7;
-  max-width: 40ch;
-}
-
-.brandList {
-  margin: 22px 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 11px;
-}
-
-.brandList li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 1.34rem;
-  line-height: 1.5;
-  color: rgba(238, 250, 243, 0.95);
-}
-
-.brandList i {
-  color: #a5f3bc;
-  margin-top: 3px;
 }
 
 .formCard {
@@ -198,21 +158,21 @@
   margin: 0;
   text-align: left;
   color: var(--ink);
-  font-size: 1.87rem;
-  font-weight: 800;
-  line-height: 1.25;
+  font-size: 2.1rem;
+  font-weight: 900;
+  line-height: 1.2;
 }
 
 .subtitle {
   margin: 10px 0 0;
   text-align: left;
   color: var(--ink-soft);
-  font-size: 1.38rem;
-  line-height: 1.65;
-  max-width: 48ch;
+  font-size: 1.45rem;
+  line-height: 1.7;
+  max-width: 50ch;
 }
 
-/* Type selector */
+/* ── Type selector ── */
 .typeGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -220,57 +180,123 @@
   margin-top: 2rem;
 }
 
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .typeCard {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: 0.6rem;
   text-align: left;
   border: 1.5px solid var(--line);
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 1.75rem 1.5rem;
   background: #fff;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  animation: cardEntrance 0.5s cubic-bezier(0.4,0,0.2,1) both;
 }
+
+.typeCard:nth-child(2) { animation-delay: 0.1s; }
 
 .typeCard:hover {
   border-color: var(--brand-2);
   transform: translateY(-3px);
-  box-shadow: 0 14px 30px rgba(1, 109, 33, 0.14);
+  box-shadow: 0 14px 36px rgba(1,109,33,0.12);
+}
+
+.typeCardBiz { border-color: #bfd6ef; }
+.typeCardBiz:hover {
+  border-color: #0070c0;
+  box-shadow: 0 14px 36px rgba(0,112,192,0.12);
 }
 
 .typeIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
+  width: 54px; height: 54px;
+  border-radius: 16px;
   background: linear-gradient(135deg, #d7f5e0, #b8eccb);
   color: var(--brand-2);
   margin-bottom: 0.25rem;
 }
 
+.typeIconBiz {
+  background: linear-gradient(135deg, #daeeff, #b8dcf5);
+  color: #0070c0;
+}
+
 .typeCard h3 {
   margin: 0;
-  font-size: 1.50rem;
+  font-size: 1.55rem;
   font-weight: 800;
   color: var(--ink);
 }
 
 .typeCard p {
   margin: 0;
-  font-size: 1.29rem;
+  font-size: 1.25rem;
   color: var(--ink-soft);
-  line-height: 1.6;
+  line-height: 1.65;
+  flex: 1;
 }
 
+/* ── CTA button — attractive green pill ── */
 .typeCta {
-  margin-top: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--brand-2);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #1f8a3b 0%, #028a2b 60%, #005a1b 100%);
+  border-radius: 999px;
+  padding: 0.7rem 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(1,109,33,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* shimmer on CTA */
+.typeCta::before {
+  content: "";
+  position: absolute;
+  top: -50%; left: -70%;
+  width: 50%; height: 200%;
+  background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.28) 50%, transparent 80%);
+  transform: skewX(-12deg);
+  animation: ctaShimmer 2.8s ease-in-out infinite 0.5s;
+  pointer-events: none;
+}
+
+@keyframes ctaShimmer {
+  0%   { left: -70%; opacity: 0; }
+  10%  { opacity: 1; }
+  60%  { opacity: 1; }
+  100% { left: 130%; opacity: 0; }
+}
+
+.typeCard:hover .typeCta {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(1,109,33,0.45);
+}
+
+/* business CTA — blue */
+.typeCtaBiz {
+  background: linear-gradient(135deg, #0055b3 0%, #0070c0 60%, #0088e0 100%);
+  box-shadow: 0 6px 20px rgba(0,112,192,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.typeCard:hover .typeCtaBiz {
+  box-shadow: 0 10px 28px rgba(0,112,192,0.45);
 }
 
 .changeTypeButton {
@@ -682,19 +708,24 @@
   width: 100%;
   border: 0;
   border-radius: 14px;
-  min-height: 52px;
+  min-height: 58px;
   background: linear-gradient(136deg, #028a2b 0%, #1f8a3b 58%, #005a1b 100%);
   color: #ffffff;
-  font-weight: 700;
-  font-size: 1.38rem;
+  font-weight: 800;
+  font-size: 1.5rem;
   letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(1,109,33,0.32);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .submitButton:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(1, 109, 33, 0.28);
-  filter: saturate(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(1, 109, 33, 0.4);
+  filter: saturate(1.1);
 }
 
 .submitButton:disabled {
@@ -873,14 +904,14 @@
   }
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 900px) {
   .registerShell {
     grid-template-columns: 1fr;
     border-radius: 24px;
   }
 
   .brandPanel {
-    display: none;
+    min-height: 220px;
   }
 
   .formCard {

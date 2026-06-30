@@ -84,42 +84,24 @@ export default function DiasporaWeekRegisterPage() {
           </div>
 
           <div className={styles.registerShell}>
+            {/* ── left: image only ── */}
             <div className={styles.brandPanel}>
-              <p className={styles.kicker}>Somaliland Diaspora Week</p>
-              <div className={styles.logoWrap}>
+              <div className={styles.brandPanelImg} aria-hidden="true" />
+            </div>
+
+            <div className={styles.formCard}>
+              {/* logo in form card */}
+              <div className={styles.formLogo}>
                 <Image
                   src="/assets/imgs/logo/logo.png"
                   alt="Somaliland Diaspora Department"
-                  width={200}
-                  height={66}
+                  width={160}
+                  height={52}
                   priority
                   className={styles.logoImage}
                 />
               </div>
 
-              <h2 className={styles.brandTitle}>Join Diaspora Week</h2>
-              <p className={styles.brandSubtitle}>
-                Register as an individual or as a business to take part in our 5-day flagship
-                event &mdash; exhibitions, forums, startup pitching, and cultural celebrations.
-              </p>
-
-              <ul className={styles.brandList}>
-                <li>
-                  <i className="fa-regular fa-circle-check" aria-hidden="true"></i>
-                  Submit your registration in minutes
-                </li>
-                <li>
-                  <i className="fa-regular fa-circle-check" aria-hidden="true"></i>
-                  Our team reviews and approves your request
-                </li>
-                <li>
-                  <i className="fa-regular fa-circle-check" aria-hidden="true"></i>
-                  Get an access code by email to unlock the full event portal
-                </li>
-              </ul>
-            </div>
-
-            <div className={styles.formCard}>
               {submitted ? (
                 <div className={styles.successState}>
                   <span className={styles.successIcon}>
@@ -143,9 +125,9 @@ export default function DiasporaWeekRegisterPage() {
                 </div>
               ) : !registrationType ? (
                 <>
-                  <h1 className={styles.title}>How are you registering?</h1>
+                  <h1 className={styles.title}>How would you like to participate?</h1>
                   <p className={styles.subtitle}>
-                    Choose the option that best describes your participation in Diaspora Week.
+                    Select the option that matches your role at Diaspora Week 2026.
                   </p>
 
                   <div className={styles.typeGrid}>
@@ -155,30 +137,36 @@ export default function DiasporaWeekRegisterPage() {
                       onClick={() => setRegistrationType("individual")}
                     >
                       <span className={styles.typeIcon}>
-                        <User size={26} />
+                        <User size={28} />
                       </span>
-                      <h3>Individual</h3>
+                      <h3>Individual Attendee</h3>
                       <p>
-                        Register as a single attendee &mdash; diaspora member, professional, or
-                        community participant.
+                        Diaspora member, professional, student or community participant
+                        attending sessions, panels and cultural events.
                       </p>
-                      <span className={styles.typeCta}>Continue</span>
+                      <span className={styles.typeCta}>
+                        Register as Individual
+                        <i className="fa-regular fa-arrow-right" aria-hidden="true"></i>
+                      </span>
                     </button>
 
                     <button
                       type="button"
-                      className={styles.typeCard}
+                      className={`${styles.typeCard} ${styles.typeCardBiz}`}
                       onClick={() => setRegistrationType("business")}
                     >
-                      <span className={styles.typeIcon}>
-                        <Building2 size={26} />
+                      <span className={`${styles.typeIcon} ${styles.typeIconBiz}`}>
+                        <Building2 size={28} />
                       </span>
-                      <h3>Business</h3>
+                      <h3>Business / Exhibitor</h3>
                       <p>
-                        Register your business or organization, including exhibitor and
-                        partnership details.
+                        Diaspora-founded business, NGO or organization seeking a booth to
+                        showcase products, services or development initiatives.
                       </p>
-                      <span className={styles.typeCta}>Continue</span>
+                      <span className={`${styles.typeCta} ${styles.typeCtaBiz}`}>
+                        Register as Business
+                        <i className="fa-regular fa-arrow-right" aria-hidden="true"></i>
+                      </span>
                     </button>
                   </div>
                 </>
@@ -193,18 +181,18 @@ export default function DiasporaWeekRegisterPage() {
                     }}
                   >
                     <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
-                    Change registration type
+                    Change participation type
                   </button>
 
                   <h1 className={styles.title}>
                     {registrationType === "individual"
                       ? "Individual Registration"
-                      : "Business Registration"}
+                      : "Business / Exhibitor Registration"}
                   </h1>
                   <p className={styles.subtitle}>
                     {registrationType === "individual"
-                      ? "Tell us about yourself so we can review your registration."
-                      : "Tell us about your business so we can review your registration."}
+                      ? "Fill in your details below. Our team will review and approve your registration within 48 hours."
+                      : "Complete your business details. Once approved, your logo will appear in the Exhibitor Showcase."}
                   </p>
 
                   <form ref={formRef} onSubmit={handleSubmit} className={styles.form} encType="multipart/form-data">
@@ -660,13 +648,17 @@ export default function DiasporaWeekRegisterPage() {
                     {error && <div className={styles.errorBox}>{error}</div>}
 
                     <button type="submit" disabled={loading} className={styles.submitButton}>
-                      {loading ? "Submitting..." : "Submit Registration"}
+                      {loading ? (
+                        <><i className="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Submitting…</>
+                      ) : (
+                        <><i className="fa-regular fa-paper-plane" aria-hidden="true"></i> {registrationType === "individual" ? "Submit My Registration" : "Submit Business Registration"}</>
+                      )}
                     </button>
                   </form>
 
                   <p className={styles.footerNote}>
-                    Already approved?{" "}
-                    <Link href="/diaspora-week/portal">Sign in to the Event Portal</Link>
+                    Already registered and approved?{" "}
+                    <Link href="/diaspora-week/portal">Access the Event Portal →</Link>
                   </p>
                 </>
               )}
