@@ -3600,10 +3600,10 @@
   background: rgba(239,68,68,0.15);
   border: 1px solid rgba(239,68,68,0.4);
   color: #fca5a5;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 0.65rem 1.5rem;
+  padding: 0.75rem 1.75rem;
   border-radius: 999px;
   margin-bottom: 1.75rem;
   animation: portalPulse 2.5s ease-in-out infinite;
@@ -3613,7 +3613,7 @@
 
 .exHeroTitle {
   margin: 0 0 1.5rem;
-  font-size: clamp(3.2rem, 6.5vw, 6rem);
+  font-size: clamp(3.6rem, 7vw, 6.5rem);
   font-weight: 900;
   line-height: 1.06;
   letter-spacing: -0.025em;
@@ -3630,11 +3630,11 @@
 }
 
 .exHeroSub {
-  font-size: 1.65rem;
+  font-size: 1.9rem;
   line-height: 1.75;
   color: rgba(255,255,255,0.88);
   margin: 0 0 2.5rem;
-  max-width: 58ch;
+  max-width: 54ch;
 }
 
 /* quick stats row */
@@ -3661,14 +3661,14 @@
 .exHeroStat:last-child { border-right: none; }
 
 .exHeroStat strong {
-  font-size: 2.6rem;
+  font-size: 3.2rem;
   font-weight: 900;
   color: #8df6b2;
   line-height: 1;
 }
 
 .exHeroStat span {
-  font-size: 1.1rem;
+  font-size: 1.35rem;
   color: rgba(255,255,255,0.65);
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -3690,8 +3690,8 @@
   background: linear-gradient(135deg, #1f8a3b 0%, #028a2b 60%, #005a1b 100%);
   color: #fff;
   font-weight: 800;
-  font-size: 1.4rem;
-  padding: 1.1rem 2.5rem;
+  font-size: 1.65rem;
+  padding: 1.2rem 2.75rem;
   border-radius: 999px;
   text-decoration: none;
   box-shadow: 0 8px 28px rgba(1,109,33,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
@@ -3715,8 +3715,8 @@
 .exHeroContact {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 1.25rem;
+  gap: 8px;
+  font-size: 1.45rem;
   font-weight: 600;
   color: rgba(255,255,255,0.82);
   text-decoration: none;
@@ -3726,16 +3726,16 @@
 .exHeroContact:hover { color: #8df6b2; }
 
 .exHeroContactDiv {
-  width: 1px; height: 22px;
+  width: 1px; height: 24px;
   background: rgba(255,255,255,0.3);
 }
 
 .exHeroNote {
-  font-size: 1.2rem;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.7;
+  font-size: 1.4rem;
+  color: rgba(255,255,255,0.62);
+  line-height: 1.75;
   margin: 0;
-  max-width: 58ch;
+  max-width: 56ch;
   text-align: center;
   border-top: 1px solid rgba(255,255,255,0.12);
   padding-top: 1.5rem;
@@ -3766,8 +3766,8 @@
   color: #1f8a3b;
   border: 1px solid #bfe6cc;
   border-radius: 999px;
-  padding: 8px 18px;
-  font-size: 1.15rem;
+  padding: 9px 20px;
+  font-size: 1.3rem;
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -3776,7 +3776,7 @@
 }
 
 .exSectionTitle {
-  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+  font-size: clamp(2.6rem, 4vw, 3.8rem);
   font-weight: 800;
   color: #0c2f37;
   line-height: 1.2;
@@ -3784,7 +3784,7 @@
 }
 
 .exAboutLead {
-  font-size: 1.55rem;
+  font-size: 1.75rem;
   line-height: 1.8;
   color: #4b666d;
   margin: 0 0 2.25rem;
@@ -3797,8 +3797,8 @@
   background: linear-gradient(135deg, #1f8a3b, #028a2b);
   color: #fff;
   font-weight: 800;
-  font-size: 1.25rem;
-  padding: 1rem 2rem;
+  font-size: 1.45rem;
+  padding: 1.1rem 2.25rem;
   border-radius: 999px;
   text-decoration: none;
   width: fit-content;
@@ -3849,14 +3849,14 @@
 }
 
 .exOppTitle {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: #0c2f37;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.3rem;
 }
 
 .exOppDesc {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: #4b666d;
   line-height: 1.65;
   margin: 0;
@@ -3906,15 +3906,15 @@
 }
 
 .exBenTitle {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: #0c2f37;
   margin: 0 0 0.3rem;
 }
 
 .exBenDesc {
-  font-size: 1.25rem;
-  line-height: 1.65;
+  font-size: 1.5rem;
+  line-height: 1.7;
   color: #4b666d;
   margin: 0;
 }
@@ -3932,7 +3932,7 @@
 }
 
 .exLogosLead {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #4b666d;
   margin: 0.5rem auto 0;
   line-height: 1.7;
@@ -3984,7 +3984,7 @@
 }
 
 .exLogoName {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #0c2f37;
   text-align: center;
@@ -4001,7 +4001,7 @@
   gap: 1.25rem;
 }
 
-.exLogosEmpty p { font-size: 1.4rem; font-weight: 600; margin: 0; }
+.exLogosEmpty p { font-size: 1.6rem; font-weight: 600; margin: 0; }
 
 @media (max-width: 900px) {
   .exAboutGrid { grid-template-columns: 1fr; gap: 2.5rem; }
