@@ -359,26 +359,52 @@ export default function DiasporaWeekPortalPage() {
             </div>
             <div className={styles.homeHeroStatsBar}>
               <div className="container">
-                <div className={styles.homeHeroStatsGrid}>
-                  <div className={styles.homeHeroStat}>
-                    <strong>5</strong>
-                    <span>Event Days</span>
-                  </div>
-                  <div className={styles.homeHeroStatDiv} />
-                  <div className={styles.homeHeroStat}>
-                    <strong>21+</strong>
-                    <span>Exhibitors</span>
-                  </div>
-                  <div className={styles.homeHeroStatDiv} />
-                  <div className={styles.homeHeroStat}>
-                    <strong>100s</strong>
-                    <span>Diaspora Attendees</span>
-                  </div>
-                  <div className={styles.homeHeroStatDiv} />
-                  <div className={styles.homeHeroStat}>
-                    <strong>3</strong>
-                    <span>Host Cities</span>
-                  </div>
+                <p className={styles.heroRoadshowDate}>
+                  <CalendarDays size={15} />
+                  August 1–6, 2026 &nbsp;·&nbsp; Hargeisa, Borama and Burao, Republic of Somaliland
+                </p>
+                <div className={styles.heroRoadshowGrid}>
+                  {[
+                    {
+                      city: "Hargeisa",
+                      date: "August 1–2",
+                      theme: "Governance, Finance & Innovation and National Investment",
+                      accent: "#1f8a3b",
+                      soft: "rgba(31,138,59,0.18)",
+                      icon: "🏛️",
+                    },
+                    {
+                      city: "Borama",
+                      date: "August 3",
+                      theme: "Knowledge, Agriculture, Mining, Cross-Border Trade & Tourism",
+                      accent: "#0070c0",
+                      soft: "rgba(0,112,192,0.18)",
+                      icon: "🌾",
+                    },
+                    {
+                      city: "Burao",
+                      date: "August 5",
+                      theme: "Livestock, Industry & Productive Economy",
+                      accent: "#b45309",
+                      soft: "rgba(180,83,9,0.18)",
+                      icon: "🏭",
+                    },
+                  ].map((c) => (
+                    <div
+                      key={c.city}
+                      className={styles.heroRoadshowCard}
+                      style={{ "--city-accent": c.accent, "--city-soft": c.soft } as React.CSSProperties}
+                    >
+                      <div className={styles.heroRoadshowCardTop}>
+                        <span className={styles.heroRoadshowIcon}>{c.icon}</span>
+                        <div>
+                          <span className={styles.heroRoadshowCity}>{c.city}</span>
+                          <span className={styles.heroRoadshowCardDate}>{c.date}</span>
+                        </div>
+                      </div>
+                      <p className={styles.heroRoadshowTheme}>{c.theme}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
