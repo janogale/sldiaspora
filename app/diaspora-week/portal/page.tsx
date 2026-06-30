@@ -410,65 +410,40 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* ══ INVITE / PARTICIPATE ══ */}
-          <section id="invite" className={styles.homeInviteSection}>
-            <div className="container">
-              <div className={styles.homeInviteHeader}>
-                <span className={styles.homeKicker}>Join Us</span>
-                <h2 className={styles.homeSectionTitle}>Come Be Part of History</h2>
-                <p className={styles.homeSectionLead}>
-                  Whether you&apos;re reconnecting with your homeland or showcasing your business &mdash; Diaspora Week 2026 has a place for you.
-                </p>
-              </div>
-              <div className={styles.homeInviteCards}>
-                <div className={styles.homeInviteCard}>
-                  <div className={styles.homeInviteCardBg}>
-                    <img src={DW_PHOTOS[0]} alt="" />
-                  </div>
-                  <div className={styles.homeInviteCardOverlay} />
-                  <div className={styles.homeInviteCardBody}>
-                    <span className={styles.homeInviteCardBadge}>
-                      <User size={13} /> For Individuals
-                    </span>
-                    <h3>Attend &amp; Connect</h3>
-                    <p>Register to attend sessions, panels, networking events and the cultural gala.</p>
-                    <Link href="/diaspora-week/register?type=individual" className={styles.homeInviteCardCta}>
-                      Register as Individual
-                      <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                    </Link>
-                  </div>
-                </div>
-                <div className={`${styles.homeInviteCard} ${styles.homeInviteCardBiz}`}>
-                  <div className={styles.homeInviteCardBg}>
-                    <img src={DW_PHOTOS[3]} alt="" />
-                  </div>
-                  <div className={styles.homeInviteCardOverlay} />
-                  <div className={styles.homeInviteCardBody}>
-                    <span className={styles.homeInviteCardBadge}>
-                      <Building2 size={13} /> For Businesses
-                    </span>
-                    <h3>Exhibit &amp; Grow</h3>
-                    <p>Secure a hall booth, showcase your products and connect with investors and diaspora partners.</p>
-                    <Link href="/diaspora-week/register?type=business" className={styles.homeInviteCardCta}>
-                      Register as Business
-                      <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
           {/* ══ THEME ══ */}
           <section className={styles.homeThemeSection}>
+            {/* decorative background blobs */}
+            <div className={styles.homeThemeBlobA} aria-hidden="true" />
+            <div className={styles.homeThemeBlobB} aria-hidden="true" />
+
             <div className="container">
               <div className={styles.homeThemeGrid}>
+
+                {/* ── Image column ── */}
+                <div className={styles.homeThemeVisual}>
+                  <div className={styles.homeThemeImgWrap}>
+                    <img
+                      src="/diaspora-img.png"
+                      alt="Somaliland Diaspora"
+                      className={styles.homeThemeImgMain}
+                    />
+                    <div className={styles.homeThemeImgBadge}>
+                      <Sparkles size={14} />
+                      Diaspora Week 2026
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Text column ── */}
                 <div className={styles.homeThemeText}>
                   <span className={styles.homeKicker}>2026 Theme</span>
+
                   <blockquote className={styles.homeThemeQuote}>
                     &ldquo;A Multi-City Roadshow: Connecting Local Roots to Global Recognition&rdquo;
                   </blockquote>
+
                   <p className={styles.homeThemeTagline}>From Local Roots to Global Recognition</p>
+
                   <p className={styles.homeThemeBody}>
                     Our diaspora is not an external supporter &mdash; they are the architects of the
                     modern Somaliland state. For over three decades the diaspora has financed
@@ -476,25 +451,26 @@ export default function DiasporaWeekPortalPage() {
                     the roadshow moves beyond a single venue to Hargeisa, Borama and Burao, proving
                     that development is national, not centralized.
                   </p>
-                  <span className={styles.homeThemeVenueDate}>
-                    <CalendarDays size={15} /> August 1&ndash;6, 2026
-                  </span>
+
+                  <div className={styles.homeThemeDatePill}>
+                    <CalendarDays size={15} />
+                    August 1&ndash;6, 2026
+                  </div>
+
                   <div className={styles.homeThemeVenueGrid}>
                     {[
-                      { city: "Hargeisa", venue: "Serene Seravoir Hotel", day: "Day 1–2", accent: "#1f8a3b", soft: "#e3f5e9" },
-                      { city: "Borama", venue: "Safari Hotel", day: "Day 3", accent: "#0070c0", soft: "#e1eefb" },
-                      { city: "Burao", venue: "Plaza Hotel", day: "Day 4", accent: "#b45309", soft: "#fdf0e1" },
+                      { city: "Hargeisa", venue: "Serene Seravoir Hotel", day: "Day 1–2", accent: "#1f8a3b", soft: "#e3f5e9", icon: "🏛️" },
+                      { city: "Borama",   venue: "Safari Hotel",          day: "Day 3",   accent: "#0070c0", soft: "#e1eefb", icon: "🌾" },
+                      { city: "Burao",    venue: "Plaza Hotel",           day: "Day 4",   accent: "#b45309", soft: "#fdf0e1", icon: "🏭" },
                     ].map((v) => (
                       <div
                         className={styles.homeThemeVenueRow}
                         key={v.city}
                         style={{ "--venue-accent": v.accent, "--venue-accent-soft": v.soft } as React.CSSProperties}
                       >
-                        <span className={styles.homeThemeVenueDot}>
-                          <MapPin size={20} />
-                        </span>
+                        <span className={styles.homeThemeVenueEmoji}>{v.icon}</span>
                         <span className={styles.homeThemeVenueText}>
-                          <span className={styles.homeThemeVenueCity}>{v.city}:</span>
+                          <span className={styles.homeThemeVenueCity}>{v.city}</span>
                           <span className={styles.homeThemeVenueName}>{v.venue}</span>
                         </span>
                         <span className={styles.homeThemeVenueDay}>{v.day}</span>
@@ -502,15 +478,7 @@ export default function DiasporaWeekPortalPage() {
                     ))}
                   </div>
                 </div>
-                <div className={styles.homeThemePhotos}>
-                  <div className={styles.homeThemePhotoMain}>
-                    <img src={DW_PHOTOS[2]} alt="Diaspora Week 2025" />
-                  </div>
-                  <div className={styles.homeThemePhotoStack}>
-                    <img src={DW_PHOTOS[1]} alt="Diaspora Week 2025" />
-                    <img src={DW_PHOTOS[5]} alt="Diaspora Week 2025" />
-                  </div>
-                </div>
+
               </div>
             </div>
           </section>
