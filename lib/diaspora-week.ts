@@ -514,7 +514,6 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
 export const sendDiasporaWeekApprovalEmail = async (options: {
   toEmail: string;
   name: string;
-  accessCode: string;
   registrationType?: "individual" | "business";
   country?: string;
   city?: string;
@@ -564,15 +563,12 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
     ${emailHeroBanner("Official Delegate Invitation")}
     ${emailCardOpen()}
 
-    <!-- approved badge + greeting -->
-    <div style="padding:22px 22px 10px;">
-      <div style="display:inline-block;background:#d7f5e0;color:#005a1b;border-radius:999px;
-        padding:4px 12px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;
-        letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">&#10003; Approved</div>
-      <p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:16px;color:#0c2f37;">
+    <!-- greeting -->
+    <div style="padding:22px 22px 14px;">
+      <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:16px;color:#0c2f37;">
         Congratulations, <strong>${safeName}</strong>!
       </p>
-      <p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:13px;color:#475569;line-height:1.7;">
+      <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#475569;line-height:1.7;">
         Your place at <strong>Somaliland Diaspora Week 2026</strong> is confirmed.
         ${isBusiness
           ? "Your business will be featured in the Exhibition Zone — booth details to follow."
@@ -580,22 +576,79 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
       </p>
     </div>
 
-    <!-- delegate details card -->
-    <div style="margin:0 22px 16px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
-      <div style="background:#f4fbf7;padding:10px 18px;border-bottom:1px solid #e2e8f0;">
-        <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;
-          color:#64748b;margin-bottom:2px;">Registration Details</div>
-        <div style="font-family:Arial,sans-serif;font-size:16px;font-weight:700;color:#0c2f37;">${safeName}</div>
+    <!-- GREEN INVITATION PASS — replaces access code block -->
+    <div style="margin:0 22px 18px;border-radius:14px;overflow:hidden;
+      box-shadow:0 4px 18px rgba(0,90,27,0.18);">
+
+      <!-- pass header -->
+      <div style="background:linear-gradient(135deg,#005a1b 0%,#1f8a3b 60%,#007a26 100%);
+        padding:18px 22px 14px;">
+        <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:2px;
+          text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:6px;">
+          Official Delegate Pass &nbsp;·&nbsp; Somaliland Diaspora Week 2026
+        </div>
+        <div style="font-family:Arial,sans-serif;font-size:22px;font-weight:900;
+          color:#ffffff;line-height:1.2;margin-bottom:4px;">${safeName}</div>
+        <div style="display:inline-block;background:rgba(255,255,255,0.18);
+          border:1px solid rgba(255,255,255,0.35);border-radius:999px;
+          padding:3px 11px;font-family:Arial,sans-serif;font-size:11px;
+          font-weight:700;color:#ffffff;letter-spacing:0.5px;">
+          ${escapeHtml(typeLabel)}
+        </div>
       </div>
-      <table width="100%" cellpadding="0" cellspacing="0">
-        ${dRow("Status", `<span style="background:#d7f5e0;color:#005a1b;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">&#10003; Approved</span>`)}
-        ${dRow("Type",   `<span style="background:${typeBg};color:${typeColor};border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">${escapeHtml(typeLabel)}</span>`)}
-        ${dRow("Email",  escapeHtml(options.toEmail))}
-        ${extraRows}
-        ${dRow("City",   escapeHtml(venue.displayCity))}
-        ${dRow("Venue",  escapeHtml(venue.hotel))}
-        ${dRow("Date",   escapeHtml(venue.dates), true)}
-      </table>
+
+      <!-- dashed divider (ticket tear line) -->
+      <div style="background:#ffffff;border-top:2px dashed #b6dfc6;padding:0;"></div>
+
+      <!-- pass body — 2 col info -->
+      <div style="background:#ffffff;padding:16px 22px 18px;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%" style="vertical-align:top;padding-right:12px;padding-bottom:12px;">
+              <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;
+                text-transform:uppercase;color:#64748b;margin-bottom:3px;">Status</div>
+              <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#005a1b;">
+                &#10003;&nbsp; Approved
+              </div>
+            </td>
+            <td width="50%" style="vertical-align:top;padding-bottom:12px;">
+              <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;
+                text-transform:uppercase;color:#64748b;margin-bottom:3px;">Email</div>
+              <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:600;
+                color:#0c2f37;word-break:break-all;">${escapeHtml(options.toEmail)}</div>
+            </td>
+          </tr>
+          <tr>
+            <td width="50%" style="vertical-align:top;padding-right:12px;padding-bottom:12px;
+              border-top:1px solid #f1f5f9;padding-top:12px;">
+              <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;
+                text-transform:uppercase;color:#64748b;margin-bottom:3px;">Event City</div>
+              <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;
+                color:#0c2f37;">${escapeHtml(venue.displayCity)}</div>
+            </td>
+            <td width="50%" style="vertical-align:top;border-top:1px solid #f1f5f9;padding-top:12px;padding-bottom:12px;">
+              <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;
+                text-transform:uppercase;color:#64748b;margin-bottom:3px;">Date</div>
+              <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;
+                color:#0c2f37;">${escapeHtml(venue.dates)}</div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="border-top:1px solid #f1f5f9;padding-top:12px;">
+              <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;
+                text-transform:uppercase;color:#64748b;margin-bottom:3px;">Venue</div>
+              <div style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;
+                color:#0c2f37;">${escapeHtml(venue.hotel)}, ${escapeHtml(venue.displayCity)}</div>
+            </td>
+          </tr>
+          ${extraRows ? `
+          <tr>
+            <td colspan="2" style="border-top:1px solid #f1f5f9;padding-top:12px;">
+              <table width="100%" cellpadding="0" cellspacing="0">${extraRows}</table>
+            </td>
+          </tr>` : ""}
+        </table>
+      </div>
     </div>
 
     <!-- highlights — compact 3 col -->
@@ -640,7 +693,7 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
         Open Event Portal &rarr;
       </a>
       <p style="margin:10px 0 0;font-family:Arial,sans-serif;font-size:11px;color:#94a3b8;">
-        <a href="${escapeHtml(portalUrl)}" style="color:#92400e;text-decoration:none;word-break:break-all;">${escapeHtml(portalUrl)}</a>
+        <a href="${escapeHtml(portalUrl)}" style="color:#005a1b;text-decoration:none;word-break:break-all;">${escapeHtml(portalUrl)}</a>
       </p>
     </div>
 

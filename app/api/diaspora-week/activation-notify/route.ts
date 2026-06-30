@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import {
-  generateAccessCode,
   getCollectionFields,
   getRegistrationByEmail,
   getRegistrationById,
   getRegistrationsCollection,
   sendDiasporaWeekApprovalEmail,
   updateCollectionRecord,
-  INDIVIDUAL_REGISTRATIONS_COLLECTION,
-  BUSINESS_REGISTRATIONS_COLLECTION,
 } from "@/lib/diaspora-week";
 
 type RegistrationType = "individual" | "business";
@@ -131,21 +128,17 @@ export async function POST(request: Request) {
     }
 
     // Avoid sending duplicate emails
-    const alreadySent = Boolean(registration.access_code_sent_at);
-    const existingCode = String(registration.access_code || "").trim();
-    if (existingCode && alreadySent) {
+    const alreadySent = Boolean(registration.approval_email_sent_at);
+    if (alreadySent) {
       return NextResponse.json(
         { message: "Approval email already sent.", sent: false },
         { status: 200 }
       );
     }
 
-    const accessCode = existingCode || generateAccessCode();
-
     const emailSent = await sendDiasporaWeekApprovalEmail({
       toEmail,
       name,
-      accessCode,
       registrationType,
       city:          String(registration.city             || ""),
       country:       String(registration.country          || ""),
@@ -158,17 +151,16 @@ export async function POST(request: Request) {
 
     if (!emailSent) {
       return NextResponse.json(
-        { message: "SMTP send failed — check SMTP credentials in .env.local.", sent: false },
+        { message: "SMTP send failed — check SMTP credentials.", sent: false },
         { status: 502 }
       );
     }
 
-    // Save access_code and timestamp back to Directus
-    const collection     = getRegistrationsCollection(registrationType);
-    const allowedFields  = await getCollectionFields(collection);
+    // Mark as sent in Directus (store timestamp so we don't resend)
+    const collection    = getRegistrationsCollection(registrationType);
+    const allowedFields = await getCollectionFields(collection);
     const updatePayload: Record<string, unknown> = {
-      access_code:         accessCode,
-      access_code_sent_at: new Date().toISOString(),
+      approval_email_sent_at: new Date().toISOString(),
     };
     const filtered = allowedFields
       ? Object.fromEntries(Object.entries(updatePayload).filter(([k]) => allowedFields.has(k)))
