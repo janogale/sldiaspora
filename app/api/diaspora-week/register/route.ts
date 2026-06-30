@@ -179,6 +179,7 @@ export async function POST(request: Request) {
       toEmail: email,
       name: displayName,
       registrationType,
+      city,
     }).catch(() => null);
 
     return NextResponse.json(

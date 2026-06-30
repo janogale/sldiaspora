@@ -347,17 +347,21 @@ const emailWrapper = (innerHtml: string) => `<!DOCTYPE html>
 </body>
 </html>`;
 
-// Text-only logo bar — no image dependency, always renders in all email clients
-const emailLogoBar = () => `
+// Logo bar — uses the public site URL so the image is always reachable in email clients
+const emailLogoBar = () => {
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://sldiaspora.org").replace(/\/$/, "");
+  return `
 <tr>
   <td style="text-align:center;padding-bottom:14px;">
-    <div style="display:inline-block;background:linear-gradient(135deg,#005a1b,#1f8a3b);
-      color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:900;
-      border-radius:10px;padding:7px 18px;letter-spacing:1px;">SLDD</div>
-    <div style="margin-top:6px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:2px;
+    <img src="${siteUrl}/assets/imgs/logo/logo.png" alt="Somaliland Diaspora Week"
+      width="52" height="52"
+      style="display:block;margin:0 auto;border-radius:12px;background:#ffffff;
+        padding:5px;border:1px solid rgba(255,255,255,0.18);" />
+    <div style="margin-top:7px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:2px;
       text-transform:uppercase;color:rgba(255,255,255,0.45);">Somaliland Diaspora Week</div>
   </td>
 </tr>`;
+};
 
 // Hero banner
 const emailHeroBanner = (label: string) => `
@@ -397,6 +401,20 @@ const dRow = (label: string, value: string, last = false) =>
     <td style="padding:9px 18px;color:#0c2f37;font-weight:600;font-size:13px;${last ? "" : "border-bottom:1px solid #f1f5f9;"}">${value}</td>
   </tr>`;
 
+// City → venue/hotel/date lookup (used by both emails)
+const CITY_VENUE: Record<string, { hotel: string; dates: string; displayCity: string }> = {
+  hargeisa: { displayCity: "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 1–3, 2026" },
+  borama:   { displayCity: "Borama",   hotel: "Safari Hotel",           dates: "August 4, 2026"   },
+  boorama:  { displayCity: "Borama",   hotel: "Safari Hotel",           dates: "August 4, 2026"   },
+  burao:    { displayCity: "Burao",    hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
+  burco:    { displayCity: "Burao",    hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
+};
+
+const resolveCityVenue = (cityRaw: string) => {
+  const key = cityRaw.toLowerCase().trim().split(",")[0].trim();
+  return CITY_VENUE[key] ?? { displayCity: escapeHtml(cityRaw) || "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 1–6, 2026" };
+};
+
 // ---------------------------------------------------------------------------
 // Email 1 — Registration Received
 // ---------------------------------------------------------------------------
@@ -405,12 +423,14 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
   toEmail: string;
   name: string;
   registrationType: "individual" | "business";
+  city?: string;
 }) => {
   const safeName   = escapeHtml(options.name || "there");
   const isBusiness = options.registrationType === "business";
   const typeLabel  = isBusiness ? "Business Exhibitor" : "Individual Delegate";
   const typeColor  = isBusiness ? "#0055b3" : "#005a1b";
   const typeBg     = isBusiness ? "#daeeff"  : "#d7f5e0";
+  const venue      = options.city ? resolveCityVenue(options.city) : null;
 
   const html = emailWrapper(`
     ${emailLogoBar()}
@@ -434,9 +454,11 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
     <!-- details -->
     <div style="margin:0 22px 18px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
       <table width="100%" cellpadding="0" cellspacing="0">
-        ${dRow("Name", safeName)}
-        ${dRow("Type", `<span style="background:${typeBg};color:${typeColor};border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">${escapeHtml(typeLabel)}</span>`)}
-        ${dRow("Email", escapeHtml(options.toEmail), true)}
+        ${dRow("Name",  safeName)}
+        ${dRow("Type",  `<span style="background:${typeBg};color:${typeColor};border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;">${escapeHtml(typeLabel)}</span>`)}
+        ${dRow("Email", escapeHtml(options.toEmail), !venue)}
+        ${venue ? dRow("Event City", `${escapeHtml(venue.displayCity)} &mdash; ${escapeHtml(venue.hotel)}`) : ""}
+        ${venue ? dRow("Date",       escapeHtml(venue.dates), true) : ""}
       </table>
     </div>
 
@@ -489,19 +511,6 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
 // ---------------------------------------------------------------------------
 
 // Maps the registered city name to venue + event date
-const CITY_VENUE: Record<string, { hotel: string; dates: string; displayCity: string }> = {
-  hargeisa: { displayCity: "Hargeisa",  hotel: "Serene Seravoir Hotel", dates: "August 1–3, 2026" },
-  borama:   { displayCity: "Borama",    hotel: "Safari Hotel",           dates: "August 4, 2026"   },
-  boorama:  { displayCity: "Borama",    hotel: "Safari Hotel",           dates: "August 4, 2026"   },
-  burao:    { displayCity: "Burao",     hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
-  burco:    { displayCity: "Burao",     hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
-};
-
-const resolveCityVenue = (cityRaw: string) => {
-  const key = cityRaw.toLowerCase().trim().split(",")[0].trim();
-  return CITY_VENUE[key] ?? { displayCity: escapeHtml(cityRaw) || "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 1–6, 2026" };
-};
-
 export const sendDiasporaWeekApprovalEmail = async (options: {
   toEmail: string;
   name: string;
