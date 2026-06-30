@@ -878,112 +878,132 @@ export default function DiasporaWeekPortalPage() {
 
       {activeSection === "exhibitors" && (
         <>
-          <section className={styles.scheduleHero}>
-            <div className={styles.scheduleHeroBg}>
-              <img
-                src="/assets/imgs/Diaspora Week 2025/hero-flags-crowd.jpg"
-                alt=""
-                className={styles.scheduleHeroBgImage}
-              />
+          {/* ══ EXHIBITOR HERO ══ */}
+          <section className={styles.exHero}>
+            <div className={styles.exHeroBg}>
+              <img src={DW_PHOTOS[6]} alt="" className={styles.exHeroBgImg} />
             </div>
-            <div className={styles.scheduleHeroOverlay}></div>
-            <div className={`container ${styles.scheduleHeroContainer}`}>
-              <span className={styles.heroBadge}>Exhibitor Showcase</span>
-              <h1 className={styles.scheduleHeroTitle}>Exhibitors</h1>
-              <p className={styles.scheduleHeroSubtitle}>
-                Showcase your brand, services, or initiative at any of our city hubs. As an exhibitor,
-                you&apos;ll gain visibility among hundreds of attendees, government representatives, and
-                international guests.
+            <div className={styles.exHeroOverlay} />
+            <div className={styles.exHeroOrb1} aria-hidden="true" />
+            <div className={styles.exHeroOrb2} aria-hidden="true" />
+
+            <div className={`container ${styles.exHeroInner}`}>
+              {/* deadline badge */}
+              <div className={styles.exHeroBadge}>
+                <CalendarDays size={15} />
+                Application Deadline: <strong>July 20, 2026</strong>
+              </div>
+
+              <h1 className={styles.exHeroTitle}>
+                Exhibit at<br />
+                <span className={styles.exHeroAccent}>Diaspora Week 2026</span>
+              </h1>
+
+              <p className={styles.exHeroSub}>
+                Put your brand in front of hundreds of diaspora investors, government officials,
+                and development partners across Hargeisa, Borama and Burao. This is your platform
+                to showcase, connect, and grow.
+              </p>
+
+              {/* quick stats */}
+              <div className={styles.exHeroStats}>
+                {[
+                  { val: "3", label: "Host Cities" },
+                  { val: "5", label: "Event Days" },
+                  { val: "500+", label: "Attendees" },
+                  { val: "21+", label: "Exhibitors" },
+                ].map((s) => (
+                  <div className={styles.exHeroStat} key={s.label}>
+                    <strong>{s.val}</strong>
+                    <span>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA + contact */}
+              <div className={styles.exHeroActions}>
+                <Link href="/diaspora-week/register?type=business" className={styles.exHeroBtn}>
+                  <Building2 size={18} />
+                  Register Your Business
+                  <ChevronRight size={18} />
+                </Link>
+                <div className={styles.exHeroContacts}>
+                  <a href="mailto:info@sldiaspora.org" className={styles.exHeroContact}>
+                    <Mail size={15} />
+                    info@sldiaspora.org
+                  </a>
+                  <span className={styles.exHeroContactDiv} />
+                  <a href="tel:+252634696895" className={styles.exHeroContact}>
+                    <Phone size={15} />
+                    +252-63-4696895
+                  </a>
+                </div>
+              </div>
+
+              {/* selection process note */}
+              <p className={styles.exHeroNote}>
+                Submit by <strong>July 20th</strong> &mdash; the Diaspora Department reviews all applications
+                and accepted businesses confirm their space with an affordable exhibition fee.
               </p>
             </div>
           </section>
 
-          <section className={styles.tabSection}>
+          {/* ══ ABOUT + OPPORTUNITY ══ */}
+          <section className={styles.exAboutSection}>
             <div className="container">
-              <div className={styles.exhibitSplit}>
-                <div className={styles.exhibitIntro}>
-                  <span className={styles.kicker}>Exhibit With Us</span>
-                  <h2 className={styles.sectionTitle}>Showcase Your Work at Diaspora Week 2026</h2>
-                  <p className={styles.sectionLead}>
-                    Diaspora Week 2026 invites diaspora-founded businesses operating in Somaliland,
-                    diaspora philanthropists, and development organizations that have contributed to
-                    community development and nation-building to showcase their work, products, and
-                    services to a diverse audience of diaspora community members, investors,
-                    development partners, government officials, and local stakeholders.
+              <div className={styles.exAboutGrid}>
+                {/* left — summary text */}
+                <div className={styles.exAboutText}>
+                  <span className={styles.exKicker}>Exhibit With Us</span>
+                  <h2 className={styles.exSectionTitle}>Showcase Your Work at Diaspora Week 2026</h2>
+                  <p className={styles.exAboutLead}>
+                    Diaspora Week 2026 invites diaspora-founded businesses, philanthropists, and
+                    development organizations to showcase their work to investors, government officials,
+                    and diaspora community members — celebrating the impact driving Somaliland&apos;s future.
                   </p>
-                  <p className={styles.sectionLead}>
-                    This is a unique opportunity to celebrate and amplify the impact of diaspora-driven
-                    initiatives that are transforming Somaliland&apos;s economic landscape &ndash; from
-                    innovative start-ups and agribusinesses to infrastructure projects, educational
-                    institutions, health facilities, and community development programs.
-                  </p>
+                  <Link href="/diaspora-week/register?type=business" className={styles.exAboutCta}>
+                    Apply Now
+                    <ChevronRight size={16} />
+                  </Link>
                 </div>
 
-                <div className={styles.whoListWrap}>
-                  <h3 className={styles.whoListTitle}>As an exhibitor, you will have the opportunity to:</h3>
-                  <ul className={styles.checkList}>
-                    <li>
-                      <CheckCircle2 size={20} />
-                      <span>Present your brand, vision, and voice to potential customers, investors, and partners.</span>
-                    </li>
-                    <li>
-                      <CheckCircle2 size={20} />
-                      <span>Build meaningful relationships within the Somaliland diaspora network and beyond.</span>
-                    </li>
-                    <li>
-                      <CheckCircle2 size={20} />
-                      <span>
-                        Inspire others by showcasing how diaspora capital, expertise, and passion are
-                        driving sustainable development across the nation.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className={styles.exhibitInfoStrip}>
-                <div className={styles.exhibitInfoItem}>
-                  <CalendarDays size={22} />
-                  <div>
-                    <strong>July 20, 2026</strong>
-                    <span>Application deadline</span>
-                  </div>
-                </div>
-                <div className={styles.exhibitInfoItem}>
-                  <Building2 size={22} />
-                  <div>
-                    <strong>Flexible Booths</strong>
-                    <span>One city hub or all three</span>
-                  </div>
-                </div>
-                <div className={styles.exhibitInfoItem}>
-                  <Sparkles size={22} />
-                  <div>
-                    <strong>Diverse Audience</strong>
-                    <span>Diaspora, investors &amp; partners</span>
-                  </div>
+                {/* right — opportunity mini-stats */}
+                <div className={styles.exOppsGrid}>
+                  {[
+                    { icon: <Star size={20} />, title: "Present", desc: "Your brand, vision and products to investors and diaspora partners.", color: "#d4600a" },
+                    { icon: <Handshake size={20} />, title: "Connect", desc: "Build lasting relationships across the global Somaliland network.", color: "#1f8a3b" },
+                    { icon: <Sparkles size={20} />, title: "Inspire", desc: "Demonstrate how diaspora capital is transforming Somaliland.", color: "#7c3aed" },
+                  ].map((o) => (
+                    <div className={styles.exOppCard} key={o.title} style={{ "--opp-color": o.color } as React.CSSProperties}>
+                      <span className={styles.exOppIcon}>{o.icon}</span>
+                      <h3 className={styles.exOppTitle}>{o.title}</h3>
+                      <p className={styles.exOppDesc}>{o.desc}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </section>
 
-          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
+          {/* ══ BENEFITS ══ */}
+          <section className={styles.exBenefitsSection}>
             <div className="container">
-              <span className={styles.kicker}>Benefits for Exhibitors</span>
-              <h2 className={styles.sectionTitle}>
-                By Exhibiting at Diaspora Week 2026, Your Organization Will&hellip;
-              </h2>
-
-              <div className={styles.benefitsGrid}>
-                {EXHIBITOR_BENEFITS.map((benefit) => {
-                  const BenefitIcon = benefit.icon;
+              <div className={styles.exBenefitsHead}>
+                <span className={styles.exKicker}>Why Exhibit</span>
+                <h2 className={styles.exSectionTitle}>What Your Organization Gains</h2>
+              </div>
+              <div className={styles.exBenefitsGrid}>
+                {EXHIBITOR_BENEFITS.map((b, i) => {
+                  const BIcon = b.icon;
+                  const COLORS = ["#d4600a","#1f8a3b","#0070c0","#7c3aed","#b45309"];
+                  const col = COLORS[i % COLORS.length];
                   return (
-                    <div className={styles.benefitCard} key={benefit.title}>
-                      <span className={styles.benefitIcon}>
-                        <BenefitIcon size={26} />
-                      </span>
-                      <h3>{benefit.title}</h3>
-                      <p>{benefit.description}</p>
+                    <div className={styles.exBenCard} key={b.title}>
+                      <div className={styles.exBenIconWrap} style={{ background: col + "18", color: col }}>
+                        <BIcon size={28} />
+                      </div>
+                      <h3 className={styles.exBenTitle}>{b.title}</h3>
+                      <p className={styles.exBenDesc}>{b.description}</p>
                     </div>
                   );
                 })}
@@ -991,75 +1011,41 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          <section className={styles.tabSection}>
+          {/* ══ CONFIRMED EXHIBITORS — from Directus ══ */}
+          <section className={styles.exLogosSection}>
             <div className="container">
-              <span className={styles.kicker}>Who Should Exhibit?</span>
-              <h2 className={styles.sectionTitle}>We Welcome Applications From</h2>
-              <p className={styles.sectionLead}>
-                Diaspora Week 2026 is open to a wide range of diaspora-driven businesses, organizations
-                and changemakers.
-              </p>
-
-              <ul className={styles.checkList}>
-                {EXHIBITOR_CATEGORIES.map((category) => (
-                  <li key={category}>
-                    <CheckCircle2 size={20} />
-                    <span>{category}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
-            <div className="container">
-              <div className={styles.exhibitIntro}>
-                <span className={styles.kicker}>Application Deadline &amp; Selection Process</span>
-                <h2 className={styles.sectionTitle}>Apply by July 20th, 2026</h2>
-                <p className={styles.sectionLead}>
-                  Please submit your application by July 20th, 2026. To ensure optimal use of the venue
-                  space, the Diaspora Department will review all submissions after this date. Accepted
-                  businesses and organizations will be required to pay an affordable exhibition fee to
-                  secure their space. Registration will be finalized only upon payment confirmation.
+              <div className={styles.exLogosHead}>
+                <span className={styles.exKicker}>Confirmed Exhibitors</span>
+                <h2 className={styles.exSectionTitle}>Participating Organizations</h2>
+                <p className={styles.exLogosLead}>
+                  A growing line-up of approved diaspora businesses and organizations exhibiting at
+                  Diaspora Week 2026.
                 </p>
+              </div>
 
-                <div className={styles.contactRow}>
-                  <a href="mailto:info@sldiaspora.org" className={styles.contactItem}>
-                    <Mail size={18} />
-                    info@sldiaspora.org
-                  </a>
-                  <a href="tel:+252634696895" className={styles.contactItem}>
-                    <Phone size={18} />
-                    +252-63-4696895
-                  </a>
+              {approvedBusinesses.length > 0 ? (
+                <div className={styles.exLogosGrid}>
+                  {approvedBusinesses.map((biz) => (
+                    <div className={styles.exLogoCard} key={biz.id} title={biz.name}>
+                      {biz.logoUrl ? (
+                        <img src={biz.logoUrl} alt={biz.name} loading="lazy" />
+                      ) : (
+                        <span className={styles.exLogoFallback}>{biz.name.slice(0, 2).toUpperCase()}</span>
+                      )}
+                      <span className={styles.exLogoName}>{biz.name}</span>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            </div>
-          </section>
-
-          <section className={styles.tabSection}>
-            <div className="container">
-              <span className={styles.kicker}>Confirmed Exhibitors</span>
-              <h2 className={styles.sectionTitle}>Participating Organizations</h2>
-              <p className={styles.sectionLead}>
-                A growing line-up of businesses, NGOs and diaspora-led initiatives confirmed to
-                exhibit at Diaspora Week 2026.
-              </p>
-
-              <div className={styles.logoCloud}>
-                {SAMPLE_EXHIBITOR_LOGOS.map((logo) => (
-                  <div className={styles.logoCloudItem} key={logo.name}>
-                    <span className={styles.logoCloudMark}>
-                      <img
-                        src={`/assets/imgs/Diaspora Week 2025/exhibitor-logos/${logo.file}`}
-                        alt={logo.name}
-                        loading="lazy"
-                      />
-                    </span>
-                    <span className={styles.logoCloudName}>{logo.name}</span>
-                  </div>
-                ))}
-              </div>
+              ) : (
+                <div className={styles.exLogosEmpty}>
+                  <Building2 size={36} />
+                  <p>Approved exhibitors will appear here as registrations are confirmed.</p>
+                  <Link href="/diaspora-week/register?type=business" className={styles.exAboutCta}>
+                    Register Your Business
+                    <ChevronRight size={16} />
+                  </Link>
+                </div>
+              )}
             </div>
           </section>
         </>

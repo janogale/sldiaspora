@@ -3520,6 +3520,504 @@
 .homeExhibitorText  { display: contents; }
 .homeExhibitorLogos { display: none; }
 
+/* ═══════════════════════════════════════
+   EXHIBITORS PAGE — FULL REDESIGN
+═══════════════════════════════════════ */
+
+/* ── Hero ── */
+.exHero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+.exHeroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.exHeroBgImg {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.exHeroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    160deg,
+    rgba(0,15,5,0.88) 0%,
+    rgba(0,50,18,0.72) 40%,
+    rgba(0,0,0,0.92) 100%
+  );
+}
+
+.exHeroOrb1 {
+  position: absolute; z-index: 1;
+  top: -100px; right: -80px;
+  width: 520px; height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(31,138,59,0.22) 0%, transparent 68%);
+  pointer-events: none;
+  animation: floatOrb 10s ease-in-out infinite;
+}
+
+.exHeroOrb2 {
+  position: absolute; z-index: 1;
+  bottom: -80px; left: -60px;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 68%);
+  pointer-events: none;
+  animation: floatOrb2 14s ease-in-out infinite;
+}
+
+.exHeroInner {
+  position: relative;
+  z-index: 2;
+  padding: 7rem 0 5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* deadline badge */
+.exHeroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.4);
+  color: #fca5a5;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  margin-bottom: 1.75rem;
+  animation: portalPulse 2.5s ease-in-out infinite;
+}
+
+.exHeroBadge strong { color: #fff; }
+
+.exHeroTitle {
+  margin: 0 0 1.5rem;
+  font-size: clamp(3.2rem, 6.5vw, 6rem);
+  font-weight: 900;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: #fff;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.5);
+}
+
+.exHeroAccent {
+  background: linear-gradient(135deg, #4ade80 0%, #86efac 60%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.exHeroSub {
+  font-size: 1.65rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.88);
+  margin: 0 0 2.5rem;
+  max-width: 58ch;
+}
+
+/* quick stats row */
+.exHeroStats {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2.75rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.exHeroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  gap: 4px;
+}
+
+.exHeroStat:last-child { border-right: none; }
+
+.exHeroStat strong {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #8df6b2;
+  line-height: 1;
+}
+
+.exHeroStat span {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.65);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* CTA + contacts */
+.exHeroActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.exHeroBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #1f8a3b 0%, #028a2b 60%, #005a1b 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.4rem;
+  padding: 1.1rem 2.5rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(1,109,33,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.exHeroBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 44px rgba(1,109,33,0.55);
+  color: #fff;
+}
+
+.exHeroContacts {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.exHeroContact {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.82);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.exHeroContact:hover { color: #8df6b2; }
+
+.exHeroContactDiv {
+  width: 1px; height: 22px;
+  background: rgba(255,255,255,0.3);
+}
+
+.exHeroNote {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 58ch;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 1.5rem;
+}
+
+.exHeroNote strong { color: rgba(255,255,255,0.9); }
+
+/* ── About / Opportunity ── */
+.exAboutSection {
+  padding: 5.5rem 0;
+  background: #fff;
+}
+
+.exAboutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.exAboutText { display: flex; flex-direction: column; }
+
+.exKicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #edf8f1;
+  color: #1f8a3b;
+  border: 1px solid #bfe6cc;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  width: fit-content;
+}
+
+.exSectionTitle {
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+  font-weight: 800;
+  color: #0c2f37;
+  line-height: 1.2;
+  margin: 0 0 1.1rem;
+}
+
+.exAboutLead {
+  font-size: 1.55rem;
+  line-height: 1.8;
+  color: #4b666d;
+  margin: 0 0 2.25rem;
+}
+
+.exAboutCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1f8a3b, #028a2b);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.25rem;
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  width: fit-content;
+  box-shadow: 0 6px 20px rgba(1,109,33,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exAboutCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(1,109,33,0.45);
+  color: #fff;
+}
+
+/* opportunity mini-cards */
+.exOppsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.exOppCard {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #fff;
+  border: 1px solid #e3eee8;
+  border-left: 5px solid var(--opp-color, #1f8a3b);
+  border-radius: 18px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 16px rgba(12,47,55,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exOppCard:hover {
+  transform: translateX(6px);
+  box-shadow: 0 12px 32px rgba(12,47,55,0.1);
+}
+
+.exOppIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: var(--opp-color, #1f8a3b);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.exOppTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0c2f37;
+  margin: 0 0 0.25rem;
+}
+
+.exOppDesc {
+  font-size: 1.25rem;
+  color: #4b666d;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Benefits — ROW layout ── */
+.exBenefitsSection {
+  padding: 5.5rem 0;
+  background: #edf8f1;
+}
+
+.exBenefitsHead {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.exBenefitsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exBenCard {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 18px rgba(1,109,33,0.07);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.exBenCard:hover {
+  transform: translateX(6px);
+  box-shadow: 0 12px 36px rgba(1,109,33,0.13);
+}
+
+.exBenIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
+.exBenTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0c2f37;
+  margin: 0 0 0.3rem;
+}
+
+.exBenDesc {
+  font-size: 1.25rem;
+  line-height: 1.65;
+  color: #4b666d;
+  margin: 0;
+}
+
+/* ── Logos ── */
+.exLogosSection {
+  padding: 5.5rem 0;
+  background: #fff;
+}
+
+.exLogosHead {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+}
+
+.exLogosLead {
+  font-size: 1.4rem;
+  color: #4b666d;
+  margin: 0.5rem auto 0;
+  line-height: 1.7;
+}
+
+.exLogosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+}
+
+.exLogoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1px solid #d9ece1;
+  border-radius: 18px;
+  padding: 1.5rem 1rem;
+  box-shadow: 0 4px 16px rgba(1,109,33,0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  aspect-ratio: 1 / 1.15;
+  justify-content: center;
+}
+
+.exLogoCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(1,109,33,0.14);
+  border-color: #8df6b2;
+}
+
+.exLogoCard img {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.exLogoCard:hover img { transform: scale(1.06); }
+
+.exLogoFallback {
+  width: 80px; height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #d7f5e0, #b8eccb);
+  border-radius: 14px;
+  color: #1f8a3b;
+  font-weight: 800; font-size: 1.6rem;
+}
+
+.exLogoName {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0c2f37;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.exLogosEmpty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #6b8e85;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.exLogosEmpty p { font-size: 1.4rem; font-weight: 600; margin: 0; }
+
+@media (max-width: 900px) {
+  .exAboutGrid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .exBenCard { flex-direction: row; }
+}
+
+@media (max-width: 640px) {
+  .exHero { min-height: auto; }
+  .exHeroTitle { font-size: 2.8rem; }
+  .exHeroStats { flex-wrap: wrap; }
+  .exHeroStat { flex: 1 1 calc(50% - 0.5rem); padding: 1rem 1.25rem; }
+  .exHeroStat strong { font-size: 2rem; }
+  .exBenCard { flex-direction: column; align-items: flex-start; }
+  .exLogosGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
 /* ── Gallery Mosaic ── */
 .homeGallerySection {
   padding: 5.5rem 0;
