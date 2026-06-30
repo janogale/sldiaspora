@@ -43,11 +43,10 @@ const SAMPLE_VIDEO_URL = "https://interactive-examples.mdn.mozilla.net/media/cc0
 const DAY_ICONS = [Sparkles, Handshake, Star, PartyPopper, Sparkles];
 
 const DAY_THEMES: Record<number, string> = {
-  1: "Hargeisa — Governance, Finance & Innovation and National Investment",
-  2: "Hargeisa — Governance, Finance & Innovation and National Investment (Day 2)",
-  3: "Borama — Knowledge, Agriculture, Mining, Cross-Border Trade & Tourism",
-  4: "Burao — Livestock, Industry & Productive Economy",
-  5: "Hargeisa — Grand Finale: Closing Gala & Diaspora Recognition Awards",
+  1: "Opening Day Ceremony",
+  2: "Somaliland & Its Global Citizens: A New Partnership Model",
+  3: "Closing Gala Evening",
+  4: "Youth, Culture & Identity",
 };
 
 const DAY_PHOTOS: Record<number, string> = {
@@ -59,55 +58,41 @@ const DAY_PHOTOS: Record<number, string> = {
 };
 
 const FALLBACK_SCHEDULE: ScheduleItem[] = [
-  // ══ DAY 1 — Hargeisa, Saturday August 1 ══
-  { id: "d1-anchor", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Theme Anchor: Governance, Finance & Innovation and National Investment", description: "As the capital city, Hargeisa represents institutional leadership and economic coordination. Strategically positioned along the Berbera Corridor, it drives Somaliland's strategic maritime position and acts as an economic gateway along the Gulf of Aden to Africa.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Theme Anchor" },
-  { id: "d1-focus", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Focus Areas", description: "Financial Services & Fintech • Startup Ecosystem • Real Estate Development • Public-Private Partnerships • Regulatory & Investment Reforms • Tourism & Conservation Sector Development • Port Development, Logistics & Free Zone Investment • Fisheries, Aquaculture & Maritime Services.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Focus Areas" },
-  { id: "d1-1", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Official Opening Ceremony with Presidential Address", description: "Opening address by H.E. Abdirahman Mohamed Abdilahi, President of the Republic of Somaliland.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-2", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Ministerial Investment Portfolio Launch", description: "Launch of the national investment portfolio by the Ministry of Foreign Affairs & International Cooperation.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-3", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Diaspora Investment Marketplace", description: "A marketplace connecting diaspora investors with bankable projects across Somaliland's regions.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-4", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Panel: \"A New Era of Partnership — From Remittances to Institutional Investment and the Diaspora Trust Fund\"", description: "This landmark panel marks a historic shift from informal remittance flows to structured, institutionalized diaspora investment. The discussion explores how the Trust Fund will mobilize diaspora capital for national development, the creation of well-regulated investment funds, and public-private partnership frameworks that enable diaspora investors to participate in Somaliland's transformative growth — while leveraging growing international recognition for increased investment, trade and global partnerships. Focus Areas: the Diaspora Trust Fund's vision, structure and operational framework; well-regulated diaspora investment vehicles; public-private partnerships with diaspora investors; and the shift from remittance dependency to structured capital mobilization.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
-  { id: "d1-5", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "", endTime: "", title: "Panel: \"Beyond Recognition — Diaspora Advocacy, Diplomacy, and Somaliland's Rising Global Profile\"", description: "This panel capitalizes on the historic momentum of Somaliland's growing international recognition, examining how the diaspora can leverage this achievement to advance further diplomatic gains. It explores diaspora communities as informal ambassadors, advocates and bridge-builders in international forums, and how recognition translates into tangible economic and diplomatic opportunities. Focus Areas: leveraging growing recognition for broader international engagement; diaspora-led advocacy and diplomatic influence strategies; strategic partnerships with governments and international organizations; positioning Somaliland as a reliable global partner; and the role of diaspora professionals in multilateral institutions.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  // ══ DAY 1 — Hargeisa, Saturday August 1 (Opening Day Ceremony) ══
+  { id: "d1-1",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "08:30", endTime: "09:00", title: "Guest Arrival and Registration",  description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-2",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:00", endTime: "09:10", title: "Quran, National Anthem and Cultural Dance", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-3",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:10", endTime: "09:15", title: "Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-4",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:15", endTime: "09:25", title: "H.E. Abdirahman Dahir Adam", description: "Speech by Minister of Foreign Affairs & International Cooperation", speaker: "H.E. Abdirahman Dahir Adam", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-5",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:25", endTime: "09:35", title: "H.E. Khadar Hussien Abdi", description: "Speech by Minister of the Presidency", speaker: "H.E. Khadar Hussien Abdi", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-6",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:35", endTime: "09:55", title: "Speeches from Diaspora Leaders", description: "Hibo Ali Hussein\nEng. Ahmed Jama\nAhmed Hersi Madar\nCumar Hassan Libaan\nSicid Ahmed Ali", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-7",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:55", endTime: "10:05", title: "Ougbad Nassir Omar", description: "Keynote Speech – Somaliland and its Global Citizens", speaker: "Ougbad Nassir Omar, Director, Diaspora Department", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-8",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:05", endTime: "10:25", title: "H.E. President Abdirahman Mohamed (Irro)", description: "Presidential Address", speaker: "H.E. President Abdirahman Mohamed (Irro)", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-9",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:25", endTime: "10:35", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-10", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:35", endTime: "11:35", title: "High-Level Panel Discussion", description: "Redefining the Role of the Diaspora: From Benefactor to Strategic Partner\n\nModerator: Mushtaaq\n\nPanellists:\nJama Egal, Scholar and Senior Advisor to MoFAIC\nAnab Yussuf, Canadian Public Servant, President & Co-founder, Akhri Foundation\nMohamed Ahmed Askar, seasoned governance expert", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
 
-  // ══ DAY 2 — Hargeisa, Sunday August 2 ══
-  { id: "d2-1", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Strategic Trade & Logistics Summit", description: "Examining Somaliland's role as a strategic maritime and logistics gateway along the Gulf of Aden.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-2", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Infrastructure Investment Dialogue", description: "Dialogue on port development, logistics, free zone investment and infrastructure priorities.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-3", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Horn of Africa Regional Integration Panel", description: "Positioning Somaliland within Horn of Africa regional trade and integration frameworks.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-4", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Blue Economy & Maritime Investment Showcase", description: "Showcasing fisheries, aquaculture and maritime service investment opportunities.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-5", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Panel: \"Building Somaliland's Future — Diaspora Skills, Innovation, and Investment in Human Capital\"", description: "This panel focuses on the transformative potential of diaspora expertise, knowledge and innovation in driving Somaliland's economic and social development. It explores how the diaspora's professional skills in healthcare, education, technology, engineering and governance can be systematically harnessed through knowledge transfer programs, mentorship, research partnerships and institutional capacity building — and how the Diaspora Trust Fund can support human capital development and skills-based investment. Focus Areas: skills mapping and diaspora talent databases; diaspora professionals in public service and institutional capacity building; university-diaspora research and innovation partnerships; technology transfer and digital skills development; and investing in human capital through the Diaspora Trust Fund.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
-  { id: "d2-6", dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "", endTime: "", title: "Panel: \"Diaspora Women in Leadership — Architects of Influence, Investment & Recognition\"", description: "This session reframes diaspora women as economic decision-makers, policy influencers, and intergenerational bridge-builders in this new era of engagement.", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  // ══ DAY 2 — Somaliland & Its Global Citizens: A New Partnership Model ══
+  { id: "d2-1",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:00", endTime: "09:15", title: "Registration", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d2-2",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:15", endTime: "09:30", title: "Recap & Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d2-3",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:30", endTime: "10:30", title: "Panel 1: Diaspora and Somaliland's International Engagement: Recognition, Advocacy & Influence", description: "Moderator: Fatima Omer\n\nPanellists:\nMP Mohamed Hassan Saed, Chair, Foreign Affairs, International Cooperation, Planning & Investment Committee of the House of Representatives\nAbdi Shakur Hussein Osman, Somaliland Immigration\nFatima Saeed Ibrahim, Senior Foreign Affairs Advisor, Upper House\nDr. Muna Magan, Founder, Riyan Organics", speaker: "", location: "Main Hall", sessionType: "Panel" },
+  { id: "d2-4",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:30", endTime: "10:30", title: "Pitch Session: Startups Showcase", description: "", speaker: "", location: "Hall 2", sessionType: "Program Highlight" },
+  { id: "d2-5",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "10:30", endTime: "10:45", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d2-6",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "10:45", endTime: "11:45", title: "Panel 2: Unlocking Investment Potential: Legal, Financial & Institutional Support for Diaspora", description: "Moderator: Hana Kaise\n\nPanellists:\nMohamed Abdillahi Hassan, Founder & CEO, Fusion Remit Planning & Investment\nKhalid Mohamed Yasin, Operations Manager, Darasalaam\nMubarak Abdi Ismail, Lawyer, Somaliland House of Representatives\nProf. Adan Ismail Hassan, Economist\nHamza Khaire, Deputy Governor, Central Bank of Somaliland", speaker: "", location: "Main Hall", sessionType: "Panel" },
+  { id: "d2-7",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "10:45", endTime: "11:45", title: "Roundtable (Closed): Ministries and Diaspora Policy Priorities", description: "", speaker: "", location: "Hall 2", sessionType: "Program Highlight" },
 
-  // ══ DAY 3 — Borama, Monday August 3 ══
-  { id: "d3-anchor", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Theme Anchor: Knowledge, Agriculture, Mining, Cross-Border Trade & Tourism", description: "Borama symbolizes educational leadership, agricultural strength, and prime mining territory.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Theme Anchor" },
-  { id: "d3-focus", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Focus Areas", description: "Agro-Processing & Value Addition • Irrigation Systems & Climate Resilience • Mining & Natural Minerals Extraction • University-Diaspora Research Partnerships • Regional Trade Corridors & Cross-Border Commerce • Tourism & Conservation Sector Development.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Focus Areas" },
-  { id: "d3-1", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Agro-Investment Presentation", description: "Presenting agro-processing and value-addition investment opportunities across Awdal.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Program Highlight" },
-  { id: "d3-2", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Incentivizing Diaspora Investment & Community Development Presentation", description: "Borama Local Government presents incentives for diaspora investment and community development.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Program Highlight" },
-  { id: "d3-3", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "University–Diaspora Research & Innovation Forum", description: "Forum on research and innovation partnerships between Amoud University and the diaspora.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Program Highlight" },
-  { id: "d3-4", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Field Visits to Newly Installed Monuments & Tourism Sites", description: "Visits to the Ahmed Guray Statue and other newly installed monuments and tourism sites.", speaker: "", location: "Borama", sessionType: "Program Highlight" },
-  { id: "d3-5", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "SME Financing Workshop", description: "SME financing workshop held in collaboration with IOM Somaliland.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Program Highlight" },
-  { id: "d3-6", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Diaspora Recognition Awards — Borama", description: "Awards jointly presented by Borama Local Government and the Diaspora Department.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Awards" },
-  { id: "d3-culture", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Cultural Integration", description: "Traditional Awdal cultural performances and an exhibition of indigenous farming practices and modernization efforts — highlighting how traditional agricultural systems can integrate with modern agribusiness and regional trade expansion.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Cultural Integration" },
-  { id: "d3-7", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Panel 1: \"Roots and Riches — Diaspora Investment in Agriculture, Mining, and Knowledge-Based Development in Awdal\"", description: "This panel focuses on the unique investment and development opportunities in the Awdal region. It highlights Borama's role as an educational and agricultural hub, exploring how diaspora capital, expertise and research partnerships can unlock the potential of agro-processing, mining and cross-border trade, while emphasizing climate resilience, value addition, and the integration of traditional knowledge with modern innovation. Focus Areas: agro-processing, irrigation and climate-smart agriculture; mining and natural mineral extraction; university-diaspora research partnerships; regional trade corridors and cross-border commerce; and tourism and heritage preservation as economic drivers.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Panel" },
-  { id: "d3-8", dayNumber: 3, dayLabel: "Day 3 · Borama", date: "August 3, 2026", startTime: "", endTime: "", title: "Panel 2: \"Tourism Hub — Diaspora Investment in Trade, Tourism, and Urban Transformation\"", description: "Borama is rapidly emerging as a tourism and educational hub in Somaliland, combining its prestigious academic institutions — led by Amoud University — with a growing portfolio of cultural and historical attractions, including the newly installed Ahmed Guray Statue and eleven other monuments. This panel explores how diaspora capital and expertise can accelerate Borama's urban transformation, support the Local Government's infrastructure and real estate agenda, and address the opportunities of the Djibouti-Borama road corridor. Focus Areas: diaspora investment in real estate, housing and urban development; tourism infrastructure — monuments, heritage sites, hospitality and eco-tourism; educational partnerships and knowledge exchange; cross-border trade and the Djibouti-Borama road corridor; public-private partnerships with the Borama Local Government; and community development — roads, water, health and education facilities.", speaker: "", location: "Safari Hotel, Borama", sessionType: "Panel" },
+  // ══ DAY 3 — Closing Gala Evening ══
+  { id: "d3-1",  dayNumber: 3, dayLabel: "Day 3 · Hargeisa", date: "August 3, 2026", startTime: "06:00", endTime: "07:00", title: "Gala Evening Registration", description: "", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d3-2",  dayNumber: 3, dayLabel: "Day 3 · Hargeisa", date: "August 3, 2026", startTime: "07:05", endTime: "07:15", title: "Mohammed Abdirahman", description: "Opening Remarks", speaker: "Mohammed Abdirahman, Director General Ministry of Foreign Affairs and International Cooperation", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d3-3",  dayNumber: 3, dayLabel: "Day 3 · Hargeisa", date: "August 3, 2026", startTime: "07:15", endTime: "07:30", title: "Recap Video & Highlights Presentation", description: "", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d3-4",  dayNumber: 3, dayLabel: "Day 3 · Hargeisa", date: "August 3, 2026", startTime: "07:30", endTime: "08:00", title: "Commitments: Diaspora Pledge", description: "", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d3-5",  dayNumber: 3, dayLabel: "Day 3 · Hargeisa", date: "August 3, 2026", startTime: "08:00", endTime: "09:40", title: "Cultural Performances & Gala Dinner", description: "Maxamed BK\nHodan Omar Dhuule\nUgbaad Aragsan\nMaxamed Maame", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Cultural Showcase" },
+  { id: "d3-6",  dayNumber: 3, dayLabel: "Day 3 · Hargeisa", date: "August 3, 2026", startTime: "09:40", endTime: "10:00", title: "Ayan Osman", description: "Closing Remarks & Diaspora Week Planning Committee", speaker: "Ayan Osman, Advisor Diaspora Department, Ministry of Foreign Affairs & International Cooperation", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
 
-  // ══ DAY 4 — Burao, Wednesday August 5 ══
-  { id: "d4-anchor", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Theme Anchor: Livestock, Industry & Productive Economy", description: "Burao represents the productive backbone of Somaliland.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Theme Anchor" },
-  { id: "d4-focus", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Focus Areas", description: "Livestock Value Chains & Meat Processing • Meat Processing & Export Standards • Leather & Hides Manufacturing • Agricultural Industry Development • Youth Vocational Skills & Industrial Training • Industrial Zones & SME Development.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Focus Areas" },
-  { id: "d4-1", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Livestock Export Strategy & Welfare Dialogue", description: "Dialogue on livestock export strategy, standards and animal welfare.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Program Highlight" },
-  { id: "d4-2", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Livestock & Trade History Showcase", description: "Showcasing Burao's livestock trade history and economic legacy.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Program Highlight" },
-  { id: "d4-3", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Manufacturing & Processing Investment Dialogue", description: "Dialogue on meat processing, leather & hides manufacturing investment opportunities.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Program Highlight" },
-  { id: "d4-4", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Youth Skills & Industry Partnership Session", description: "Session on youth vocational training and industrial zone partnerships.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Program Highlight" },
-  { id: "d4-5", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Bridging Home and Diaspora: Local Initiatives and Incentives Presentation", description: "Local initiatives and incentives for diaspora investment and retention in Burao.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Program Highlight" },
-  { id: "d4-6", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Diaspora Recognition Awards — Burao", description: "Awards jointly presented by Burao Local Government and the Diaspora Department.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Awards" },
-  { id: "d4-culture", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Cultural Integration", description: "Nomadic heritage exhibition, live music and diaspora celebration, and oral poetry celebrating pastoral identity.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Cultural Integration" },
-  { id: "d4-night", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "High-Profile Diaspora Night Event — \"Honoring the Backbone of the Nation\"", description: "A special evening dedicated to honoring the contributions of the diaspora, featuring cultural performances, networking, and the launch of new diaspora investment incentives and pledges for bridging home and diaspora and co-investing in our future. The evening connects Somaliland's pastoral roots to its modern industrial transformation, and demonstrates how heritage can power productivity.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Cultural Evening" },
-  { id: "d4-panel", dayNumber: 4, dayLabel: "Day 4 · Burao", date: "August 5, 2026", startTime: "", endTime: "", title: "Panel: \"Building the Midland — Diaspora-Led Investment in Livestock, Industry, and Burao's Productive Economy\"", description: "Burao sits at the heart of Somaliland (the Midland) and represents the nation's productive backbone. While Hargeisa and Borama lie in the far western corners, Burao offers a strategic central location and immense economic potential that must be developed to prevent the concentration of growth in the capital. This panel focuses on how diaspora investment, expertise and market connections can transform Burao's livestock economy into a modern industrial sector — including meat processing, leather manufacturing, and export-oriented industries — and addresses the creation of industrial zones, youth vocational training and SME development to retain diaspora and local talent. Focus Areas: livestock value chains, meat processing and export standards; leather, hides and manufacturing industries; industrial zones and SME development; youth vocational skills and industry partnerships; incentives for diaspora investment and retention in Burao; and balancing national development by strengthening the midland economy.", speaker: "", location: "Plaza Hotel, Burao", sessionType: "Panel" },
-
-  // ══ DAY 5 — Hargeisa, Thursday August 6 (Grand Finale) ══
-  { id: "d5-anchor", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "The Grand Finale: Closing Gala Dinner & Diaspora Recognition Awards", description: "A celebratory conclusion to the roadshow, bringing all delegates back to the capital for an evening of recognition, culture, and unity.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Theme Anchor" },
-  { id: "d5-1", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Closing Gala Dinner", description: "A celebratory conclusion to the roadshow, bringing all delegates back to Hargeisa.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d5-2", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Diaspora Recognition Awards Ceremony", description: "Award Categories: Investment & Enterprise Leadership • International Advocacy & Diplomacy • Youth Innovation & Entrepreneurship • Cultural Preservation & Creative Industries • Women in Leadership & Community Impact.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Awards" },
-  { id: "d5-3", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Hargeisa Local Government Presentation on Diaspora Incentives", description: "Presentation on diaspora incentives for investment and engagement in Hargeisa.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d5-4", dayNumber: 5, dayLabel: "Day 5 · Hargeisa", date: "August 6, 2026", startTime: "", endTime: "", title: "Cultural Showcase", description: "Performances from traditional teams, national poetry recitals, and music ensembles celebrating Somaliland's rich culture and heritage.", speaker: "", location: "Guleed Hotel, Hargeisa", sessionType: "Cultural Showcase" },
+  // ══ DAY 4 — Youth, Culture & Identity ══
+  { id: "d4-1",  dayNumber: 4, dayLabel: "Day 4", date: "August 5, 2026", startTime: "04:30", endTime: "05:30", title: "Fun Day: Youth Activities", description: "Engaging the younger generation in cultural crafts, weaving and pottery.", speaker: "", location: "", sessionType: "Program Highlight" },
+  { id: "d4-2",  dayNumber: 4, dayLabel: "Day 4", date: "August 5, 2026", startTime: "05:30", endTime: "06:30", title: "Panel 1: Volunteering Smarter: Skills Transfer & Diaspora for Development", description: "Moderator: Hassan Farah Oman\n\nPanelists:\nAhmed Mahamud Askar, Founding member of Hargeisa Debates\nAhmed Yusuf Gool'adde, Director of Public Relations, University of Hargeisa\nFathia Ali Abdallah, Labor Mobility Human Development Division, IOM\nHodo Cabdi Cali Botan, Writer, Investigative Journalist, Strategic Communications Advisor, and Media Scholar", speaker: "", location: "", sessionType: "Panel" },
+  { id: "d4-3",  dayNumber: 4, dayLabel: "Day 4", date: "August 5, 2026", startTime: "06:30", endTime: "07:30", title: "Panel 2: Language, Identity & Belonging: Diaspora Youth & Somaliland", description: "Moderator: Dr. Jama Muse Jama\n\nPanelists:\nMaxamed Xasan Cali (Weji), Director, Department of Culture, Ministry of Information, Culture and Guidance\nAmirah Abdullah, Civil Engineer, Speaker, and Consultant\nHawa Dubde Gorrah, Hargeisa Deaf Club", speaker: "", location: "", sessionType: "Panel" },
+  { id: "d4-4",  dayNumber: 4, dayLabel: "Day 4", date: "August 5, 2026", startTime: "07:30", endTime: "08:15", title: "Cultural Exhibition", description: "Fashion Show, storytelling, poetry, and photography.", speaker: "", location: "", sessionType: "Cultural Showcase" },
+  { id: "d4-5",  dayNumber: 4, dayLabel: "Day 4", date: "August 5, 2026", startTime: "08:15", endTime: "09:00", title: "Intergenerational Dialogue Circle", description: "Elders & diaspora youth share experiences.", speaker: "", location: "", sessionType: "Program Highlight" },
 ];
 
 const EXHIBITOR_BENEFITS = [
@@ -700,237 +685,194 @@ export default function DiasporaWeekPortalPage() {
               </div>
             </section>
           ) : (
-            <div className={styles.scheduleModernWrapper}>
+            <div className={styles.pgWrapper}>
               {sortedDays.map((dayNumber, dayIndex) => {
                 const sessions = scheduleByDay[dayNumber];
-                const DayIcon = DAY_ICONS[(dayNumber - 1) % DAY_ICONS.length];
+                const isFlipped = dayIndex % 2 === 1;
+                const dayTitle = DAY_THEMES[dayNumber] || sessions[0]?.title || "";
+                const venue    = sessions[0]?.location || "";
+                const date     = sessions[0]?.date || "";
+
+                // colour accent per day
+                const DAY_ACCENTS: Record<number, string> = {
+                  1: "#d4600a", 2: "#1f8a3b", 3: "#0070c0", 4: "#7c3aed", 5: "#b45309",
+                };
+                const accent = DAY_ACCENTS[dayNumber] ?? "#d4600a";
+
+                // photo per day (replaces camel in the programme booklet)
                 const dayPhoto = DAY_PHOTOS[dayNumber] ?? DW_PHOTOS[dayNumber % DW_PHOTOS.length];
 
-                const themeAnchor = sessions.find((s) => s.sessionType === "Theme Anchor");
-                const focusAreas = sessions.find((s) => s.sessionType === "Focus Areas");
-                const highlights = sessions.filter((s) => s.sessionType === "Program Highlight");
-                const panels = sessions.filter((s) => s.sessionType === "Panel");
-                const culture = sessions.filter((s) => s.sessionType === "Cultural Integration" || s.sessionType === "Cultural Evening" || s.sessionType === "Cultural Showcase");
-                const awards = sessions.find((s) => s.sessionType === "Awards");
-                const venue = sessions[0]?.location;
+                // sessions to display — skip meta-only rows
+                const HIDDEN_TYPES = new Set(["Theme Anchor", "Focus Areas"]);
+                const displaySessions = sessions.filter((s) => !HIDDEN_TYPES.has(s.sessionType));
 
-                const renderSessions = (list: typeof sessions) => (
-                  <div className={styles.scheduleTimeline}>
-                    {list.map((session) => (
-                      <div className={styles.scheduleTimelineItem} key={session.id}>
-                        <div className={styles.scheduleTimelineDot} />
-                        <div className={styles.scheduleTimelineCard}>
-                          <h3>{session.title}</h3>
-                          {session.description && <p>{session.description}</p>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                );
-
-                /* split a panel's description into its main body + its own "Focus Areas" bullets */
-                const renderPanel = (panel: ScheduleItem) => {
+                // split panel description into body + focus bullets
+                const splitPanel = (desc: string) => {
                   const marker = "Focus Areas:";
-                  const idx = panel.description.indexOf(marker);
-                  const body = idx === -1 ? panel.description : panel.description.slice(0, idx).trim();
-                  const focusText = idx === -1 ? "" : panel.description.slice(idx + marker.length).trim();
+                  const idx = desc.indexOf(marker);
+                  if (idx === -1) return { body: desc, focusItems: [] };
+                  const body = desc.slice(0, idx).trim();
+                  const focusText = desc.slice(idx + marker.length).trim();
                   const focusItems = focusText
-                    ? focusText.replace(/\.$/, "").split("; ").map((s) => s.replace(/^and\s+/i, ""))
+                    ? focusText.replace(/\.$/, "").split("; ").map((s) => s.replace(/^and\s+/i, "").trim()).filter(Boolean)
+                    : [];
+                  return { body, focusItems };
+                };
+
+                // award category bullets
+                const splitAwards = (desc: string) =>
+                  desc.replace(/^Award Categories:\s*/, "").replace(/\.$/, "").split(" • ").map((s) => s.trim()).filter(Boolean);
+
+                // ── reusable: render one session row ──
+                const renderRow = (s: ScheduleItem) => {
+                  const time = s.startTime && s.endTime
+                    ? `${s.startTime} – ${s.endTime}`
+                    : s.startTime || "";
+
+                  if (s.sessionType === "Panel") {
+                    const { body, focusItems } = splitPanel(s.description);
+                    const panelLines = body
+                      ? body.split("\n").map((l) => l.trim()).filter(Boolean)
+                      : [];
+                    return (
+                      <tr key={s.id} className={styles.pgRow}>
+                        <td className={styles.pgTime}>{time}</td>
+                        <td className={styles.pgCell}>
+                          <strong className={styles.pgTitle}>{s.title}</strong>
+                          {panelLines.map((line, i) => (
+                            <span key={i} className={i === 0 ? styles.pgDesc2 : styles.pgSubLine}>{line}</span>
+                          ))}
+                          {focusItems.length > 0 && (
+                            <ul className={styles.pgFocusList}>
+                              {focusItems.map((f) => <li key={f}><CheckCircle2 size={13} />{f}</li>)}
+                            </ul>
+                          )}
+                          {s.location && <span className={styles.pgLocation}><MapPin size={12} />{s.location}</span>}
+                        </td>
+                      </tr>
+                    );
+                  }
+
+                  if (s.sessionType === "Awards") {
+                    const cats = splitAwards(s.description);
+                    return (
+                      <tr key={s.id} className={styles.pgRow}>
+                        <td className={styles.pgTime}>{time}</td>
+                        <td className={styles.pgCell}>
+                          <strong className={styles.pgTitle}>{s.title}</strong>
+                          {cats.length > 0 && (
+                            <ul className={styles.pgFocusList}>
+                              {cats.map((c) => <li key={c}><Star size={13} />{c}</li>)}
+                            </ul>
+                          )}
+                          {s.location && <span className={styles.pgLocation}><MapPin size={12} />{s.location}</span>}
+                        </td>
+                      </tr>
+                    );
+                  }
+
+                  const descLines = s.description
+                    ? s.description.split("\n").map((l) => l.trim()).filter(Boolean)
                     : [];
                   return (
-                    <div className={styles.scheduleTimelineCard} key={panel.id}>
-                      <h3>{panel.title}</h3>
-                      <p>{body}</p>
-                      {focusItems.length > 0 && (
-                        <div className={styles.schedulePanelFocus}>
-                          <span>Focus Areas of the Panel</span>
-                          <ul className={styles.scheduleFocusList}>
-                            {focusItems.map((item) => (
-                              <li key={item}><CheckCircle2 size={15} />{item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
+                    <tr key={s.id} className={styles.pgRow}>
+                      <td className={styles.pgTime}>{time}</td>
+                      <td className={styles.pgCell}>
+                        {descLines.length > 0 && (
+                          <span className={styles.pgSuper}>{descLines[0]}</span>
+                        )}
+                        <strong className={styles.pgTitle}>{s.title}</strong>
+                        {descLines.slice(1).map((line, i) => (
+                          <span key={i} className={styles.pgSubLine}>{line}</span>
+                        ))}
+                      </td>
+                    </tr>
                   );
                 };
 
-                /* helper: framed photo panel */
-                const renderImagePanel = (src: string, alt: string, icon: React.ReactNode, caption: string) => (
-                  <div className={styles.scheduleModernImageSide}>
-                    <div className={styles.scheduleModernPhotoFrame}>
-                      <img src={src} alt={alt} className={styles.scheduleModernPhoto} />
-                      <div className={styles.scheduleModernGeomA} aria-hidden="true" />
+                // ── split sessions into two halves ──
+                const half = Math.ceil(displaySessions.length / 2);
+                const part1 = displaySessions.slice(0, half);
+                const part2 = displaySessions.slice(half);
+
+                // ── Part 1 day header — text only, no image ──
+                const DayHeaderCol = () => (
+                  <div className={styles.pgDayHeader}>
+                    <div className={styles.pgDayNumWrap}>
+                      <span className={styles.pgDayLabel}>DAY</span>
+                      <span className={styles.pgDayNum}>{dayNumber}</span>
                     </div>
-                    <div className={styles.scheduleModernPhotoCaption}>
-                      <span className={styles.scheduleModernCaptionIcon}>{icon}</span>
-                      <span>{caption}</span>
-                    </div>
+                    <h2 className={styles.pgDayTitle}>{dayTitle}</h2>
+                    {date  && <p className={styles.pgDayMeta}><CalendarDays size={16} />{date}</p>}
+                    {venue && <p className={styles.pgDayMeta}><MapPin size={16} />{venue}</p>}
                   </div>
                 );
 
-                const isFlipped = dayIndex % 2 === 1;
-                const panelsFlipped = isFlipped;
-                const dayTitle = DAY_THEMES[dayNumber] || sessions[0]?.title;
-                const panelPhoto = DW_PHOTOS[(dayNumber + 4) % DW_PHOTOS.length];
+                // Part 2 right-column photo — Day 1 uses president's official photo
+                const PRESIDENT_IRRO_IMG = "https://upload.wikimedia.org/wikipedia/commons/1/1a/President_Abdullahi_%28Irro%29.png";
+                const dayPhoto2 = dayNumber === 1
+                  ? PRESIDENT_IRRO_IMG
+                  : DW_PHOTOS[(dayNumber + 3) % DW_PHOTOS.length];
 
                 return (
-                  <section
+                  <div
                     key={dayNumber}
                     id={`schedule-day-${dayNumber}`}
-                    className={`${styles.scheduleModernSection} ${styles[`scheduleModernDay${dayNumber}`] || styles.scheduleModernDay2}`}
+                    className={styles.pgDayBlock}
+                    style={{ "--pg-accent": accent } as React.CSSProperties}
                   >
-                    <div className={styles.scheduleModernBadgeRow}>
-                      <span className={styles.scheduleModernDayChip}>
-                        {sessions[0]?.dayLabel || `DAY ${dayNumber}`}
-                      </span>
-                      {sessions[0]?.date && (
-                        <span className={styles.scheduleModernDateChip}>{sessions[0].date}</span>
-                      )}
-                      {venue && (
-                        <span className={styles.scheduleModernDateChip}><MapPin size={14} /> {venue}</span>
-                      )}
-                    </div>
+                    {/* ══ PART 1: Day header LEFT · Sessions RIGHT ══ */}
+                    <div className={styles.pgPattern} aria-hidden="true" />
+                    <div className="container">
+                      <div className={styles.pgLayout}>
 
-                    <div className={`${styles.scheduleModernBody} ${isFlipped ? styles.scheduleModernBodyFlip : ""}`}>
-                      {!isFlipped && renderImagePanel(dayPhoto, `Day ${dayNumber}`, <DayIcon size={20} />, dayTitle)}
+                        {/* left — cream header, text only */}
+                        <DayHeaderCol />
 
-                      <div className={styles.scheduleModernSessionsSide}>
-                        <h2 className={styles.scheduleModernDayTitle}>{dayTitle}</h2>
-
-                        {themeAnchor && (
-                          <div>
-                            <span className={styles.scheduleSubheading}><DayIcon size={16} /> Theme Anchor</span>
-                            <p className={styles.scheduleAnchorText}>{themeAnchor.description}</p>
-                          </div>
-                        )}
-
-                        {focusAreas && (
-                          <div>
-                            <span className={styles.scheduleSubheading}><Star size={16} /> Focus Areas</span>
-                            <ul className={styles.scheduleFocusList}>
-                              {focusAreas.description.replace(/\.$/, "").split(" • ").map((item) => (
-                                <li key={item}><CheckCircle2 size={15} />{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {highlights.length > 0 && (
-                          <div>
-                            <span className={styles.scheduleSubheading}><CalendarDays size={16} /> Program Highlights</span>
-                            {renderSessions(highlights)}
-                          </div>
-                        )}
-                      </div>
-
-                      {isFlipped && renderImagePanel(dayPhoto, `Day ${dayNumber}`, <DayIcon size={20} />, dayTitle)}
-                    </div>
-
-                    {panels.length > 0 && (
-                      <div
-                        className={`${styles.scheduleModernBody} ${panelsFlipped ? styles.scheduleModernBodyFlip : ""}`}
-                        style={{ minHeight: "auto" }}
-                      >
-                        {panelsFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
-
-                        <div className={styles.scheduleModernSessionsSide} style={{ overflowY: "visible" }}>
-                          <span className={styles.scheduleSubheading}><Handshake size={16} /> Featured Panel Discussions</span>
-                          <div className={styles.scheduleTimeline} style={{ marginTop: "1rem" }}>
-                            {panels.map((panel) => (
-                              <div className={styles.scheduleTimelineItem} key={panel.id}>
-                                <div className={styles.scheduleTimelineDot} />
-                                {renderPanel(panel)}
-                              </div>
-                            ))}
-                          </div>
+                        {/* right — sessions table */}
+                        <div className={styles.pgTableWrap}>
+                          <table className={styles.pgTable}>
+                            <tbody>{part1.map(renderRow)}</tbody>
+                          </table>
                         </div>
 
-                        {!panelsFlipped && renderImagePanel(panelPhoto, `Day ${dayNumber} panels`, <Handshake size={20} />, "Featured Panel Discussions")}
                       </div>
+                    </div>
+
+                    {/* ══ PART 2: Sessions LEFT · Large photo RIGHT ══ */}
+                    {part2.length > 0 && (
+                      <>
+                        <div className={styles.pgPatternMid} aria-hidden="true" />
+                        <div className="container">
+                          <div className={styles.pgLayout2}>
+
+                            {/* left — sessions table */}
+                            <div className={styles.pgTableWrap}>
+                              <table className={styles.pgTable}>
+                                <tbody>{part2.map(renderRow)}</tbody>
+                              </table>
+                            </div>
+
+                            {/* right — full-height photo */}
+                            <div className={styles.pgPhotoCol}>
+                              <img
+                                src={dayPhoto2}
+                                alt={`Diaspora Week Day ${dayNumber}`}
+                              />
+                            </div>
+
+                          </div>
+                        </div>
+                      </>
                     )}
 
-                    {(culture.length > 0 || awards) && (
-                      <div className={styles.scheduleDayExtra}>
-                        {culture.length > 0 && (
-                          <div>
-                            <span className={styles.scheduleSubheading}><PartyPopper size={16} /> Cultural Integration</span>
-                            {renderSessions(culture)}
-                          </div>
-                        )}
-
-                        {awards && (
-                          <div>
-                            <span className={styles.scheduleSubheading}><Star size={16} /> {awards.title}</span>
-                            <ul className={styles.scheduleFocusList}>
-                              {awards.description.replace(/^Award Categories:\s*/, "").replace(/\.$/, "").split(" • ").map((item) => (
-                                <li key={item}><CheckCircle2 size={15} />{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </section>
+                    <div className={styles.pgPattern} aria-hidden="true" />
+                  </div>
                 );
               })}
             </div>
           )}
 
-          <section className={`${styles.tabSection} ${styles.tabSectionAlt}`}>
-            <div className="container">
-              <span className={styles.kicker}>Good to Know</span>
-              <h2 className={styles.sectionTitle}>Important Notes for Delegates</h2>
-              <p className={styles.sectionLead}>
-                A few essentials to help you plan your visit across the roadshow.
-              </p>
-
-              <ul className={styles.checkList}>
-                <li>
-                  <CheckCircle2 size={20} />
-                  <span>
-                    <strong>Roadshow Logistics:</strong> After Hargeisa on August 1&ndash;2, the roadshow
-                    continues in Borama on August 3. August 4 is a travel/rest day before sessions
-                    resume in Burao on August 5, closing back in Hargeisa on August 6 with the Gala
-                    Dinner and Diaspora Recognition Awards.
-                  </span>
-                </li>
-                <li>
-                  <CheckCircle2 size={20} />
-                  <span>
-                    <strong>High-Level Panel Composition:</strong> Panels feature Ministers, Directors
-                    General, host city Mayors and regional Governors, joined by diaspora business
-                    leaders, investors, entrepreneurs, academics and international development partners.
-                  </span>
-                </li>
-                <li>
-                  <CheckCircle2 size={20} />
-                  <span>
-                    <strong>Travel &amp; Accommodation:</strong> Delegates joining from abroad are kindly
-                    requested to arrange and cover their own travel and accommodation for all cities
-                    they attend.
-                  </span>
-                </li>
-                <li>
-                  <CheckCircle2 size={20} />
-                  <span>
-                    <strong>Registration &amp; Eligibility:</strong> Online registration is reserved for
-                    members of the global diaspora. A valid international ID (foreign passport,
-                    residency card, or driving license) is required to verify status and secure a
-                    delegate pass.
-                  </span>
-                </li>
-                <li>
-                  <CheckCircle2 size={20} />
-                  <span>
-                    <strong>Local Government Collaboration:</strong> Each host municipality retains
-                    authority over the planning of its designated days, working closely with the
-                    Diaspora Department to align the program.
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </section>
         </>
       )}
 
