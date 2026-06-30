@@ -3,7 +3,7 @@
 import { FormEvent, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Building2, CheckCircle2, User } from "lucide-react";
+import { Building2, CalendarDays, CheckCircle2, User } from "lucide-react";
 import styles from "./page.module.css";
 
 type RegistrationType = "individual" | "business";
@@ -90,18 +90,6 @@ export default function DiasporaWeekRegisterPage() {
             </div>
 
             <div className={styles.formCard}>
-              {/* logo in form card */}
-              <div className={styles.formLogo}>
-                <Image
-                  src="/assets/imgs/logo/logo.png"
-                  alt="Somaliland Diaspora Department"
-                  width={160}
-                  height={52}
-                  priority
-                  className={styles.logoImage}
-                />
-              </div>
-
               {submitted ? (
                 <div className={styles.successState}>
                   <span className={styles.successIcon}>
@@ -172,306 +160,143 @@ export default function DiasporaWeekRegisterPage() {
                 </>
               ) : (
                 <>
-                  <button
-                    type="button"
-                    className={styles.changeTypeButton}
-                    onClick={() => {
-                      setRegistrationType(null);
-                      setError("");
-                    }}
-                  >
-                    <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
-                    Change participation type
-                  </button>
+                  <div className={styles.formHeader}>
+                    <div>
+                      <button
+                        type="button"
+                        className={styles.changeTypeButton}
+                        onClick={() => { setRegistrationType(null); setError(""); }}
+                      >
+                        <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
+                        Change participation type
+                      </button>
+                      <h1 className={styles.title}>
+                        {registrationType === "individual" ? "Individual Registration" : "Business / Exhibitor Registration"}
+                      </h1>
+                      <p className={styles.subtitle}>
+                        {registrationType === "individual"
+                          ? "Fill in your details below. Our team will review within 48 hours."
+                          : "Complete your business details. Once approved, your logo appears in the Showcase."}
+                      </p>
+                    </div>
 
-                  <h1 className={styles.title}>
-                    {registrationType === "individual"
-                      ? "Individual Registration"
-                      : "Business / Exhibitor Registration"}
-                  </h1>
-                  <p className={styles.subtitle}>
-                    {registrationType === "individual"
-                      ? "Fill in your details below. Our team will review and approve your registration within 48 hours."
-                      : "Complete your business details. Once approved, your logo will appear in the Exhibitor Showcase."}
-                  </p>
+                  </div>
 
                   <form ref={formRef} onSubmit={handleSubmit} className={styles.form} encType="multipart/form-data">
                     {registrationType === "individual" ? (
-                      /* ── INDIVIDUAL FORM ───────────────────────────────── */
-                      <>
-                        {/* ── Personal Details ── */}
-                        <div className={styles.formBlock}>
+                      /* ── INDIVIDUAL FORM — 2-col compact ── */
+                      <div className={styles.indivGrid}>
+
+                        {/* LEFT — Personal Details */}
+                        <div className={styles.indivBlock}>
                           <div className={styles.formBlockHeader}>
-                            <span className={styles.formBlockBadge}>
-                              <i className="fa-regular fa-user" aria-hidden="true"></i>
-                            </span>
+                            <span className={styles.formBlockBadge}><i className="fa-regular fa-user" aria-hidden="true"></i></span>
                             <span className={styles.formBlockLabel}>Personal Details</span>
                           </div>
 
-                          {/* Full Name — full width */}
                           <div className={styles.fieldGroup}>
-                            <label htmlFor="fullName" className={styles.label}>
-                              Full Name *
-                            </label>
-                            <input
-                              id="fullName"
-                              name="fullName"
-                              type="text"
-                              className={`form-control ${styles.input}`}
-                              placeholder="Enter your full name"
-                              required
-                            />
+                            <label htmlFor="fullName" className={styles.label}>Full Name *</label>
+                            <input id="fullName" name="fullName" type="text" className={`form-control ${styles.input}`} placeholder="Your full legal name" required />
                           </div>
 
-                          {/* 3-col: Country | Phone | Email */}
-                          <div className={styles.fieldRow3}>
-                            <div className={styles.fieldGroup}>
-                              <label htmlFor="country" className={styles.label}>
-                                Country *
-                              </label>
-                              <input
-                                id="country"
-                                name="country"
-                                type="text"
-                                className={`form-control ${styles.input}`}
-                                placeholder="Country of residence"
-                                required
-                              />
-                            </div>
-
-                            <div className={styles.fieldGroup}>
-                              <label htmlFor="phone" className={styles.label}>
-                                Phone Number *
-                              </label>
-                              <input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                className={`form-control ${styles.input}`}
-                                placeholder="+252 ..."
-                                required
-                              />
-                            </div>
-
-                            <div className={styles.fieldGroup}>
-                              <label htmlFor="email" className={styles.label}>
-                                Email Address *
-                              </label>
-                              <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                className={`form-control ${styles.input}`}
-                                placeholder="you@example.com"
-                                required
-                              />
-                            </div>
-                          </div>
-
-                          {/* 2-col: Address | Event Location */}
                           <div className={styles.fieldRow}>
                             <div className={styles.fieldGroup}>
-                              <label htmlFor="address" className={styles.label}>
-                                Address *
-                              </label>
-                              <input
-                                id="address"
-                                name="address"
-                                type="text"
-                                className={`form-control ${styles.input}`}
-                                placeholder="Street, apartment, district…"
-                                required
-                              />
+                              <label htmlFor="phone" className={styles.label}>Phone *</label>
+                              <input id="phone" name="phone" type="tel" className={`form-control ${styles.input}`} placeholder="+252 ..." required />
                             </div>
-
                             <div className={styles.fieldGroup}>
-                              <label htmlFor="eventLocation" className={styles.label}>
-                                Event Location *
-                              </label>
-                              <select
-                                id="eventLocation"
-                                name="eventLocation"
-                                className={`form-control ${styles.input} ${styles.select}`}
-                                required
-                                defaultValue=""
-                              >
-                                <option value="" disabled>Select a city</option>
-                                <option value="Hargeisa">Hargeisa</option>
-                                <option value="Boorama">Boorama</option>
-                                <option value="Burco">Burco</option>
-                              </select>
+                              <label htmlFor="country" className={styles.label}>Country *</label>
+                              <input id="country" name="country" type="text" className={`form-control ${styles.input}`} placeholder="Country of residence" required />
+                            </div>
+                          </div>
+
+                          <div className={styles.fieldRow}>
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="email" className={styles.label}>Email *</label>
+                              <input id="email" name="email" type="email" className={`form-control ${styles.input}`} placeholder="you@example.com" required />
+                            </div>
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="address" className={styles.label}>Address *</label>
+                              <input id="address" name="address" type="text" className={`form-control ${styles.input}`} placeholder="Street / district" required />
+                            </div>
+                          </div>
+
+                          {/* Event city checkboxes */}
+                          <div className={styles.fieldGroup}>
+                            <label className={styles.label}>Which city will you attend? *</label>
+                            <div className={styles.cityChecklist}>
+                              {["Hargeisa", "Burco", "Boorama"].map((city) => (
+                                <label key={city} className={styles.cityCheckItem}>
+                                  <input type="checkbox" name="eventLocation" value={city} className={styles.cityCheckbox} />
+                                  <span className={styles.cityCheckMark} />
+                                  {city}
+                                </label>
+                              ))}
                             </div>
                           </div>
                         </div>
 
-                        {/* ── Identity Document ── */}
-                        <div className={styles.formBlock}>
+                        {/* RIGHT — Identity Document */}
+                        <div className={styles.indivBlock}>
                           <div className={styles.formBlockHeader}>
-                            <span className={styles.formBlockBadge}>
-                              <i className="fa-regular fa-id-badge" aria-hidden="true"></i>
-                            </span>
+                            <span className={styles.formBlockBadge}><i className="fa-regular fa-id-badge" aria-hidden="true"></i></span>
                             <span className={styles.formBlockLabel}>Identity Document</span>
                           </div>
 
-                          <div className={styles.idDocTypeRow}>
-                            <label
-                              className={`${styles.idDocTypeCard} ${
-                                idDocType === "passport" ? styles.idDocTypeCardActive : ""
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="idDocumentType"
-                                value="passport"
-                                checked={idDocType === "passport"}
-                                onChange={() => {
-                                  setIdDocType("passport");
-                                  setIdDocPreview(null);
-                                  setIdDocFileName(null);
-                                }}
-                                className={styles.idDocRadio}
-                              />
-                              <span className={styles.idDocTypeIcon}>
-                                <i className="fa-regular fa-passport" aria-hidden="true"></i>
-                              </span>
-                              <span>
-                                <strong>Passport</strong>
-                                <br />
-                                <small>International travel document</small>
-                              </span>
-                            </label>
-
-                            <label
-                              className={`${styles.idDocTypeCard} ${
-                                idDocType === "licence" ? styles.idDocTypeCardActive : ""
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="idDocumentType"
-                                value="licence"
-                                checked={idDocType === "licence"}
-                                onChange={() => {
-                                  setIdDocType("licence");
-                                  setIdDocPreview(null);
-                                  setIdDocFileName(null);
-                                }}
-                                className={styles.idDocRadio}
-                              />
-                              <span className={styles.idDocTypeIcon}>
-                                <i className="fa-regular fa-id-card" aria-hidden="true"></i>
-                              </span>
-                              <span>
-                                <strong>Driving Licence</strong>
-                                <br />
-                                <small>National driving licence</small>
-                              </span>
-                            </label>
+                          {/* doc type toggle */}
+                          <div className={styles.fieldGroup}>
+                            <label className={styles.label}>Document Type *</label>
+                            <div className={styles.docToggle}>
+                              {(["passport", "licence"] as const).map((type) => (
+                                <label key={type} className={`${styles.docToggleBtn} ${idDocType === type ? styles.docToggleBtnActive : ""}`}>
+                                  <input type="radio" name="idDocumentType" value={type}
+                                    checked={idDocType === type}
+                                    onChange={() => { setIdDocType(type); setIdDocPreview(null); setIdDocFileName(null); }}
+                                    className={styles.idDocRadio} />
+                                  <i className={`fa-regular ${type === "passport" ? "fa-passport" : "fa-id-card"}`} aria-hidden="true"></i>
+                                  {type === "passport" ? "Passport" : "Driving Licence"}
+                                </label>
+                              ))}
+                            </div>
                           </div>
 
                           {idDocType && (
                             <div className={styles.fieldGroup}>
                               <label htmlFor="idDocFile" className={styles.label}>
-                                Upload {idDocType === "passport" ? "Passport" : "Driving Licence"} *
+                                Upload {idDocType === "passport" ? "Passport" : "Licence"} *
                               </label>
 
-                              {idDocFileName ? (
+                              {idDocFileName && (
                                 <div className={styles.logoPreviewWrap}>
-                                  {idDocIsImage && idDocPreview ? (
-                                    <img
-                                      src={idDocPreview}
-                                      alt="Document preview"
-                                      className={styles.logoPreviewLg}
-                                    />
-                                  ) : (
-                                    <span className={styles.idDocTypeIcon}>
-                                      <i className="fa-regular fa-file-pdf" aria-hidden="true"></i>
-                                    </span>
-                                  )}
+                                  {idDocIsImage && idDocPreview
+                                    ? <img src={idDocPreview} alt="Preview" className={styles.logoPreviewLg} />
+                                    : <span className={styles.idDocTypeIcon}><i className="fa-regular fa-file-pdf" aria-hidden="true"></i></span>
+                                  }
                                   <div className={styles.logoPreviewMeta}>
                                     <p className={styles.logoPreviewTitle}>{idDocFileName}</p>
-                                    <p className={styles.logoPreviewHint}>
-                                      Click the upload area to change it
-                                    </p>
+                                    <p className={styles.logoPreviewHint}>Click below to change</p>
                                   </div>
                                 </div>
-                              ) : null}
+                              )}
 
                               <div className={styles.uploadZone}>
                                 <i className="fa-regular fa-cloud-arrow-up" aria-hidden="true"></i>
-                                <span>Drag &amp; drop or click to browse</span>
-                                <input
-                                  id="idDocFile"
-                                  name="idDocFile"
-                                  type="file"
-                                  accept="image/*,.pdf"
-                                  className={styles.uploadZoneInput}
-                                  onChange={handleIdDocChange}
-                                  required
-                                />
+                                <span>Click or drag &amp; drop</span>
+                                <input id="idDocFile" name="idDocFile" type="file"
+                                  accept="image/*,.pdf" className={styles.uploadZoneInput}
+                                  onChange={handleIdDocChange} required />
                               </div>
-                              <p className={styles.fileHint}>
-                                Accepted: JPG, PNG, PDF &mdash; max 5 MB
-                              </p>
+                              <p className={styles.fileHint}>JPG, PNG or PDF — max 5 MB</p>
                             </div>
                           )}
-                        </div>
 
-                        {/* ── Contact the Department ── */}
-                        <div className={styles.formBlock}>
-                          <div className={styles.formBlockHeader}>
-                            <span className={styles.formBlockBadge}>
-                              <i className="fa-regular fa-headset" aria-hidden="true"></i>
-                            </span>
-                            <span className={styles.formBlockLabel}>Contact the Department</span>
-                          </div>
-
-                          <div className={styles.contactInfoBox}>
-                            <p className={styles.contactInfoNote}>
-                              Need help with your registration? Reach the Somaliland Diaspora
-                              Department directly:
-                            </p>
-                            <div className={styles.contactInfoGrid}>
-                              <div className={styles.contactInfoItem}>
-                                <span className={styles.contactInfoItemIcon}>
-                                  <i className="fa-regular fa-phone" aria-hidden="true"></i>
-                                </span>
-                                <div>
-                                  <span className={styles.contactInfoItemLabel}>Phone 1</span>
-                                  <span className={styles.contactInfoItemValue}>+252 63 000 0000</span>
-                                </div>
-                              </div>
-                              <div className={styles.contactInfoItem}>
-                                <span className={styles.contactInfoItemIcon}>
-                                  <i className="fa-regular fa-phone" aria-hidden="true"></i>
-                                </span>
-                                <div>
-                                  <span className={styles.contactInfoItemLabel}>Phone 2</span>
-                                  <span className={styles.contactInfoItemValue}>+252 63 000 0001</span>
-                                </div>
-                              </div>
-                              <div className={styles.contactInfoItem}>
-                                <span className={styles.contactInfoItemIcon}>
-                                  <i className="fa-regular fa-envelope" aria-hidden="true"></i>
-                                </span>
-                                <div>
-                                  <span className={styles.contactInfoItemLabel}>Email</span>
-                                  <span className={styles.contactInfoItemValue}>diaspora@somaliland.gov.so</span>
-                                </div>
-                              </div>
-                              <div className={styles.contactInfoItem}>
-                                <span className={styles.contactInfoItemIcon}>
-                                  <i className="fa-regular fa-location-dot" aria-hidden="true"></i>
-                                </span>
-                                <div>
-                                  <span className={styles.contactInfoItemLabel}>Office</span>
-                                  <span className={styles.contactInfoItemValue}>Ministry of Diaspora Affairs, Hargeisa</span>
-                                </div>
-                              </div>
-                            </div>
+                          <div className={styles.indivContactNote}>
+                            <i className="fa-regular fa-circle-info" aria-hidden="true"></i>
+                            Need help? <a href="mailto:info@sldiaspora.org">info@sldiaspora.org</a>
+                            &nbsp;·&nbsp;<a href="tel:+252634696895">+252-63-4696895</a>
                           </div>
                         </div>
-                      </>
+                      </div>
                     ) : (
                       /* ── BUSINESS FORM ─────────────────────────────────── */
                       <>
