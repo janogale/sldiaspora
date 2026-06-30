@@ -8,6 +8,7 @@ import {
   CalendarDays,
   Camera,
   CheckCircle2,
+  ChevronRight,
   Eye,
   Handshake,
   Mail,
@@ -222,20 +223,26 @@ type PortalContent = {
 
 type Section = "home" | "schedule" | "exhibitors" | "gallery";
 
+type ApprovedBusiness = { id: string; name: string; logoUrl: string | null; category: string };
+
 export default function DiasporaWeekPortalPage() {
   const [loading, setLoading] = useState(true);
   const [content, setContent] = useState<PortalContent | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [activeDay, setActiveDay] = useState<number | null>(null);
+  const [approvedBusinesses, setApprovedBusinesses] = useState<ApprovedBusiness[]>([]);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const response = await fetch("/api/diaspora-week/portal/public", { cache: "no-store" });
-        const result = await response.json().catch(() => null);
-        if (response.ok && result?.data) {
-          setContent(result.data);
-        }
+        const [portalRes, bizRes] = await Promise.all([
+          fetch("/api/diaspora-week/portal/public", { cache: "no-store" }),
+          fetch("/api/business-register", { cache: "no-store" }),
+        ]);
+        const result = await portalRes.json().catch(() => null);
+        if (portalRes.ok && result?.data) setContent(result.data);
+        const bizResult = await bizRes.json().catch(() => null);
+        if (bizRes.ok && bizResult?.data) setApprovedBusinesses(bizResult.data);
       } catch {
         // keep null — fallbacks handle empty state
       } finally {
@@ -574,30 +581,49 @@ export default function DiasporaWeekPortalPage() {
           {/* ══ EXHIBITORS PREVIEW ══ */}
           <section className={styles.homeExhibitorSection}>
             <div className="container">
-              <div className={styles.homeExhibitorInner}>
-                <div className={styles.homeExhibitorText}>
-                  <span className={styles.homeKicker}>Exhibitor Showcase</span>
-                  <h2 className={styles.homeSectionTitle}>Meet Our Exhibitors</h2>
-                  <p className={styles.homeSectionLead}>
-                    21+ diaspora-founded businesses, NGOs and changemakers are confirmed to showcase
-                    their work across Hargeisa, Borama and Burao. Come discover, connect and invest.
-                  </p>
-                  <button type="button" className={styles.homeExhibitorCta} onClick={() => setActiveSection("exhibitors")}>
-                    <Building2 size={16} />
-                    View All Exhibitors
-                  </button>
-                </div>
-                <div className={styles.homeExhibitorLogos}>
-                  {SAMPLE_EXHIBITOR_LOGOS.slice(0, 9).map((logo) => (
-                    <div className={styles.homeExhibitorLogo} key={logo.name} title={logo.name}>
-                      <img
-                        src={`/assets/imgs/Diaspora Week 2025/exhibitor-logos/${logo.file}`}
-                        alt={logo.name}
-                        loading="lazy"
-                      />
+              <div className={styles.homeExhibitorHead}>
+                <span className={styles.homeKicker}>
+                  <Building2 size={13} />
+                  Showcase
+                </span>
+                <h2 className={styles.homeSectionTitle}>Meet the Exhibitors</h2>
+                <p className={styles.homeSectionLead}>
+                  Diaspora businesses and organizations from around the world will showcase
+                  their products, services and investment opportunities throughout the week.
+                </p>
+              </div>
+
+              {approvedBusinesses.length > 0 ? (
+                <div className={styles.homeExhibitorLogoGrid}>
+                  {approvedBusinesses.slice(0, 6).map((biz) => (
+                    <div className={styles.homeExhibitorLogo} key={biz.id} title={biz.name}>
+                      {biz.logoUrl ? (
+                        <img src={biz.logoUrl} alt={biz.name} loading="lazy" />
+                      ) : (
+                        <span className={styles.homeExhibitorFallback}>
+                          {biz.name.slice(0, 2).toUpperCase()}
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div className={styles.homeExhibitorEmpty}>
+                  <Building2 size={28} />
+                  <p>Exhibitor logos will appear here once businesses are approved.</p>
+                </div>
+              )}
+
+              <div className={styles.homeExhibitorAction}>
+                <button
+                  type="button"
+                  className={styles.homeExhibitorCta}
+                  onClick={() => setActiveSection("exhibitors")}
+                >
+                  <Building2 size={16} />
+                  View All Exhibitors &amp; Connect
+                  <ChevronRight size={16} />
+                </button>
               </div>
             </div>
           </section>
