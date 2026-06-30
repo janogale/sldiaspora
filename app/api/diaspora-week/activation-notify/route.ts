@@ -7,24 +7,39 @@ import {
   getRegistrationsCollection,
   sendDiasporaWeekApprovalEmail,
   updateCollectionRecord,
+  INDIVIDUAL_REGISTRATIONS_COLLECTION,
+  BUSINESS_REGISTRATIONS_COLLECTION,
 } from "@/lib/diaspora-week";
 
-type NotifyPayload = {
-  registrationId?: string;
-  email?: string;
-  status?: string;
-  key?: string;
-  keys?: Array<string | number>;
-  payload?: { id?: string | number; email?: string; status?: string };
-  data?: { id?: string | number; email?: string; status?: string };
+type RegistrationType = "individual" | "business";
+
+// Accepts any of:
+//   x-member-webhook-secret: <MEMBER_STATUS_WEBHOOK_SECRET>
+//   Authorization: Bearer <DIRECTUS_ADMIN_TOKEN>
+//   (no auth when neither secret is configured — dev/testing)
+const isAuthorized = (request: Request): boolean => {
+  const webhookSecret  = (process.env.MEMBER_STATUS_WEBHOOK_SECRET || "").trim();
+  const directusToken  = (process.env.DIRECTUS_ADMIN_TOKEN        || "").trim();
+
+  if (!webhookSecret && !directusToken) return true; // nothing configured — open
+
+  const providedWebhook = (request.headers.get("x-member-webhook-secret") || "").trim();
+  if (webhookSecret && providedWebhook === webhookSecret) return true;
+
+  const authorization   = (request.headers.get("Authorization") || "").trim();
+  if (directusToken && authorization === `Bearer ${directusToken}`) return true;
+
+  return false;
 };
 
-const isAuthorized = (request: Request) => {
-  const configuredSecret = process.env.MEMBER_STATUS_WEBHOOK_SECRET || "";
-  if (!configuredSecret) return true;
-
-  const providedSecret = request.headers.get("x-member-webhook-secret") || "";
-  return providedSecret === configuredSecret;
+// Resolve which Directus collection was targeted from the Directus Flow payload
+const resolveRegistrationType = (
+  body: Record<string, unknown>
+): RegistrationType | null => {
+  const collection = String(body?.collection || "").toLowerCase();
+  if (collection.includes("business"))    return "business";
+  if (collection.includes("individual"))  return "individual";
+  return null;
 };
 
 export async function POST(request: Request) {
@@ -33,26 +48,45 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
     }
 
-    const body = (await request.json().catch(() => null)) as NotifyPayload | null;
+    const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
+
+    if (!body) {
+      return NextResponse.json({ message: "Empty or invalid JSON body." }, { status: 400 });
+    }
+
+    // Support Directus Flow payload shape:
+    //   { collection, keys: ["id"], payload: { status }, event, ... }
+    // AND our own manual shape:
+    //   { registrationId, email, status }
+
+    const payload  = (body?.payload  as Record<string, unknown>) ?? {};
+    const data     = (body?.data     as Record<string, unknown>) ?? {};
+    const keys     = Array.isArray(body?.keys) ? (body.keys as Array<string | number>) : [];
 
     const registrationId = String(
-      body?.registrationId || body?.key || body?.keys?.[0] || body?.payload?.id || body?.data?.id || ""
+      body?.registrationId ?? body?.key ?? keys[0] ?? payload?.id ?? data?.id ?? ""
     ).trim();
 
     const email = String(
-      body?.email || body?.payload?.email || body?.data?.email || ""
+      body?.email ?? payload?.email ?? data?.email ?? ""
     ).trim().toLowerCase();
 
     const requestedStatus = String(
-      body?.status || body?.payload?.status || body?.data?.status || ""
+      body?.status ?? payload?.status ?? data?.status ?? ""
     ).trim().toLowerCase();
 
+    // Resolve registration from Directus
+    const collectionHint = resolveRegistrationType(body);
     let registration: Record<string, unknown> | null = null;
 
     if (registrationId) {
-      registration = await getRegistrationById(registrationId, "individual").catch(() => null);
-      if (!registration) {
-        registration = await getRegistrationById(registrationId, "business").catch(() => null);
+      if (collectionHint) {
+        registration = await getRegistrationById(registrationId, collectionHint).catch(() => null);
+      } else {
+        registration = await getRegistrationById(registrationId, "individual").catch(() => null);
+        if (!registration) {
+          registration = await getRegistrationById(registrationId, "business").catch(() => null);
+        }
       }
     }
 
@@ -61,23 +95,33 @@ export async function POST(request: Request) {
     }
 
     if (!registration) {
-      return NextResponse.json({ message: "Registration not found." }, { status: 404 });
+      return NextResponse.json(
+        { message: "Registration not found.", registrationId, email },
+        { status: 404 }
+      );
     }
 
-    const registrationType = registration.registration_type === "business" ? "business" : "individual";
+    const registrationType: RegistrationType =
+      registration.registration_type === "business" ? "business" : "individual";
 
-    const status = (requestedStatus || String(registration.status || "")).trim().toLowerCase();
+    // Use status from payload first; fall back to what's stored in Directus
+    const effectiveStatus = (requestedStatus || String(registration.status || "")).trim().toLowerCase();
 
-    if (status !== "approved") {
+    if (effectiveStatus !== "approved") {
       return NextResponse.json(
-        { message: "No email sent because status is not 'approved'.", status },
+        { message: "No email sent — status is not approved.", effectiveStatus },
         { status: 200 }
       );
     }
 
-    const id = String(registration.id || "");
+    const id      = String(registration.id    || "").trim();
     const toEmail = String(registration.email || "").trim().toLowerCase();
-    const name = String(registration.full_name || registration.business_name || registration.contact_person || "Participant");
+    const name    = String(
+      registration.full_name     ||
+      registration.business_name ||
+      registration.contact_person ||
+      "Participant"
+    );
 
     if (!id || !toEmail) {
       return NextResponse.json(
@@ -86,12 +130,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const existingCode = String(registration.access_code || "").trim();
+    // Avoid sending duplicate emails
     const alreadySent = Boolean(registration.access_code_sent_at);
-
+    const existingCode = String(registration.access_code || "").trim();
     if (existingCode && alreadySent) {
       return NextResponse.json(
-        { message: "Approval email already sent.", sent: false, reason: "already_sent" },
+        { message: "Approval email already sent.", sent: false },
         { status: 200 }
       );
     }
@@ -103,32 +147,31 @@ export async function POST(request: Request) {
       name,
       accessCode,
       registrationType,
-      country:       String(registration.country        || ""),
-      city:          String(registration.city           || ""),
-      profession:    String(registration.profession     || ""),
-      // business-specific extras
-      businessName:  String(registration.business_name  || ""),
-      contactPerson: String(registration.contact_person || ""),
-      industry:      String(registration.industry       || ""),
+      city:          String(registration.city             || ""),
+      country:       String(registration.country          || ""),
+      profession:    String(registration.profession       || ""),
+      businessName:  String(registration.business_name   || ""),
+      contactPerson: String(registration.contact_person  || ""),
+      industry:      String(registration.industry        || ""),
       website:       String(registration.business_website || ""),
     });
 
     if (!emailSent) {
       return NextResponse.json(
-        { message: "Could not send approval email.", sent: false, reason: "mail_failed" },
+        { message: "SMTP send failed — check SMTP credentials in .env.local.", sent: false },
         { status: 502 }
       );
     }
 
-    const collection = getRegistrationsCollection(registrationType);
-    const allowedFields = await getCollectionFields(collection);
+    // Save access_code and timestamp back to Directus
+    const collection     = getRegistrationsCollection(registrationType);
+    const allowedFields  = await getCollectionFields(collection);
     const updatePayload: Record<string, unknown> = {
-      access_code: accessCode,
+      access_code:         accessCode,
       access_code_sent_at: new Date().toISOString(),
     };
-
     const filtered = allowedFields
-      ? Object.fromEntries(Object.entries(updatePayload).filter(([key]) => allowedFields.has(key)))
+      ? Object.fromEntries(Object.entries(updatePayload).filter(([k]) => allowedFields.has(k)))
       : updatePayload;
 
     if (Object.keys(filtered).length > 0) {
@@ -136,15 +179,15 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { message: "Approval email with access code sent.", sent: true },
+      { message: "Approval email sent.", sent: true, toEmail },
       { status: 200 }
     );
   } catch (error) {
-    const message =
-      error instanceof Error && error.message
-        ? error.message
-        : "Unexpected error while sending Diaspora Week approval email.";
-
-    return NextResponse.json({ message, stage: "diaspora-week-activation-notify" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unexpected error.";
+    console.error("[activation-notify]", message, error);
+    return NextResponse.json(
+      { message, stage: "diaspora-week-activation-notify" },
+      { status: 500 }
+    );
   }
 }
