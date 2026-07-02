@@ -96,6 +96,7 @@ body {
 
 /* ===== Fixed CTA style (no conflicts, no duplicates) ===== */
 
+/* Shared style for both hero CTA buttons */
 .cta-register-btn {
   background: linear-gradient(135deg, #ff7a18 0%, #ff3d81 100%);
   border: none !important;
@@ -121,11 +122,28 @@ body {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   color: #ffffff !important;
-  
 }
 
 .cta-register-btn:active {
   transform: translateY(0) scale(1);
+}
+
+/* "Register for Diaspora Week" — same style as the other button, plus a pulse + yellow border to attract attention */
+.hero-week-register {
+	position: relative;
+	overflow: visible;
+	border: 3px solid #ffd166 !important;
+	animation: hero-cta-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes hero-cta-pulse {
+	0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.55); }
+	50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 209, 102, 0); }
+	100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 209, 102, 0); }
+}
+
+.hero-week-register-wrap {
+	position: relative;
 }
 
 /* keep this because you already use it in JSX */
@@ -158,9 +176,26 @@ body {
 	.hero-cta-wrap {
 		margin-top: 0.75rem !important;
 		margin-bottom: 0.9rem !important;
+		flex-direction: column !important;
+		width: 100% !important;
+	}
+
+	.hero-cta-wrap > div {
+		width: 100% !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
 	}
 
 	.cta-register-btn {
+		min-width: 0 !important;
+		width: 100% !important;
+		max-width: 330px;
+		padding: 12px 16px !important;
+		border-radius: 16px !important;
+		font-size: 1rem !important;
+	}
+
+	.hero-week-register {
 		min-width: 0 !important;
 		width: 100% !important;
 		max-width: 330px;

@@ -31,11 +31,21 @@ export async function POST(request: Request) {
 
     const email = toText(form.get("email")).toLowerCase();
     const phone = toText(form.get("phone"));
-    const country = toText(form.get("country"));
-    const city = toText(form.get("city"));
     const additionalNotes = toText(form.get("additionalNotes"));
     const exhibitorInterest = toBoolean(form.get("exhibitorInterest"));
     const pitchInterest = toBoolean(form.get("pitchInterest"));
+
+    // The individual form collects country + the event city (eventLocation);
+    // the business form collects a single combined "City, Country" address.
+    let country = toText(form.get("country"));
+    let city = toText(form.get("eventLocation")) || toText(form.get("city"));
+
+    if (registrationType === "business" && (!country || !city)) {
+      const businessAddress = toText(form.get("businessAddress"));
+      const [addressCity, addressCountry] = businessAddress.split(",").map((part) => part.trim());
+      city = city || addressCity || businessAddress;
+      country = country || addressCountry || businessAddress;
+    }
 
     if (!email || !phone || !country || !city) {
       return NextResponse.json(
@@ -63,6 +73,7 @@ export async function POST(request: Request) {
       const fullName = toText(form.get("fullName"));
       const profession = toText(form.get("profession"));
       const areasOfInterest = toText(form.get("areasOfInterest"));
+      const idDocumentType = toText(form.get("idDocumentType"));
 
       if (!fullName) {
         return NextResponse.json(
@@ -73,11 +84,25 @@ export async function POST(request: Request) {
 
       displayName = fullName;
 
+      const idDocInput = form.get("idDocFile");
+      const idDocFile = idDocInput instanceof File && idDocInput.size > 0 ? idDocInput : null;
+
+      let idDocFileId: string | null = null;
+      if (idDocFile) {
+        idDocFileId = await uploadDirectusFile(
+          idDocFile,
+          `${fullName} ${idDocumentType === "licence" ? "Driving Licence" : "Passport"}`,
+          "Uploaded during Diaspora Week individual registration"
+        );
+      }
+
       basePayload = {
         ...basePayload,
         full_name: fullName,
         profession: profession || null,
         areas_of_interest: areasOfInterest || null,
+        passport: idDocumentType === "passport" ? idDocFileId : null,
+        driving_license: idDocumentType === "licence" ? idDocFileId : null,
       };
     } else {
       const businessName = toText(form.get("businessName"));
@@ -125,16 +150,7 @@ export async function POST(request: Request) {
     }
 
     const collection = getRegistrationsCollection(registrationType);
-    const allowedFields = await getCollectionFields(collection);
-
-    if (!allowedFields) {
-      return NextResponse.json(
-        {
-          message: `Directus collection '${collection}' was not found. Please create it (see README).`,
-        },
-        { status: 500 }
-      );
-    }
+    const allowedFields = await getCollectionFields(collection).catch(() => null);
 
     const payload = filterPayloadByFields(basePayload, allowedFields);
     const { response, result } = await createCollectionRecord(collection, payload);
@@ -154,7 +170,10 @@ export async function POST(request: Request) {
       toEmail: email,
       name: displayName,
       registrationType,
-    }).catch(() => null);
+      city,
+    }).catch((error) => {
+      console.error("diaspora-week registration received email failed", error);
+    });
 
     return NextResponse.json(
       {

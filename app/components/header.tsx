@@ -251,6 +251,7 @@ const Header = () => {
                           style={{ marginTop: "0.2rem" }}
                         ></i>
                       </Link>
+                      
                     </div>
                     <div className="header__hamburger ml-20 d-xl-none">
                       <div className="sidebar__toggle">

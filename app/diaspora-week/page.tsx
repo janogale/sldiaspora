@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, type CSSProperties } from "react";
 import {
   Building2,
   CalendarDays,
@@ -17,6 +17,8 @@ import {
   Heart,
   ChevronRight,
   Star,
+  Mail,
+  Phone,
 } from "lucide-react";
 import Header from "../components/header";
 import styles from "./page.module.css";
@@ -32,6 +34,7 @@ type ExhibitorPreview = {
   id: string;
   name: string;
   logo: string | null;
+  logoUrl?: string | null;
   category: string;
 };
 
@@ -70,31 +73,35 @@ const EMPTY_CONTENT: PublicContent = {
 const FALLBACK_DAYS = [
   {
     dayNumber: 1,
-    dayLabel: "Day 1",
-    title: "Opening Ceremony & Presidential Address",
-    desc: "Grand opening with keynote speeches from top government officials and diaspora leaders.",
+    dayLabel: "Hargeisa",
+    date: "August 1–2",
+    title: "Governance, Finance, Innovation & National Investment",
+    desc: "The capital hosts the national investment forum, government dialogue, and innovation showcase.",
     icon: "🎯",
   },
   {
     dayNumber: 2,
-    dayLabel: "Day 2",
-    title: "New Partnership Model & Startup Pitching",
-    desc: "Entrepreneurs pitch bold ideas to investors. Business partnerships forged for the future.",
-    icon: "🚀",
+    dayLabel: "Borama",
+    date: "August 3",
+    title: "Knowledge, Agriculture, Mining, Tourism & Cross-Border Trade Hub",
+    desc: "Borama showcases its strengths in education, agriculture, mining, tourism and cross-border trade.",
+    icon: "🌾",
   },
   {
     dayNumber: 3,
-    dayLabel: "Day 3",
-    title: "Closing Ceremony & Cultural Gala",
-    desc: "A magnificent celebration of culture, achievement, and collective Somaliland identity.",
-    icon: "🌟",
+    dayLabel: "Burao",
+    date: "August 5",
+    title: "Livestock, Industry & Productive Economy",
+    desc: "Burao highlights livestock, industry and the productive economy driving national growth.",
+    icon: "🏭",
   },
   {
     dayNumber: 4,
-    dayLabel: "Day 4",
-    title: "Family & Cultural Fun Day",
-    desc: "Community activities, music, art, and food — celebrating our shared heritage.",
-    icon: "🎉",
+    dayLabel: "Hargeisa",
+    date: "August 6",
+    title: "Grand Finale: Closing Gala & Diaspora Recognition Awards",
+    desc: "The roadshow concludes in Hargeisa with the closing gala and Diaspora Recognition Awards.",
+    icon: "🌟",
   },
 ];
 
@@ -137,9 +144,18 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
   );
 }
 
+type ApprovedBusiness = {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+  category: string;
+};
+
 export default function DiasporaWeekPage() {
   const [content, setContent] = useState<PublicContent>(EMPTY_CONTENT);
   const [loading, setLoading] = useState(true);
+  const [galleryImages, setGalleryImages] = useState<{ id: string; url: string; title: string; type: "image" | "video" }[]>([]);
+  const [approvedBusinesses, setApprovedBusinesses] = useState<ApprovedBusiness[]>([]);
   const [videoOpen, setVideoOpen] = useState(false);
   const videoRef = useRef<HTMLDivElement>(null);
 
@@ -149,12 +165,33 @@ export default function DiasporaWeekPage() {
     let isMounted = true;
     const load = async () => {
       try {
-        const response = await fetch("/api/diaspora-week/content", { method: "GET" });
-        const result = (await response.json().catch(() => null)) as
-          | { data?: PublicContent }
-          | null;
+        const [weekRes, galRes, bizRes] = await Promise.all([
+          fetch("/api/diaspora-week/content", { method: "GET" }),
+          fetch("/api/galleries", { method: "GET" }),
+          fetch("/api/business-register", { method: "GET" }),
+        ]);
+        const weekResult = (await weekRes.json().catch(() => null)) as { data?: PublicContent } | null;
+        const galResult = (await galRes.json().catch(() => null)) as { data?: Array<{ id: string; title: string; images: string[] }> } | null;
+        const bizResult = (await bizRes.json().catch(() => null)) as { data?: ApprovedBusiness[] } | null;
         if (!isMounted) return;
-        if (response.ok && result?.data) setContent(result.data);
+        if (weekRes.ok && weekResult?.data) setContent(weekResult.data);
+        if (bizRes.ok && bizResult?.data) setApprovedBusinesses(bizResult.data);
+
+        // Build flat image list: prefer diaspora-week gallery, fall back to general galleries
+        const weekGallery = weekResult?.data?.galleryPreview ?? [];
+        if (weekGallery.length > 0) {
+          setGalleryImages(weekGallery.slice(0, 8));
+        } else if (galResult?.data) {
+          const flat = galResult.data.flatMap((album) =>
+            (album.images ?? []).slice(0, 3).map((url, i) => ({
+              id: `${album.id}-${i}`,
+              url,
+              title: album.title,
+              type: "image" as const,
+            }))
+          ).slice(0, 8);
+          setGalleryImages(flat);
+        }
       } catch {
         // keep defaults
       } finally {
@@ -179,7 +216,7 @@ export default function DiasporaWeekPage() {
   const scheduleDays =
     content.scheduleOutline.length > 0
       ? content.scheduleOutline.map((d, i) => ({ ...d, ...FALLBACK_DAYS[i] }))
-      : FALLBACK_DAYS.map((item) => ({ ...item, date: "" }));
+      : FALLBACK_DAYS;
 
   return (
     <main className={styles.page}>
@@ -195,20 +232,37 @@ export default function DiasporaWeekPage() {
         </div>
 
         <div className={`container ${styles.heroContainer}`}>
-          <div className={styles.heroBadge}>
+          {/* <div className={styles.heroBadge}>
             <Sparkles size={14} />
-            Annual Flagship Event · Hargeisa, Somaliland
-          </div>
+            Official Roadshow Announcement
+          </div> */}
 
           <h1 className={styles.heroTitle}>
             <span className={styles.heroTitleLine1}>Somaliland </span>
-            <span className={styles.heroTitleLine2}>Diaspora Week</span>
+            <span className={styles.heroTitleLine2}>Diaspora Week 2026</span>
           </h1>
 
-          <p className={styles.heroSubtitle}>
-            Four transformative days uniting the global Somaliland diaspora — through investment
-            forums, startup pitching, cultural showcases, and partnerships that build our nation&apos;s future.
+          <p className={styles.heroTagline}>
+            &ldquo;A Multi-City Roadshow: <span>Connecting Local Roots to Global Recognition</span>&rdquo;
           </p>
+
+          <div className={styles.heroDescCard}>
+            <div className={styles.heroMetaRow}>
+              <span className={`${styles.heroMetaPill} ${styles.heroMetaPillAccent}`}>
+                <CalendarDays size={14} />
+                August 1–6, 2026
+              </span>
+              <span className={styles.heroMetaPill}>
+                <Globe size={14} />
+                Hargeisa · Borama · Burao, Republic of Somaliland
+              </span>
+            </div>
+            <p className={styles.heroSubtitle}>
+              Join us for a transformative multi-city roadshow. This is a national platform to{" "}
+              connect local roots with <span className={styles.heroSubtitleHighlight}>global recognition</span>,{" "}
+              celebrating the diaspora as the architects of modern Somaliland.
+            </p>
+          </div>
 
           <div className={styles.heroActions}>
             <Link href="/diaspora-week/register" className={styles.primaryCta}>
@@ -227,8 +281,10 @@ export default function DiasporaWeekPage() {
               </span>
               Watch the Announcement
             </button>
-            <Link href="/diaspora-week/portal" className={styles.secondaryCta}>
-              <CalendarDays size={16} />
+            <Link href="/diaspora-week/portal" className={styles.portalCta}>
+              <span className={styles.portalCtaIcon}>
+                <CalendarDays size={16} />
+              </span>
               Event Portal
             </Link>
           </div>
@@ -270,42 +326,50 @@ export default function DiasporaWeekPage() {
                 <Play size={13} />
                 Official Announcement
               </span>
-              <h2 className={styles.sectionTitle}>Watch the Official Diaspora Week Announcement</h2>
-              <p className={styles.sectionLead}>
-                Hear directly from Somaliland government officials and diaspora leaders about this
-                year&apos;s groundbreaking event. Discover why thousands of diaspora members are
-                flying in from across the globe to be part of history.
+              <h2 className={styles.sectionTitle}>Welcome to the Somaliland Diaspora Week 2026</h2>
+              <p className={styles.announcementText}>
+                The Somaliland 2nd Diaspora Week 2026 moves beyond a single venue or centralized format to a national,
+                multi-city roadshow hosted across Hargeisa, Borama, and Burao, reinforcing that development is national,
+                not centralized, with each region representing a distinct pillar of Somaliland&apos;s economic and cultural
+                strength, and offering unique opportunities for diaspora investment, engagement, and partnership.
               </p>
-              <ul className={styles.videoHighlights}>
-                <li><Globe size={15} /> Diaspora members from 40+ countries</li>
-                <li><TrendingUp size={15} /> $50M+ in investment discussions</li>
-                <li><Heart size={15} /> Cultural reconnection programs</li>
-                <li><Star size={15} /> Awards & recognition ceremony</li>
-              </ul>
-              <button className={styles.watchNowBtn} onClick={() => setVideoOpen(true)}>
-                <span className={styles.watchBtnPulse}>
-                  <Play size={18} fill="white" />
-                </span>
-                Watch Now — 3 min
-              </button>
+              <p className={styles.announcementText}>
+                It will bring together Somalilanders from around the world, government officials, entrepreneurs and
+                innovators to explore opportunities, strengthen partnerships, celebrate identity, and contribute to a
+                shared vision for the future. This is more than a conference, it is a national platform for engagement,
+                a marketplace for ideas and investment, a celebration of culture and identity, and a journey across
+                Somaliland&apos;s past, present, and future.
+              </p>
+              <p className={styles.announcementText}>
+                This is the moment to move from dialogue to action, from commitment to tangible impact.
+                Together, we can build a nation where every Somalilander, at home and abroad, has a stake in our shared
+                future.
+              </p>
             </div>
 
             <div className={styles.videoThumb} onClick={() => setVideoOpen(true)} role="button" tabIndex={0} aria-label="Play announcement video" onKeyDown={e => e.key === "Enter" && setVideoOpen(true)}>
-              <div className={styles.videoThumbImg}>
-                <video
-                  src="/assets/videos/diaspora-week-hero.mp4"
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                />
-                <div className={styles.videoThumbOverlay}>
-                  <div className={styles.playBtn}>
-                    <Play size={28} fill="white" />
-                  </div>
-                  <div className={styles.videoThumbBadge}>
-                    <Sparkles size={12} />
-                    Official 2026 Announcement
+              {/* floating accent blobs */}
+              <div className={styles.videoAccent1} aria-hidden="true" />
+              <div className={styles.videoAccent2} aria-hidden="true" />
+
+              {/* inner frame with shadow + border-radius */}
+              <div className={styles.videoThumbInner}>
+                <div className={styles.videoThumbImg}>
+                  <video
+                    src="/assets/videos/diaspora-week-hero.mp4"
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                  />
+                  <div className={styles.videoThumbOverlay}>
+                    <div className={styles.playBtn}>
+                      <Play size={32} fill="white" />
+                    </div>
+                    <div className={styles.videoThumbBadge}>
+                      <Sparkles size={12} />
+                      Official 2026 Announcement
+                    </div>
                   </div>
                 </div>
               </div>
@@ -314,125 +378,177 @@ export default function DiasporaWeekPage() {
         </div>
       </section>
 
-      {/* ── WHY ATTEND ── */}
-      <section className={`${styles.section} ${styles.sectionAlt}`}>
+      {/* ── WHY ATTEND (hidden) ── */}
+      {false && (
+      <section className={`${styles.section} ${styles.whySection}`}>
         <div className="container">
           <div className={styles.sectionHead}>
             <span className={styles.kicker}>
               <Sparkles size={13} />
               Why Attend
             </span>
-            <h2 className={styles.sectionTitle}>Four Days That Will Change Your Future</h2>
+            <h2 className={styles.sectionTitle}>Why Attend Diaspora Week 2026?</h2>
             <p className={styles.sectionLead}>
               Somaliland Diaspora Week is more than an event — it&apos;s a movement that connects
               hearts, builds bridges, and shapes the future of our nation together.
             </p>
           </div>
 
-          <div className={styles.highlightsGrid}>
+          {/* Top row: 1 large feature + 2 stacked cards */}
+          <div className={styles.whyTopRow}>
+            {/* Feature card */}
+            <div className={`${styles.whyCard} ${styles.whyCardFeature}`}>
+              <span className={styles.whyNum}>01</span>
+              <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#d7f5e0,#b8eccb)", color: "#1f8a3b" }}>
+                <CalendarDays size={28} />
+              </span>
+              <h3 className={styles.whyTitle}>Invest</h3>
+              <p className={styles.whyDesc}>
+                Discover bankable projects, emerging industries, and investment opportunities
+                across Somaliland&apos;s major regions.
+              </p>
+              <div className={styles.whyTags}>
+                <span>Bankable Projects</span>
+                <span>Emerging Industries</span>
+                <span>Regional Opportunities</span>
+              </div>
+            </div>
+
+            {/* 2 stacked cards */}
+            <div className={styles.whyStack}>
+              <div className={`${styles.whyCard} ${styles.whyCardSide}`}>
+                <span className={styles.whyNum}>02</span>
+                <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#daeeff,#b8dcf5)", color: "#0070c0" }}>
+                  <Building2 size={22} />
+                </span>
+                <div>
+                  <h3 className={styles.whyTitle}>Connect</h3>
+                  <p className={styles.whyDesc}>
+                    Meet government leaders, business executives, entrepreneurs, development
+                    partners, academics, and diaspora professionals from around the world.
+                  </p>
+                </div>
+              </div>
+              <div className={`${styles.whyCard} ${styles.whyCardSide}`}>
+                <span className={styles.whyNum}>03</span>
+                <span className={styles.whyIcon} style={{ background: "linear-gradient(135deg,#fef3c7,#fde68a)", color: "#b45309" }}>
+                  <Rocket size={22} />
+                </span>
+                <div>
+                  <h3 className={styles.whyTitle}>Innovate</h3>
+                  <p className={styles.whyDesc}>
+                    Share ideas, expertise, technology, and solutions that contribute to
+                    sustainable growth and economic transformation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom row: 3 equal cards */}
+          <div className={styles.whyBottomRow}>
             {[
               {
-                icon: <CalendarDays size={24} />,
-                color: "#1f8a3b",
-                bg: "linear-gradient(135deg,#d7f5e0,#b8eccb)",
-                title: "4-Day Event Schedule",
-                desc: "A full program of forums, workshops, networking sessions, and cultural galas — something for every member of the diaspora.",
-              },
-              {
-                icon: <Building2 size={24} />,
-                color: "#0070c0",
-                bg: "linear-gradient(135deg,#daeeff,#b8dcf5)",
-                title: "Business Exhibition Hall",
-                desc: "Businesses and organizations showcase products, services and investment opportunities from across the globe.",
-              },
-              {
-                icon: <Rocket size={24} />,
-                color: "#b45309",
-                bg: "linear-gradient(135deg,#fef3c7,#fde68a)",
-                title: "Startup Pitching Stage",
-                desc: "Diaspora-led startups pitch bold ideas to a panel of investors, partners and community leaders.",
-              },
-              {
-                icon: <Camera size={24} />,
-                color: "#7c3aed",
+                num: "04",
+                icon: <Camera size={22} />,
                 bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)",
-                title: "Live Media Coverage",
-                desc: "Follow the event live, relive past highlights, and access full media archives through our portal.",
+                color: "#7c3aed",
+                title: "Celebrate",
+                desc: "Experience Somaliland's rich culture, heritage, traditions, creativity, and resilience through exhibitions, performances, and community events.",
+                tags: ["Exhibitions", "Performances", "Heritage"],
               },
               {
-                icon: <Globe size={24} />,
-                color: "#0f766e",
-                bg: "linear-gradient(135deg,#ccfbf1,#a7f3d0)",
-                title: "Global Networking",
-                desc: "Connect with diaspora members, investors, government officials and changemakers from 40+ countries.",
-              },
-              {
-                icon: <Heart size={24} />,
-                color: "#be123c",
+                num: "05",
+                icon: <Heart size={22} />,
                 bg: "linear-gradient(135deg,#ffe4e6,#fecdd3)",
-                title: "Cultural Reconnection",
-                desc: "Celebrate Somaliland's rich culture, history, and identity through art, music, food and storytelling.",
+                color: "#be123c",
+                title: "Inspire",
+                desc: "Strengthen the connection between generations and encourage young Somalilanders abroad to engage with their heritage and future opportunities.",
+                tags: ["Second Generation", "Heritage", "Opportunity"],
               },
-            ].map((item, i) => (
-              <div className={styles.highlightCard} key={i}>
-                <span
-                  className={styles.highlightIcon}
-                  style={{ background: item.bg, color: item.color }}
-                >
-                  {item.icon}
-                </span>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-                <span className={styles.cardArrow} style={{ color: item.color }}>
-                  Learn more <ChevronRight size={14} />
-                </span>
+              {
+                num: "06",
+                icon: <Globe size={22} />,
+                bg: "linear-gradient(135deg,#ccfbf1,#a7f3d0)",
+                color: "#0f766e",
+                title: "Engage Local Governments",
+                desc: "Dialogue with Municipal Councils across Hargeisa, Borama and Burao to shape incentives, service delivery, and investment facilitation.",
+                tags: ["Hargeisa", "Borama", "Burao"],
+              },
+            ].map((item) => (
+              <div className={`${styles.whyCard} ${styles.whyCardBottom}`} key={item.num}>
+                <div className={styles.whyCardBottomTop}>
+                  <span className={styles.whyNum}>{item.num}</span>
+                  <span className={styles.whyIcon} style={{ background: item.bg, color: item.color }}>
+                    {item.icon}
+                  </span>
+                </div>
+                <h3 className={styles.whyTitle}>{item.title}</h3>
+                <p className={styles.whyDesc}>{item.desc}</p>
+                <div className={styles.whyTags}>
+                  {item.tags.map((t) => <span key={t}>{t}</span>)}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+      )}
 
       {/* ── SCHEDULE ── */}
-      <section className={styles.section}>
+      <section className={`${styles.section} ${styles.scheduleSection}`}>
         <div className="container">
           <div className={styles.sectionHead}>
             <span className={styles.kicker}>
               <CalendarDays size={13} />
-              4-Day Program
+              Multi-City Roadshow
             </span>
-            <h2 className={styles.sectionTitle}>Event Schedule Outline</h2>
+            <h2 className={styles.sectionTitle}>The 2026 Roadshow at a Glance</h2>
             <p className={styles.sectionLead}>
-              A carefully curated journey through four transformative days. Full session details,
-              speakers, and locations in the{" "}
+              Hargeisa, Borama and Burao — each city representing a distinct pillar of
+              Somaliland&apos;s economic and cultural strength. Full session details, speakers,
+              and locations in the{" "}
               <Link href="/diaspora-week/portal">Event Portal</Link>.
             </p>
           </div>
 
-          <div className={styles.scheduleTimeline}>
-            {scheduleDays.slice(0, 4).map((day, i) => (
-              <div className={styles.timelineRow} key={day.dayNumber}>
-                <div className={styles.timelineSide}>
-                  <div className={styles.timelineNum}>{day.dayNumber}</div>
-                  {i < 3 && <div className={styles.timelineLine} />}
-                </div>
-                <div className={styles.timelineCard}>
-                  <div className={styles.timelineCardTop}>
-                    <span className={styles.dayBadge}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
-                    {day.date && <span className={styles.dayDate}>{day.date}</span>}
-                    <span className={styles.timelineEmoji}>{(day as { icon?: string }).icon || "📅"}</span>
+          <div className={styles.scheduleGrid}>
+            {scheduleDays.slice(0, 4).map((day, i) => {
+              const accents = [
+                { line: "#1f8a3b", bg: "linear-gradient(135deg,#d7f5e0,#b8eccb)", num: "#1f8a3b" },
+                { line: "#0070c0", bg: "linear-gradient(135deg,#daeeff,#b8dcf5)", num: "#0070c0" },
+                { line: "#b45309", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", num: "#b45309" },
+                { line: "#7c3aed", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", num: "#7c3aed" },
+              ];
+              const a = accents[i];
+              return (
+                <div
+                  className={styles.schedCard}
+                  key={day.dayNumber}
+                  style={{ "--accent": a.line } as React.CSSProperties}
+                >
+                  <div className={styles.schedCardTop}>
+                    <span className={styles.schedDayNum} style={{ background: a.bg, color: a.num }}>
+                      {String(day.dayNumber).padStart(2, "0")}
+                    </span>
+                    <div className={styles.schedMeta}>
+                      <span className={styles.schedDayLabel}>{day.dayLabel || `Day ${day.dayNumber}`}</span>
+                      {day.date && <span className={styles.schedDate}>{day.date}</span>}
+                    </div>
+                    <span className={styles.schedEmoji}>{(day as { icon?: string }).icon || "📅"}</span>
                   </div>
-                  <h3>{day.title}</h3>
+                  <h3 className={styles.schedTitle}>{day.title}</h3>
                   {(day as { desc?: string }).desc && (
-                    <p className={styles.timelineDesc}>{(day as { desc?: string }).desc}</p>
+                    <p className={styles.schedDesc}>{(day as { desc?: string }).desc}</p>
                   )}
-                  <Link href="/diaspora-week/portal" className={styles.dayLink}>
+                  <Link href="/diaspora-week/portal" className={styles.schedLink}>
                     <CalendarDays size={13} />
                     View full schedule
                     <ChevronRight size={13} />
                   </Link>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -452,17 +568,21 @@ export default function DiasporaWeekPage() {
             </p>
           </div>
 
-          {!loading && content.exhibitorsPreview.length > 0 ? (
+          {loading ? (
             <div className={styles.logoGrid}>
-              {content.exhibitorsPreview.map((item) => (
-                <div className={styles.logoCard} key={item.id}>
-                  {item.logo ? (
-                    <img src={item.logo} alt={item.name} />
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className={`${styles.logoCard} ${styles.logoCardSkeleton}`} />
+              ))}
+            </div>
+          ) : approvedBusinesses.length > 0 ? (
+            <div className={styles.logoGrid}>
+              {approvedBusinesses.map((biz) => (
+                <div className={styles.logoCard} key={biz.id} title={biz.name}>
+                  {biz.logoUrl ? (
+                    <img src={biz.logoUrl} alt={biz.name} />
                   ) : (
-                    <span className={styles.logoFallback}>{item.name.slice(0, 2).toUpperCase()}</span>
+                    <span className={styles.logoFallback}>{biz.name.slice(0, 2).toUpperCase()}</span>
                   )}
-                  <strong>{item.name}</strong>
-                  {item.category && <span>{item.category}</span>}
                 </div>
               ))}
             </div>
@@ -471,13 +591,14 @@ export default function DiasporaWeekPage() {
               <div className={styles.comingSoonIcon}>
                 <Building2 size={32} />
               </div>
-              <h3>Exhibitors Announced Soon</h3>
+              <h3>Exhibitor Registrations Opening Soon</h3>
               <p>
-                Businesses from across the diaspora are applying for exhibition booths. The
-                full exhibitor list will be published here.
+                Approved diaspora businesses will appear here. Register your business to be
+                featured in the Showcase.
               </p>
               <Link href="/diaspora-week/register" className={styles.comingSoonCta}>
-                Apply for a Booth
+                Register Your Business
+                <ChevronRight size={16} />
               </Link>
             </div>
           )}
@@ -485,7 +606,7 @@ export default function DiasporaWeekPage() {
       </section>
 
       {/* ── STARTUP PITCHING ── */}
-      <section className={styles.pitchSection}>
+      {/* <section className={styles.pitchSection}>
         <div className="container">
           <div className={styles.pitchInner}>
             <div className={styles.pitchLeft}>
@@ -537,7 +658,7 @@ export default function DiasporaWeekPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── GALLERY ── */}
       <section className={styles.section}>
@@ -554,9 +675,9 @@ export default function DiasporaWeekPage() {
             </p>
           </div>
 
-          {!loading && content.galleryPreview.length > 0 ? (
+          {!loading && galleryImages.length > 0 ? (
             <div className={styles.galleryGrid}>
-              {content.galleryPreview.map((item) => (
+              {galleryImages.map((item) => (
                 <div className={styles.galleryItem} key={item.id}>
                   {item.type === "video" ? (
                     <video src={item.url} muted loop playsInline />
@@ -580,7 +701,7 @@ export default function DiasporaWeekPage() {
               ))}
               <div className={styles.galleryPlaceholderOverlay}>
                 <Camera size={32} />
-                <p>Gallery from Diaspora Week 2026 will appear here</p>
+                <p>Photos &amp; videos from Diaspora Week 2026 will appear here</p>
                 <Link href="/diaspora-week/portal" className={styles.galleryPortalLink}>
                   Access Event Portal
                 </Link>
@@ -590,7 +711,7 @@ export default function DiasporaWeekPage() {
         </div>
       </section>
 
-      {/* ── PARTNERS ── */}
+      {/* ── ORGANIZERS & PARTNERS ── */}
       <section className={`${styles.section} ${styles.sectionAlt}`}>
         <div className="container">
           <div className={styles.sectionHead}>
@@ -598,81 +719,141 @@ export default function DiasporaWeekPage() {
               <Handshake size={13} />
               Collaboration
             </span>
-            <h2 className={styles.sectionTitle}>Our Partners</h2>
+            <h2 className={styles.sectionTitle}>Organizers &amp; Partners</h2>
             <p className={styles.sectionLead}>
-              Leading organizations supporting Somaliland Diaspora Week.
+              Local government bodies and partner organizations supporting Somaliland Diaspora
+              Week.
             </p>
+
+            <div className={styles.partnerContactCallout}>
+              <p className={styles.partnerContactText}>
+                We thank our current partners and invite new sponsors to join us for a successful
+                Diaspora Week.
+              </p>
+              <div className={styles.partnerContactLinks}>
+                <a href="mailto:info@sldiaspora.org" className={styles.partnerContactLink}>
+                  <Mail size={15} />
+                  info@sldiaspora.org
+                </a>
+                <a href="tel:+252638880240" className={styles.partnerContactLink}>
+                  <Phone size={15} />
+                  +252 63 8880240
+                </a>
+              </div>
+            </div>
           </div>
 
-          {!loading && content.partnersPreview.length > 0 ? (
-            <div className={styles.partnersStrip}>
-              {content.partnersPreview.map((item) => (
-                <div className={styles.partnerLogo} key={item.id}>
-                  {item.logo ? (
-                    <img src={item.logo} alt={item.name} />
-                  ) : (
-                    <span>{item.name}</span>
-                  )}
-                </div>
-              ))}
+          <div className={styles.partnerGroups}>
+            <div
+              className={styles.partnerGroup}
+              style={
+                {
+                  "--partner-accent": "linear-gradient(90deg,#1f8a3b,#6fcf8d)",
+                  "--partner-accent-soft": "#e8f7ec",
+                } as CSSProperties
+              }
+            >
+              <h3 className={styles.partnerGroupLabel} style={{ color: "#1f8a3b" }}>
+                <Building2 size={16} />
+                Local Government
+              </h3>
+              <div className={styles.partnersStrip}>
+                {[
+                  {
+                    name: "Hargeisa Local Government",
+                    abbr: "DHH",
+                    logo: "/partners/DHH.jpg",
+                  },
+                  {
+                    name: "Burco Local Government",
+                    abbr: "DHB",
+                    logo: "/partners/DHBurco.jpg",
+                  },
+                  {
+                    name: "Berbera Maritime Authority",
+                    abbr: "BMA",
+                    logo: "/partners/DHBerbera.jpg",
+                  },
+                ].map((p) => (
+                  <div className={`${styles.partnerLogo} ${styles.partnerLogoZoomSm}`} key={p.name}>
+                    <img
+                      src={p.logo}
+                      alt={p.name}
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        img.style.display = "none";
+                        const fb = img.nextElementSibling as HTMLElement | null;
+                        if (fb) fb.style.display = "flex";
+                      }}
+                    />
+                    <span className={styles.partnerFallback} style={{ display: "none" }}>
+                      {p.abbr}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ) : (
-            <div className={styles.partnerComingSoon}>
-              <Handshake size={28} />
-              <p>Partner organizations will be announced soon. <Link href="/contact">Become a partner</Link></p>
-            </div>
-          )}
-        </div>
-      </section>
 
-      {/* ── TESTIMONIAL QUOTE ── */}
-      <section className={styles.quoteSection}>
-        <div className="container">
-          <div className={styles.quoteInner}>
-            <div className={styles.quoteMark}>&ldquo;</div>
-            <blockquote className={styles.quoteText}>
-              Diaspora Week is not just an event — it is a declaration that wherever we are in
-              the world, our hearts, our investments, and our futures remain anchored in
-              Somaliland.
-            </blockquote>
-            <cite className={styles.quoteAuthor}>
-              <span className={styles.quoteAvatar}>SL</span>
-              <span>
-                <strong>Somaliland Diaspora Agency</strong>
-                <em>Official Statement</em>
-              </span>
-            </cite>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ── */}
-      <section className={styles.ctaSection}>
-        <div className={styles.ctaBg} aria-hidden="true">
-          <div className={styles.ctaOrb1} />
-          <div className={styles.ctaOrb2} />
-        </div>
-        <div className={`container ${styles.ctaInner}`}>
-          <div className={styles.ctaContent}>
-            <div className={styles.ctaIconWrap}>
-              <Users size={30} />
-            </div>
-            <h2 className={styles.ctaTitle}>
-              Your place at Diaspora Week is waiting
-            </h2>
-            <p className={styles.ctaDesc}>
-              Join thousands of diaspora members, entrepreneurs, investors and cultural leaders.
-              The event portal is open — explore the schedule, meet exhibitors, and register today.
-            </p>
-            <div className={styles.ctaButtons}>
-              <Link href="/diaspora-week/register" className={styles.ctaButtonPrimary}>
-                Register Now — Free
-                <ChevronRight size={18} />
-              </Link>
-              <Link href="/diaspora-week/portal" className={styles.ctaButtonSecondary}>
-                <CalendarDays size={16} />
-                View Event Portal
-              </Link>
+            <div
+              className={styles.partnerGroup}
+              style={
+                {
+                  "--partner-accent": "linear-gradient(90deg,#b45309,#f4a637)",
+                  "--partner-accent-soft": "#fdf0dc",
+                } as CSSProperties
+              }
+            >
+              <h3 className={styles.partnerGroupLabel} style={{ color: "#b45309" }}>
+                <Handshake size={16} />
+                Partners
+              </h3>
+              <div className={styles.partnersStrip}>
+                {[
+                  {
+                    name: "Dahabshiil",
+                    abbr: "DS",
+                    logo: "/partners/dahabshiil-clear.png",
+                    bg: "linear-gradient(135deg,#4caf50,#3d8b40)",
+                  },
+                  {
+                    name: "Telesom",
+                    abbr: "TL",
+                    logo: "/partners/telesom.png",
+                    bg: "linear-gradient(135deg,#9ccc3c,#7cb030)",
+                  },
+                  {
+                    name: "IOM",
+                    abbr: "IOM",
+                    logo: "/partners/IOM-clear.png",
+                    bg: "linear-gradient(135deg,#1f3fa0,#142a73)",
+                  },
+                ].map((p) => (
+                  <div
+                    className={`${styles.partnerLogo} ${p.bg ? styles.partnerLogoZoom : ""}`}
+                    key={p.name}
+                    style={p.bg ? { background: p.bg, border: "none" } : undefined}
+                  >
+                    {p.logo && (
+                      <img
+                        src={p.logo}
+                        alt={p.name}
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          img.style.display = "none";
+                          const fb = img.nextElementSibling as HTMLElement | null;
+                          if (fb) fb.style.display = "flex";
+                        }}
+                      />
+                    )}
+                    <span
+                      className={styles.partnerFallback}
+                      style={{ display: p.logo ? "none" : "flex" }}
+                    >
+                      {p.abbr}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
