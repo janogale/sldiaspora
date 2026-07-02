@@ -104,9 +104,9 @@ export async function POST(request: Request) {
     // Use status from payload first; fall back to what's stored in Directus
     const effectiveStatus = (requestedStatus || String(registration.status || "")).trim().toLowerCase();
 
-    if (effectiveStatus !== "approved") {
+    if (!["approved", "published", "active"].includes(effectiveStatus)) {
       return NextResponse.json(
-        { message: "No email sent — status is not approved.", effectiveStatus },
+        { message: "No email sent — status is not approved/published.", effectiveStatus },
         { status: 200 }
       );
     }

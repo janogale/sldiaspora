@@ -149,16 +149,7 @@ export async function POST(request: Request) {
     }
 
     const collection = getRegistrationsCollection(registrationType);
-    const allowedFields = await getCollectionFields(collection);
-
-    if (!allowedFields) {
-      return NextResponse.json(
-        {
-          message: `Directus collection '${collection}' was not found. Please create it (see README).`,
-        },
-        { status: 500 }
-      );
-    }
+    const allowedFields = await getCollectionFields(collection).catch(() => null);
 
     const payload = filterPayloadByFields(basePayload, allowedFields);
     const { response, result } = await createCollectionRecord(collection, payload);
