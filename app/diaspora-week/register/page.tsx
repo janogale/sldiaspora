@@ -5,8 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Building2, CalendarDays, CheckCircle2, User } from "lucide-react";
 import styles from "./page.module.css";
+import { countries } from "../../data/countries";
 
 type RegistrationType = "individual" | "business";
+
+const dialCodeFor = (countryName: string) =>
+  countries.find((c) => c.name === countryName)?.dial || "";
 
 export default function DiasporaWeekRegisterPage() {
   const [registrationType, setRegistrationType] = useState<RegistrationType | null>(null);
@@ -19,6 +23,29 @@ export default function DiasporaWeekRegisterPage() {
   const [idDocFileName, setIdDocFileName] = useState<string | null>(null);
   const [idDocIsImage, setIdDocIsImage] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const [indivCountry, setIndivCountry] = useState("");
+  const [indivPhone, setIndivPhone] = useState("");
+  const [bizCountry, setBizCountry] = useState("");
+  const [bizPhone, setBizPhone] = useState("");
+
+  // Selecting a country prefills the phone field with that country's dial
+  // code, but only replaces a still-untouched or previously-prefilled value
+  // so it never clobbers digits the person already typed in.
+  const handleCountryChange = (
+    countryName: string,
+    phoneValue: string,
+    setPhone: (value: string) => void,
+    setCountry: (value: string) => void
+  ) => {
+    setCountry(countryName);
+    const newDial = dialCodeFor(countryName);
+    const trimmedPhone = phoneValue.trim();
+    const isUntouched = !trimmedPhone || /^\+\d+$/.test(trimmedPhone);
+    if (newDial && isUntouched) {
+      setPhone(`${newDial} `);
+    }
+  };
 
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -201,12 +228,35 @@ export default function DiasporaWeekRegisterPage() {
 
                           <div className={styles.fieldRow}>
                             <div className={styles.fieldGroup}>
-                              <label htmlFor="phone" className={styles.label}>Phone *</label>
-                              <input id="phone" name="phone" type="tel" className={`form-control ${styles.input}`} placeholder="+252 ..." required />
+                              <label htmlFor="country" className={styles.label}>Country *</label>
+                              <select
+                                id="country"
+                                name="country"
+                                className={`form-control ${styles.input}`}
+                                value={indivCountry}
+                                onChange={(e) =>
+                                  handleCountryChange(e.target.value, indivPhone, setIndivPhone, setIndivCountry)
+                                }
+                                required
+                              >
+                                <option value="">Select country of residence</option>
+                                {countries.map((c) => (
+                                  <option key={c.name} value={c.name}>{c.name}</option>
+                                ))}
+                              </select>
                             </div>
                             <div className={styles.fieldGroup}>
-                              <label htmlFor="country" className={styles.label}>Country *</label>
-                              <input id="country" name="country" type="text" className={`form-control ${styles.input}`} placeholder="Country of residence" required />
+                              <label htmlFor="phone" className={styles.label}>Phone *</label>
+                              <input
+                                id="phone"
+                                name="phone"
+                                type="tel"
+                                className={`form-control ${styles.input}`}
+                                placeholder="Select a country first"
+                                value={indivPhone}
+                                onChange={(e) => setIndivPhone(e.target.value)}
+                                required
+                              />
                             </div>
                           </div>
 
@@ -323,10 +373,38 @@ export default function DiasporaWeekRegisterPage() {
                                 placeholder="Owner / representative" required />
                             </div>
                             <div className={styles.fieldGroup}>
-                              <label htmlFor="phone" className={styles.label}>Phone *</label>
-                              <input id="phone" name="phone" type="tel"
+                              <label htmlFor="bizCountry" className={styles.label}>Country *</label>
+                              <select
+                                id="bizCountry"
+                                name="country"
                                 className={`form-control ${styles.input}`}
-                                placeholder="+252 ..." required />
+                                value={bizCountry}
+                                onChange={(e) =>
+                                  handleCountryChange(e.target.value, bizPhone, setBizPhone, setBizCountry)
+                                }
+                                required
+                              >
+                                <option value="">Select country</option>
+                                {countries.map((c) => (
+                                  <option key={c.name} value={c.name}>{c.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className={styles.fieldRow}>
+                            <div className={styles.fieldGroup}>
+                              <label htmlFor="phone" className={styles.label}>Phone *</label>
+                              <input
+                                id="phone"
+                                name="phone"
+                                type="tel"
+                                className={`form-control ${styles.input}`}
+                                placeholder="Select a country first"
+                                value={bizPhone}
+                                onChange={(e) => setBizPhone(e.target.value)}
+                                required
+                              />
                             </div>
                           </div>
 
@@ -347,10 +425,10 @@ export default function DiasporaWeekRegisterPage() {
 
                           <div className={styles.fieldRow}>
                             <div className={styles.fieldGroup}>
-                              <label htmlFor="businessAddress" className={styles.label}>Location *</label>
+                              <label htmlFor="businessAddress" className={styles.label}>Business Address *</label>
                               <input id="businessAddress" name="businessAddress" type="text"
                                 className={`form-control ${styles.input}`}
-                                placeholder="City, Country" required />
+                                placeholder="Street / district, city" required />
                             </div>
                             <div className={styles.fieldGroup}>
                               <label htmlFor="businessWebsite" className={styles.label}>

@@ -6,7 +6,6 @@ import {
   getDirectusErrorMessage,
   getRegistrationByEmail,
   getRegistrationsCollection,
-  sendDiasporaWeekRegistrationReceivedEmail,
   uploadDirectusFile,
 } from "@/lib/diaspora-week";
 
@@ -67,8 +66,6 @@ export async function POST(request: Request) {
       status: "pending",
     };
 
-    let displayName = "";
-
     if (registrationType === "individual") {
       const fullName = toText(form.get("fullName"));
       const profession = toText(form.get("profession"));
@@ -81,8 +78,6 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-
-      displayName = fullName;
 
       const idDocInput = form.get("idDocFile");
       const idDocFile = idDocInput instanceof File && idDocInput.size > 0 ? idDocInput : null;
@@ -116,8 +111,6 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-
-      displayName = businessName;
 
       const logoInput = form.get("businessLogo");
       const logoFile = logoInput instanceof File && logoInput.size > 0 ? logoInput : null;
@@ -165,15 +158,6 @@ export async function POST(request: Request) {
         { status: response.status || 400 }
       );
     }
-
-    await sendDiasporaWeekRegistrationReceivedEmail({
-      toEmail: email,
-      name: displayName,
-      registrationType,
-      city,
-    }).catch((error) => {
-      console.error("diaspora-week registration received email failed", error);
-    });
 
     return NextResponse.json(
       {
