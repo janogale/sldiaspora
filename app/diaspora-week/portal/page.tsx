@@ -351,10 +351,6 @@ export default function DiasporaWeekPortalPage() {
             </div>
             <div className={styles.homeHeroStatsBar}>
               <div className="container">
-                <p className={styles.heroRoadshowDate}>
-                  <CalendarDays size={15} />
-                  August 1–6, 2026 &nbsp;·&nbsp; Hargeisa, Borama and Burao, Republic of Somaliland
-                </p>
                 <div className={styles.heroRoadshowGrid}>
                   {[
                     {
