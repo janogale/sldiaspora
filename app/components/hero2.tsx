@@ -65,7 +65,7 @@ const MapSection = () => {
                     </Link>
                   </div>
                   <div className="d-flex justify-content-center mt-4 hero-week-register-wrap">
-                <Link
+                {/* <Link
                   href="/diaspora-week/register"
                    className="btn btn-lg cta-register-btn hero-week-register d-flex align-items-center justify-content-center gap-2 shadow-lg h-25"
                     >
@@ -73,7 +73,7 @@ const MapSection = () => {
                         Register for Diaspora Week
                       </span>
                       <i className="fa-solid fa-arrow-right animate-arrow"></i>
-                </Link>
+                </Link> */}
               </div>
               </div>
                 </div>
