@@ -51,10 +51,10 @@ const DAY_THEMES: Record<number, string> = {
 
 const DAY_PHOTOS: Record<number, string> = {
   1: "/assets/imgs/Diaspora Week 2025/526662922_1167327548769637_8258044179086207429_n.jpg",
-  2: "/assets/imgs/Diaspora Week 2025/527691517_1167226418779750_3577322439121286715_n.jpg",
-  3: "/assets/imgs/Diaspora Week 2025/528345424_1169233925245666_1511022412967923258_n.jpg",
-  4: "/assets/imgs/Diaspora Week 2025/528603324_1169233405245718_3332848329999857221_n.jpg",
-  5: "/assets/imgs/Diaspora Week 2025/527426570_1169233348579057_2900217355379882609_n.jpg",
+  2: "/diaspora-img.png",
+  3: "/diaspora-img.png",
+  4: "/diaspora-img.png",
+  5: "/diaspora-img.png",
 };
 
 const FALLBACK_SCHEDULE: ScheduleItem[] = [
@@ -808,7 +808,7 @@ export default function DiasporaWeekPortalPage() {
                 const PRESIDENT_IRRO_IMG = "https://upload.wikimedia.org/wikipedia/commons/1/1a/President_Abdullahi_%28Irro%29.png";
                 const dayPhoto2 = dayNumber === 1
                   ? PRESIDENT_IRRO_IMG
-                  : DW_PHOTOS[(dayNumber + 3) % DW_PHOTOS.length];
+                  : "/diaspora-img.png";
 
                 return (
                   <div
