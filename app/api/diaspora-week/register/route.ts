@@ -6,6 +6,7 @@ import {
   getDirectusErrorMessage,
   getRegistrationByEmail,
   getRegistrationsCollection,
+  sendDiasporaWeekRegistrationReceivedEmail,
   uploadDirectusFile,
 } from "@/lib/diaspora-week";
 
@@ -164,6 +165,15 @@ export async function POST(request: Request) {
         { status: response.status || 400 }
       );
     }
+
+    await sendDiasporaWeekRegistrationReceivedEmail({
+      toEmail: email,
+      name: displayName,
+      registrationType,
+      city,
+    }).catch((error) => {
+      console.error("diaspora-week registration received email failed", error);
+    });
 
     return NextResponse.json(
       {
