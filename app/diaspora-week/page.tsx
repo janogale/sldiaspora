@@ -74,7 +74,7 @@ const FALLBACK_DAYS = [
   {
     dayNumber: 1,
     dayLabel: "Hargeisa",
-    date: "August 1–2",
+    date: "August 2–3",
     title: "Governance, Finance, Innovation & National Investment",
     desc: "The capital hosts the national investment forum, government dialogue, and innovation showcase.",
     icon: "🎯",
@@ -82,7 +82,7 @@ const FALLBACK_DAYS = [
   {
     dayNumber: 2,
     dayLabel: "Borama",
-    date: "August 3",
+    date: "August 4",
     title: "Knowledge, Agriculture, Mining, Tourism & Cross-Border Trade Hub",
     desc: "Borama showcases its strengths in education, agriculture, mining, tourism and cross-border trade.",
     icon: "🌾",
@@ -160,7 +160,7 @@ export default function DiasporaWeekPage() {
   const [announcementVideoUrl, setAnnouncementVideoUrl] = useState("/assets/videos/diaspora-week-hero.mp4");
   const videoRef = useRef<HTMLDivElement>(null);
 
-  const EVENT_DATE = new Date("2026-08-01T09:00:00");
+  const EVENT_DATE = new Date("2026-08-02T09:00:00");
 
   useEffect(() => {
     let isMounted = true;
@@ -254,7 +254,7 @@ export default function DiasporaWeekPage() {
             <div className={styles.heroMetaRow}>
               <span className={`${styles.heroMetaPill} ${styles.heroMetaPillAccent}`}>
                 <CalendarDays size={14} />
-                August 1–6, 2026
+                August 2–6, 2026
               </span>
               <span className={styles.heroMetaPill}>
                 <Globe size={14} />
