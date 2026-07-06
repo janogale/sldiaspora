@@ -58,34 +58,34 @@ const DAY_PHOTOS: Record<number, string> = {
 };
 
 const FALLBACK_SCHEDULE: ScheduleItem[] = [
-  // ══ DAY 1 — Hargeisa, Saturday August 1 (Opening Day Ceremony) ══
-  { id: "d1-1",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "08:30", endTime: "09:00", title: "Guest Arrival and Registration",  description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-2",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:00", endTime: "09:10", title: "Quran, National Anthem and Cultural Dance", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-3",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:10", endTime: "09:15", title: "Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-4",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:15", endTime: "09:25", title: "H.E. Abdirahman Dahir Adam", description: "Speech by Minister of Foreign Affairs & International Cooperation", speaker: "H.E. Abdirahman Dahir Adam", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-5",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:25", endTime: "09:35", title: "H.E. Khadar Hussien Abdi", description: "Speech by Minister of the Presidency", speaker: "H.E. Khadar Hussien Abdi", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-6",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:35", endTime: "09:55", title: "Speeches from Diaspora Leaders", description: "Hibo Ali Hussein\nEng. Ahmed Jama\nAhmed Hersi Madar\nCumar Hassan Libaan\nSicid Ahmed Ali", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-7",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:55", endTime: "10:05", title: "Ougbad Nassir Omar", description: "Keynote Speech – Somaliland and its Global Citizens", speaker: "Ougbad Nassir Omar, Director, Diaspora Department", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-8",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:05", endTime: "10:25", title: "H.E. President Abdirahman Mohamed (Irro)", description: "Presidential Address", speaker: "H.E. President Abdirahman Mohamed (Irro)", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-9",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:25", endTime: "10:35", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-10", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:35", endTime: "11:35", title: "High-Level Panel Discussion", description: "Redefining the Role of the Diaspora: From Benefactor to Strategic Partner\n\nModerator: Mushtaaq\n\nPanellists:\nJama Egal, Scholar and Senior Advisor to MoFAIC\nAnab Yussuf, Canadian Public Servant, President & Co-founder, Akhri Foundation\nMohamed Ahmed Askar, seasoned governance expert", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  // ══ DAY 1 — Hargeisa, Sunday August 2 (Opening Day Ceremony) ══
+  { id: "d1-1",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "08:30", endTime: "09:00", title: "Guest Arrival and Registration",  description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-2",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:00", endTime: "09:10", title: "Quran, National Anthem and Cultural Dance", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-3",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:10", endTime: "09:15", title: "Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-4",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:15", endTime: "09:25", title: "H.E. Abdirahman Dahir Adam", description: "Speech by Minister of Foreign Affairs & International Cooperation", speaker: "H.E. Abdirahman Dahir Adam", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-5",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:25", endTime: "09:35", title: "H.E. Khadar Hussien Abdi", description: "Speech by Minister of the Presidency", speaker: "H.E. Khadar Hussien Abdi", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-6",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:35", endTime: "09:55", title: "Speeches from Diaspora Leaders", description: "Hibo Ali Hussein\nEng. Ahmed Jama\nAhmed Hersi Madar\nCumar Hassan Libaan\nSicid Ahmed Ali", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-7",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:55", endTime: "10:05", title: "Ougbad Nassir Omar", description: "Keynote Speech – Somaliland and its Global Citizens", speaker: "Ougbad Nassir Omar, Director, Diaspora Department", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-8",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "10:05", endTime: "10:25", title: "H.E. President Abdirahman Mohamed (Irro)", description: "Presidential Address", speaker: "H.E. President Abdirahman Mohamed (Irro)", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-9",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "10:25", endTime: "10:35", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-10", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "10:35", endTime: "11:35", title: "High-Level Panel Discussion", description: "Redefining the Role of the Diaspora: From Benefactor to Strategic Partner\n\nModerator: Mushtaaq\n\nPanellists:\nJama Egal, Scholar and Senior Advisor to MoFAIC\nAnab Yussuf, Canadian Public Servant, President & Co-founder, Akhri Foundation\nMohamed Ahmed Askar, seasoned governance expert", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
 
   // ══ DAY 2 — Somaliland & Its Global Citizens: A New Partnership Model ══
-  { id: "d2-1",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:00", endTime: "09:15", title: "Registration", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-2",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:15", endTime: "09:30", title: "Recap & Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-3",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:30", endTime: "10:30", title: "Panel 1: Diaspora and Somaliland's International Engagement: Recognition, Advocacy & Influence", description: "Moderator: Fatima Omer\n\nPanellists:\nMP Mohamed Hassan Saed, Chair, Foreign Affairs, International Cooperation, Planning & Investment Committee of the House of Representatives\nAbdi Shakur Hussein Osman, Somaliland Immigration\nFatima Saeed Ibrahim, Senior Foreign Affairs Advisor, Upper House\nDr. Muna Magan, Founder, Riyan Organics", speaker: "", location: "Main Hall", sessionType: "Panel" },
-  { id: "d2-4",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "09:30", endTime: "10:30", title: "Pitch Session: Startups Showcase", description: "", speaker: "", location: "Hall 2", sessionType: "Program Highlight" },
-  { id: "d2-5",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "10:30", endTime: "10:45", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d2-6",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "10:45", endTime: "11:45", title: "Panel 2: Unlocking Investment Potential: Legal, Financial & Institutional Support for Diaspora", description: "Moderator: Hana Kaise\n\nPanellists:\nMohamed Abdillahi Hassan, Founder & CEO, Fusion Remit Planning & Investment\nKhalid Mohamed Yasin, Operations Manager, Darasalaam\nMubarak Abdi Ismail, Lawyer, Somaliland House of Representatives\nProf. Adan Ismail Hassan, Economist\nHamza Khaire, Deputy Governor, Central Bank of Somaliland", speaker: "", location: "Main Hall", sessionType: "Panel" },
-  { id: "d2-7",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 2, 2026", startTime: "10:45", endTime: "11:45", title: "Roundtable (Closed): Ministries and Diaspora Policy Priorities", description: "", speaker: "", location: "Hall 2", sessionType: "Program Highlight" },
+  { id: "d2-1",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "09:00", endTime: "09:15", title: "Registration", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d2-2",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "09:15", endTime: "09:30", title: "Recap & Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d2-3",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "09:30", endTime: "10:30", title: "Panel 1: Diaspora and Somaliland's International Engagement: Recognition, Advocacy & Influence", description: "Moderator: Fatima Omer\n\nPanellists:\nMP Mohamed Hassan Saed, Chair, Foreign Affairs, International Cooperation, Planning & Investment Committee of the House of Representatives\nAbdi Shakur Hussein Osman, Somaliland Immigration\nFatima Saeed Ibrahim, Senior Foreign Affairs Advisor, Upper House\nDr. Muna Magan, Founder, Riyan Organics", speaker: "", location: "Main Hall", sessionType: "Panel" },
+  { id: "d2-4",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "09:30", endTime: "10:30", title: "Pitch Session: Startups Showcase", description: "", speaker: "", location: "Hall 2", sessionType: "Program Highlight" },
+  { id: "d2-5",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "10:30", endTime: "10:45", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d2-6",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "10:45", endTime: "11:45", title: "Panel 2: Unlocking Investment Potential: Legal, Financial & Institutional Support for Diaspora", description: "Moderator: Hana Kaise\n\nPanellists:\nMohamed Abdillahi Hassan, Founder & CEO, Fusion Remit Planning & Investment\nKhalid Mohamed Yasin, Operations Manager, Darasalaam\nMubarak Abdi Ismail, Lawyer, Somaliland House of Representatives\nProf. Adan Ismail Hassan, Economist\nHamza Khaire, Deputy Governor, Central Bank of Somaliland", speaker: "", location: "Main Hall", sessionType: "Panel" },
+  { id: "d2-7",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "10:45", endTime: "11:45", title: "Roundtable (Closed): Ministries and Diaspora Policy Priorities", description: "", speaker: "", location: "Hall 2", sessionType: "Program Highlight" },
 
   // ══ DAY 3 — Closing Gala Evening ══
-  { id: "d3-1",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 3, 2026", startTime: "06:00", endTime: "07:00", title: "Gala Evening Registration", description: "", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
-  { id: "d3-2",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 3, 2026", startTime: "07:05", endTime: "07:15", title: "Mohammed Abdirahman", description: "Opening Remarks", speaker: "Mohammed Abdirahman, Director General Ministry of Foreign Affairs and International Cooperation", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
-  { id: "d3-3",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 3, 2026", startTime: "07:15", endTime: "07:30", title: "Recap Video & Highlights Presentation", description: "", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
-  { id: "d3-4",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 3, 2026", startTime: "07:30", endTime: "08:00", title: "Commitments: Diaspora Pledge", description: "", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
-  { id: "d3-5",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 3, 2026", startTime: "08:00", endTime: "09:40", title: "Cultural Performances & Gala Dinner", description: "Maxamed BK\nHodan Omar Dhuule\nUgbaad Aragsan\nMaxamed Maame", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Cultural Showcase" },
-  { id: "d3-6",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 3, 2026", startTime: "09:40", endTime: "10:00", title: "Ayan Osman", description: "Closing Remarks & Diaspora Week Planning Committee", speaker: "Ayan Osman, Advisor Diaspora Department, Ministry of Foreign Affairs & International Cooperation", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
+  { id: "d3-1",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 4, 2026", startTime: "06:00", endTime: "07:00", title: "Gala Evening Registration", description: "", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
+  { id: "d3-2",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 4, 2026", startTime: "07:05", endTime: "07:15", title: "Mohammed Abdirahman", description: "Opening Remarks", speaker: "Mohammed Abdirahman, Director General Ministry of Foreign Affairs and International Cooperation", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
+  { id: "d3-3",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 4, 2026", startTime: "07:15", endTime: "07:30", title: "Recap Video & Highlights Presentation", description: "", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
+  { id: "d3-4",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 4, 2026", startTime: "07:30", endTime: "08:00", title: "Commitments: Diaspora Pledge", description: "", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
+  { id: "d3-5",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 4, 2026", startTime: "08:00", endTime: "09:40", title: "Cultural Performances & Gala Dinner", description: "Maxamed BK\nHodan Omar Dhuule\nUgbaad Aragsan\nMaxamed Maame", speaker: "", location: "Safari Hotel, Boorama", sessionType: "Cultural Showcase" },
+  { id: "d3-6",  dayNumber: 3, dayLabel: "Day 3 · Boorama", date: "August 4, 2026", startTime: "09:40", endTime: "10:00", title: "Ayan Osman", description: "Closing Remarks & Diaspora Week Planning Committee", speaker: "Ayan Osman, Advisor Diaspora Department, Ministry of Foreign Affairs & International Cooperation", location: "Safari Hotel, Boorama", sessionType: "Program Highlight" },
 
   // ══ DAY 4 — Youth, Culture & Identity ══
   { id: "d4-1",  dayNumber: 4, dayLabel: "Day 4 · Burco", date: "August 5, 2026", startTime: "04:30", endTime: "05:30", title: "Fun Day: Youth Activities", description: "Engaging the younger generation in cultural crafts, weaving and pottery.", speaker: "", location: "Plaza Hotel, Burco", sessionType: "Program Highlight" },
@@ -329,7 +329,7 @@ export default function DiasporaWeekPortalPage() {
             <div className={`container ${styles.homeHeroContent}`}>
               <span className={styles.homeHeroBadge}>
                 <CalendarDays size={14} />
-                August 1 &ndash; 6, 2026 &nbsp;&middot;&nbsp; Hargeisa, Borama &amp; Burao
+                August 2 &ndash; 6, 2026 &nbsp;&middot;&nbsp; Hargeisa, Borama &amp; Burao
               </span>
               <h1 className={styles.homeHeroTitle}>
                 Somaliland <span className={styles.homeHeroAccent}>Diaspora</span> Week 2026
@@ -355,7 +355,7 @@ export default function DiasporaWeekPortalPage() {
                   {[
                     {
                       city: "Hargeisa",
-                      date: "August 1–2",
+                      date: "August 2–3",
                       theme: "Governance, Finance & Innovation and National Investment",
                       accent: "#1f8a3b",
                       soft: "rgba(31,138,59,0.18)",
@@ -363,7 +363,7 @@ export default function DiasporaWeekPortalPage() {
                     },
                     {
                       city: "Borama",
-                      date: "August 3",
+                      date: "August 4",
                       theme: "Knowledge, Agriculture, Mining, Cross-Border Trade & Tourism",
                       accent: "#0070c0",
                       soft: "rgba(0,112,192,0.18)",
@@ -442,7 +442,7 @@ export default function DiasporaWeekPortalPage() {
 
                   <div className={styles.homeThemeDatePill}>
                     <CalendarDays size={15} />
-                    August 1&ndash;6, 2026
+                    August 2&ndash;6, 2026
                   </div>
 
                   <div className={styles.homeThemeVenueGrid}>
