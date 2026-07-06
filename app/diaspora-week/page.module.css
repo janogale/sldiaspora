@@ -623,7 +623,8 @@
   height: 0;
 }
 
-.videoFrame iframe {
+.videoFrame iframe,
+.videoFrame video {
   position: absolute;
   inset: 0;
   width: 100%;
