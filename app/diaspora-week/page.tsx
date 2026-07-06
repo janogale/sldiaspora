@@ -157,6 +157,7 @@ export default function DiasporaWeekPage() {
   const [galleryImages, setGalleryImages] = useState<{ id: string; url: string; title: string; type: "image" | "video" }[]>([]);
   const [approvedBusinesses, setApprovedBusinesses] = useState<ApprovedBusiness[]>([]);
   const [videoOpen, setVideoOpen] = useState(false);
+  const [announcementVideoUrl, setAnnouncementVideoUrl] = useState("/assets/videos/diaspora-week-hero.mp4");
   const videoRef = useRef<HTMLDivElement>(null);
 
   const EVENT_DATE = new Date("2026-08-01T09:00:00");
@@ -165,17 +166,20 @@ export default function DiasporaWeekPage() {
     let isMounted = true;
     const load = async () => {
       try {
-        const [weekRes, galRes, bizRes] = await Promise.all([
+        const [weekRes, galRes, bizRes, annVideoRes] = await Promise.all([
           fetch("/api/diaspora-week/content", { method: "GET" }),
           fetch("/api/galleries", { method: "GET" }),
           fetch("/api/business-register", { method: "GET" }),
+          fetch("/api/diaspora-week/announcement-video", { method: "GET" }),
         ]);
         const weekResult = (await weekRes.json().catch(() => null)) as { data?: PublicContent } | null;
         const galResult = (await galRes.json().catch(() => null)) as { data?: Array<{ id: string; title: string; images: string[] }> } | null;
         const bizResult = (await bizRes.json().catch(() => null)) as { data?: ApprovedBusiness[] } | null;
+        const annVideoResult = (await annVideoRes.json().catch(() => null)) as { data?: { url: string | null } } | null;
         if (!isMounted) return;
         if (weekRes.ok && weekResult?.data) setContent(weekResult.data);
         if (bizRes.ok && bizResult?.data) setApprovedBusinesses(bizResult.data);
+        if (annVideoRes.ok && annVideoResult?.data?.url) setAnnouncementVideoUrl(annVideoResult.data.url);
 
         // Build flat image list: prefer diaspora-week gallery, fall back to general galleries
         const weekGallery = weekResult?.data?.galleryPreview ?? [];
@@ -297,7 +301,7 @@ export default function DiasporaWeekPage() {
             </button>
             <div className={styles.videoFrame}>
               <video
-                src="/assets/videos/diaspora-week-hero.mp4"
+                src={announcementVideoUrl}
                 controls
                 autoPlay
                 style={{ width: "100%", height: "100%", display: "block" }}
@@ -346,7 +350,7 @@ export default function DiasporaWeekPage() {
               <div className={styles.videoThumbInner}>
                 <div className={styles.videoThumbImg}>
                   <video
-                    src="/assets/videos/diaspora-week-hero.mp4"
+                    src={announcementVideoUrl}
                     muted
                     loop
                     playsInline
