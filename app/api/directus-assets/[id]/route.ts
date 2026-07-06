@@ -31,6 +31,10 @@ export async function GET(request: NextRequest, context: RouteContext) {
   if (DIRECTUS_ASSET_TOKEN) {
     headers.Authorization = `Bearer ${DIRECTUS_ASSET_TOKEN}`;
   }
+  const range = request.headers.get("range");
+  if (range) {
+    headers.Range = range;
+  }
 
   const upstream = await fetch(upstreamUrl.toString(), {
     method: "GET",
@@ -54,16 +58,20 @@ export async function GET(request: NextRequest, context: RouteContext) {
   const contentLength = upstream.headers.get("content-length");
   const cacheControl = upstream.headers.get("cache-control");
   const contentDisposition = upstream.headers.get("content-disposition");
+  const contentRange = upstream.headers.get("content-range");
+  const acceptRanges = upstream.headers.get("accept-ranges");
 
   if (contentType) responseHeaders.set("content-type", contentType);
   if (contentLength) responseHeaders.set("content-length", contentLength);
   if (contentDisposition) {
     responseHeaders.set("content-disposition", contentDisposition);
   }
+  if (contentRange) responseHeaders.set("content-range", contentRange);
+  responseHeaders.set("accept-ranges", acceptRanges || "bytes");
   responseHeaders.set("cache-control", cacheControl || "public, max-age=300");
 
   return new Response(upstream.body, {
-    status: 200,
+    status: upstream.status,
     headers: responseHeaders,
   });
 }

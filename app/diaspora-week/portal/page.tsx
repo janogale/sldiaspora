@@ -805,7 +805,7 @@ export default function DiasporaWeekPortalPage() {
                 );
 
                 // Part 2 right-column photo — Day 1 uses president's official photo
-                const PRESIDENT_IRRO_IMG = "https://upload.wikimedia.org/wikipedia/commons/1/1a/President_Abdullahi_%28Irro%29.png";
+                const PRESIDENT_IRRO_IMG = "/president.jpg";
                 const dayPhoto2 = dayNumber === 1
                   ? PRESIDENT_IRRO_IMG
                   : "/diaspora-img.png";

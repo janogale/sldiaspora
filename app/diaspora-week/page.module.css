@@ -623,7 +623,8 @@
   height: 0;
 }
 
-.videoFrame iframe {
+.videoFrame iframe,
+.videoFrame video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1723,6 +1724,21 @@
   align-items: center;
   gap: 18px;
   padding-bottom: 4px;
+}
+
+.partnersComingSoon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  border: 1.5px dashed #f0c98a;
+  border-radius: 16px;
+  background: #fdf0dc;
+  color: #b45309;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .partnerLogo {
