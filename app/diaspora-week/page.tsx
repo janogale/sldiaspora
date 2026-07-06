@@ -271,16 +271,6 @@ export default function DiasporaWeekPage() {
                 <ChevronRight size={18} />
               </span>
             </Link>
-            <button
-              className={styles.videoBtn}
-              onClick={() => setVideoOpen(true)}
-              aria-label="Watch announcement video"
-            >
-              <span className={styles.videoBtnIcon}>
-                <Play size={16} fill="currentColor" />
-              </span>
-              Watch the Announcement
-            </button>
             <Link href="/diaspora-week/portal" className={styles.portalCta}>
               <span className={styles.portalCtaIcon}>
                 <CalendarDays size={16} />
