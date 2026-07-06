@@ -1726,6 +1726,21 @@
   padding-bottom: 4px;
 }
 
+.partnersComingSoon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  border: 1.5px dashed #f0c98a;
+  border-radius: 16px;
+  background: #fdf0dc;
+  color: #b45309;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .partnerLogo {
   width: 168px;
   height: 116px;

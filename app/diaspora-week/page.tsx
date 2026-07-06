@@ -801,53 +801,7 @@ export default function DiasporaWeekPage() {
                 <Handshake size={16} />
                 Partners
               </h3>
-              <div className={styles.partnersStrip}>
-                {[
-                  {
-                    name: "Dahabshiil",
-                    abbr: "DS",
-                    logo: "/partners/dahabshiil-clear.png",
-                    bg: "linear-gradient(135deg,#4caf50,#3d8b40)",
-                  },
-                  {
-                    name: "Telesom",
-                    abbr: "TL",
-                    logo: "/partners/telesom.png",
-                    bg: "linear-gradient(135deg,#9ccc3c,#7cb030)",
-                  },
-                  {
-                    name: "IOM",
-                    abbr: "IOM",
-                    logo: "/partners/IOM-clear.png",
-                    bg: "linear-gradient(135deg,#1f3fa0,#142a73)",
-                  },
-                ].map((p) => (
-                  <div
-                    className={`${styles.partnerLogo} ${p.bg ? styles.partnerLogoZoom : ""}`}
-                    key={p.name}
-                    style={p.bg ? { background: p.bg, border: "none" } : undefined}
-                  >
-                    {p.logo && (
-                      <img
-                        src={p.logo}
-                        alt={p.name}
-                        onError={(e) => {
-                          const img = e.currentTarget;
-                          img.style.display = "none";
-                          const fb = img.nextElementSibling as HTMLElement | null;
-                          if (fb) fb.style.display = "flex";
-                        }}
-                      />
-                    )}
-                    <span
-                      className={styles.partnerFallback}
-                      style={{ display: p.logo ? "none" : "flex" }}
-                    >
-                      {p.abbr}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <div className={styles.partnersComingSoon}>Coming Soon</div>
             </div>
           </div>
         </div>
