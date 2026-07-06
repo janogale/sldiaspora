@@ -9,9 +9,6 @@ import { countries } from "../../data/countries";
 
 type RegistrationType = "individual" | "business";
 
-const dialCodeFor = (countryName: string) =>
-  countries.find((c) => c.name === countryName)?.dial || "";
-
 export default function DiasporaWeekRegisterPage() {
   const [registrationType, setRegistrationType] = useState<RegistrationType | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,27 +22,7 @@ export default function DiasporaWeekRegisterPage() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const [indivCountry, setIndivCountry] = useState("");
-  const [indivPhone, setIndivPhone] = useState("");
   const [bizCountry, setBizCountry] = useState("");
-  const [bizPhone, setBizPhone] = useState("");
-
-  // Selecting a country prefills the phone field with that country's dial
-  // code, but only replaces a still-untouched or previously-prefilled value
-  // so it never clobbers digits the person already typed in.
-  const handleCountryChange = (
-    countryName: string,
-    phoneValue: string,
-    setPhone: (value: string) => void,
-    setCountry: (value: string) => void
-  ) => {
-    setCountry(countryName);
-    const newDial = dialCodeFor(countryName);
-    const trimmedPhone = phoneValue.trim();
-    const isUntouched = !trimmedPhone || /^\+\d+$/.test(trimmedPhone);
-    if (newDial && isUntouched) {
-      setPhone(`${newDial} `);
-    }
-  };
 
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -73,10 +50,29 @@ export default function DiasporaWeekRegisterPage() {
     if (!registrationType) return;
 
     setError("");
+
+    const formData = new FormData(event.currentTarget);
+
+    const cities = formData.getAll("eventLocation");
+    if (cities.length === 0) {
+      setError("Please select at least one city you will attend.");
+      return;
+    }
+
+    if (registrationType === "individual") {
+      if (!idDocType) {
+        setError("Please select a document type (Passport or Driving Licence).");
+        return;
+      }
+      if (!idDocFileName) {
+        setError(`Please upload your ${idDocType === "passport" ? "passport" : "driving licence"}.`);
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
-      const formData = new FormData(event.currentTarget);
       formData.set("registrationType", registrationType);
 
       const response = await fetch("/api/diaspora-week/register", {
@@ -234,9 +230,7 @@ export default function DiasporaWeekRegisterPage() {
                                 name="country"
                                 className={`form-control ${styles.input}`}
                                 value={indivCountry}
-                                onChange={(e) =>
-                                  handleCountryChange(e.target.value, indivPhone, setIndivPhone, setIndivCountry)
-                                }
+                                onChange={(e) => setIndivCountry(e.target.value)}
                                 required
                               >
                                 <option value="">Select country of residence</option>
@@ -252,9 +246,7 @@ export default function DiasporaWeekRegisterPage() {
                                 name="phone"
                                 type="tel"
                                 className={`form-control ${styles.input}`}
-                                placeholder="Select a country first"
-                                value={indivPhone}
-                                onChange={(e) => setIndivPhone(e.target.value)}
+                                placeholder="e.g. +252 63 1234567"
                                 required
                               />
                             </div>
@@ -379,9 +371,7 @@ export default function DiasporaWeekRegisterPage() {
                                 name="country"
                                 className={`form-control ${styles.input}`}
                                 value={bizCountry}
-                                onChange={(e) =>
-                                  handleCountryChange(e.target.value, bizPhone, setBizPhone, setBizCountry)
-                                }
+                                onChange={(e) => setBizCountry(e.target.value)}
                                 required
                               >
                                 <option value="">Select country</option>
@@ -400,9 +390,7 @@ export default function DiasporaWeekRegisterPage() {
                                 name="phone"
                                 type="tel"
                                 className={`form-control ${styles.input}`}
-                                placeholder="Select a country first"
-                                value={bizPhone}
-                                onChange={(e) => setBizPhone(e.target.value)}
+                                placeholder="e.g. +252 63 1234567"
                                 required
                               />
                             </div>
