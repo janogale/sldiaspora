@@ -130,6 +130,13 @@ Example webhook payload:
 
 Use a Directus Flow/Webhook on `members` update where status changes to `active` or `published`.
 
+3. Polling fallback (recommended — use this if the Directus Flow/Webhook above does not fire reliably)
+
+- Endpoint: `POST /api/member-auth/send-pending-approvals`
+- Same optional `x-member-webhook-secret` header (or `Authorization: Bearer <DIRECTUS_ADMIN_TOKEN>`) as above.
+- Scans the `members` collection for anything `active`/`published` that hasn't been emailed yet (per the tracking field) and sends the welcome/activation email.
+- Point an external scheduler (e.g. cron-job.org, Vercel Cron) at this endpoint every 1–2 minutes, the same way the Diaspora Week `send-pending-approvals` poller is scheduled.
+
 ### Security note
 
 For safety, passwords are not included in email. Members should use the password they created during registration.
