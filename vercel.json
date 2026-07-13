@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/diaspora-week/send-pending-approvals",
+      "schedule": "*/2 * * * *"
+    },
+    {
+      "path": "/api/member-auth/send-pending-approvals",
+      "schedule": "*/2 * * * *"
+    }
+  ]
+}
