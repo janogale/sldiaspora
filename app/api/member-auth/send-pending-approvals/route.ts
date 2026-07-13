@@ -10,17 +10,23 @@ import { directusFetch, maybeSendActivationWelcomeEmail } from "@/lib/member-dir
 const isAuthorized = (request: Request): boolean => {
   const webhookSecret = (process.env.MEMBER_STATUS_WEBHOOK_SECRET || "").trim();
   const directusToken = (process.env.DIRECTUS_ADMIN_TOKEN || "").trim();
+  const cronSecret    = (process.env.CRON_SECRET || "").trim();
 
-  if (!webhookSecret && !directusToken) return true;
+  if (!webhookSecret && !directusToken && !cronSecret) return true;
 
   const providedWebhook = (request.headers.get("x-member-webhook-secret") || "").trim();
   if (webhookSecret && providedWebhook === webhookSecret) return true;
 
   const authorization = (request.headers.get("Authorization") || "").trim();
   if (directusToken && authorization === `Bearer ${directusToken}`) return true;
+  if (cronSecret    && authorization === `Bearer ${cronSecret}`)    return true;
 
   return false;
 };
+
+export async function GET(request: Request) {
+  return POST(request);
+}
 
 export async function POST(request: Request) {
   try {
