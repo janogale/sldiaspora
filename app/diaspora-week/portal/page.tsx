@@ -38,7 +38,7 @@ const DW_PHOTOS = [
   "/assets/imgs/Diaspora Week 2025/528603324_1169233405245718_3332848329999857221_n.jpg",
 ];
 
-const SAMPLE_VIDEO_URL = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+const SAMPLE_VIDEO_URL = "/assets/videos/diaspora-week-hero.mp4";
 
 const DAY_ICONS = [Sparkles, Handshake, Star, PartyPopper, Sparkles];
 
