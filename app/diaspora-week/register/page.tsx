@@ -3,7 +3,7 @@
 import { FormEvent, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Building2, CalendarDays, CheckCircle2, User } from "lucide-react";
+import { CheckCircle2, User } from "lucide-react";
 import styles from "./page.module.css";
 import { countries } from "../../data/countries";
 
@@ -157,25 +157,6 @@ export default function DiasporaWeekRegisterPage() {
                       </p>
                       <span className={styles.typeCta}>
                         Register as Individual
-                        <i className="fa-regular fa-arrow-right" aria-hidden="true"></i>
-                      </span>
-                    </button>
-
-                    <button
-                      type="button"
-                      className={`${styles.typeCard} ${styles.typeCardBiz}`}
-                      onClick={() => setRegistrationType("business")}
-                    >
-                      <span className={`${styles.typeIcon} ${styles.typeIconBiz}`}>
-                        <Building2 size={28} />
-                      </span>
-                      <h3>Business / Exhibitor</h3>
-                      <p>
-                        Diaspora-founded business, NGO or organization seeking a booth to
-                        showcase products, services or development initiatives.
-                      </p>
-                      <span className={`${styles.typeCta} ${styles.typeCtaBiz}`}>
-                        Register as Business
                         <i className="fa-regular fa-arrow-right" aria-hidden="true"></i>
                       </span>
                     </button>
