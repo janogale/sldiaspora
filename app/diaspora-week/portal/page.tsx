@@ -8,18 +8,11 @@ import {
   CalendarDays,
   Camera,
   CheckCircle2,
-  ChevronRight,
-  Eye,
   Handshake,
-  Mail,
   MapPin,
-  Megaphone,
-  Package,
   PartyPopper,
-  Phone,
   Sparkles,
   Star,
-  Unlock,
   User,
 } from "lucide-react";
 import styles from "./page.module.css";
@@ -95,71 +88,6 @@ const FALLBACK_SCHEDULE: ScheduleItem[] = [
   { id: "d4-5",  dayNumber: 4, dayLabel: "Day 4 · Burco", date: "August 5, 2026", startTime: "08:15", endTime: "09:00", title: "Intergenerational Dialogue Circle", description: "Elders & diaspora youth share experiences.", speaker: "", location: "Plaza Hotel, Burco", sessionType: "Program Highlight" },
 ];
 
-const EXHIBITOR_BENEFITS = [
-  {
-    icon: Eye,
-    title: "Increase Visibility",
-    description:
-      "Put your brand in front of hundreds of diaspora attendees, government representatives, investors, and development partners from across Somaliland's regions.",
-  },
-  {
-    icon: Handshake,
-    title: "Build New Connections",
-    description:
-      "Meet potential investors, collaborators, and clients from Somaliland and abroad who share a commitment to national development.",
-  },
-  {
-    icon: Package,
-    title: "Showcase Your Impact",
-    description:
-      "Demonstrate your products, services, or community development work to an audience eager to support diaspora-driven initiatives that are making a tangible difference.",
-  },
-  {
-    icon: Unlock,
-    title: "Unlock New Opportunities",
-    description:
-      "Position your business or organization to benefit from partnerships, investment leads, and future collaborations sparked during the event.",
-  },
-  {
-    icon: Megaphone,
-    title: "Contribute to the Narrative",
-    description:
-      "Be part of a movement that shows the world that Somaliland's diaspora is not just an observer, it is the architect of the modern state.",
-  },
-];
-
-const EXHIBITOR_CATEGORIES = [
-  "Diaspora-founded businesses operating in Somaliland across all sectors, including agriculture, livestock, fishery, mining, manufacturing, real estate, fintech, tourism, energy, healthcare, education, technology, and other professional service sectors.",
-  "Diaspora philanthropists and individual changemakers who have invested in community development.",
-  "Diaspora-led development organizations and NGOs that have implemented impactful programs in Somaliland.",
-  "Community groups and cooperatives that are driving local economic development.",
-  "Diaspora professionals with ventures or initiatives contributing to Somaliland's growth.",
-];
-
-const SAMPLE_EXHIBITOR_LOGOS = [
-  { name: "Kaaha Design", file: "kaaha-design.png" },
-  { name: "AKHRI - Mothers and Daughters Literacy", file: "akhri-mothers.png" },
-  { name: "Emaankoo Group", file: "emaankoo-group.png" },
-  { name: "Call A Doctor", file: "call-a-doctor.png" },
-  { name: "Fresh Harvest Co.", file: "fresh-harvest.png" },
-  { name: "Saver Mobile Clinic", file: "saver-mobile-clinic.png" },
-  { name: "Luxury Perfumes", file: "luxury-perfumes.png" },
-  { name: "Kaabsan Real Estate", file: "kaabsan-real-estate.png" },
-  { name: "DPD - Diaspora Property Developers", file: "dpd.png" },
-  { name: "Eureka Coffee Roasters", file: "eureka.png" },
-  { name: "WTI Somaliland & UK", file: "wti.png" },
-  { name: "Yool Training Center", file: "yool-training-center.png" },
-  { name: "Vista Real Estate", file: "vista-real-estate.png" },
-  { name: "Subeer Real Estate", file: "subeer-real-estate.png" },
-  { name: "My Land Code", file: "my-land-code.png" },
-  { name: "Diyaar Local Food Processing", file: "diyaar.png" },
-  { name: "Dhalin Jaab Initiative", file: "dhalin-jaab.png" },
-  { name: "GoodLight Energy", file: "goodlight-energy.png" },
-  { name: "Somaliland Leadership Academy", file: "somaliland-leadership-academy.png" },
-  { name: "SAAFI - Somali Advice and Forum for Information", file: "saafi.png" },
-  { name: "Riyan Organic", file: "riyan-organic.png" },
-];
-
 type ScheduleItem = {
   id: string;
   dayNumber: number;
@@ -206,28 +134,20 @@ type PortalContent = {
   gallery: GalleryMediaItem[];
 };
 
-type Section = "home" | "schedule" | "exhibitors" | "gallery";
-
-type ApprovedBusiness = { id: string; name: string; logoUrl: string | null; category: string };
+type Section = "home" | "schedule" | "gallery";
 
 export default function DiasporaWeekPortalPage() {
   const [loading, setLoading] = useState(true);
   const [content, setContent] = useState<PortalContent | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [activeDay, setActiveDay] = useState<number | null>(null);
-  const [approvedBusinesses, setApprovedBusinesses] = useState<ApprovedBusiness[]>([]);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [portalRes, bizRes] = await Promise.all([
-          fetch("/api/diaspora-week/portal/public", { cache: "no-store" }),
-          fetch("/api/business-register", { cache: "no-store" }),
-        ]);
+        const portalRes = await fetch("/api/diaspora-week/portal/public", { cache: "no-store" });
         const result = await portalRes.json().catch(() => null);
         if (portalRes.ok && result?.data) setContent(result.data);
-        const bizResult = await bizRes.json().catch(() => null);
-        if (bizRes.ok && bizResult?.data) setApprovedBusinesses(bizResult.data);
       } catch {
         // keep null — fallbacks handle empty state
       } finally {
@@ -271,7 +191,6 @@ export default function DiasporaWeekPortalPage() {
   const navItems: Array<{ key: Section; label: string; icon: React.ReactNode }> = [
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
     { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
-    { key: "exhibitors", label: "Exhibitors", icon: <Building2 size={16} /> },
     { key: "gallery", label: "Gallery", icon: <Camera size={16} /> },
   ];
 
@@ -559,56 +478,6 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* ══ EXHIBITORS PREVIEW ══ */}
-          <section className={styles.homeExhibitorSection}>
-            <div className="container">
-              <div className={styles.homeExhibitorHead}>
-                <span className={styles.homeKicker}>
-                  <Building2 size={13} />
-                  Showcase
-                </span>
-                <h2 className={styles.homeSectionTitle}>Meet the Exhibitors</h2>
-                <p className={styles.homeSectionLead}>
-                  Diaspora businesses and organizations from around the world will showcase
-                  their products, services and investment opportunities throughout the week.
-                </p>
-              </div>
-
-              {approvedBusinesses.length > 0 ? (
-                <div className={styles.homeExhibitorLogoGrid}>
-                  {approvedBusinesses.slice(0, 6).map((biz) => (
-                    <div className={styles.homeExhibitorLogo} key={biz.id} title={biz.name}>
-                      {biz.logoUrl ? (
-                        <img src={biz.logoUrl} alt={biz.name} loading="lazy" />
-                      ) : (
-                        <span className={styles.homeExhibitorFallback}>
-                          {biz.name.slice(0, 2).toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.homeExhibitorEmpty}>
-                  <Building2 size={28} />
-                  <p>Exhibitor logos will appear here once businesses are approved.</p>
-                </div>
-              )}
-
-              <div className={styles.homeExhibitorAction}>
-                <button
-                  type="button"
-                  className={styles.homeExhibitorCta}
-                  onClick={() => setActiveSection("exhibitors")}
-                >
-                  <Building2 size={16} />
-                  View All Exhibitors &amp; Connect
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </div>
-          </section>
-
           {/* ══ GALLERY MOSAIC ══ */}
           <section className={styles.homeGallerySection}>
             <div className="container">
@@ -869,182 +738,6 @@ export default function DiasporaWeekPortalPage() {
             </div>
           )}
 
-        </>
-      )}
-
-      {activeSection === "exhibitors" && (
-        <>
-          {/* ══ EXHIBITOR HERO ══ */}
-          <section className={styles.exHero}>
-            <div className={styles.exHeroBg}>
-              <img src={DW_PHOTOS[6]} alt="" className={styles.exHeroBgImg} />
-            </div>
-            <div className={styles.exHeroOverlay} />
-            <div className={styles.exHeroOrb1} aria-hidden="true" />
-            <div className={styles.exHeroOrb2} aria-hidden="true" />
-
-            <div className={`container ${styles.exHeroInner}`}>
-              {/* deadline badge */}
-              <div className={styles.exHeroBadge}>
-                <CalendarDays size={15} />
-                Application Deadline: <strong>July 20, 2026</strong>
-              </div>
-
-              <h1 className={styles.exHeroTitle}>
-                Exhibit at <span className={styles.exHeroAccent}>Diaspora Week 2026</span>
-              </h1>
-
-              <p className={styles.exHeroSub}>
-                Put your brand in front of hundreds of diaspora investors, government officials,
-                and development partners across Hargeisa, Borama and Burao. This is your platform
-                to showcase, connect, and grow.
-              </p>
-
-              {/* quick stats */}
-              <div className={styles.exHeroStats}>
-                {[
-                  { val: "3", label: "Host Cities" },
-                  { val: "5", label: "Event Days" },
-                  { val: "500+", label: "Attendees" },
-                  { val: "21+", label: "Exhibitors" },
-                ].map((s) => (
-                  <div className={styles.exHeroStat} key={s.label}>
-                    <strong>{s.val}</strong>
-                    <span>{s.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA + contact */}
-              <div className={styles.exHeroActions}>
-                <Link href="/diaspora-week/register?type=business" className={styles.exHeroBtn}>
-                  <Building2 size={18} />
-                  Register Your Business
-                  <ChevronRight size={18} />
-                </Link>
-                <div className={styles.exHeroContacts}>
-                  <a href="mailto:info@sldiaspora.org" className={styles.exHeroContact}>
-                    <Mail size={15} />
-                    info@sldiaspora.org
-                  </a>
-                  <span className={styles.exHeroContactDiv} />
-                  <a href="tel:+252638880240" className={styles.exHeroContact}>
-                    <Phone size={15} />
-                    +252 63 8880240
-                  </a>
-                </div>
-              </div>
-
-              {/* selection process note */}
-              <p className={styles.exHeroNote}>
-                Submit by <strong>July 20th</strong> &mdash; the Diaspora Department reviews all applications
-                and accepted businesses confirm their space with an affordable exhibition fee.
-              </p>
-            </div>
-          </section>
-
-          {/* ══ ABOUT + OPPORTUNITY ══ */}
-          <section className={styles.exAboutSection}>
-            <div className="container">
-              <div className={styles.exAboutGrid}>
-                {/* left — summary text */}
-                <div className={styles.exAboutText}>
-                  <span className={styles.exKicker}>Exhibit With Us</span>
-                  <h2 className={styles.exSectionTitle}>Showcase Your Work at Diaspora Week 2026</h2>
-                  <p className={styles.exAboutLead}>
-                    Diaspora Week 2026 invites diaspora-founded businesses, philanthropists, and
-                    development organizations to showcase their work to investors, government officials,
-                    and diaspora community members — celebrating the impact driving Somaliland&apos;s future.
-                  </p>
-                  <Link href="/diaspora-week/register?type=business" className={styles.exAboutCta}>
-                    Apply Now
-                    <ChevronRight size={16} />
-                  </Link>
-                </div>
-
-                {/* right — opportunity mini-stats */}
-                <div className={styles.exOppsGrid}>
-                  {[
-                    { icon: <Star size={20} />, title: "Present", desc: "Your brand, vision and products to investors and diaspora partners.", color: "#d4600a" },
-                    { icon: <Handshake size={20} />, title: "Connect", desc: "Build lasting relationships across the global Somaliland network.", color: "#1f8a3b" },
-                    { icon: <Sparkles size={20} />, title: "Inspire", desc: "Demonstrate how diaspora capital is transforming Somaliland.", color: "#7c3aed" },
-                  ].map((o) => (
-                    <div className={styles.exOppCard} key={o.title} style={{ "--opp-color": o.color } as React.CSSProperties}>
-                      <span className={styles.exOppIcon}>{o.icon}</span>
-                      <h3 className={styles.exOppTitle}>{o.title}</h3>
-                      <p className={styles.exOppDesc}>{o.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ══ BENEFITS ══ */}
-          <section className={styles.exBenefitsSection}>
-            <div className="container">
-              <div className={styles.exBenefitsHead}>
-                <span className={styles.exKicker}>Why Exhibit</span>
-                <h2 className={styles.exSectionTitle}>What Your Organization Gains</h2>
-              </div>
-              <div className={styles.exBenefitsGrid}>
-                {EXHIBITOR_BENEFITS.map((b, i) => {
-                  const BIcon = b.icon;
-                  const COLORS = ["#d4600a","#1f8a3b","#0070c0","#7c3aed","#b45309"];
-                  const col = COLORS[i % COLORS.length];
-                  return (
-                    <div className={styles.exBenCard} key={b.title} style={{ "--ben-color": col } as React.CSSProperties}>
-                      <div className={styles.exBenIconWrap} style={{ background: col + "18", color: col }}>
-                        <BIcon size={30} />
-                      </div>
-                      <div className={styles.exBenText}>
-                        <h3 className={styles.exBenTitle}>{b.title}</h3>
-                        <p className={styles.exBenDesc}>{b.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-
-          {/* ══ CONFIRMED EXHIBITORS — from Directus ══ */}
-          <section className={styles.exLogosSection}>
-            <div className="container">
-              <div className={styles.exLogosHead}>
-                <span className={styles.exKicker}>Confirmed Exhibitors</span>
-                <h2 className={styles.exSectionTitle}>Participating Organizations</h2>
-                <p className={styles.exLogosLead}>
-                  A growing line-up of approved diaspora businesses and organizations exhibiting at
-                  Diaspora Week 2026.
-                </p>
-              </div>
-
-              {approvedBusinesses.length > 0 ? (
-                <div className={styles.exLogosGrid}>
-                  {approvedBusinesses.map((biz) => (
-                    <div className={styles.exLogoCard} key={biz.id} title={biz.name}>
-                      {biz.logoUrl ? (
-                        <img src={biz.logoUrl} alt={biz.name} loading="lazy" />
-                      ) : (
-                        <span className={styles.exLogoFallback}>{biz.name.slice(0, 2).toUpperCase()}</span>
-                      )}
-                      <span className={styles.exLogoName}>{biz.name}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.exLogosEmpty}>
-                  <Building2 size={36} />
-                  <p>Approved exhibitors will appear here as registrations are confirmed.</p>
-                  <Link href="/diaspora-week/register?type=business" className={styles.exAboutCta}>
-                    Register Your Business
-                    <ChevronRight size={16} />
-                  </Link>
-                </div>
-              )}
-            </div>
-          </section>
         </>
       )}
 

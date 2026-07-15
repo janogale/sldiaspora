@@ -144,18 +144,10 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
   );
 }
 
-type ApprovedBusiness = {
-  id: string;
-  name: string;
-  logoUrl: string | null;
-  category: string;
-};
-
 export default function DiasporaWeekPage() {
   const [content, setContent] = useState<PublicContent>(EMPTY_CONTENT);
   const [loading, setLoading] = useState(true);
   const [galleryImages, setGalleryImages] = useState<{ id: string; url: string; title: string; type: "image" | "video" }[]>([]);
-  const [approvedBusinesses, setApprovedBusinesses] = useState<ApprovedBusiness[]>([]);
   const [videoOpen, setVideoOpen] = useState(false);
   const [announcementVideoUrl, setAnnouncementVideoUrl] = useState("/assets/videos/diaspora-week-hero.mp4");
   const videoRef = useRef<HTMLDivElement>(null);
@@ -166,19 +158,16 @@ export default function DiasporaWeekPage() {
     let isMounted = true;
     const load = async () => {
       try {
-        const [weekRes, galRes, bizRes, annVideoRes] = await Promise.all([
+        const [weekRes, galRes, annVideoRes] = await Promise.all([
           fetch("/api/diaspora-week/content", { method: "GET" }),
           fetch("/api/galleries", { method: "GET" }),
-          fetch("/api/business-register", { method: "GET" }),
           fetch("/api/diaspora-week/announcement-video", { method: "GET" }),
         ]);
         const weekResult = (await weekRes.json().catch(() => null)) as { data?: PublicContent } | null;
         const galResult = (await galRes.json().catch(() => null)) as { data?: Array<{ id: string; title: string; images: string[] }> } | null;
-        const bizResult = (await bizRes.json().catch(() => null)) as { data?: ApprovedBusiness[] } | null;
         const annVideoResult = (await annVideoRes.json().catch(() => null)) as { data?: { url: string | null } } | null;
         if (!isMounted) return;
         if (weekRes.ok && weekResult?.data) setContent(weekResult.data);
-        if (bizRes.ok && bizResult?.data) setApprovedBusinesses(bizResult.data);
         if (annVideoRes.ok && annVideoResult?.data?.url) setAnnouncementVideoUrl(annVideoResult.data.url);
 
         // Build flat image list: prefer diaspora-week gallery, fall back to general galleries
@@ -544,58 +533,6 @@ export default function DiasporaWeekPage() {
               );
             })}
           </div>
-        </div>
-      </section>
-
-      {/* ── EXHIBITORS ── */}
-      <section className={`${styles.section} ${styles.sectionAlt}`}>
-        <div className="container">
-          <div className={styles.sectionHead}>
-            <span className={styles.kicker}>
-              <Building2 size={13} />
-              Showcase
-            </span>
-            <h2 className={styles.sectionTitle}>Meet the Exhibitors</h2>
-            <p className={styles.sectionLead}>
-              Diaspora businesses and organizations from around the world will showcase
-              their products, services and investment opportunities throughout the week.
-            </p>
-          </div>
-
-          {loading ? (
-            <div className={styles.logoGrid}>
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <div key={n} className={`${styles.logoCard} ${styles.logoCardSkeleton}`} />
-              ))}
-            </div>
-          ) : approvedBusinesses.length > 0 ? (
-            <div className={styles.logoGrid}>
-              {approvedBusinesses.map((biz) => (
-                <div className={styles.logoCard} key={biz.id} title={biz.name}>
-                  {biz.logoUrl ? (
-                    <img src={biz.logoUrl} alt={biz.name} />
-                  ) : (
-                    <span className={styles.logoFallback}>{biz.name.slice(0, 2).toUpperCase()}</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className={styles.comingSoonCard}>
-              <div className={styles.comingSoonIcon}>
-                <Building2 size={32} />
-              </div>
-              <h3>Exhibitor Registrations Opening Soon</h3>
-              <p>
-                Approved diaspora businesses will appear here. Register your business to be
-                featured in the Showcase.
-              </p>
-              <Link href="/diaspora-week/register" className={styles.comingSoonCta}>
-                Register Your Business
-                <ChevronRight size={16} />
-              </Link>
-            </div>
-          )}
         </div>
       </section>
 
