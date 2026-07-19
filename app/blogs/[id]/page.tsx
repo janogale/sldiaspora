@@ -39,10 +39,10 @@ export default async function Page({ params }: Props) {
       <Header />
       <BreadCamp title="News Details" />
 
-      <section style={{ backgroundColor: "#f8faf9", minHeight: "100vh", padding: "60px 0 80px" }}>
+      <section style={{ backgroundColor: "#f8faf9", minHeight: "100vh", padding: "0 0 80px" }}>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-lg-9 col-xl-8">
+            <div className="col-lg-8 col-xl-7">
 
               {/* Article Card */}
               <article style={{
@@ -135,7 +135,7 @@ export default async function Page({ params }: Props) {
                   <h1 style={{
                     fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
                     fontWeight: 700,
-                    color: "#111827",
+                    color: "#1a6b45",
                     lineHeight: 1.3,
                     marginBottom: "32px",
                     borderBottom: "2px solid #e8f4ee",
@@ -148,7 +148,7 @@ export default async function Page({ params }: Props) {
                   <div style={{
                     fontSize: "1.065rem",
                     lineHeight: 1.85,
-                    color: "#374151",
+                    color: "#111827",
                   }}
                     className="article-body-content"
                   >
@@ -274,6 +274,13 @@ export default async function Page({ params }: Props) {
       </section>
 
       <style>{`
+        .article-body-content,
+        .article-body-content p,
+        .article-body-content li,
+        .article-body-content span,
+        .article-body-content td {
+          color: #000000 !important;
+        }
         .article-body-content p {
           margin-bottom: 1.4em;
         }
@@ -281,7 +288,7 @@ export default async function Page({ params }: Props) {
         .article-body-content h3,
         .article-body-content h4 {
           font-weight: 700;
-          color: #111827;
+          color: #1a6b45;
           margin-top: 2em;
           margin-bottom: 0.6em;
           line-height: 1.3;
@@ -307,7 +314,7 @@ export default async function Page({ params }: Props) {
           font-style: italic;
         }
         .article-body-content a {
-          color: #1a6b45;
+          color: #2563eb !important;
           text-decoration: underline;
         }
         .article-body-content img {
