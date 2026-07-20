@@ -280,6 +280,7 @@ export default async function Page({ params }: Props) {
         .article-body-content span,
         .article-body-content td {
           color: #000000 !important;
+          text-align: left !important;
         }
         .article-body-content p {
           margin-bottom: 1.4em;
