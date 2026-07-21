@@ -190,7 +190,7 @@ export default function DiasporaWeekPortalPage() {
 
   const navItems: Array<{ key: Section; label: string; icon: React.ReactNode }> = [
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
-    { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
+    // { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
     { key: "gallery", label: "Gallery", icon: <Camera size={16} /> },
   ];
 
