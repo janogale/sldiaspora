@@ -262,10 +262,10 @@ export default function DiasporaWeekPortalPage() {
                   Register to Participate
                   <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </Link>
-                <button type="button" className={styles.homeHeroCtaSecondary} onClick={() => setActiveSection("schedule")}>
+                {/* <button type="button" className={styles.homeHeroCtaSecondary} onClick={() => setActiveSection("schedule")}>
                   <CalendarDays size={16} />
                   View Schedule
-                </button>
+                </button> */}
               </div>
             </div>
             <div className={styles.homeHeroStatsBar}>
@@ -434,8 +434,8 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* ══ SCHEDULE QUICK ACCESS ══ */}
-          <section className={styles.homeScheduleSection}>
+          {/* ══ SCHEDULE QUICK ACCESS ══ (hidden) */}
+          {false && <section className={styles.homeScheduleSection}>
             <div className="container">
               <div className={styles.homeScheduleHeader}>
                 <div>
@@ -476,7 +476,7 @@ export default function DiasporaWeekPortalPage() {
                 })}
               </div>
             </div>
-          </section>
+          </section>}
 
           {/* ══ GALLERY MOSAIC ══ */}
           <section className={styles.homeGallerySection}>
