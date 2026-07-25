@@ -34,7 +34,7 @@ const isAuthorized = (request: Request): boolean => {
 
 type RegistrationType = "individual" | "business";
 
-const processCollection = async (registrationType: RegistrationType) => {
+const processCollection = async (registrationType: RegistrationType, force: boolean) => {
   const collection =
     registrationType === "business"
       ? BUSINESS_REGISTRATIONS_COLLECTION
@@ -42,20 +42,29 @@ const processCollection = async (registrationType: RegistrationType) => {
 
   const statusFilter = APPROVED_STATUSES.map((s) => encodeURIComponent(s)).join(",");
 
-  // Try the precise query first (filter out already-emailed records in Directus).
-  // If it fails (e.g. approval_email_sent_at field does not exist in the schema),
-  // fall back to fetching all approved records and skip in code.
-  let response = await directusFetch(
-    `/items/${collection}?filter[status][_in]=${statusFilter}&filter[approval_email_sent_at][_null]=true&fields=*&limit=100`
-  );
-
+  let response: Response;
   let fallbackMode = false;
-  if (!response.ok) {
-    // Field may not exist — retry without the null-check filter
+
+  if (force) {
+    // Resend to every approved/published record regardless of approval_email_sent_at
     response = await directusFetch(
       `/items/${collection}?filter[status][_in]=${statusFilter}&fields=*&limit=100`
     );
-    fallbackMode = true;
+  } else {
+    // Try the precise query first (filter out already-emailed records in Directus).
+    // If it fails (e.g. approval_email_sent_at field does not exist in the schema),
+    // fall back to fetching all approved records and skip in code.
+    response = await directusFetch(
+      `/items/${collection}?filter[status][_in]=${statusFilter}&filter[approval_email_sent_at][_null]=true&fields=*&limit=100`
+    );
+
+    if (!response.ok) {
+      // Field may not exist — retry without the null-check filter
+      response = await directusFetch(
+        `/items/${collection}?filter[status][_in]=${statusFilter}&fields=*&limit=100`
+      );
+      fallbackMode = true;
+    }
   }
 
   if (!response.ok) return { collection, sent: 0, failed: 0 };
@@ -64,9 +73,9 @@ const processCollection = async (registrationType: RegistrationType) => {
     data?: Array<Record<string, unknown>>;
   } | null;
 
-  // In fallback mode, skip records that already have approval_email_sent_at set
+  // In fallback mode (non-force), skip records that already have approval_email_sent_at set
   const allRecords = result?.data || [];
-  const candidates = fallbackMode
+  const candidates = fallbackMode && !force
     ? allRecords.filter((r) => !r.approval_email_sent_at)
     : allRecords;
   const allowedFields = await getCollectionFields(collection);
@@ -129,9 +138,12 @@ const runScan = async (request: Request) => {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
+  const url = new URL(request.url);
+  const force = url.searchParams.get("force") === "true";
+
   const [individual, business] = await Promise.all([
-    processCollection("individual"),
-    processCollection("business"),
+    processCollection("individual", force),
+    processCollection("business", force),
   ]);
 
   return NextResponse.json({ message: "Scan complete.", results: [individual, business] });
