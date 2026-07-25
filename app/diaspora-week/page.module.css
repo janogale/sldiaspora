@@ -639,7 +639,7 @@
 
 .videoSectionInner {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
+  grid-template-columns: 1fr 480px;
   gap: 72px;
   align-items: center;
 }
