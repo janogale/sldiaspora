@@ -51,17 +51,15 @@ const DAY_PHOTOS: Record<number, string> = {
 };
 
 const FALLBACK_SCHEDULE: ScheduleItem[] = [
-  // ══ DAY 1 — Hargeisa, Sunday August 2 (Opening Day Ceremony) ══
-  { id: "d1-1",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "08:30", endTime: "09:00", title: "Guest Arrival and Registration",  description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-2",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:00", endTime: "09:10", title: "Quran, National Anthem and Cultural Dance", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-3",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:10", endTime: "09:15", title: "Welcome Remarks", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-4",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:15", endTime: "09:25", title: "H.E. Abdirahman Dahir Adam", description: "Speech by Minister of Foreign Affairs & International Cooperation", speaker: "H.E. Abdirahman Dahir Adam", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-5",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:25", endTime: "09:35", title: "H.E. Khadar Hussien Abdi", description: "Speech by Minister of the Presidency", speaker: "H.E. Khadar Hussien Abdi", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-6",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:35", endTime: "09:55", title: "Speeches from Diaspora Leaders", description: "Hibo Ali Hussein\nEng. Ahmed Jama\nAhmed Hersi Madar\nCumar Hassan Libaan\nSicid Ahmed Ali", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-7",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "09:55", endTime: "10:05", title: "Ougbad Nassir Omar", description: "Keynote Speech – Somaliland and its Global Citizens", speaker: "Ougbad Nassir Omar, Director, Diaspora Department", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-8",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "10:05", endTime: "10:25", title: "H.E. President Abdirahman Mohamed (Irro)", description: "Presidential Address", speaker: "H.E. President Abdirahman Mohamed (Irro)", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-9",  dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "10:25", endTime: "10:35", title: "Refreshments", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
-  { id: "d1-10", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 2, 2026", startTime: "10:35", endTime: "11:35", title: "High-Level Panel Discussion", description: "Redefining the Role of the Diaspora: From Benefactor to Strategic Partner\n\nModerator: Mushtaaq\n\nPanellists:\nJama Egal, Scholar and Senior Advisor to MoFAIC\nAnab Yussuf, Canadian Public Servant, President & Co-founder, Akhri Foundation\nMohamed Ahmed Askar, seasoned governance expert", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  // ══ DAY 1 — Hargeisa, Saturday August 1 (Harnessing the Somaliland Diaspora) ══
+  { id: "d1-1", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:00", endTime: "09:30", title: "Opening Ceremony", description: "To officially open the conference and articulate the Government of Somaliland's vision and policy for strengthening partnerships with the diaspora, investors, and development partners to advance national development, investment, and international cooperation.\n\nProgramme: Qur'an recitation · National Anthem · Welcome remarks by the Director General, Ministry of Foreign Affairs · Opening remarks by the Minister of Foreign Affairs or the President", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-2", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "09:30", endTime: "09:55", title: "Opening Keynote — The Somaliland Diaspora: Past Contributions, Present Opportunities, and Future Partnerships", description: "To establish the conference vision by demonstrating how the Somaliland diaspora has evolved from supporting families through remittances to becoming a strategic partner in peacebuilding, state-building, investment, diplomacy, knowledge transfer, and international engagement. The keynote becomes the foundation for all later sessions.", speaker: "Suggested speaker: H.E. Minister of Foreign Affairs, or a distinguished diaspora leader", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-3", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "10:00", endTime: "11:00", title: "Session One — Harnessing the Strategic Potential of the Somaliland Diaspora", description: "High-Level Panel Discussion\n\nBuilding directly from the keynote, this panel explores: Who is the Somaliland diaspora today? How has it contributed historically? How is it changing? What opportunities and barriers exist? And what should Somaliland's future diaspora strategy look like?\n\nModerator: Abdishakur Dayib (Senior journalist or academic)\n\nPanellists:\nMinistry of Foreign Affairs\nDistinguished diaspora leader\nAcademic / researcher\nIOM\nDiaspora youth representative", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  { id: "d1-4", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "11:00", endTime: "11:15", title: "Coffee Break", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-5", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "11:15", endTime: "12:15", title: "Session Two — Diaspora Investment in Trade, Tourism and Urban Transformation", description: "Scene-setting presentation (10 min): \"From Remittances to Investment: The Diaspora as a Driver of Economic Transformation.\" This is not another keynote; it explains how the ideas discussed earlier translate into economic development.\nPresenter: Minister of Trade and Tourism\n\nPanel discussion (50 min): How can Somaliland unlock diaspora investment in trade, tourism, urban development, real estate, infrastructure, and local business?\n\nPanellists:\nMinister of Trade & Tourism\nSomaliland Chamber of Commerce\nMunicipality\nDiaspora investor\nReal estate developer\nUrban planning expert", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  { id: "d1-6", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "12:15", endTime: "13:30", title: "Lunch & Prayers", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
+  { id: "d1-7", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "13:30", endTime: "14:30", title: "Session Three — Structuring Bankable Public–Private Partnerships (PPPs)", description: "Scene-setting presentation (10 min): \"Creating an Enabling Environment for Diaspora Investment.\" Connecting naturally to Session Two, it shifts the question from \"Why should people invest?\" to \"How can Somaliland make investment easier?\"\nPresenter: Ministry of Investment and Industrial Development\n\nPanel discussion (50 min): PPP policy, infrastructure, digital economy, banking, fintech, energy, and investment incentives.\n\nPanellists:\nBank of Somaliland\nMinistry of ICT\nPPP Department\nCommercial bank\nDiaspora entrepreneur", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
+  { id: "d1-8", dayNumber: 1, dayLabel: "Day 1 · Hargeisa", date: "August 1, 2026", startTime: "14:30", endTime: "15:30", title: "Closing Plenary Dialogue — Building Somaliland Together: A Shared Vision for the Future", description: "Not another panel, but a closing conversation. Having answered who we are, what we have achieved, where we can invest, and how we enable investment, the day closes on the question: where do we go together?\n\nFormat: Moderated conversation rather than presentations\n\nParticipants:\nAbdiqadir Haji Ismail Jirde\nSomaliland Immigration\nRepresentative of women leaders\nRepresentative of diaspora youth\nMinistry of Foreign Affairs\nPrivate sector leader — Suleikha", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Panel" },
 
   // ══ DAY 2 — Somaliland & Its Global Citizens: A New Partnership Model ══
   { id: "d2-1",  dayNumber: 2, dayLabel: "Day 2 · Hargeisa", date: "August 3, 2026", startTime: "09:00", endTime: "09:15", title: "Registration", description: "", speaker: "", location: "Serene Seravoir Hotel, Hargeisa", sessionType: "Program Highlight" },
@@ -190,7 +188,7 @@ export default function DiasporaWeekPortalPage() {
 
   const navItems: Array<{ key: Section; label: string; icon: React.ReactNode }> = [
     { key: "home", label: "Home", icon: <i className="fa-regular fa-house" aria-hidden="true"></i> },
-    // { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
+    { key: "schedule", label: "Event Schedule", icon: <CalendarDays size={16} /> },
     { key: "gallery", label: "Gallery", icon: <Camera size={16} /> },
   ];
 
@@ -262,10 +260,10 @@ export default function DiasporaWeekPortalPage() {
                   Register to Participate
                   <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </Link>
-                {/* <button type="button" className={styles.homeHeroCtaSecondary} onClick={() => setActiveSection("schedule")}>
+                <button type="button" className={styles.homeHeroCtaSecondary} onClick={() => setActiveSection("schedule")}>
                   <CalendarDays size={16} />
                   View Schedule
-                </button> */}
+                </button>
               </div>
             </div>
             <div className={styles.homeHeroStatsBar}>
@@ -434,8 +432,8 @@ export default function DiasporaWeekPortalPage() {
             </div>
           </section>
 
-          {/* ══ SCHEDULE QUICK ACCESS ══ (hidden) */}
-          {false && <section className={styles.homeScheduleSection}>
+          {/* ══ SCHEDULE QUICK ACCESS ══ */}
+          <section className={styles.homeScheduleSection}>
             <div className="container">
               <div className={styles.homeScheduleHeader}>
                 <div>
@@ -476,7 +474,7 @@ export default function DiasporaWeekPortalPage() {
                 })}
               </div>
             </div>
-          </section>}
+          </section>
 
           {/* ══ GALLERY MOSAIC ══ */}
           <section className={styles.homeGallerySection}>
@@ -564,12 +562,14 @@ export default function DiasporaWeekPortalPage() {
                 };
                 const accent = DAY_ACCENTS[dayNumber] ?? "#d4600a";
 
-                // photo per day (replaces camel in the programme booklet)
-                const dayPhoto = DAY_PHOTOS[dayNumber] ?? DW_PHOTOS[dayNumber % DW_PHOTOS.length];
-
                 // sessions to display — skip meta-only rows
                 const HIDDEN_TYPES = new Set(["Theme Anchor", "Focus Areas"]);
                 const displaySessions = sessions.filter((s) => !HIDDEN_TYPES.has(s.sessionType));
+
+                // ── split sessions into two halves ──
+                const half = Math.ceil(displaySessions.length / 2);
+                const part1 = displaySessions.slice(0, half);
+                const part2 = displaySessions.slice(half);
 
                 // split panel description into body + focus bullets
                 const splitPanel = (desc: string) => {
@@ -655,11 +655,6 @@ export default function DiasporaWeekPortalPage() {
                   );
                 };
 
-                // ── split sessions into two halves ──
-                const half = Math.ceil(displaySessions.length / 2);
-                const part1 = displaySessions.slice(0, half);
-                const part2 = displaySessions.slice(half);
-
                 // ── Part 1 day header — text only, no image ──
                 const DayHeaderCol = () => (
                   <div className={styles.pgDayHeader}>
@@ -672,12 +667,6 @@ export default function DiasporaWeekPortalPage() {
                     {venue && <p className={styles.pgDayMeta}><MapPin size={16} />{venue}</p>}
                   </div>
                 );
-
-                // Part 2 right-column photo — Day 1 uses president's official photo
-                const PRESIDENT_IRRO_IMG = "/president.jpg";
-                const dayPhoto2 = dayNumber === 1
-                  ? PRESIDENT_IRRO_IMG
-                  : "/diaspora-img.png";
 
                 return (
                   <div
@@ -704,7 +693,7 @@ export default function DiasporaWeekPortalPage() {
                       </div>
                     </div>
 
-                    {/* ══ PART 2: Sessions LEFT · Large photo RIGHT ══ */}
+                    {/* ══ PART 2: Sessions LEFT · Photo RIGHT ══ */}
                     {part2.length > 0 && (
                       <>
                         <div className={styles.pgPatternMid} aria-hidden="true" />
@@ -718,12 +707,9 @@ export default function DiasporaWeekPortalPage() {
                               </table>
                             </div>
 
-                            {/* right — full-height photo */}
+                            {/* right — day card, no photo */}
                             <div className={styles.pgPhotoCol}>
-                              <img
-                                src={dayPhoto2}
-                                alt={`Diaspora Week Day ${dayNumber}`}
-                              />
+                              <DayHeaderCol />
                             </div>
 
                           </div>
