@@ -374,7 +374,7 @@ const emailHeroBanner = (label: string) => `
     <div style="font-family:Arial,sans-serif;font-size:24px;font-weight:900;color:#ffffff;
       line-height:1.2;margin-bottom:6px;">Somaliland Diaspora Week 2026</div>
     <div style="font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.8);">
-      Aug 1–6, 2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
+      Aug 2–6, 2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
     </div>
   </td>
 </tr>`;
@@ -403,16 +403,16 @@ const dRow = (label: string, value: string, last = false) =>
 
 // City → venue/hotel/date lookup (used by both emails)
 const CITY_VENUE: Record<string, { hotel: string; dates: string; displayCity: string }> = {
-  hargeisa: { displayCity: "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 1–3, 2026" },
+  hargeisa: { displayCity: "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 2–3, 2026" },
   borama:   { displayCity: "Borama",   hotel: "Safari Hotel",           dates: "August 4, 2026"   },
   boorama:  { displayCity: "Borama",   hotel: "Safari Hotel",           dates: "August 4, 2026"   },
-  burao:    { displayCity: "Burao",    hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
-  burco:    { displayCity: "Burao",    hotel: "Plaza Hotel",            dates: "August 5–6, 2026" },
+  burao:    { displayCity: "Burao",    hotel: "Plaza Hotel",            dates: "August 5, 2026"   },
+  burco:    { displayCity: "Burao",    hotel: "Plaza Hotel",            dates: "August 5, 2026"   },
 };
 
 const resolveCityVenue = (cityRaw: string) => {
   const key = cityRaw.toLowerCase().trim().split(",")[0].trim();
-  return CITY_VENUE[key] ?? { displayCity: escapeHtml(cityRaw) || "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 1–6, 2026" };
+  return CITY_VENUE[key] ?? { displayCity: escapeHtml(cityRaw) || "Hargeisa", hotel: "Serene Seravoir Hotel", dates: "August 2–6, 2026" };
 };
 
 // ---------------------------------------------------------------------------
@@ -481,7 +481,7 @@ export const sendDiasporaWeekRegistrationReceivedEmail = async (options: {
           <td width="32%" style="text-align:center;padding:4px 6px;vertical-align:top;">
             <div style="font-family:Arial,sans-serif;font-size:18px;">&#127882;</div>
             <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#0c2f37;margin-top:3px;">Attend &amp; Connect</div>
-            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:2px;">Aug 1–6, 2026</div>
+            <div style="font-family:Arial,sans-serif;font-size:10px;color:#64748b;margin-top:2px;">Aug 2–6, 2026</div>
           </td>
         </tr>
       </table>
@@ -581,7 +581,7 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
               border:1px solid rgba(255,255,255,0.2);border-radius:999px;
               padding:6px 18px;font-family:Arial,sans-serif;font-size:12px;
               color:rgba(255,255,255,0.9);letter-spacing:0.3px;">
-              Aug 1–6, 2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
+              Aug 2–6, 2026 &nbsp;&middot;&nbsp; Hargeisa &nbsp;&middot;&nbsp; Borama &nbsp;&middot;&nbsp; Burao
             </div>
           </td>
         </tr>
