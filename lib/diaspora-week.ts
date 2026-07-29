@@ -785,6 +785,78 @@ export const sendDiasporaWeekApprovalEmail = async (options: {
 };
 
 // ---------------------------------------------------------------------------
+// Email 3 — Card Ready Notice (Diaspora Department)
+// ---------------------------------------------------------------------------
+
+export const sendDiasporaWeekCardNoticeEmail = async (options: {
+  toEmail: string;
+  name: string;
+}) => {
+  const safeName = escapeHtml(options.name || "Delegate");
+
+  const html = emailWrapper(`
+    ${emailLogoBar()}
+
+    <!-- notice hero -->
+    <tr>
+      <td style="background:linear-gradient(135deg,#004d16 0%,#006b20 40%,#007d26 70%,#005a1b 100%);
+        border-radius:16px 16px 0 0;padding:28px 24px;text-align:center;">
+        <div style="display:inline-block;border:1px solid rgba(255,215,0,0.5);
+          background:rgba(255,215,0,0.12);border-radius:999px;
+          padding:4px 16px;font-family:Arial,sans-serif;font-size:10px;
+          letter-spacing:2.5px;text-transform:uppercase;color:#fde68a;margin-bottom:14px;">
+          Official Notice
+        </div>
+        <div style="font-family:Arial,sans-serif;font-size:22px;font-weight:900;color:#ffffff;
+          line-height:1.25;">Your Invitation Card Is Ready</div>
+      </td>
+    </tr>
+
+    ${emailCardOpen()}
+
+    <div style="padding:26px 26px 6px;">
+      <p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:15px;color:#0c2f37;">
+        Dear <strong>${safeName}</strong>,
+      </p>
+      <p style="margin:0 0 18px;font-family:Arial,sans-serif;font-size:13.5px;color:#334155;line-height:1.8;">
+        The Diaspora Department of the Ministry of Foreign Affairs and International Cooperation of the
+        Republic of Somaliland respectfully informs you that your invitation for the
+        <strong>Somaliland Diaspora Week 2026 Conference</strong> is now ready.
+      </p>
+      <p style="margin:0 0 22px;font-family:Arial,sans-serif;font-size:13.5px;color:#334155;line-height:1.8;">
+        You are kindly requested to receive your invitation from the Diaspora Department Office.
+      </p>
+    </div>
+
+    <!-- pickup details -->
+    <div style="margin:0 26px 24px;background:linear-gradient(135deg,#f0faf4 0%,#e8f5ee 100%);
+      border:1px solid #c3e6ce;border-radius:14px;overflow:hidden;">
+      <div style="background:linear-gradient(135deg,#005a1b,#007a26);padding:12px 18px;
+        font-family:Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+        color:rgba(255,255,255,0.75);">Card Pickup</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${dRow("Location", "Sha&rsquo;ab Road One, Hargeisa")}
+        ${dRow("Contact", `<a href="tel:+252638880240" style="color:#005a1b;text-decoration:none;font-weight:700;">+252 63 888 0240</a>`, true)}
+      </table>
+    </div>
+
+    <div style="padding:0 26px 26px;font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;text-align:center;">
+      Questions? &nbsp;
+      <a href="mailto:info@sldiaspora.org" style="color:#005a1b;font-weight:700;text-decoration:none;">info@sldiaspora.org</a>
+    </div>
+
+    ${emailCardClose()}
+    ${emailFooter()}
+  `);
+
+  return sendHtmlEmail({
+    to: options.toEmail,
+    subject: "NOTICE — Your Diaspora Week 2026 Invitation Card Is Ready",
+    html,
+  });
+};
+
+// ---------------------------------------------------------------------------
 // Public content (schedule outline, exhibitors, partners, gallery)
 // ---------------------------------------------------------------------------
 
