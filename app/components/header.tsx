@@ -12,6 +12,10 @@ const Header = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const openMemberModal = () => {
+    window.dispatchEvent(new CustomEvent("open-member-register"));
+  };
+
   return (
     <>
       {/* Offcanvas area start */}
@@ -130,16 +134,19 @@ const Header = () => {
                 </div>
               </div>
               <div className="d-grid gap-2 p-6">
-                <Link
-                  href="https://admin.sldiaspora.org/admin/register"
-                  onClick={toggleMobileMenu}
+                <button
+                  type="button"
+                  onClick={() => {
+                    toggleMobileMenu();
+                    openMemberModal();
+                  }}
                   className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg"
                 >
                   <span className="fw-bold text-uppercase ls-1 h-20">
                     Become a Member
                   </span>
                   <i className="fa-solid fa-arrow-right animate-arrow"></i>
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -240,8 +247,9 @@ const Header = () => {
                 <div className="header__right header2__right">
                   <div className="header__action d-flex align-items-center">
                     <div className="header__btn-wrap d-none d-sm-inline-flex">
-                      <Link
-                        href="https://admin.sldiaspora.org/admin/register"
+                      <button
+                        type="button"
+                        onClick={openMemberModal}
                         className="rr-btn"
                         style={{ background: "red" }}
                       >
@@ -250,7 +258,7 @@ const Header = () => {
                           className="fa-solid fa-arrow-right"
                           style={{ marginTop: "0.2rem" }}
                         ></i>
-                      </Link>
+                      </button>
                       
                     </div>
                     <div className="header__hamburger ml-20 d-xl-none">
