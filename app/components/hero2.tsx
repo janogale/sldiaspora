@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import GlobeMapContainer from "./globemap-container";
 
 // dynamic import MapContainer from "../components/map";
@@ -54,15 +53,20 @@ const MapSection = () => {
                   </h1>
                   <div className="d-flex justify-content-center align-items-center my-4 gap-4 h-25 hero-cta-wrap">
                   <div className="me-2 d-flex justify-content-center mt-4">
-                    <Link
-                      href="https://admin.sldiaspora.org/admin/register"
+                    <button
+                      type="button"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("open-member-register")
+                        )
+                      }
                       className="btn btn-lg cta-register-btn d-flex align-items-center justify-content-center gap-2 shadow-lg h-25"
                     >
                       <span className="fw-bold text-uppercase text-xl hero-cta-label">
                         Become a Member
                       </span>
                       <i className="fa-solid fa-arrow-right animate-arrow"></i>
-                    </Link>
+                    </button>
                   </div>
                   <div className="d-flex justify-content-center mt-4 hero-week-register-wrap">
                 {/* <Link

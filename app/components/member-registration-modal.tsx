@@ -419,16 +419,43 @@ function MemberRegistrationModal() {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("openRegister") === "1") {
+        openModal();
+        params.delete("openRegister");
+        const rest = params.toString();
+        window.history.replaceState(
+          {},
+          "",
+          window.location.pathname + (rest ? `?${rest}` : "")
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const onOpenMemberModal = () => openModal();
 
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented) return;
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
       const target = event.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
       if (!anchor) return;
-      if (anchor.target === "_blank") return;
+
+      const href = anchor.getAttribute("href") || "";
+      if (href === DIRECTUS_REGISTER_LINK || href === "/register") {
+        event.preventDefault();
+        openModal();
+      }
+    };
+
+    const onAuxClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const anchor = target?.closest("a") as HTMLAnchorElement | null;
+      if (!anchor) return;
 
       const href = anchor.getAttribute("href") || "";
       if (href === DIRECTUS_REGISTER_LINK || href === "/register") {
@@ -447,11 +474,13 @@ function MemberRegistrationModal() {
 
     window.addEventListener("open-member-register", onOpenMemberModal);
     document.addEventListener("click", onClick);
+    document.addEventListener("auxclick", onAuxClick);
     document.addEventListener("keydown", onEsc);
 
     return () => {
       window.removeEventListener("open-member-register", onOpenMemberModal);
       document.removeEventListener("click", onClick);
+      document.removeEventListener("auxclick", onAuxClick);
       document.removeEventListener("keydown", onEsc);
     };
   }, []);
