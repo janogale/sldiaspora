@@ -184,6 +184,25 @@ export const createCollectionRecord = async (
   return { response, result };
 };
 
+export const resolveFeedbackCollection = async () => {
+  const fromEnv = (process.env.DIRECTUS_FEEDBACK_COLLECTION || "").trim();
+  const candidates = [
+    fromEnv,
+    "feedback",
+    "feedbacks",
+    "feedback_submissions",
+  ].filter(Boolean);
+
+  for (const collection of candidates) {
+    const fields = await getCollectionFields(collection).catch(() => null);
+    if (fields && fields.size > 0) {
+      return { collection, fields };
+    }
+  }
+
+  return { collection: null, fields: null };
+};
+
 export const resolveAssociationCollection = async () => {
   const fromEnv = (process.env.DIRECTUS_ASSOCIATION_COLLECTION || "").trim();
   const candidates = [
