@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
 
+export { REGISTRATION_OPEN } from "./diaspora-week-config";
+
 const DIRECTUS_URL = process.env.DIRECTUS_URL || "https://admin.sldiaspora.org";
 const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 

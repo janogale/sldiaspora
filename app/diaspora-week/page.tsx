@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Header from "../components/header";
 import styles from "./page.module.css";
+import { REGISTRATION_OPEN } from "../../lib/diaspora-week-config";
 
 type ScheduleOutlineItem = {
   dayNumber: number;
@@ -258,12 +259,18 @@ export default function DiasporaWeekPage() {
           </div>
 
           <div className={styles.heroActions}>
-            <Link href="/diaspora-week/register" className={styles.primaryCta}>
-              <span>Register Now</span>
-              <span className={styles.ctaArrow}>
-                <ChevronRight size={18} />
+            {REGISTRATION_OPEN ? (
+              <Link href="/diaspora-week/register" className={styles.primaryCta}>
+                <span>Register Now</span>
+                <span className={styles.ctaArrow}>
+                  <ChevronRight size={18} />
+                </span>
+              </Link>
+            ) : (
+              <span className={styles.primaryCta} aria-disabled="true" style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}>
+                <span>Registration Closed</span>
               </span>
-            </Link>
+            )}
             <Link href="/diaspora-week/portal" className={styles.portalCta}>
               <span className={styles.portalCtaIcon}>
                 <CalendarDays size={16} />
@@ -564,10 +571,16 @@ export default function DiasporaWeekPage() {
                   <Star size={16} /> Winners announced at Gala
                 </div>
               </div>
-              <Link href="/diaspora-week/register" className={styles.pitchCta}>
-                Apply to Pitch
-                <ChevronRight size={16} />
-              </Link>
+              {REGISTRATION_OPEN ? (
+                <Link href="/diaspora-week/register" className={styles.pitchCta}>
+                  Apply to Pitch
+                  <ChevronRight size={16} />
+                </Link>
+              ) : (
+                <span className={styles.pitchCta} aria-disabled="true" style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}>
+                  Applications Closed
+                </span>
+              )}
             </div>
             <div className={styles.pitchRight}>
               <div className={styles.pitchStat}>

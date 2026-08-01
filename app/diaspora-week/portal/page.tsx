@@ -16,6 +16,7 @@ import {
   User,
 } from "lucide-react";
 import styles from "./page.module.css";
+import { REGISTRATION_OPEN } from "../../../lib/diaspora-week-config";
 
 const DW_PHOTOS = [
   "/assets/imgs/Diaspora Week 2025/526662922_1167327548769637_8258044179086207429_n.jpg",
@@ -233,10 +234,17 @@ export default function DiasporaWeekPortalPage() {
           </nav>
 
           <div className={styles.siteHeaderRight}>
-            <Link href="/diaspora-week/register" className={styles.registerHeaderButton}>
-              <User size={14} />
-              Register to Participate
-            </Link>
+            {REGISTRATION_OPEN ? (
+              <Link href="/diaspora-week/register" className={styles.registerHeaderButton}>
+                <User size={14} />
+                Register to Participate
+              </Link>
+            ) : (
+              <span className={styles.registerHeaderButton} aria-disabled="true" style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}>
+                <User size={14} />
+                Registration Closed
+              </span>
+            )}
             <Link href="/diaspora-week" className={styles.backToSiteButton}>
               <i className="fa-regular fa-arrow-left" aria-hidden="true"></i>
               Back to Main Website
@@ -268,10 +276,16 @@ export default function DiasporaWeekPortalPage() {
                 we build Somaliland&apos;s future together.
               </p>
               <div className={styles.homeHeroCtas}>
-                <Link href="/diaspora-week/register" className={styles.homeHeroCtaPrimary}>
-                  Register to Participate
-                  <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                </Link>
+                {REGISTRATION_OPEN ? (
+                  <Link href="/diaspora-week/register" className={styles.homeHeroCtaPrimary}>
+                    Register to Participate
+                    <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                  </Link>
+                ) : (
+                  <span className={styles.homeHeroCtaPrimary} aria-disabled="true" style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}>
+                    Registration Closed
+                  </span>
+                )}
                 <button type="button" className={styles.homeHeroCtaSecondary} onClick={() => setActiveSection("schedule")}>
                   <CalendarDays size={16} />
                   View Schedule

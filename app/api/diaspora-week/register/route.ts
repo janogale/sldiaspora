@@ -8,6 +8,7 @@ import {
   getRegistrationsCollection,
   uploadDirectusFile,
 } from "@/lib/diaspora-week";
+import { REGISTRATION_OPEN } from "@/lib/diaspora-week-config";
 
 const toText = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
@@ -16,6 +17,13 @@ const toBoolean = (value: FormDataEntryValue | null) =>
   toText(value) === "true" || toText(value) === "1" || toText(value) === "on";
 
 export async function POST(request: Request) {
+  if (!REGISTRATION_OPEN) {
+    return NextResponse.json(
+      { message: "Registration is currently closed." },
+      { status: 403 }
+    );
+  }
+
   try {
     const form = await request.formData();
 

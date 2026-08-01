@@ -6,6 +6,7 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import styles from "./page.module.css";
 import { countries } from "../../data/countries";
+import { REGISTRATION_OPEN } from "../../../lib/diaspora-week-config";
 
 export default function DiasporaWeekRegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -96,7 +97,23 @@ export default function DiasporaWeekRegisterPage() {
             </div>
 
             <div className={styles.formCard}>
-              {submitted ? (
+              {!REGISTRATION_OPEN ? (
+                <div className={styles.successState}>
+                  <span className={styles.successIcon}>
+                    <CheckCircle2 size={40} />
+                  </span>
+                  <h1 className={styles.title}>Registration Closed</h1>
+                  <p className={styles.subtitle}>
+                    Registration for Somaliland Diaspora Week is currently closed. Please check
+                    back later or contact us for more information.
+                  </p>
+                  <div className={styles.successActions}>
+                    <Link href="/diaspora-week" className={styles.secondaryButton}>
+                      Back to Diaspora Week
+                    </Link>
+                  </div>
+                </div>
+              ) : submitted ? (
                 <div className={styles.successState}>
                   <span className={styles.successIcon}>
                     <CheckCircle2 size={40} />
