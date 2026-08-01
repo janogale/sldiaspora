@@ -47,68 +47,26 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   };
 
   return (
-    <div
-      className="feedback-modal-overlay"
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0, 0, 0, 0.5)",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "16px",
-        backdropFilter: "blur(2px)",
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "460px",
-          background: "#ffffff",
-          borderRadius: "20px",
-          border: "1px solid #d4e4da",
-          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
-          overflow: "hidden",
-        }}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div
-          style={{
-            padding: "24px 28px",
-            background:
-              "linear-gradient(135deg, rgba(241,250,245,1) 0%, rgba(255,255,255,1) 100%)",
-            borderBottom: "1px solid #eef3f0",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: "16px",
-          }}
-        >
+    <div className="fb-overlay" onClick={onClose}>
+      <div className="fb-card" onClick={(event) => event.stopPropagation()}>
+        <div className="fb-drag-handle" />
+
+        <div className="fb-header">
           <div>
-            <h3 style={{ margin: "0 0 6px 0", color: "#0f172a", fontWeight: 800, fontSize: "1.6rem" }}>
-              {status === "done" ? "Thank You!" : "Share Your Feedback"}
+            <h3 className="fb-title">
+              {status === "done" ? "Thank You! 🎉" : "Share Your Feedback"}
             </h3>
-            <p style={{ margin: 0, color: "#5a6b76", fontSize: "0.95rem" }}>
+            <p className="fb-subtitle">
               {status === "done"
                 ? "We appreciate you taking the time to share your thoughts with us."
-                : "Tell us your name and leave a comment, we'd love to hear from you."}
+                : "Tell us your name and leave a comment — we'd love to hear from you."}
             </p>
           </div>
           {onClose && (
             <button
               type="button"
               onClick={onClose}
-              style={{
-                border: "none",
-                background: "transparent",
-                color: "#9ca3af",
-                fontSize: "28px",
-                lineHeight: 1,
-                cursor: "pointer",
-                fontWeight: 300,
-              }}
+              className="fb-close"
               aria-label="Close"
             >
               ✕
@@ -117,19 +75,21 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         </div>
 
         {status === "done" ? (
-          <div style={{ padding: "32px 28px", textAlign: "center" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "12px" }}>🙏</div>
-            <p style={{ color: "#0f172a", fontSize: "1.05rem", fontWeight: 600, margin: 0 }}>
+          <div className="fb-thanks">
+            <div className="fb-thanks-icon">🙏</div>
+            <p className="fb-thanks-text">
               Thanks, {name.split(" ")[0]}! Your feedback means a lot to us.
             </p>
+            {onClose && (
+              <button type="button" onClick={onClose} className="fb-done-button">
+                Done
+              </button>
+            )}
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ padding: "24px 28px" }}>
-            <div style={{ marginBottom: "16px" }}>
-              <label
-                htmlFor="feedback-name"
-                style={{ display: "block", marginBottom: "6px", fontWeight: 600, color: "#0f172a", fontSize: "0.9rem" }}
-              >
+          <form onSubmit={handleSubmit} className="fb-form">
+            <div className="fb-field">
+              <label htmlFor="feedback-name" className="fb-label">
                 Your Name
               </label>
               <input
@@ -139,21 +99,13 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 onChange={(event) => setName(event.target.value)}
                 required
                 placeholder="Enter your name"
-                style={{
-                  width: "100%",
-                  padding: "12px 14px",
-                  borderRadius: "10px",
-                  border: "1px solid #d4e4da",
-                  fontSize: "0.95rem",
-                }}
+                className="fb-input"
+                autoComplete="name"
               />
             </div>
 
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                htmlFor="feedback-comment"
-                style={{ display: "block", marginBottom: "6px", fontWeight: 600, color: "#0f172a", fontSize: "0.9rem" }}
-              >
+            <div className="fb-field">
+              <label htmlFor="feedback-comment" className="fb-label">
                 Your Comment
               </label>
               <textarea
@@ -163,43 +115,270 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 required
                 rows={4}
                 placeholder="Share your thoughts, suggestions, or experience..."
-                style={{
-                  width: "100%",
-                  padding: "12px 14px",
-                  borderRadius: "10px",
-                  border: "1px solid #d4e4da",
-                  fontSize: "0.95rem",
-                  resize: "vertical",
-                }}
+                className="fb-textarea"
               />
             </div>
 
-            {status === "error" && (
-              <p style={{ color: "#b91c1c", fontSize: "0.85rem", marginBottom: "14px" }}>
-                {errorMessage}
-              </p>
-            )}
+            {status === "error" && <p className="fb-error">{errorMessage}</p>}
 
             <button
               type="submit"
               disabled={status === "submitting"}
-              style={{
-                width: "100%",
-                padding: "13px",
-                borderRadius: "10px",
-                border: "none",
-                background: status === "submitting" ? "#8fb7a0" : "#0f9d58",
-                color: "#ffffff",
-                fontWeight: 700,
-                fontSize: "0.95rem",
-                cursor: status === "submitting" ? "default" : "pointer",
-              }}
+              className="fb-submit"
             >
               {status === "submitting" ? "Sending..." : "Send Feedback"}
             </button>
           </form>
         )}
       </div>
+
+      <style jsx>{`
+        .fb-overlay * {
+          box-sizing: border-box;
+        }
+
+        .fb-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 23, 42, 0.55);
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          backdrop-filter: blur(3px);
+        }
+
+        .fb-card {
+          width: 100%;
+          max-width: 440px;
+          max-height: 88vh;
+          background: #ffffff;
+          border-radius: 22px;
+          border: 1px solid #d4e4da;
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .fb-drag-handle {
+          display: none;
+        }
+
+        .fb-header {
+          padding: 22px 24px 16px;
+          background: linear-gradient(135deg, #f1faf5 0%, #ffffff 100%);
+          border-bottom: 1px solid #eef3f0;
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          position: sticky;
+          top: 0;
+          z-index: 1;
+        }
+
+        .fb-title {
+          margin: 0 0 6px 0;
+          color: #0f172a;
+          font-weight: 800;
+          font-size: 1.35rem;
+          line-height: 1.25;
+        }
+
+        .fb-subtitle {
+          margin: 0;
+          color: #5a6b76;
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+
+        .fb-close {
+          flex-shrink: 0;
+          border: none;
+          background: #f1f5f3;
+          color: #64748b;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          font-size: 16px;
+          line-height: 1;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .fb-form {
+          padding: 20px 24px 24px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .fb-field {
+          margin-bottom: 16px;
+        }
+
+        .fb-label {
+          display: block;
+          margin-bottom: 6px;
+          font-weight: 600;
+          color: #0f172a;
+          font-size: 0.85rem;
+        }
+
+        .fb-input,
+        .fb-textarea {
+          width: 100%;
+          margin: 0;
+          padding: 13px 14px;
+          border-radius: 12px;
+          border: 1.5px solid #dbe7e0;
+          font-size: 16px;
+          font-family: inherit;
+          color: #0f172a;
+          background: #fafcfb;
+          transition: border-color 0.15s ease, background 0.15s ease;
+          box-sizing: border-box;
+        }
+
+        .fb-input[type="text"] {
+          margin-left: 0;
+        }
+
+        .fb-input:focus,
+        .fb-textarea:focus {
+          outline: none;
+          border-color: #0f9d58;
+          background: #ffffff;
+        }
+
+        .fb-textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+
+        .fb-error {
+          color: #b91c1c;
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          border-radius: 10px;
+          padding: 10px 12px;
+          font-size: 0.85rem;
+          margin: 0 0 16px 0;
+        }
+
+        .fb-submit {
+          width: 100%;
+          padding: 15px;
+          border-radius: 12px;
+          border: none;
+          background: #0f9d58;
+          color: #ffffff;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .fb-submit:active {
+          transform: scale(0.98);
+        }
+
+        .fb-submit:disabled {
+          background: #94c7ac;
+          cursor: default;
+        }
+
+        .fb-thanks {
+          padding: 36px 24px 32px;
+          text-align: center;
+        }
+
+        .fb-thanks-icon {
+          font-size: 3rem;
+          margin-bottom: 12px;
+        }
+
+        .fb-thanks-text {
+          color: #0f172a;
+          font-size: 1rem;
+          font-weight: 600;
+          margin: 0 0 20px 0;
+          line-height: 1.5;
+        }
+
+        .fb-done-button {
+          padding: 12px 28px;
+          border-radius: 12px;
+          border: none;
+          background: #0f172a;
+          color: #ffffff;
+          font-weight: 700;
+          font-size: 0.9rem;
+          cursor: pointer;
+        }
+
+        /* Mobile: bottom-sheet style for a native, app-like feel */
+        @media (max-width: 560px) {
+          .fb-overlay {
+            padding: 0;
+            align-items: flex-end;
+          }
+
+          .fb-card {
+            max-width: 100%;
+            max-height: 92vh;
+            border-radius: 20px 20px 0 0;
+            border: none;
+            border-top: 1px solid #e5efe9;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            animation: fb-slide-up 0.25s ease-out;
+          }
+
+          .fb-drag-handle {
+            display: block;
+            width: 40px;
+            height: 4px;
+            border-radius: 999px;
+            background: #d9e3dd;
+            margin: 10px auto 0;
+          }
+
+          .fb-header {
+            padding: 14px 20px 14px;
+          }
+
+          .fb-title {
+            font-size: 1.2rem;
+          }
+
+          .fb-subtitle {
+            font-size: 0.85rem;
+          }
+
+          .fb-form {
+            padding: 16px 20px 20px;
+          }
+
+          .fb-thanks {
+            padding: 28px 20px 24px;
+          }
+        }
+
+        @keyframes fb-slide-up {
+          from {
+            transform: translateY(24px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 }
