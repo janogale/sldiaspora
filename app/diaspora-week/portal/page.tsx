@@ -517,11 +517,16 @@ export default function DiasporaWeekPortalPage() {
                 </button>
               </div>
               <div className={styles.homeGalleryMosaic}>
-                {DW_PHOTOS.slice(0, 7).map((src, i) => (
-                  <div key={src} className={`${styles.homeGalleryItem} ${styles[`homeGalleryItem${i + 1}`] || ""}`}>
-                    <img src={src} alt={`Diaspora Week 2025 — photo ${i + 1}`} loading="lazy" />
-                  </div>
-                ))}
+                {(safeContent.gallery.length > 0
+                  ? safeContent.gallery.filter((item) => item.type === "image").map((item) => item.url)
+                  : DW_PHOTOS
+                )
+                  .slice(0, 7)
+                  .map((src, i) => (
+                    <div key={src} className={`${styles.homeGalleryItem} ${styles[`homeGalleryItem${i + 1}`] || ""}`}>
+                      <img src={src} alt={`Diaspora Week 2026 — photo ${i + 1}`} loading="lazy" />
+                    </div>
+                  ))}
               </div>
             </div>
           </section>
