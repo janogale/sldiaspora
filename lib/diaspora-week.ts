@@ -877,6 +877,18 @@ const toFileId = (value: unknown): string | null => {
 
   if (typeof value === "object") {
     const obj = value as Record<string, unknown>;
+
+    const directFile = obj.directus_files_id;
+    if (typeof directFile === "string" || typeof directFile === "number") {
+      return String(directFile);
+    }
+    if (directFile && typeof directFile === "object") {
+      const nestedId = (directFile as Record<string, unknown>).id;
+      if (typeof nestedId === "string" || typeof nestedId === "number") {
+        return String(nestedId);
+      }
+    }
+
     if (typeof obj.id === "string" || typeof obj.id === "number") {
       return String(obj.id);
     }
@@ -1035,7 +1047,22 @@ export const getPartners = async (): Promise<PartnerItem[]> => {
 };
 
 export const getGalleryMedia = async (): Promise<GalleryMediaItem[]> => {
-  const rows = await fetchCollection(GALLERY_COLLECTION, "fields=*.*&limit=200&sort=sort,-date_created");
+  let rows = await fetchCollection(GALLERY_COLLECTION, "fields=*.*&limit=200&sort=sort,-date_created");
+
+  if (!rows || rows.length === 0) {
+    const allGalleries = await fetchCollection("galleries", "fields=*.*&limit=200&sort=sort,-date_created");
+    const candidates = (allGalleries || []).filter((row) =>
+      toText(row.title ?? row.name).toLowerCase().includes("diaspora week")
+    );
+
+    const currentYear = String(new Date().getFullYear());
+    const currentYearMatch = candidates.filter((row) =>
+      toText(row.title ?? row.name).includes(currentYear)
+    );
+
+    rows = currentYearMatch.length > 0 ? currentYearMatch : candidates;
+  }
+
   if (!rows) return [];
   return normalizeGalleryRows(rows);
 };
