@@ -141,6 +141,17 @@ export default function IsraelVisit2026Page() {
               <small>payable on arrival in Israel</small>
             </div>
           </div>
+          <p className={styles.feeNote}>
+            <strong>Please note:</strong> The full six-day program is priced at
+            €1,370 per person, based on double occupancy. A €300 deposit is
+            required upon registration, with the remaining €1,070 payable upon
+            arrival in Israel. The total package includes hotel accommodation,
+            daily breakfast and dinner, guided tours, official meetings, site
+            entrance fees, and group local transportation. Not included:
+            international airfare, travel insurance, lunches (approximately
+            $20–$25 per day), airport transfers, visa fees, and private taxi
+            transportation.
+          </p>
           <div className={styles.included}>
             <div>
               <h4>Package includes</h4>
