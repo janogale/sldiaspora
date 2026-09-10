@@ -2,7 +2,6 @@
 
 import { FormEvent, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
-import Header from "../components/header";
 import styles from "./page.module.css";
 
 const AREAS = [
@@ -59,6 +58,24 @@ export default function IsraelVisit2026Page() {
       {/* ---------- HERO ---------- */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
+          <div className={styles.logoRow}>
+            <img
+              src="/israel-visit/somaliland-emblem.png"
+              alt="Republic of Somaliland"
+              className={styles.logoCrest}
+            />
+            <img
+              src="/israel-visit/iabc.png"
+              alt="Israel-Africa Business Connect"
+              className={styles.logoWide}
+            />
+            <img
+              src="/israel-visit/israel-emblem.png"
+              alt="State of Israel"
+              className={styles.logoCrest}
+            />
+          </div>
+
           <span className={styles.kicker}>Israel–Africa Business Connect</span>
           <h1 className={styles.heroTitle}>
             Historic First Somaliland Diaspora-Led{" "}

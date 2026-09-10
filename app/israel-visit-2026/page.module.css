@@ -21,6 +21,24 @@
   border-bottom: 3px solid var(--gold);
 }
 .heroInner { max-width: 940px; margin: 0 auto; }
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: clamp(16px, 5vw, 44px);
+  margin-bottom: 34px;
+}
+.logoRow img {
+  display: block;
+  object-fit: contain;
+  background: transparent;
+  filter: drop-shadow(0 3px 10px rgba(255, 255, 255, 0.35));
+}
+.logoWide { height: clamp(46px, 11vw, 74px); }
+.logoCrest { height: clamp(52px, 13vw, 86px); }
+.logoDivider { display: none; }
 .kicker {
   display: inline-block;
   letter-spacing: 3px;
