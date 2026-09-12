@@ -157,7 +157,7 @@
 .feeBox small { font-size: 13.5px; opacity: 0.9; line-height: 1.4; display: block; }
 
 .feeNote {
-  margin: -8px 0 22px;
+  margin: 22px 0 22px;
   padding: 14px 16px;
   background: rgba(201, 162, 75, 0.1);
   border: 1px solid rgba(201, 162, 75, 0.35);
