@@ -78,8 +78,8 @@ export default function IsraelVisit2026Page() {
 
           <span className={styles.kicker}>Israel–Africa Business Connect</span>
           <h1 className={styles.heroTitle}>
-            Historic First Somaliland Diaspora-Led{" "}
-            <span>Delegation Visit to Israel</span>
+            First Ever Somaliland{" "}
+            <span>Diaspora Visit to Israel</span>
           </h1>
           <div className={styles.heroMeta}>
             <span>17 – 22 October 2026</span>
@@ -141,17 +141,6 @@ export default function IsraelVisit2026Page() {
               <small>payable on arrival in Israel</small>
             </div>
           </div>
-          <p className={styles.feeNote}>
-            <strong>Please note:</strong> The full six-day program is priced at
-            €1,370 per person, based on double occupancy. A €300 deposit is
-            required upon registration, with the remaining €1,070 payable upon
-            arrival in Israel. The total package includes hotel accommodation,
-            daily breakfast and dinner, guided tours, official meetings, site
-            entrance fees, and group local transportation. Not included:
-            international airfare, travel insurance, lunches (approximately
-            $20–$25 per day), airport transfers, visa fees, and private taxi
-            transportation.
-          </p>
           <div className={styles.included}>
             <div>
               <h4>Package includes</h4>
@@ -173,6 +162,33 @@ export default function IsraelVisit2026Page() {
                 <li>Private taxi transportation</li>
               </ul>
             </div>
+          </div>
+
+          <div className={styles.feeNote}>
+            <h4>Participation Fee &amp; Payment</h4>
+            <p>
+              The full six-day program is priced at €1,370 per person, based on
+              double occupancy. Participants currently residing in Somaliland
+              and departing from Hargeisa, who register through this
+              Somaliland-based registration form, are required to pay a €300
+              deposit upon registration, with the remaining €1,070 payable
+              upon arrival in Israel.
+            </p>
+            <p>
+              Somaliland diaspora participants residing outside Somaliland
+              should register through the official IABC platform and follow
+              the payment arrangements specified on that platform.
+            </p>
+            <h4>Travel &amp; Visa Assistance</h4>
+            <p>
+              Participants can travel using any valid Somaliland passport
+              (Ordinary, Service, or Diplomatic) as well as other valid
+              passports they may hold. The Diaspora Affairs Department, in
+              coordination with the Somaliland Embassy in Israel, will assist
+              registered participants with the visa application process and
+              facilitate timely visa arrangements, subject to the applicable
+              Israeli entry and visa requirements.
+            </p>
           </div>
         </div>
 
