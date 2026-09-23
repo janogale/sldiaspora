@@ -11,6 +11,9 @@ const AREAS = [
   "Tourism and cultural heritage exchange",
 ];
 
+const PAYMENT_URL =
+  "https://www.wetravel.com/checkout_embed?uuid=5160652091&source=direct_link";
+
 export default function IsraelVisit2026Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -89,9 +92,19 @@ export default function IsraelVisit2026Page() {
           <p className={styles.exclusive}>
             Registration is open exclusively to Somalilanders
           </p>
-          <a href="#register" className={styles.jump}>
-            Register Now
-          </a>
+          <div className={styles.heroActions}>
+            <a href="#register" className={styles.jump}>
+              Register Now
+            </a>
+            <a
+              href={PAYMENT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.heroPayment}
+            >
+              Payment Link
+            </a>
+          </div>
         </div>
       </section>
 
@@ -175,6 +188,18 @@ export default function IsraelVisit2026Page() {
               upon arrival in Israel.
             </p>
             <p>
+              Pay the €300 registration deposit securely through the{" "}
+              <a
+                href={PAYMENT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.paymentLink}
+              >
+                official payment link
+              </a>
+              .
+            </p>
+            <p>
               Somaliland diaspora participants residing outside Somaliland
               should register through the official IABC platform and follow
               the payment arrangements specified on that platform.
@@ -225,6 +250,14 @@ export default function IsraelVisit2026Page() {
                 verification by the Diaspora Department. Our team will contact you
                 by email regarding the €300 deposit and next steps.
               </p>
+              <a
+                href={PAYMENT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.paymentButton}
+              >
+                Pay the €300 registration deposit
+              </a>
             </div>
           ) : (
             <>
